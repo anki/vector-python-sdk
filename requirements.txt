@@ -1,0 +1,9 @@
+aiogrpc>=1.4
+googleapis-common-protos
+keras
+opencv-python
+numpy
+Pillow
+scipy
+scikit-learn
+tensorflow
