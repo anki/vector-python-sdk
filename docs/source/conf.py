@@ -80,7 +80,7 @@ verlink_base_url = 'http://vectorsdk.anki.com/%s/' % sdk_version
 verlink_version = sdk_version
 
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3.5', None),
+    'python': ('https://docs.python.org/3.6', None),
     'numpy': ('http://docs.scipy.org/doc/numpy/', None),
     'PIL': ('https://pillow.readthedocs.io/en/latest/', None)
     }
@@ -380,7 +380,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'VectorSDK', 'Vector SDK Documentation',
-     author, 'VectorSDK', 'The SDK for directly controlling your Vector Robot',
+     author, 'VectorSDK', 'The SDK for directly controlling your Vector',
      'Miscellaneous'), # TODO: clean this up
 ]
 

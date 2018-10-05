@@ -27,7 +27,7 @@ from .messaging import protocol
 
 
 class EventHandler:
-    """Subscribe functions to Vector events"""
+    """Listen for Vector events."""
 
     def __init__(self):
         self.logger = util.get_class_logger(__name__, self)
@@ -44,7 +44,7 @@ class EventHandler:
 
             robot.events.start(robot.conn, robot.loop)
 
-        :param connection: A references to the connection from the SDK to the robot.
+        :param connection: A reference to the connection from the SDK to the robot.
         :param loop: The loop to run the event task on.
         """
         self._loop = loop

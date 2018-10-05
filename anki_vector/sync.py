@@ -13,6 +13,8 @@
 # limitations under the License.
 
 """
+Synchronizer related classes and functions.
+
 A synchronizer is used to make functions waitable outside
 of the scope of the event loop. This allows for more
 advanced use cases where multiple commands may be sent in
@@ -34,7 +36,7 @@ class Synchronizer:
     Class for managing asynchronous functions in a synchronous world
     """
 
-    # TODO Add types. Also ideally need better docstring than "Create a Synchronizer"
+    # TODO Add types, sample code
     def __init__(self, loop, remove_pending, func, *args, **kwargs):
         """
         Create an Synchronizer
@@ -93,22 +95,22 @@ class Synchronizer:
             Either returns an Synchronizer or finishes processing the function depending on if the
             object "is_async"
             """
-            that = args[0]
-            log_wrapped_func = log_result(func, that.logger)
+            wrapped_self = args[0]
+            log_wrapped_func = log_result(func, wrapped_self.logger)
 
             # When invoking inside of a running event loop, things could explode.
             # Instead, we should return the async function and let users await it
             # manually.
-            if that.robot.loop.is_running():
+            if wrapped_self.robot.loop.is_running():
                 return log_wrapped_func(*args, **kwargs)
-            if that.robot.is_async:
+            if wrapped_self.robot.is_async:
                 # Return a Synchronizer to manage Task completion
-                synchronizer = cls(that.robot.loop,
-                                   that.robot.remove_pending,
+                synchronizer = cls(wrapped_self.robot.loop,
+                                   wrapped_self.robot.remove_pending,
                                    log_wrapped_func,
                                    *args,
                                    **kwargs)
-                that.robot.add_pending(synchronizer)
+                wrapped_self.robot.add_pending(synchronizer)
                 return synchronizer
-            return that.robot.loop.run_until_complete(log_wrapped_func(*args, **kwargs))
+            return wrapped_self.robot.loop.run_until_complete(log_wrapped_func(*args, **kwargs))
         return waitable

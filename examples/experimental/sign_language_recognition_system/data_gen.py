@@ -109,9 +109,11 @@ def main():
     else:
         stats = {}
 
-    with anki_vector.Robot(args.serial, port=args.port, show_viewer=True) as robot:
+    with anki_vector.Robot(args.serial, show_viewer=True) as robot:
         try:
             # Add a rectangular overlay describing the portion of image that is used after cropping.
+
+            # @TODO: The rectangle overlay should feed in a full rect, not just a size
             frame_of_interest = anki_vector.util.RectangleOverlay(util.NetworkConstants.IMAGE_WIDTH, util.NetworkConstants.IMAGE_HEIGHT)
             robot.viewer.overlays.append(frame_of_interest)
             robot.loop.run_until_complete(data_capture(robot.camera, stats, args.dataset_root_folder))

@@ -15,7 +15,7 @@ import anki_vector  # pylint: disable=wrong-import-position
 
 def main():
     """main execution"""
-    args = anki_vector.util.parse_test_args()
+    args = anki_vector.util.parse_command_args()
 
     print("------ begin testing face events ------")
     # Should see a stream of face events when the robot observes a face
@@ -41,7 +41,7 @@ def main():
             print(f"Nose: {face.nose}")
             print(f"Mouth: {face.mouth}")
 
-    with anki_vector.Robot(args.serial, port=args.port, enable_vision_mode=True) as robot:
+    with anki_vector.Robot(args.serial, enable_vision_mode=True) as robot:
         test_subscriber = functools.partial(test_subscriber, robot)
         robot.events.subscribe('robot_changed_observed_face_id', test_subscriber)
         robot.events.subscribe('robot_observed_face', test_subscriber)

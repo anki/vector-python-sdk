@@ -15,18 +15,17 @@
 """Helper routines for dealing with Vector's lights and colors."""
 
 # __all__ should order by constants, event classes, other classes, functions.
-__all__ = ['MAX_COLOR_PROFILE', 'WHITE_BALANCED_BACKPACK_PROFILE', 'WHITE_BALANCED_CUBE_PROFILE',
+__all__ = ['MAX_COLOR_PROFILE', 'WHITE_BALANCED_CUBE_PROFILE',
            'blue_light', 'cyan_light', 'green_light', 'magenta_light', 'off_light',
            'red_light', 'white_light', 'yellow_light',
            'Color', 'ColorProfile', 'Light', 'package_request_params']
 
 from .color import Color, green, red, blue, cyan, magenta, yellow, white, off
 
-# TODO Needs a better docstring. Can't describe a ColorProfile as a Color profile.
-
 
 class ColorProfile:
-    """A Color profile to be used with messages involving Lights.
+    """Applies transforms to make Vector's lights and colors appear as
+    intended, by limiting maximum channel intensity.
 
     :param red_multiplier: Scaling value for the brightness of red Lights
     :param green_multiplier: Scaling value for the brightness of green Lights
@@ -80,20 +79,13 @@ MAX_COLOR_PROFILE = ColorProfile(red_multiplier=1.0,
 #: :class:`ColorProfile`:  Color profile balanced so that a max color value more closely resembles pure white.
 # TODO: Balance this more carefully once robots with proper color pipe
 # hardware becomes available
-WHITE_BALANCED_BACKPACK_PROFILE = ColorProfile(red_multiplier=1.0,
-                                               green_multiplier=0.825,
-                                               blue_multiplier=0.81)
-
-#: :class:`ColorProfile`:  Color profile balanced so that a max color value more closely resembles pure white.
-# TODO: Balance this more carefully once robots with proper color pipe
-# hardware becomes available
 WHITE_BALANCED_CUBE_PROFILE = ColorProfile(red_multiplier=1.0,
                                            green_multiplier=0.95,
                                            blue_multiplier=0.7)
 
 
 class Light:
-    """Lights are used with Vector's LightCube and backpack.
+    """Lights are used with Vector's Cube.
 
     Lights may either be "on" or "off", though in practice any colors may be
     assigned to either state (including no color/light).
@@ -180,7 +172,7 @@ class Light:
         self._transition_off_period_ms = ms
 
 
-# TODO needs docs, param types. Should this be private?
+# TODO needs docs, param types. Should this be private? Maybe a more descriptive name?
 def package_request_params(lights, color_profile):
     merged_params = {}
     for light in lights:
@@ -191,8 +183,6 @@ def package_request_params(lights, color_profile):
                 attr_val = color_profile.augment_color(attr_val).int_color
             merged_params.setdefault(attr_name, []).append(attr_val)
     return merged_params
-
-# TODO Add sample code for the following light instances?
 
 
 #: :class:`Light`: A steady green colored LED light.

@@ -16,15 +16,15 @@ CUSTOM_ANIM_FOLDER = Path("test_assets", "custom_animations")
 
 def main():
     """main execution"""
-    args = anki_vector.util.parse_test_args()
+    args = anki_vector.util.parse_command_args()
 
     print("------ begin testing animations ------")
 
-    with anki_vector.Robot(args.serial, port=args.port, cache_animation_list=False) as robot:
+    with anki_vector.Robot(args.serial, cache_animation_list=False) as robot:
         print("playing animation by name: anim_blackjack_victorwin_01")
         robot.anim.play_animation("anim_blackjack_victorwin_01")
 
-    with anki_vector.AsyncRobot(args.serial, port=args.port, cache_animation_list=False) as robot:
+    with anki_vector.AsyncRobot(args.serial, cache_animation_list=False) as robot:
         print("------ testing load async animations ------")
 
         print("receiving all loaded animations")

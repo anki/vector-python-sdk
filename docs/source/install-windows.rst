@@ -1,10 +1,10 @@
-.. _install-macos:
+.. _install-windows:
 
-###########################
-Installation - macOS / OS X
-###########################
+######################
+Installation - Windows
+######################
 
-This guide provides instructions on installing the Vector SDK for computers running with a macOS operating system.
+This guide provides instructions on installing the Vector SDK for computers running with a Windows operating system.
 
 ^^^^^^^^^^^^^
 Prerequisites
@@ -21,22 +21,24 @@ Prerequisites
 Python Installation
 ^^^^^^^^^^^^^^^^^^^
 
-1. Install `Homebrew <http://brew.sh>`_ on your system according to the latest instructions. If you already had brew installed then update it by opening a Terminal window and typing in the following::
 
-    brew update
+Download the `Python 3.6.1 (or later) executable file from Python.org <https://www.python.org/downloads/windows/>`_ and
+run it on your computer.
 
-2. Once Homebrew is installed and updated, type the following into the Terminal window to install the latest version of Python 3::
-
-    brew install python3
+.. important:: Be sure to tick the "Add Python 3.6 to PATH" checkbox on the Setup screen. Then tap "Install Now" and complete the Python installation.
 
 ^^^^^^^^^^^^^^^^
 SDK Installation
 ^^^^^^^^^^^^^^^^
 
-To install the SDK, type the following into the Terminal window::
+To install the SDK, type the following into a Command Prompt window::
 
     cd vector-sdk
     pip3 install --user vector-0.4-py3-none-any.whl
+
+.. note:: If you encounter an error during SDK installation, you may need to upgrade your pip install. Try `python -m pip install --upgrade pip` or `py -3 -m pip install --upgrade pip`
+
+.. note:: If you encounter an error during SDK installation, you may need to upgrade your Python Setuptools. Try `py -3 -m pip install --upgrade setuptools`
 
 ^^^^^^^^^^^^^^^^^^^^^
 Vector Authentication
@@ -45,7 +47,7 @@ Vector Authentication
 To authenticate with the robot, type the following into the Terminal window::
 
     cd vector-sdk
-    ./configure.py
+    py configure.py
 
 You will be prompted for your robot's name, ip address and serial number. You will also be asked for your Anki login and password.
 

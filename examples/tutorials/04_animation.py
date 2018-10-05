@@ -15,16 +15,14 @@
 # limitations under the License.
 
 """Play an animation on Vector
-
-Play an animation by name.
 """
 
 import anki_vector
 
 
 def main():
-    args = anki_vector.util.parse_test_args()
-    with anki_vector.Robot(args.serial, port=args.port) as robot:
+    args = anki_vector.util.parse_command_args()
+    with anki_vector.Robot(args.serial) as robot:
         robot.behavior.drive_off_charger()
 
         # Play an animation via its name.
@@ -32,7 +30,7 @@ def main():
         # Warning: Future versions of the app might change these, so for future-proofing
         # we recommend using play_animation_trigger when it becomes available.
         #
-        # See the remote_control_cozmo.py example in apps for an easy way to see
+        # See the remote_control.py example in apps for an easy way to see
         # the available animations.
         animation = 'anim_pounce_success_02'
         print("Playing animation by name: " + animation)

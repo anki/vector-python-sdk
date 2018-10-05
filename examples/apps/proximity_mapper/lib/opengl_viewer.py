@@ -26,7 +26,7 @@ Example:
         def my_function(robot):
             robot.play_animation("anim_blackjack_victorwin_01")
 
-        with anki_vector.Robot("Vector-XXXX", "XX.XX.XX.XX", "/some/path/robot.cert") as robot:
+        with anki_vector.Robot("my_robot_serial_number") as robot:
             viewer = opengl.OpenGLViewer(robot=robot)
             viewer.run(my_function)
 

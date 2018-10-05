@@ -14,12 +14,12 @@ import anki_vector  # pylint: disable=wrong-import-position
 
 def main():
     """main execution"""
-    args = anki_vector.util.parse_test_args()
+    args = anki_vector.util.parse_command_args()
 
     print("------ begin cube interactions ------")
 
     # The robot shall drive straight, stop and then turn around
-    with anki_vector.Robot(args.serial, port=args.port) as robot:
+    with anki_vector.Robot(args.serial) as robot:
         print("disconnecting from any connected cube...")
         robot.world.disconnect_cube()
 
@@ -42,7 +42,7 @@ def main():
 
             robot.world.flash_cube_lights()
 
-        print("for the next 8 second, please tap, move, or allow victor to observe the cube, events will be logged to console.")
+        print("for the next 8 second, please tap, move, or allow Vector to observe the cube, events will be logged to console.")
         for _ in range(16):
             if connected_cube:
                 print(connected_cube)

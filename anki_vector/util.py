@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-Utility functions and classes for the Vector SDK
+Utility functions and classes for the Vector SDK.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
@@ -35,7 +35,7 @@ __all__ = ['Angle',
            'distance_mm',
            'distance_inches',
            'get_class_logger',
-           'parse_test_args',
+           'parse_command_args',
            'radians',
            'setup_basic_logging',
            'speed_mmps']
@@ -47,36 +47,35 @@ import os
 import sys
 
 try:
-    import cv2
-except ImportError as exc:
-    sys.exit("Cannot import opencv-python: Do `pip3 install opencv-python` to install")
+    from PIL import Image, ImageDraw
+except ImportError:
+    sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
 
-try:
-    import numpy as np
-except ImportError as exc:
-    sys.exit("Cannot import numpy: Do `pip3 install numpy` to install")
+# TODO Move to the robot class
 
 
-# TODO Are we keeping this for release? If so, rename? Build into the robot class?
-# TODO Update this using the login credentials when they're available
-# TODO Add sample code and return value
-# TODO update the docstring to something more explanatory
-def parse_test_args(parser: argparse.ArgumentParser = None):
+def parse_command_args(parser: argparse.ArgumentParser = None):
     """
-    Provides the command line interface for all the tests
+    Parses command line arguments.
 
-    :param parser: To add new arguments,
+    Attempts to read the robot serial number from the command line arguments. If no serial number
+    is specified, we next attempt to read the robot serial number from environment variable ANKI_ROBOT_SERIAL.
+    If ANKI_ROBOT_SERIAL is specified, the value will be used as the robot's serial number.
+
+    .. code-block:: python
+
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--new_param")
+        args = util.parse_command_args(parser)
+
+    :param parser: To add new command line arguments,
          pass an argparse parser with the new options
          already defined. Leave empty to use the defaults.
     """
     if parser is None:
         parser = argparse.ArgumentParser()
     parser.add_argument("-s", "--serial", nargs='?', default=os.environ.get('ANKI_ROBOT_SERIAL', None))
-    parser.add_argument("--port", nargs='?', default="443")
     args = parser.parse_args()
-
-    if args.port == "8443":
-        args.serial = "Local"
 
     if args.serial is None:
         parser.error('The "serial" argument is required '
@@ -88,7 +87,7 @@ def parse_test_args(parser: argparse.ArgumentParser = None):
 def setup_basic_logging(custom_handler: logging.Handler = None,
                         general_log_level: str = None,
                         target: object = None):
-    """Helper to perform basic setup of the Python logging machinery.
+    """Helper to perform basic setup of the Python logger.
 
     .. code-block:: python
 
@@ -96,7 +95,7 @@ def setup_basic_logging(custom_handler: logging.Handler = None,
 
     :param custom_handler: provide an external logger for custom logging locations
     :param general_log_level: 'DEBUG', 'INFO', 'WARN', 'ERROR' or an equivalent
-            constant from the :mod:`logging` module.  If None then a
+            constant from the :mod:`logging` module. If None then a
             value will be read from the VECTOR_LOG_LEVEL environment variable.
     :param target: The stream to send the log data to; defaults to stderr
     """
@@ -116,7 +115,7 @@ def setup_basic_logging(custom_handler: logging.Handler = None,
 
 
 def get_class_logger(module: str, obj: object) -> logging.Logger:
-    """Helper to create logger for a given class (and module)
+    """Helper to create logger for a given class (and module).
 
     .. code-block:: python
 
@@ -129,7 +128,7 @@ def get_class_logger(module: str, obj: object) -> logging.Logger:
 
 
 class Vector2:
-    """Represents a 2D Vector (type/units aren't specified)
+    """Represents a 2D Vector (type/units aren't specified).
 
     :param x: X component
     :param y: Y component
@@ -190,7 +189,7 @@ class Vector2:
 
 
 class Vector3:
-    """Represents a 3D Vector (type/units aren't specified)
+    """Represents a 3D Vector (type/units aren't specified).
 
     :param x: X component
     :param y: Y component
@@ -510,7 +509,6 @@ class Matrix44:
         self.m32 = z
 
 
-# TODO See Cozmo class Quaternion definition. Use some/all of that here, including helper methods?
 class Quaternion:
     """Represents the rotation of an object in the world."""
 
@@ -630,16 +628,8 @@ class Position(Vector3):
     __slots__ = ()
 
 
-# TODO In Cozmo, this class has an `invalidate` method that is used in the SDK. Why not in Vector?
-# TODO add pose_quaternion and pose_z_angle from Cozmo or remove from docs below
 class Pose:
     """Represents where an object is in the world.
-
-    Use the :func:'pose_quaternion' to return pose in the form of
-    position and rotation defined by a quaternion
-
-    Use the :func:'pose_z_angle' to return pose in the form of
-    position and rotation defined by rotation about the z axis
 
     Whenever Vector is de-localized (i.e. whenever Vector no longer knows
     where he is - e.g. when he's picked up), Vector creates a new pose starting at
@@ -649,11 +639,8 @@ class Pose:
     initial position and orientation.
 
     The coordinate space is relative to Vector, where Vector's origin is the
-    point on the ground between Vector's two front wheels:
-
-    The X axis is Vector's forward direction
-    The Y axis is to Vector's left
-    The Z axis is up
+    point on the ground between Vector's two front wheels. The X axis is Vector's forward direction,
+    the Y axis is to Vector's left, and the Z axis is up.
 
     Only poses of the same origin_id can safely be compared or operated on.
 
@@ -757,22 +744,22 @@ class ImageRect:
 
     @property
     def x_top_left(self) -> float:
-        """The top left x value of where the object was last visible within Victor's camera view."""
+        """The top left x value of where the object was last visible within Vector's camera view."""
         return self._x_top_left
 
     @property
     def y_top_left(self) -> float:
-        """The top left y value of where the object was last visible within Victor's camera view."""
+        """The top left y value of where the object was last visible within Vector's camera view."""
         return self._y_top_left
 
     @property
     def width(self) -> float:
-        """The width of the object from when it was last visible within Victor's camera view."""
+        """The width of the object from when it was last visible within Vector's camera view."""
         return self._width
 
     @property
     def height(self) -> float:
-        """The height of the object from when it was last visible within Victor's camera view."""
+        """The height of the object from when it was last visible within Vector's camera view."""
         return self._height
 
 
@@ -894,7 +881,7 @@ class Speed:
 
 
 def speed_mmps(speed_mmps: float):  # pylint: disable=redefined-outer-name
-    """:class:`anki_vector.util.Speed` instance set to the specified millimeters per second speed"""
+    """:class:`anki_vector.util.Speed` instance set to the specified millimeters per second speed."""
     return Speed(speed_mmps=speed_mmps)
 
 
@@ -929,6 +916,7 @@ class RectangleOverlay(BaseOverlay):
         :param line_color: The color of the line to be drawn.
     """
 
+    # @TODO Implement overlay using an ImageRect rather than a raw width & height
     def __init__(self, width: int, height: int, line_thickness: int = 5, line_color: tuple = (255, 0, 0)):
         super().__init__(line_thickness, line_color)
         self._width: int = width
@@ -944,15 +932,18 @@ class RectangleOverlay(BaseOverlay):
         """The height of the rectangle to be drawn."""
         return self._height
 
-    # TODO: Update to handle PIL images
-    def apply_overlay(self, image: np.ndarray) -> None:
+    def apply_overlay(self, image: Image.Image) -> None:
         """Draw a rectangle on top of the given image."""
-        image_width, image_height, _ = image.shape
+        d = ImageDraw.Draw(image)
+
+        image_width, image_height = image.size
         remaining_width = image_width - self.width
         remaining_height = image_height - self.height
-        top_left = (remaining_height // 2, remaining_width // 2)
-        bottom_right = ((image_height - (remaining_height // 2)), (image_width - (remaining_width // 2)))
-        cv2.rectangle(image, top_left, bottom_right, self.line_color, self.line_thickness)
+        x1, y1 = remaining_height // 2, remaining_width // 2
+        x2, y2 = (image_height - (remaining_height // 2)), (image_width - (remaining_width // 2))
+
+        for i in range(0, self.line_thickness):
+            d.rectangle([x1 + i, y1 + i, x2 - i, y2 - i], outline=self.line_color)
 
 
 class Component:

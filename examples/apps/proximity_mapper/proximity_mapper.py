@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Maps a region around victor using the proximity sensor.
+"""Maps a region around Vector using the proximity sensor.
 
 Vector will turn in place and use his sensor to detect walls in his
 local environment.  These walls are displayed in a 3d viewer.  The
@@ -35,7 +35,7 @@ from proximity_mapper_state import ClearedTerritory, MapState, Wall, WallSegment
 from opengl_viewer import OpenGLViewer   # pylint: disable=wrong-import-position
 
 import anki_vector   # pylint: disable=wrong-import-position
-from anki_vector.util import parse_test_args, radians, degrees, distance_mm, speed_mmps, Vector3  # pylint: disable=wrong-import-position
+from anki_vector.util import parse_command_args, radians, degrees, distance_mm, speed_mmps, Vector3  # pylint: disable=wrong-import-position
 
 # Constants
 
@@ -311,8 +311,8 @@ async def map_explorer(robot: anki_vector.robot.Robot, viewer: OpenGLViewer):
 
 
 # Connect to the robot
-args = parse_test_args()
-with anki_vector.Robot(args.serial, port=args.port, show_viewer=True) as robotInstance:
+args = parse_command_args()
+with anki_vector.Robot(args.serial, show_viewer=True) as robotInstance:
     # Creates a 3d viewer for the connected robot.
     viewerInstance = OpenGLViewer(robot=robotInstance)
 

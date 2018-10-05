@@ -13,10 +13,10 @@
 # limitations under the License.
 
 """
-The "world" represents the robot's known view of its environment.
+Vector's known view of his world.
 
 This view includes objects and faces it knows about and can currently
-"see" with its camera.
+see with its camera.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
@@ -53,10 +53,10 @@ class World(util.Component):
 
         # Subscribe to a callback that updates the world view
         robot.events.subscribe("robot_observed_face",
-                               self.add_update_face_to_world_view)
+                               self._add_update_face_to_world_view)
         # Subscribe to a callback that updates a face's id
         robot.events.subscribe("robot_changed_observed_face_id",
-                               self.update_face_id)
+                               self._update_face_id)
 
         # Subscribe to callbacks related to objects
         robot.events.subscribe("object_event",
@@ -91,16 +91,16 @@ class World(util.Component):
             yield face
 
     def get_face(self, face_id: int) -> faces.Face:
-        """Fetches a Face instance with the given id"""
+        """Fetches a Face instance with the given id."""
         return self._faces.get(face_id)
 
-    def add_update_face_to_world_view(self, _, msg):
-        """Adds/Updates the world view when a face is observed"""
+    def _add_update_face_to_world_view(self, _, msg):
+        """Adds/Updates the world view when a face is observed."""
         face = self.face_factory()
         face.unpack_face_stream_data(msg)
         self._faces[face.face_id] = face
 
-    def update_face_id(self, _, msg):
+    def _update_face_id(self, _, msg):
         """Updates the face id when a tracked face (negative ID) is recognized and
         receives a positive ID or when face records get merged"""
         face = self.get_face(msg.old_id)
@@ -119,7 +119,7 @@ class World(util.Component):
         return cube
 
     def get_light_cube(self):
-        """Returns the connected light cube
+        """Returns the connected light cube.
 
         Returns:
             :class:`anki_vector.objects.LightCube`: The LightCube object with that cube_id
@@ -142,7 +142,7 @@ class World(util.Component):
 
     @property
     def connected_light_cube(self):
-        """A light cube attached to Vector, if any
+        """A light cube attached to Vector, if any.
 
         .. code-block:: python
 
@@ -163,10 +163,9 @@ class World(util.Component):
     # TODO Needs return type
     @sync.Synchronizer.wrap
     async def connect_cube(self):
-        """ Attempt to connect to a cube
+        """Attempt to connect to a cube.
 
-        Attempt to connect to a cube. If a cube is currently connected,
-        this will do nothing.
+        If a cube is currently connected, this will do nothing.
 
         .. code-block:: python
 
@@ -184,7 +183,7 @@ class World(util.Component):
     # TODO Needs return type
     @sync.Synchronizer.wrap
     async def disconnect_cube(self):
-        """ Requests a disconnection from the currently connected cube
+        """Requests a disconnection from the currently connected cube.
 
         .. code-block:: python
 
@@ -196,7 +195,7 @@ class World(util.Component):
     # TODO Needs return type
     @sync.Synchronizer.wrap
     async def flash_cube_lights(self):
-        """ Flash cube lights
+        """Flash cube lights
 
         Plays the default cube connection animation on the currently
         connected cube's lights.
@@ -207,7 +206,7 @@ class World(util.Component):
     # TODO Needs return type
     @sync.Synchronizer.wrap
     async def forget_preferred_cube(self):
-        """ Forget preferred cube
+        """Forget preferred cube.
 
         'Forget' the robot's preferred cube. This will cause the robot to
         connect to the cube with the highest RSSI (signal strength) next
@@ -223,7 +222,7 @@ class World(util.Component):
     # TODO Needs return type
     @sync.Synchronizer.wrap
     async def set_preferred_cube(self, factory_id: str):
-        """ Set preferred cube
+        """Set preferred cube.
 
         Set the robot's preferred cube and save it to disk. The robot
         will always attempt to connect to this cube if it is available.
@@ -244,7 +243,6 @@ class World(util.Component):
     def on_object_event(self, _, msg):
         object_event_type = msg.WhichOneof("object_event_type")
 
-        # TODO How can we document these better? These are a bit buried right now.
         object_event_handlers = {
             "object_connection_state": self._on_object_connection_state,
             "object_moved": self._on_object_moved,
@@ -303,9 +301,9 @@ class World(util.Component):
             self.logger.warning('Tapped an object not currently tracked by the world with id {0}'.format(msg.object_id))
 
     def _on_robot_observed_object(self, _, msg):
+        # is_active refers to whether an object has a battery, such as for a Light Cube.
         self.logger.debug('Got Robot Observed Object Message ( timestamp: {0}, object_family: {1}, object_type: {2}, object_id: {3}, img_rect: {4}, pose: {5}, top_face_orientation_rad: {6}, is_active: {7} )'.format(msg.timestamp, msg.object_family, msg.object_type, msg.object_id, msg.img_rect, msg.pose, msg.top_face_orientation_rad, msg.is_active))
 
-        # is_active refers to whether an object has a battery, which is a given for the cube
         if msg.object_id in self._objects:
             self._objects[msg.object_id].on_observed(msg)
         else:

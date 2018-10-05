@@ -13,11 +13,20 @@
 # limitations under the License.
 
 """
+Behavior related classes and functions.
+
 Behaviors represent a complex task which requires Vector's
 internal logic to determine how long it will take. This
 may include combinations of animation, path planning or
-other functionality. Examples include drive_on_charger,
-set_lift_height, etc.
+other functionality. Examples include :meth:`drive_on_charger`,
+:meth:`set_lift_height`, etc.
+
+For commands such as :meth:`go_to_pose`, :meth:`drive_on_charger` and :meth:`dock_with_cube`,
+Vector uses path planning, which refers to the problem of
+navigating the robot from point A to B without collisions. Vector
+loads known obstacles from his map, creates a path to navigate
+around those objects, then starts following the path. If a new obstacle
+is found while following the path, a new plan may be created.
 
 The :class:`BehaviorComponent` class in this module contains
 functions for all the behaviors.
@@ -95,16 +104,16 @@ class BehaviorComponent(util.Component):
 
         return protocol.PathMotionProfile(**default_motion_profile)
 
-    @property
-    def current_priority(self):
-        # TODO implement
-        return self._current_priority
+    # @property
+    # def current_priority(self):
+    #    # TODO implement
+    #    return self._current_priority
 
-    @property
-    def is_active(self) -> bool:
-        # TODO implement
-        """True if the behavior is currently active and may run on the robot."""
-        return self._is_active
+    # @property
+    # def is_active(self) -> bool:
+    #    # TODO implement
+    #    """True if the behavior is currently active and may run on the robot."""
+    #    return self._is_active
 
     @classmethod
     def _get_next_action_id(cls):
@@ -119,7 +128,7 @@ class BehaviorComponent(util.Component):
     # Navigation actions
     @sync.Synchronizer.wrap
     async def drive_off_charger(self):
-        """ Drive Vector off the charger
+        """Drive Vector off the charger
 
         If Vector is on the charger, drives him off the charger.
 
@@ -132,10 +141,13 @@ class BehaviorComponent(util.Component):
 
     @sync.Synchronizer.wrap
     async def drive_on_charger(self):
-        """ Drive Vector onto the charger
+        """Drive Vector onto the charger
 
         Vector will attempt to find the charger and, if successful, he will
         back onto it and start charging.
+
+        Vector's charger has a visual marker so that the robot can locate it
+        for self-docking.
 
         .. code-block:: python
 
@@ -151,6 +163,8 @@ class BehaviorComponent(util.Component):
                          num_retries: int = 0) -> protocol.GoToPoseResponse:
         """Tells Vector to drive to the specified pose and orientation.
 
+        In navigating to the requested pose, Vector will use path planning.
+
         If relative_to_robot is set to True, the given pose will assume the
         robot's pose as its origin.
 
@@ -165,7 +179,7 @@ class BehaviorComponent(util.Component):
         :param num_retries: Number of times to re-attempt action in case of a failure.
 
         Returns:
-            A response from the robot with status information sent when this action successfully completes or fails.
+            A response from the robot with status information sent when this request successfully completes or fails.
 
         .. code-block:: python
 
@@ -188,7 +202,9 @@ class BehaviorComponent(util.Component):
 
         return await self.grpc_interface.GoToPose(go_to_pose_request)
 
-    # TODO Check that num_retries is actually working (and if not, same for other num_retries).
+    # TODO Check that num_retries is working (and if not, same for other num_retries).
+    # TODO alignment_type coming out ugly in the docs without real values
+    # TODO DockWithCubeResponse not clear what it is in docs
     @sync.Synchronizer.wrap
     async def dock_with_cube(self,
                              target_object: objects.LightCube,
@@ -196,7 +212,9 @@ class BehaviorComponent(util.Component):
                              alignment_type: protocol.AlignmentType = protocol.ALIGNMENT_TYPE_LIFT_PLATE,
                              distance_from_marker: util.Distance = None,
                              num_retries: int = 0) -> protocol.DockWithCubeResponse:
-        """Tells Vector to dock with a light cube with a given approach angle and distance.
+        """Tells Vector to dock with a light cube, optionally using a given approach angle and distance.
+
+        While docking with the cube, Vector will use path planning.
 
         :param target_object: The LightCube object to dock with.
         :param approach_angle: Angle to approach the dock with.
@@ -205,7 +223,7 @@ class BehaviorComponent(util.Component):
         :param num_retries: Number of times to re-attempt action in case of a failure.
 
         Returns:
-            A response from the robot with status information sent when this action successfully completes or fails.
+            A response from the robot with status information sent when this request successfully completes or fails.
 
         .. code-block:: python
 
@@ -241,7 +259,7 @@ class BehaviorComponent(util.Component):
                              speed: util.Speed,
                              should_play_anim: bool = True,
                              num_retries: int = 0) -> protocol.DriveStraightResponse:
-        """Tells Vector to drive in a straight line
+        """Tells Vector to drive in a straight line.
 
         Vector will drive for the specified distance (forwards or backwards)
 
@@ -256,7 +274,7 @@ class BehaviorComponent(util.Component):
         :param num_retries: Number of times to re-attempt action in case of a failure.
 
         Returns:
-            A response from the robot with status information sent when this action successfully completes or fails.
+            A response from the robot with status information sent when this request successfully completes or fails.
 
         .. code-block:: python
 
@@ -299,7 +317,7 @@ class BehaviorComponent(util.Component):
         :param num_retries: Number of times to re-attempt the turn in case of a failure.
 
         Returns:
-            A response from the robot with status information sent when this action successfully completes or fails.
+            A response from the robot with status information sent when this request successfully completes or fails.
 
         .. code-block:: python
 
@@ -333,7 +351,7 @@ class BehaviorComponent(util.Component):
         :param num_retries: Number of times to re-attempt the action in case of a failure.
 
         Returns:
-            A response from the robot with status information sent when this action successfully completes or fails.
+            A response from the robot with status information sent when this request successfully completes or fails.
 
         .. code-block:: python
 
@@ -355,7 +373,7 @@ class BehaviorComponent(util.Component):
                               max_speed: float = 10.0,
                               duration: float = 0.0,
                               num_retries: int = 0) -> protocol.SetLiftHeightResponse:
-        """Tell Vector's lift to move to a given height
+        """Tell Vector's lift to move to a given height.
 
         :param height: desired height for Vector's lift 0.0 (bottom) to
                 1.0 (top) (we clamp it to this range internally).
@@ -367,7 +385,7 @@ class BehaviorComponent(util.Component):
         :param num_retries: Number of times to re-attempt the action in case of a failure.
 
         Returns:
-            A response from the robot with status information sent when this action successfully completes or fails.
+            A response from the robot with status information sent when this request successfully completes or fails.
 
         .. code-block:: python
 

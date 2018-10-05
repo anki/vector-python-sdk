@@ -14,12 +14,12 @@ import anki_vector  # pylint: disable=wrong-import-position
 
 def main():
     """main execution"""
-    args = anki_vector.util.parse_test_args()
+    args = anki_vector.util.parse_command_args()
 
     print("------ begin testing go to pose ------")
 
     # The robot should go to given pose
-    with anki_vector.Robot(args.serial, port=args.port) as robot:
+    with anki_vector.Robot(args.serial) as robot:
 
         pose = anki_vector.util.Pose(x=50, y=0, z=0, angle_z=anki_vector.util.Angle(degrees=0))
         robot.behavior.go_to_pose(pose)

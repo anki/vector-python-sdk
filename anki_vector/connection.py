@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-Management of the connection to and from a Vector Robot
+Management of the connection to and from Vector.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
@@ -30,12 +30,7 @@ from .messaging import client, protocol
 
 
 class CONTROL_PRIORITY_LEVEL(Enum):
-    # TODO Review these levels to make sure they represent what we are shipping
-    """Enum used to specify the priority level that the program requests to run at"""
-
-    #: Runs above all levels of the behvaior tree. It is recommended to use a lower level, so
-    #: Victor may safely react to events such as falling.
-    OVERRIDE_ALL = protocol.ControlRequest.OVERRIDE_ALL  # pylint: disable=no-member
+    """Enum used to specify the priority level for the program."""
 
     #: Runs below Mandatory Physical Reactions such as tucking Vector's head and lift during a fall,
     #: yet above Trigger-Word Detection.
@@ -131,15 +126,15 @@ class Connection:
     .. code-block:: python
 
         # Connect to your Vector
-        conn = connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/tmp/cert.pem")
+        conn = connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/to/file.cert", "<secret_key>")
         conn.connect()
-        # Run your commands (for example play animation)
+        # Run your commands
         anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_blackjack_victorwin_01")
         await conn.grpc_interface.PlayAnimation(anim) # This needs to be run in an asyncio loop
         # Close the connection
         conn.close()
 
-    :param name: Vector's name in the format of "Vector-A1B2"
+    :param name: Vector's name in the format of "Vector-XXXX"
     :param host: The ip and port of Vector in the format "XX.XX.XX.XX:443"
     :param cert_file: The location of the certificate file on disk
     :param loop: The asyncio loop for the control events to run inside
@@ -188,7 +183,7 @@ class Connection:
         return self._control_events.lost_event
 
     def request_control(self, timeout: float = 10.0):
-        """Explicitly request control. Usually for use when detecting a :func:`control_lost_event`.
+        """Explicitly request control. Typically used after detecting :func:`control_lost_event`.
 
         .. code-block:: python
             :emphasize-lines: 3
@@ -197,7 +192,7 @@ class Connection:
                 await conn.control_lost_event.wait()
                 conn.request_control(timeout=5.0)
 
-        :param timeout: The time allotted to attempt a connection. default=10.0
+        :param timeout: The time allotted to attempt a connection, in seconds.
         """
         self._control_events.request()
         try:
@@ -212,16 +207,16 @@ class Connection:
             :emphasize-lines: 4
 
             # Connect to your Vector
-            conn = connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/tmp/cert.pem")
+            conn = connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/to/file.cert", "<secret_key>")
             # Add a 5 second timeout to reduce the amount of time allowed for a connection
             conn.connect(timeout=5.0)
-            # Run your commands (for example play animation)
+            # Run your commands
             anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_blackjack_victorwin_01")
             await conn.grpc_interface.PlayAnimation(anim) # This needs to be run in an asyncio loop
             # Close the connection
             conn.close()
 
-        :param timeout: The time allotted to attempt a connection. default=10.0
+        :param timeout: The time allotted to attempt a connection, in seconds.
         """
         self._loop = loop
         self._control_events = _ControlEventManager(loop)
@@ -232,7 +227,7 @@ class Connection:
         # Pin the robot certificate for opening the channel
         channel_credentials = aiogrpc.ssl_channel_credentials(root_certificates=trusted_certs)
         # Add authorization header for all the calls
-        call_credentials = aiogrpc.access_token_call_credentials(self._guid)  # TODO: get real credentials here or nothing will work
+        call_credentials = aiogrpc.access_token_call_credentials(self._guid)
 
         credentials = aiogrpc.composite_channel_credentials(channel_credentials, call_credentials)
 
@@ -281,9 +276,9 @@ class Connection:
             :emphasize-lines: 8
 
             # Connect to your Vector
-            conn = connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/tmp/cert.pem")
+            conn = connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/to/file.cert", "<secret_key>")
             conn.connect()
-            # Run your commands (for example play animation)
+            # Run your commands
             anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_blackjack_victorwin_01")
             await conn.grpc_interface.PlayAnimation(anim) # This needs to be run in an asyncio loop
             # Close the connection

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-SDK-specific exception classes for Vector
+SDK-specific exception classes for Vector.
 """
 
 from grpc import RpcError, StatusCode
@@ -35,6 +35,8 @@ class VectorException(Exception):
     """Base class of all Vector SDK exceptions."""
 
 # Don't add a docstring here or it prints out at runtime undesirably.
+
+
 class VectorConnectionException(VectorException):
     def __init__(self, cause):
         self._status = cause.code()
@@ -54,23 +56,23 @@ class VectorConnectionException(VectorException):
 
 
 class VectorUnauthenticatedException(VectorConnectionException):
-    """Failed to authenticate request"""
+    """Failed to authenticate request."""
 
 
 class VectorUnavailableException(VectorConnectionException):
-    """Unable to reach Vector"""
+    """Unable to reach Vector."""
 
 
 class VectorUnimplementedException(VectorConnectionException):
-    """Vector does not handle this message"""
+    """Vector does not handle this message."""
 
 
 class VectorTimeoutException(VectorConnectionException):
-    """Message took too long to complete"""
+    """Message took too long to complete."""
 
 
 def connection_error(rpc_error: RpcError) -> VectorConnectionException:
-    """Translates grpc-specific errors to user-friendly :class:`VectorConnectionException`"""
+    """Translates grpc-specific errors to user-friendly :class:`VectorConnectionException`."""
     code = rpc_error.code()
     if code is StatusCode.UNAUTHENTICATED:
         return VectorUnauthenticatedException(rpc_error)
@@ -90,15 +92,15 @@ class _VectorGenericException(VectorException):
 
 
 class VectorNotReadyException(_VectorGenericException):
-    """Vector tried to do something before it was ready"""
+    """Vector tried to do something before it was ready."""
 
 
 class VectorControlException(_VectorGenericException):
-    """Failed to get control of Vector
+    """Failed to get control of Vector.
 
 Please verify that Vector is connected to the internet, and consider trying to request a higher control level.
 """
 
 
 class VectorCameraFeedDisabledException(VectorException):
-    """Failed to render video because camera feed was disabled"""
+    """Failed to render video because camera feed was disabled."""

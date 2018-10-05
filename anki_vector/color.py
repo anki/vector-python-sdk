@@ -12,9 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Colors to be used with a light or Vector's screen.
+"""
+
 
 class Color:
-    """A Color to be used with a Light or Screen.
+    """A Color to be used with a Light or Vector's screen.
 
     Either int_color or rgb may be used to specify the actual color.
     Any alpha components (from int_color) are ignored - all colors are fully opaque.
@@ -40,7 +44,7 @@ class Color:
 
     @property
     def rgb565_bytepair(self):
-        """bytes[]: two bytes representing an int16 color with rgb565 encoding
+        """bytes[]: Two bytes representing an int16 color with rgb565 encoding.
 
         This format reflects the robot's Screen color range, and performing this
         conversion will reduce network traffic when sending Screen data.
@@ -80,5 +84,5 @@ yellow = Color(name="yellow", int_color=0xffff00ff)
 #: :class:`Color`: White color instance.
 white = Color(name="white", int_color=0xffffffff)
 
-#: :class:`Color`: instance representing no color (Lights off).
+#: :class:`Color`: Instance representing no color (i.e., lights off).
 off = Color(name="off")

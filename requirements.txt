@@ -1,9 +1,8 @@
 aiogrpc>=1.4
+cryptography
+flask
 googleapis-common-protos
-keras
-opencv-python
 numpy
+opencv-python
 Pillow
-scipy
-scikit-learn
-tensorflow
+requests

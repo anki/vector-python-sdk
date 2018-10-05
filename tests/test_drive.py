@@ -13,12 +13,12 @@ from anki_vector.util import degrees, distance_mm, speed_mmps  # pylint: disable
 
 def main():
     """main execution"""
-    args = anki_vector.util.parse_test_args()
+    args = anki_vector.util.parse_command_args()
 
     print("------ begin testing driving along a straight path and turning in place ------")
 
     # The robot shall drive straight, stop and then turn around
-    with anki_vector.Robot(args.serial, port=args.port) as robot:
+    with anki_vector.Robot(args.serial) as robot:
         robot.behavior.drive_straight(distance_mm(200), speed_mmps(50))
 
         robot.behavior.turn_in_place(degrees(180))

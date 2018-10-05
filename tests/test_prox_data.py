@@ -13,11 +13,11 @@ import anki_vector  # pylint: disable=wrong-import-position
 
 
 def main():
-    args = anki_vector.util.parse_test_args()
+    args = anki_vector.util.parse_command_args()
 
     print("------ begin testing prox sensor data ------")
 
-    with anki_vector.Robot(args.serial, port=args.port) as robot:
+    with anki_vector.Robot(args.serial) as robot:
         loop = robot.loop
         for _ in range(30):
             proximity_data = robot.proximity.last_valid_sensor_reading

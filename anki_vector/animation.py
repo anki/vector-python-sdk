@@ -14,12 +14,21 @@
 
 """
 Animation related classes, functions, events and values.
+
+Animations represent a sequence of highly coordinated movements, faces, lights, and sounds used to demonstrate an emotion or reaction.
+
+Animations can control the following tracks: head, lift, treads, face, audio and backpack lights.
+
+There are two ways to play an animation on Vector: play_animation and play_animation_trigger (not yet implemented). When calling play_animation,
+you select the specific animation you want the robot to run. For play_animation_trigger, you select a group of animations, and the robot
+will choose which animation from the group to run when you execute the method.
+
+By default, when an SDK program starts, the SDK will request a list of known animations from the robot, which will be loaded into anim_list
+in the AnimationComponent.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ["AnimationComponent"]
-
-# TODO Cozmo had EvtAnimationsLoaded, EvtAnimationCompleted, Animation, AnimationNames is_loaded. Where is this now?
 
 import asyncio
 
@@ -56,8 +65,7 @@ class AnimationComponent(util.Component):
                 result.wait_for_completed()
         return list(self._anim_dict.keys())
 
-    # TODO Provide example of how to connect without loading animations, then using ensure_loaded to load and use them.
-    async def ensure_loaded(self):
+    async def _ensure_loaded(self):
         """
         This is an optimization for the case where a user doesn't
         need the animation_list. This way, connections aren't delayed
@@ -82,7 +90,7 @@ class AnimationComponent(util.Component):
 
         .. code-block:: python
 
-            with anki_vector.Robot("00e20115") as robot:
+            with anki_vector.Robot("my_robot_serial_number") as robot:
                 anim_request = robot.anim.load_animation_list()
                 anim_request.wait_for_completed()
                 anim_names = robot.anim.anim_list
@@ -96,14 +104,14 @@ class AnimationComponent(util.Component):
         return result
 
     @sync.Synchronizer.wrap
-    async def play_animation(self, anim: str, loop_count: int = 1, ignore_body_track: bool = True, ignore_head_track: bool = True, ignore_lift_track: bool = True):
+    async def play_animation(self, anim: str, loop_count: int = 1, ignore_body_track: bool = False, ignore_head_track: bool = False, ignore_lift_track: bool = False):
         """Starts an animation playing on a robot.
 
         Vector must be off of the charger to play an animation.
 
         Warning: Specific animations may be renamed or removed in future updates of the app.
             If you want your program to work more reliably across all versions
-            we recommend using :meth:`play_animation_trigger` instead. TODO: implement play_animation_trigger
+            we recommend using :meth:`play_animation_trigger` instead. (:meth:`play_animation_trigger` is still in development.)
 
         .. code-block:: python
 
@@ -117,7 +125,7 @@ class AnimationComponent(util.Component):
         """
         animation = anim
         if not isinstance(anim, protocol.Animation):
-            await self.ensure_loaded()
+            await self._ensure_loaded()
             if anim not in self.anim_list:
                 raise exceptions.VectorException(f"Unknown animation: {anim}")
             animation = self._anim_dict[anim]

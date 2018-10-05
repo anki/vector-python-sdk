@@ -41,7 +41,7 @@ def parse_command_args():
     parser.add_argument("--model_config", nargs='?', default=None)
     parser.add_argument("--model_weights", nargs='?', default=None)
 
-    return util.parse_test_args(parser)
+    return util.parse_command_args(parser)
 
 
 def crop_image(image, target_width, target_height):

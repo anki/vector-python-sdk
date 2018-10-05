@@ -26,13 +26,13 @@ from .messaging import protocol
 
 
 class PhotographComponent(util.Component):
-    """Manage the state of all the photos on the robot.
+    """Access the photos on Vector.
 
     .. code-block:: python
 
         from PIL import Image
 
-        with Robot("Vector-XXXX", "XX.XX.XX.XX", "/some/path/robot.cert") as robot:
+        with anki_vector.Robot("my_robot_serial_number") as robot:
             if len(robot.photo_info) > 0:
                 first_photo = robot.photo_info[0]
                 photo = robot.photos.get_photo(first_photo)
@@ -74,7 +74,6 @@ class PhotographComponent(util.Component):
         .. code-block:: python
 
             robot.photos.load_photo_info()
-            robot.photos.photo_info # This property is now up-to-date with the robot
 
         :return: The response from the PhotosInfo rpc call
         """
@@ -93,7 +92,7 @@ class PhotographComponent(util.Component):
 
             from PIL import Image
 
-            with Robot("Vector-XXXX", "XX.XX.XX.XX", "/some/path/robot.cert") as robot:
+            with anki_vector.Robot("my_robot_serial_number") as robot:
                 if len(robot.photo_info) > 0:
                     first_photo = robot.photo_info[0]
                     photo = robot.photos.get_photo(first_photo)
@@ -114,15 +113,15 @@ class PhotographComponent(util.Component):
     async def get_thumbnail(self, photo_id: int) -> protocol.ThumbnailResponse:
         """Download a thumbnail of a given photo from the robot's storage.
 
-        This function is good for grabbing all of the images off the robot, and
-        selecting which one to download the full-resolution version of.
+        You may use this function to pull all of the images off the robot in a smaller format, and
+        then determine which one to download as full resolution.
 
         .. code-block:: python
             :emphasize-lines: 5
 
             from PIL import Image
 
-            with Robot("Vector-XXXX", "XX.XX.XX.XX", "/some/path/robot.cert") as robot:
+            with anki_vector.Robot("my_robot_serial_number") as robot:
                 for photo in robot.photo_info:
                     photo = robot.photos.get_thumbnail(photo)
                     image = Image.open(io.BytesIO(photo.image))

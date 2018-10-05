@@ -1,10 +1,8 @@
-.. _install-macos:
+.. _install-linux:
 
-###########################
-Installation - macOS / OS X
-###########################
-
-This guide provides instructions on installing the Vector SDK for computers running with a macOS operating system.
+####################
+Installation - Linux
+####################
 
 ^^^^^^^^^^^^^
 Prerequisites
@@ -17,25 +15,42 @@ Prerequisites
 * You can see Vector's eyes on his screen.
 
 
-^^^^^^^^^^^^^^^^^^^
+This guide provides instructions on installing the Vector SDK for computers running with an Ubuntu Linux operating system.
+
+.. warning:: The Vector SDK is tested and and supported on Ubuntu 16.04 and 18.04. Anki makes no guarantee the Vector SDK will work on other versions of Linux.  If you wish to try the Vector SDK on versions of Linux *other than* Ubuntu 14.04 or 16.04, please ensure the following dependencies are installed:
+
+  * Python 3.6.1 or later
+  * pip for Python 3 (Python package installer)
+
+
+
+^^^^^^^^^^^^^^^^^^^^^^
+Ubuntu 16.04 and 18.04
+^^^^^^^^^^^^^^^^^^^^^^
+
+"""""""""""""""""""
 Python Installation
-^^^^^^^^^^^^^^^^^^^
+"""""""""""""""""""
 
-1. Install `Homebrew <http://brew.sh>`_ on your system according to the latest instructions. If you already had brew installed then update it by opening a Terminal window and typing in the following::
+1. Type the following into your Terminal window to install Python::
 
-    brew update
+    sudo apt-get update
+    sudo apt-get install python3
 
-2. Once Homebrew is installed and updated, type the following into the Terminal window to install the latest version of Python 3::
+2. Then install pip by typing in the following into the Terminal window::
 
-    brew install python3
+    sudo apt install python3-pip
 
-^^^^^^^^^^^^^^^^
+3. Last, install Tkinter::
+
+    sudo apt-get install python3-pil.imagetk
+
+""""""""""""""""
 SDK Installation
-^^^^^^^^^^^^^^^^
+""""""""""""""""
 
 To install the SDK, type the following into the Terminal window::
 
-    cd vector-sdk
     pip3 install --user vector-0.4-py3-none-any.whl
 
 ^^^^^^^^^^^^^^^^^^^^^

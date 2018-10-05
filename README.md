@@ -10,13 +10,8 @@ Before connecting, you will need:
 
 These will be needed to run the configure.py script and set up authentication with your Vector.
 
-## Installation Steps
+Your device must have Python 3.6.1 installed. Please see the documentation pages mentioned below for instructions to install Python.
 
-Install python3:
-
-```bash
-brew install python
-```
 
 ---
 
@@ -36,26 +31,31 @@ Then configure your `anki_vector` SDK authentication from a terminal using:
 python3 configure.py
 ```
 
-If you have any trouble, please contact a member of the SDK team.
+By running this script, you will be asked to provide your Anki account credentials, and the script will download an authentication token and cert that will grant you access to the robot and his capabilities (such as camera and audio) as well as data stored on the robot (such as faces and photos).
+
+The downloaded access token is equivalent to your account credentials. It will be stored in your user directory along with a robot identity certificate and other useful data for establishing a connection. Do not share your access token.
+
+If you have any trouble, please post to the Vector forums at https://forums.anki.com/
 
 ---
 
 Run the scripts under `examples/tutorials` to test out the installation using:
 
 ```bash
-python3 examples/tutorials/01_hello_world.py -e ${VECTOR_SERIAL_NUMBER}
+python3 examples/tutorials/01_hello_world.py --serial ${VECTOR_SERIAL_NUMBER}
 ```
 
 > Note: Replace `${VECTOR_SERIAL_NUMBER}` with your robot's serial number.
 
 ---
 
-Until the documentation is uploaded to the anki.com website, check out the documentation:
+Check out the documentation by opening docs/build/html/index.html in your browser.
 
-```bash
-cd docs
-make html
-open build/html/index.html
-```
+If you encounter any issues, please reach out to the forums team and let us know at https://forums.anki.com/
 
-If you encounter any issues, please reach out to the SDK team and let us know.
+---
+
+Use of Vector and the Vector SDK is subject to Anki's Privacy Policy and Terms and Conditions.
+
+https://www.anki.com/en-us/company/privacy
+https://www.anki.com/en-us/company/terms-and-conditions

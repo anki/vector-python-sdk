@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-SDK for programming with Anki's Vector Robot.
+SDK for programming with the Anki Vector robot.
 """
 
 import sys
@@ -22,9 +22,9 @@ import logging
 from . import messaging
 from .robot import Robot, AsyncRobot
 
-logger = logging.getLogger('victor')  # pylint: disable=invalid-name
+logger = logging.getLogger('vector')  # pylint: disable=invalid-name
 
-if sys.version_info < (3, 5, 1):
-    sys.exit('victor requires Python 3.5.1 or later')
+if sys.version_info < (3, 6, 1):
+    sys.exit('anki_vector requires Python 3.6.1 or later')
 
 __all__ = ['Robot', 'AsyncRobot', 'logger', 'messaging']

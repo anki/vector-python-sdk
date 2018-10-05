@@ -16,12 +16,12 @@ import anki_vector  # pylint: disable=wrong-import-position
 
 def main():
     """main execution"""
-    args = anki_vector.util.parse_test_args()
+    args = anki_vector.util.parse_command_args()
 
     print("------ begin cube docking ------")
 
     docking_result = None
-    with anki_vector.Robot(args.serial, port=args.port) as robot:
+    with anki_vector.Robot(args.serial) as robot:
         robot.world.connect_cube()
 
         if robot.world.connected_light_cube:

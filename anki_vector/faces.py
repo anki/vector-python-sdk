@@ -34,11 +34,9 @@ import time
 from . import sync, util
 from .messaging import protocol
 
-# TODO: Add event classes in to this module once event subscription logic changes
-
 
 class Expression(Enum):
-    """Facial expressions that Vector can distinguish
+    """Facial expressions that Vector can distinguish.
 
     Facial expression not recognized.
     Call :func:`anki_vector.robot.Robot.enable_vision_mode` to enable recognition.
@@ -64,7 +62,7 @@ class Face:
 
     Each Face instance has a :attr:`face_id` integer - This may change if
     Vector later gets an improved view and makes a different prediction about
-    which face it is looking at.
+    which face he is looking at.
     """
 
     def __init__(self, face_id=None):
@@ -92,6 +90,7 @@ class Face:
                 f"Updated face id: {self.updated_face_id} Name: {self.name} "
                 f"Expression: {protocol.FacialExpression.Name(self.expression)}>")
 
+    # TODO sample code
     @property
     def face_id(self):
         """The internal ID assigned to the face.
@@ -103,6 +102,7 @@ class Face:
         """
         return self._face_id if self._updated_face_id is None else self._updated_face_id
 
+    # TODO sample code
     @face_id.setter
     def face_id(self, face_id):
         if self._face_id is not None:
@@ -111,7 +111,7 @@ class Face:
 
     @property
     def has_updated_face_id(self) -> bool:
-        """True if this face been updated / superseded by a face with a new ID
+        """True if this face been updated / superseded by a face with a new ID.
 
         .. code-block:: python
 
@@ -119,6 +119,7 @@ class Face:
         """
         return self._updated_face_id is not None
 
+    # TODO sample code
     @property
     def updated_face_id(self) -> int:
         """The ID for the face that superseded this one (if any, otherwise :meth:`face_id`)"""
@@ -126,52 +127,54 @@ class Face:
             return self._updated_face_id
         return self._face_id
 
+    # TODO sample code
     @property
     def name(self):
-        """string: The name Vector has associated with the face in his memory.
+        """string: The name Vector has associated with the face.
 
         This string will be empty if the face is not recognized or enrolled.
         """
         return self._name
 
+    # TODO sample code
     @property
     def last_observed_time(self) -> float:
-        """The time the element was last observed by the robot.
-        ``None`` if the element has not yet been observed.
-
-        .. code-block:: python
-
-            was_face_originally_unrecognized_but_is_now_recognized = face.has_updated_face_id
+        """The time the face was last observed by the robot.
+        ``None`` if the face has not yet been observed.
         """
         return self._last_observed_time
 
     @property
     def time_since_last_seen(self) -> float:
-        """The time since this element was last seen (math.inf if never)
+        """The time since this face was last seen (math.inf if never)
 
         .. code-block:: python
 
-            last_seen_time = cube.time_since_last_seen
+            last_seen_time = face.time_since_last_seen
         """
         if self._last_observed_time is None:
             return math.inf
         return time.time() - self._last_observed_time
 
+    # TODO sample code
     @property
     def timestamp(self):
         """int: Timestamp of event"""
         return self._last_observed_robot_timestamp
 
+    # TODO sample code
     @property
     def pose(self):
         """:class:`anki_vector.util.Pose`: Position and rotation of the face observed"""
         return self._pose
 
+    # TODO sample code
     @property
     def face_rect(self) -> util.ImageRect:
-        """Rect representing position of face"""
+        """Rect representing position of face."""
         return self._face_rect
 
+    # TODO sample code
     @property
     def expression(self):
         """string: The facial expression Vector has recognized on the face.
@@ -185,6 +188,7 @@ class Face:
         """
         return self._expression
 
+    # TODO sample code
     @property
     def expression_score(self):
         """int: The score/confidence that :attr:`expression` was correct.
@@ -195,28 +199,32 @@ class Face:
         """
         return self._expression_score
 
+    # TODO sample code
     @property
     def left_eye(self):
-        """sequence of tuples of float (x,y): points representing the outline of the left eye"""
+        """sequence of tuples of float (x,y): points representing the outline of the left eye."""
         return self._left_eye
 
+    # TODO sample code
     @property
     def right_eye(self):
-        """sequence of tuples of float (x,y): points representing the outline of the right eye"""
+        """sequence of tuples of float (x,y): points representing the outline of the right eye."""
         return self._right_eye
 
+    # TODO sample code
     @property
     def nose(self):
-        """sequence of tuples of float (x,y): points representing the outline of the nose"""
+        """sequence of tuples of float (x,y): points representing the outline of the nose."""
         return self._nose
 
+    # TODO sample code
     @property
     def mouth(self):
-        """sequence of tuples of float (x,y): points representing the outline of the mouth"""
+        """sequence of tuples of float (x,y): points representing the outline of the mouth."""
         return self._mouth
 
     def unpack_face_stream_data(self, msg):
-        """Unpacks the face observed stream data in to a Face instance"""
+        """Unpacks the face observed stream data from Vector into a Face instance."""
         self._face_id = msg.face_id
         self._name = msg.name
         self._last_observed_time = time.time()
@@ -238,21 +246,15 @@ class Face:
 
 
 class FaceComponent(util.Component):
-    """Manage the state of the faces on the robot"""
+    """Manage the state of the faces on the robot."""
 
-    # TODO document, sample code and add Anki internal test for all face enrollment methods
-    @sync.Synchronizer.wrap
-    async def cancel_face_enrollment(self):
-        req = protocol.CancelFaceEnrollmentRequest()
-        return await self.grpc_interface.CancelFaceEnrollment(req)
-
-    # TODO document, needs sample code and return value. It returns an array of LoadedKnownFace but is that availble in Python?
-    # TODO This doesn't seem to be in Cozmo. Are we sure we want to expose it?
+    # TODO document, needs sample code and return value. It returns an array of LoadedKnownFace
     @sync.Synchronizer.wrap
     async def request_enrolled_names(self):
         req = protocol.RequestEnrolledNamesRequest()
         return await self.grpc_interface.RequestEnrolledNames(req)
 
+    # TODO needs sample code
     @sync.Synchronizer.wrap
     async def update_enrolled_face_by_id(self, face_id: int, old_name: str, new_name: str):
         """Update the name enrolled for a given face.
@@ -265,6 +267,7 @@ class FaceComponent(util.Component):
                                                      oldName=old_name, newName=new_name)
         return await self.grpc_interface.UpdateEnrolledFaceByID(req)
 
+    # TODO needs sample code
     @sync.Synchronizer.wrap
     async def erase_enrolled_face_by_id(self, face_id: int):
         """Erase the enrollment (name) record for the face with this ID.
@@ -274,27 +277,23 @@ class FaceComponent(util.Component):
         req = protocol.EraseEnrolledFaceByIDRequest(faceID=face_id)
         return await self.grpc_interface.EraseEnrolledFaceByID(req)
 
+    # TODO needs sample code
     @sync.Synchronizer.wrap
     async def erase_all_enrolled_faces(self):
         """Erase the enrollment (name) records for all faces."""
         req = protocol.EraseAllEnrolledFacesRequest()
         return await self.grpc_interface.EraseAllEnrolledFaces(req)
 
-    # TODO document, sample code and add Anki internal test for all face enrollment methods
-    @sync.Synchronizer.wrap
-    async def set_face_to_enroll(self, name, observedID=0, saveID=0, saveToRobot: bool = True, sayName: bool = False, useMusic: bool = False):
-        req = protocol.SetFaceToEnrollRequest(name=name,
-                                              observedID=observedID,
-                                              saveID=saveID,
-                                              saveToRobot=saveToRobot,
-                                              sayName=sayName,
-                                              useMusic=useMusic)
-        return await self.grpc_interface.SetFaceToEnroll(req)
-
-    # TODO move out of face component? This is general to objects, not specific to faces? Does this also live in robot?
+    # TODO move out of face component? This is general to objects, not specific to faces? Move to new vision component? Needs sample code.
+    # TODO improve list of modes as shown in docs
     @sync.Synchronizer.wrap
     async def enable_vision_mode(self, enable: bool, mode: protocol.VisionMode = protocol.VisionMode.Value("VISION_MODE_DETECTING_FACES")):
-        """Edit the vision mode
+        """Enable a vision mode
+
+        The vision system can be enabled for modes including the following:
+        Marker detection: `VISION_MODE_DETECTING_MARKERS`
+        Face detection and recognition: `VISION_MODE_DETECTING_FACES`
+        Motion detection: `VISION_MODE_DETECTING_MOTION`
 
         :param enable: Enable/Disable the mode specified.
         :param mode: Specifies the vision mode to edit.

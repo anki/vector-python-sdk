@@ -13,7 +13,9 @@
 # limitations under the License.
 
 """
-Vector's Screen that displays his face
+Vector's LCD Screen that displays his face.
+
+The screen is 184 x 96 color (RGB565) pixels. The active area is 23.2mm x 12.1mm.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
@@ -94,7 +96,7 @@ def convert_pixels_to_screen_data(pixel_data: list, image_width: int, image_heig
 
 
 def convert_image_to_screen_data(pil_image: Image.Image):
-    """ Convert an image into the correct format to display on Vector's face.
+    """Convert an image into the correct format to display on Vector's face.
 
     .. code-block:: python
 

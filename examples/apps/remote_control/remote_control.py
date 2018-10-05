@@ -116,7 +116,7 @@ class RemoteControlVector:
                                   "anim_wakeword_groggyeyes_listenloop_01",  # 5
                                   "anim_fistbump_success_01",  # 6
                                   "anim_reacttoface_unidentified_02",  # 7
-                                  "anim_vc_reaction_whatwasthat_01",  # 8
+                                  "anim_communication_cantdothat_01",  # 8
                                   "anim_lookatdvice_getout"]  # 9
 
         self.anim_index_for_key = [0] * 10
@@ -543,7 +543,6 @@ def get_annotated_image():
     if image is None:
         return _default_camera_image
 
-    image = Image.fromarray(image)
     return image
 
 
@@ -671,10 +670,13 @@ def handle_updateVector():
 
 
 def run():
-    args = util.parse_test_args()
+    args = util.parse_command_args()
 
-    with anki_vector.AsyncRobot(args.serial, port=args.port) as robot:
+    with anki_vector.AsyncRobot(args.serial) as robot:
         flask_app.remote_control_vector = RemoteControlVector(robot)
+
+        robot.behavior.drive_off_charger()
+
         flask_helpers.run_flask(flask_app)
 
 

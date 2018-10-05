@@ -241,12 +241,6 @@ MESSAGES_TO_TEST = [
      TestResultMatches(protocol.SetLiftHeightResponse(status=protocol.ResponseStatus(code=protocol.ResponseStatus.RESPONSE_RECEIVED),    # pylint: disable=no-member
                                                       result=protocol.ActionResult(code=protocol.ActionResult.ACTION_RESULT_SUCCESS)))),  # pylint: disable=no-member
 
-    # SetBackpackLights message
-    (client.ExternalInterfaceServicer.SetBackpackLights,
-     protocol.SetBackpackLightsRequest(on_color=[0, 0, 0], off_color=[0, 0, 0], on_period_ms=[250, 250, 250],
-                                       off_period_ms=[0, 0, 0], transition_on_period_ms=[0, 0, 0], transition_off_period_ms=[0, 0, 0]),
-     TestResultMatches(protocol.SetBackpackLightsResponse(status=protocol.ResponseStatus(code=protocol.ResponseStatus.REQUEST_PROCESSING)))),  # pylint: disable=no-member
-
     # ConnectCube message
     (client.ExternalInterfaceServicer.ConnectCube,
      protocol.ConnectCubeRequest(),
@@ -417,7 +411,7 @@ async def run_message_tests(robot, future):
 
 def main():
     """main execution"""
-    args = anki_vector.util.parse_test_args()
+    args = anki_vector.util.parse_command_args()
 
     logger = logging.getLogger('anki_vector')
     logger.setLevel(logging.DEBUG)
@@ -427,7 +421,7 @@ def main():
     fh.setFormatter(formatter)
     logger.addHandler(fh)
 
-    with anki_vector.Robot(args.serial, port=args.port, default_logging=False) as robot:
+    with anki_vector.Robot(args.serial, default_logging=False) as robot:
         print("------ beginning tests ------")
 
         future = asyncio.Future()

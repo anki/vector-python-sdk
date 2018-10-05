@@ -14,12 +14,12 @@ from anki_vector.util import degrees  # pylint: disable=wrong-import-position
 
 def main():
     """main execution"""
-    args = anki_vector.util.parse_test_args()
+    args = anki_vector.util.parse_command_args()
 
     print("------ begin testing head and lift actions ------")
 
     # The robot shall lower and raise his head and lift
-    with anki_vector.Robot(args.serial, port=args.port) as robot:
+    with anki_vector.Robot(args.serial) as robot:
         robot.behavior.set_head_angle(degrees(-50.0))
 
         robot.behavior.set_head_angle(degrees(50.0))

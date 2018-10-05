@@ -43,9 +43,9 @@ from anki_vector.util import distance_mm, speed_mmps
 
 
 def main():
-    args = anki_vector.util.parse_test_args()
+    args = anki_vector.util.parse_command_args()
 
-    with anki_vector.Robot(args.serial, port=args.port) as robot:
+    with anki_vector.Robot(args.serial) as robot:
         print("Vector SDK has behavior control...")
         robot.behavior.drive_off_charger()
 

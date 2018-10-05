@@ -13,7 +13,12 @@
 # limitations under the License.
 
 """
-Object Proximity detection related classes, functions, events and values.
+Support for Vector's distance sensor.
+
+Vector's time-of-flight distance sensor has a usable range of about 30 mm to 1200 mm
+(max useful range closer to 300mm for Victor) with a field of view of 25 degrees.
+
+The distance sensor can be used to detect objects in front of the robot.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
@@ -25,12 +30,12 @@ from . import util
 class ProximitySensorData:
     """A distance sample from the time-of-flight sensor with metadata describing reliability of the measurement
 
-    The proximity sensor is located near the bottom of Vector between the two front wheels, facing forward.  The
-    reported distance describes how far in front of this sensor the robot feels an obstacle is.  The sensor estimates
-    based on time of flight information within a field of view which the engine resolves to a certain quality value.
+    The proximity sensor is located near the bottom of Vector between the two front wheels, facing forward. The
+    reported distance describes how far in front of this sensor the robot feels an obstacle is. The sensor estimates
+    based on time-of-flight information within a field of view which the engine resolves to a certain quality value.
 
     Four additional flags are supplied by the engine to indicate whether this proximity data is considered valid
-    for the robot's internal pathfinding.  Respecting these is optional, but will help python code respect the
+    for the robot's internal pathfinding. Respecting these is optional, but will help python code respect the
     behavior of the robot's innate object avoidance.
     """
 
@@ -61,7 +66,7 @@ class ProximitySensorData:
     @property
     def is_in_valid_range(self) -> bool:
         """Whether or not the engine considers the detected signal is close enough
-        to be considered useful.  Past a certain threshold, distance readings
+        to be considered useful. Past a certain threshold, distance readings
         become unreliable.
 
         .. code-block:: python
@@ -83,7 +88,7 @@ class ProximitySensorData:
 
     @property
     def is_lift_in_fov(self) -> bool:
-        """Whether Vector's lift is blocking the time-of-flight sensor.  While
+        """Whether Vector's lift is blocking the time-of-flight sensor. While
         the lift will send clear proximity signals, it's not useful for object
         detection.
 
@@ -96,7 +101,7 @@ class ProximitySensorData:
     @property
     def is_too_pitched(self) -> bool:
         """Whether the engine considers the robot to be tilted too much up or down
-        for the time of flight data to usefully describe obstacles in the driving
+        for the time-of-flight data to usefully describe obstacles in the driving
         plane.
 
         .. code-block:: python
@@ -128,7 +133,7 @@ class ProximitySensorData:
 class ProximityComponent(util.Component):
     """Maintains the most recent proximity sensor data
 
-    This will be updated with every broadcast RobotState, and can be queried at any time.  Two sensor readings are made available:
+    This will be updated with every broadcast RobotState, and can be queried at any time. Two sensor readings are made available:
         - the most recent data from the robot
         - the most recent data which was considered valid by the engine for usage
 
@@ -136,7 +141,7 @@ class ProximityComponent(util.Component):
 
       .. code-block:: python
 
-         with anki_vector.Robot("Vector-XXXX", "XX.XX.XX.XX", "/some/path/robot.cert") as robot:
+         with anki_vector.Robot("my_robot_serial_number") as robot:
              proximity_data = robot.proximity.last_sensor_reading
              if proximity_data is not None:
                  print('Proximity distance: {0}, engine considers useful: {1}'.format(proximity_data.distance, proximity_data.is_valid))
@@ -168,7 +173,7 @@ class ProximityComponent(util.Component):
         """
         return self._last_valid_sensor_reading
 
-    # TODO Needs docstring, sample code
+    # TODO Should this be private? Otherwise needs docstring, sample code
     def on_proximity_update(self, prox_data: ProximitySensorData):
         self._last_sensor_reading = ProximitySensorData(prox_data)
         if self._last_sensor_reading.is_valid:

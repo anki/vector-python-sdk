@@ -203,7 +203,7 @@ class LightCubeView(opengl.PrecomputedView):
 
 
 class RobotView(opengl.PrecomputedView):
-    """A view containing the Vector Robot 3D Model.
+    """A view containing the Vector robot 3D Model.
 
     :param mesh_data: Source Mesh Data for the robot.
     """

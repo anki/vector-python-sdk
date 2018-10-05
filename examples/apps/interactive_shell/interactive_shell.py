@@ -28,20 +28,27 @@ except ImportError:
 
 import anki_vector
 
-usage = ('This is an IPython interactive shell for Vector.\n'
-         'All commands are executed within Vector\'s running connection loop.\n'
-         'Use the [tab] key to auto-complete commands, and see all available methods.\n'
-         'All IPython commands work as usual. See below for some useful syntax:\n'
-         '  ?         -> Introduction and overview of IPython\'s features.\n'
-         '  object?   -> Details about \'object\'.\n'
-         '  object??  -> More detailed, verbose information about \'object\'.')
+usage = """Use the [tab] key to auto-complete commands, and see all available methods and properties.
 
-args = anki_vector.util.parse_test_args()
+For example, type 'robot.' then press the [tab] key and you'll see all the robot functions.
+Keep pressing tab to cycle through all of the available options.
 
-ipyshell = InteractiveShellEmbed(banner1='\nWelcome to the Vector Shell!',
+All IPython commands work as usual.
+Here's some useful syntax:
+  robot?   -> Details about 'robot'.
+  robot??  -> More detailed information including code for 'robot'.
+These commands will work on all objects inside of the shell.
+
+You can even call the functions that send messages to Vector, and he'll respond just like he would in a script.
+Try it out! Type:
+    robot.anim.play_animation('anim_vc_alrighty_01')
+"""
+
+args = anki_vector.util.parse_command_args()
+
+ipyshell = InteractiveShellEmbed(banner1='\nWelcome to the Vector Interactive Shell!',
                                  exit_msg='Goodbye\n')
 
-
-with anki_vector.Robot(args.serial, port=args.port) as robot:
+with anki_vector.Robot(args.serial) as robot:
     # Invoke the ipython shell while connected to Vector
     ipyshell(usage)

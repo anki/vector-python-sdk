@@ -28,10 +28,10 @@ from anki_vector.util import degrees
 
 
 def main():
-    args = anki_vector.util.parse_test_args()
+    args = anki_vector.util.parse_command_args()
 
     docking_result = None
-    with anki_vector.Robot(args.serial, port=args.port) as robot:
+    with anki_vector.Robot(args.serial) as robot:
         robot.behavior.drive_off_charger()
 
         # If necessary, Move Vector's Head and Lift down
@@ -42,7 +42,7 @@ def main():
 
         if robot.world.connected_light_cube:
             print("Begin cube docking...")
-            # TODO Add num_retries of 3. Observe it actually trying multiple times.
+            # TODO Try with num_retries of 3
             dock_response = robot.behavior.dock_with_cube(robot.world.connected_light_cube)
             docking_result = dock_response.result
 

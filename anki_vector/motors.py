@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-Control the motors of Victor
+Control the motors of Vector.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
@@ -24,7 +24,7 @@ from .messaging import protocol
 
 
 class MotorComponent(util.Component):
-    """Controls the low-level motor functions"""
+    """Controls the low-level motor functions."""
     @sync.Synchronizer.wrap
     async def set_wheel_motors(self,
                                left_wheel_speed: float,
@@ -42,8 +42,8 @@ class MotorComponent(util.Component):
 
             robot.motors.set_wheel_motors(25, 50)
 
-        :param left_wheel_speed: Speed of the left tread (in millimeters per second)
-        :param right_wheel_speed: Speed of the right tread (in millimeters per second)
+        :param left_wheel_speed: Speed of the left tread (in millimeters per second).
+        :param right_wheel_speed: Speed of the right tread (in millimeters per second).
         :param left_wheel_accel: Acceleration of left tread (in millimeters per second squared)
                             ``None`` value defaults this to the same as l_wheel_speed.
         :param right_wheel_accel: Acceleration of right tread (in millimeters per second squared)
@@ -78,7 +78,7 @@ class MotorComponent(util.Component):
                              speed: float):
         '''Tell Vector's lift motor to move with a certain speed.
 
-        Positive speed for up, negative speed for down.  Measured in radians per second.
+        Positive speed for up, negative speed for down. Measured in radians per second.
 
         To unlock the lift track, call `set_lift_motor(0)`.
 
