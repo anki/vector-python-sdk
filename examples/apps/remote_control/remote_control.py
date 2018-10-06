@@ -111,12 +111,12 @@ class RemoteControlVector:
         default_anims_for_keys = ["anim_turn_left_01",  # 0
                                   "anim_blackjack_victorwin_01",  # 1
                                   "anim_pounce_success_02",  # 2
-                                  "vig_alwayshelpful_photo",  # 3
+                                  "anim_vc_shutup_01",  # 3
                                   "anim_weather_snow_01",  # 4
                                   "anim_wakeword_groggyeyes_listenloop_01",  # 5
                                   "anim_fistbump_success_01",  # 6
                                   "anim_reacttoface_unidentified_02",  # 7
-                                  "anim_communication_cantdothat_01",  # 8
+                                  "anim_vc_comehere_reaction",  # 8
                                   "anim_lookatdvice_getout"]  # 9
 
         self.anim_index_for_key = [0] * 10

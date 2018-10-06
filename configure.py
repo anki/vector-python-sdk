@@ -43,7 +43,7 @@ except:
     def colored(text, color=None, on_color=None, attrs=None):
         return text
 
-import anki_vector.messaging as api
+from anki_vector import messaging
 
 class ApiHandler:
     def __init__(self, headers: dict, url: str):
@@ -100,10 +100,10 @@ def user_authentication(session_id: bytes, cert: bytes, ip: str, name: str) -> s
     sys.stdout.flush()
     channel = grpc.secure_channel("{}:443".format(ip), creds,
                                         options=(("grpc.ssl_target_name_override", name,),))
-    interface = api.client.ExternalInterfaceStub(channel)
-    request = api.protocol.UserAuthenticationRequest(user_session_id=session_id.encode('utf-8'))
+    interface = messaging.client.ExternalInterfaceStub(channel)
+    request = messaging.protocol.UserAuthenticationRequest(user_session_id=session_id.encode('utf-8'))
     response = interface.UserAuthentication(request)
-    if response.code != api.protocol.UserAuthenticationResponse.AUTHORIZED:
+    if response.code != messaging.protocol.UserAuthenticationResponse.AUTHORIZED:
         print(colored(" ERROR", "red"))
         sys.exit("Failed to authorize request: {}\n\n"
                  "Please be sure to connect via the Vector companion app and log into a Vector into an account first.")
@@ -116,7 +116,7 @@ def get_session_token(api):
     password = getpass("Enter Password: ")
     payload = {'username': username, 'password': password}
 
-    print("\nAuthenticating with {}...".format(api.name()), end="")
+    print("\nAuthenticating with {}...".format(api.name), end="")
     sys.stdout.flush()
     r = requests.post(api.handler.url, data=payload, headers=api.handler.headers)
     if r.status_code != 200:

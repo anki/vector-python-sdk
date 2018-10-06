@@ -131,7 +131,7 @@ class Robot:
         self.events = events.EventHandler()
         # placeholders for components before they exist
         self._anim: animation.AnimationComponent = None
-        self._audio: audio.AudioComponent = None
+        #self._audio: audio.AudioComponent = None // TODO turn on
         self._behavior: behavior.BehaviorComponent = None
         self._camera: camera.CameraComponent = None
         self._faces: faces.FaceComponent = None
