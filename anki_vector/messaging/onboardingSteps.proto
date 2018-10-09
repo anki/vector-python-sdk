@@ -1,0 +1,54 @@
+// Copyright (c) 2018 Anki, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License in the file LICENSE.txt or at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// Onboarding messages
+
+syntax = "proto3";
+
+package Anki.Vector.external_interface;
+
+enum OnboardingSteps {
+  STEP_INVALID = 0;
+
+  // This step enum helps keep the app/robot in sync. Some steps are expecting a
+  // continue or other message (see comments). The rest of the steps are only used
+  // for information purposes since there exist better, more specific messages to
+  // handle state (e.g., low battery)
+
+  // interruptions:
+  STEP_PHYSICAL_INTERRUPTION             = 1;  // picked up, cliff, on side, etc.
+  STEP_LOW_BATTERY                       = 2;  // low battery of some sort. see OnboardingLowBattery
+  // Available
+  STEP_EXPECTING_RESUME_FROM_CHARGER     = 4;  // check the latest OnboardingOnCharger to know when to send this
+  STEP_EXPECTING_RESUME_FROM_HABITAT     = 5;  // check the latest OnboardingInHabitat
+  STEP_RESUMING                          = 6;  // generic resuming (e.g., driving off charger)
+
+  // chronological:
+  // (available)
+  STEP_EXPECTING_CONTINUE_WAKE_UP        = 8;  // expecting an OnboardingContinue from app
+  STEP_WAKING_UP                         = 9;
+  STEP_EXPECTING_FIRST_TRIGGER_WORD      = 10;
+  STEP_EXPECTING_FIRST_VOICE_COMMAND     = 11;
+  STEP_FIRST_VOICE_COMMAND               = 12;
+  STEP_EXPECTING_CONTINUE_MEET_VECTOR    = 13; // expecting an OnboardingContinue from app
+  STEP_EXPECTING_MEET_VECTOR             = 14;
+  STEP_MEET_VECTOR                       = 15;
+  STEP_EXPECTING_RESCAN                  = 16; // check the latest FaceEnrollmentResult to know if this is the state
+  STEP_EXPECTING_END_MEET_VECTOR         = 17; // check the latest FaceEnrollmentResult to know if this is the state
+  STEP_EXPECTING_START_CUBE_SEARCH       = 18; // expecting an OnboardingContinue from app
+  STEP_CUBE_SEARCH                       = 19;
+  STEP_CUBE_TRICK                        = 20;
+  STEP_EXPECTING_CONTINUE_APP_ONBOARDING = 21; // expecting an OnboardingContinue from app
+  STEP_APP_ONBOARDING                    = 22; // waiting any voice command before switching to the normal behavior stack
+}

@@ -57,6 +57,7 @@ setup(
     install_requires=get_requirements(),
     extras_require={
         '3dviewer': ['PyOpenGL>=3.1'],
+        'docs': ['sphinx', 'sphinx_rtd_theme', 'sphinx_autodoc_typehints'],
         'experimental': ['keras', 'scikit-learn', 'scipy', 'tensorflow'],
         'test': ['pytest', 'requests', 'requests_toolbelt'],
     }

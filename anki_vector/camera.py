@@ -120,6 +120,7 @@ class CameraComponent(util.Component):
 
         # Decode compressed source data into uncompressed image data
         imageArray = cv2.imdecode(array, -1)
+        imageArray = cv2.cvtColor(imageArray, cv2.COLOR_BGR2RGB)
 
         # Convert to Pillow Image
         self._latest_image = Image.fromarray(imageArray)

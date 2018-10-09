@@ -58,9 +58,10 @@ def raise_opengl_or_pillow_import_error(opengl_import_exc):
         raise NotImplementedError('GLUT (OpenGL Utility Toolkit) is not available:\n%s'
                                   % opengl_import_exc)
     else:
+        # TODO Update to: 'Do `pip3 install --user anki_vector[3dviewer]` from `pip3 install PyOpenGL`
         raise NotImplementedError('opengl is not available; '
                                   'make sure the PyOpenGL and Pillow packages are installed:\n'
-                                  'Do `pip3 install --user anki_vector[3dviewer]` to install. Error: %s' % opengl_import_exc)
+                                  'Do `pip3 install PyOpenGL Pillow` to install. Error: %s' % opengl_import_exc)
 
 
 try:

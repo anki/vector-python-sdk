@@ -13,6 +13,7 @@ Prerequisites
 * Vector is powered on.
 * You have successfully created an Anki account.
 * Vector has been set up with the Vector companion app.
+* The Vector companion app is *not* currently connected to Vector.
 * Vector is connected to the same network as your computer.
 * You can see Vector's eyes on his screen.
 

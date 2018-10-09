@@ -1,0 +1,219 @@
+// Copyright (c) 2018 Anki, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License in the file LICENSE.txt or at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// External interface for robot <-> app and robot <-> sdk communication
+
+syntax = "proto3";
+
+package Anki.Vector.external_interface;
+
+import "anki_vector/messaging/messages.proto";
+
+// Attempt to connect to a cube. If a cube is currently connected,
+// this will do nothing.
+message ConnectCubeRequest {
+}
+
+message ConnectCubeResponse {
+  ResponseStatus status     = 1;
+  bool         success    = 2;
+  uint32       object_id  = 3;
+  string       factory_id = 4;
+}
+
+message CubesAvailableRequest {
+}
+
+message CubesAvailableResponse {
+  ResponseStatus status = 1;
+  repeated string factory_ids = 2;
+}
+
+// Requests a disconnection from the currently connected cube.
+message DisconnectCubeRequest {
+}
+
+message DisconnectCubeResponse {
+  ResponseStatus status = 1;
+}
+
+// Plays the default cube connection animation on the currently
+// connected cube's lights.  This is intended for app level user
+// surfacing of cube connectivity, not for sdk cube light control.
+message FlashCubeLightsRequest {
+}
+
+message FlashCubeLightsResponse {
+  ResponseStatus status = 1;
+}
+
+// Forget the robot's preferred cube. This will cause the robot to
+// connect to the cube with the highest RSSI (signal strength) next
+// time a connection is requested. Saves this preference to disk.
+// The next cube that the robot connects to will become its
+// preferred cube.
+message ForgetPreferredCubeRequest {
+}
+
+message ForgetPreferredCubeResponse {
+  ResponseStatus status = 1;
+}
+
+// Set the robot's preferred cube and save it to disk. The robot
+// will always attempt to connect to this cube if it is available.
+// This is only used in simulation for now.
+message SetPreferredCubeRequest {
+  string factory_id = 1;
+}
+
+message SetPreferredCubeResponse {
+  ResponseStatus status = 1;
+}
+
+// Sets each LED on victor's cube.  Two states are specified
+// designated 'on' and 'off', each with a color, duration,
+// and state transition time
+message SetCubeLightsRequest {
+  // This is a uint_8 internally.
+  enum MakeRelativeMode
+  {
+    UNKNOWN   = 0;
+    OFF       = 1;
+    BY_CORNER = 2;
+    BY_SIDE   = 3;
+  }
+
+  uint32           object_id                = 1;
+  repeated uint32  on_color                 = 2;
+  repeated uint32  off_color                = 3;
+  repeated uint32  on_period_ms             = 4;
+  repeated uint32  off_period_ms            = 5;
+  repeated uint32  transition_on_period_ms  = 6;
+  repeated uint32  transition_off_period_ms = 7;
+  repeated int32   offset                   = 8;
+  float            relative_to_x            = 9;
+  float            relative_to_y            = 10;
+  bool             rotate                   = 11;
+  MakeRelativeMode make_relative            = 12;
+}
+message SetCubeLightsResponse {
+  ResponseStatus status = 1;
+}
+
+// This is an int_32 on the clad side.
+enum ObjectType
+{
+  INVALID_OBJECT = 0;
+  UNKNOWN_OBJECT = 1;
+
+  //////////////////////////////////////////////////////////////////////////
+  // Light Cube (a.k.a. Active Block)
+  //
+
+  BLOCK_LIGHTCUBE1 = 2;
+
+  // There are 38 object types in the internal clad definition, though only
+  // some are surfaced here
+  OBJECT_TYPE_COUNT = 38;
+}
+
+enum ObjectFamily {
+  INVALID_FAMILY    = 0;
+  UNKNOWN_FAMILY    = 1;
+  BLOCK             = 2;
+  LIGHT_CUBE        = 3;
+  CHARGER           = 4;
+
+  // There are 7 object types in the internal clad definition, though only
+  // some are surfaced here
+  OBJECT_FAMILY_COUNT = 7;
+}
+
+// Indicates that a the connection subscribed through ConnectCube has
+// been lost.
+message CubeConnectionLost {
+}
+
+message ObjectAvailable {
+  string factory_id = 1;
+}
+
+// Indicates that a cube has connected or disconnected to the robot.
+// This message will be sent for any connects or disconnects regardless
+// of whether it originated from us or underlying robot behavior.
+message ObjectConnectionState {
+  uint32     object_id   = 1;
+  string     factory_id  = 2;
+  ObjectType object_type = 3;
+  bool       connected   = 4;
+}
+
+message ObjectMoved {
+  uint32 timestamp = 1;
+  uint32 object_id = 2;
+}
+
+message ObjectStoppedMoving {
+  uint32 timestamp = 1;
+  uint32 object_id = 2;
+}
+
+enum UpAxis {
+  INVALID_AXIS = 0;
+  X_NEGATIVE   = 1;
+  X_POSITIVE   = 2;
+  Y_NEGATIVE   = 3;
+  Y_POSITIVE   = 4;
+  Z_NEGATIVE   = 5;
+  Z_POSITIVE   = 6;
+  NUM_AXES     = 7;
+}
+
+message ObjectUpAxisChanged {
+  uint32 timestamp = 1;
+  uint32 object_id = 2;
+  UpAxis up_axis   = 3;
+}
+
+message ObjectTapped {
+  uint32 timestamp = 1;
+  uint32 object_id = 2;
+}
+
+// RobotObservedObject for signaling that an object
+//  with specified ID/Type/Family was seen at a particular location in the image
+//  and the world
+message RobotObservedObject {
+    uint32       timestamp                = 1;
+    ObjectFamily object_family            = 2;
+    ObjectType   object_type              = 3;
+    int32        object_id                = 4; // signed to match U2G::PickAndPlaceObject which has the option to have objectID<0
+    CladRect     img_rect                 = 5; // position in image coords
+    PoseStruct   pose                     = 6;
+    float        top_face_orientation_rad = 7; // absolute orienation of top face, iff isActive==true
+    uint32       is_active                = 8;
+}
+
+message ObjectEvent {
+  oneof object_event_type {
+    ObjectAvailable       object_available        = 1;
+    ObjectConnectionState object_connection_state = 2;
+    ObjectMoved           object_moved            = 3;
+    ObjectStoppedMoving   object_stopped_moving   = 4;
+    ObjectUpAxisChanged   object_up_axis_changed  = 5;
+    ObjectTapped          object_tapped           = 6;
+    RobotObservedObject   robot_observed_object   = 7;
+    CubeConnectionLost    cube_connection_lost    = 8;
+  }
+}
