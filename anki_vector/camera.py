@@ -128,7 +128,7 @@ class CameraComponent(util.Component):
 
     async def _request_and_handle_images(self) -> None:
         """Queries and listens for camera feed events from the robot.
-        Recieved events are parsed by a helper function."""
+        Received events are parsed by a helper function."""
         try:
             req = protocol.CameraFeedRequest()
             async for evt in self.grpc_interface.CameraFeed(req):

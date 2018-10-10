@@ -13,6 +13,7 @@ Prerequisites
 * Vector is powered on.
 * You have successfully created an Anki account.
 * Vector has been set up with the Vector companion app.
+* You have updated Vector to OS 1.0.1 or later. Check the OS version by putting Vector on the charger, double-tapping his backpack button, and raising and lowering his lift once.
 * The Vector companion app is *not* currently connected to Vector.
 * Vector is connected to the same network as your computer.
 * You can see Vector's eyes on his screen.
@@ -21,7 +22,6 @@ Prerequisites
 ^^^^^^^^^^^^^^^^^^^
 Python Installation
 ^^^^^^^^^^^^^^^^^^^
-
 
 Download the `Python 3.6.1 (or later) executable file from Python.org <https://www.python.org/downloads/windows/>`_ and
 run it on your computer.
@@ -32,14 +32,18 @@ run it on your computer.
 SDK Installation
 ^^^^^^^^^^^^^^^^
 
-To install the SDK, type the following into a Command Prompt window::
+To install the SDK, first download file ``vector_python_sdk_0.4.0.zip``.
 
-    cd vector-sdk
-    pip3 install --user vector-0.4-py3-none-any.whl
+Uncompress the file by right-clicking the file ``vector_python_sdk_0.4.0.zip`` and tap ``Extract All``.
 
-.. note:: If you encounter an error during SDK installation, you may need to upgrade your pip install. Try `python -m pip install --upgrade pip` or `py -3 -m pip install --upgrade pip`
+Navigate into the SDK folder and install the SDK by typing the following into a Command Prompt window::
 
-.. note:: If you encounter an error during SDK installation, you may need to upgrade your Python Setuptools. Try `py -3 -m pip install --upgrade setuptools`
+    cd vector_python_sdk_0.4.0
+    pip3 install .
+
+.. note:: If you encounter an error during SDK installation, you may need to upgrade your pip install. Try ``python -m pip install --upgrade pip`` or ``py -3 -m pip install --upgrade pip``
+
+.. note:: If you encounter an error during SDK installation, you may need to upgrade your Python Setuptools. Try ``py -3 -m pip install --upgrade setuptools``
 
 ^^^^^^^^^^^^^^^^^^^^^
 Vector Authentication
@@ -47,23 +51,14 @@ Vector Authentication
 
 To authenticate with the robot, type the following into the Terminal window::
 
-    cd vector-sdk
+    cd vector_python_sdk_0.4.0
     py configure.py
 
 You will be prompted for your robot's name, ip address and serial number. You will also be asked for your Anki login and password.
 
-.. note:: Running `configure.py` will automatically download the Vector robot certificate to your computer and store credentials to allow you to connect to Vector. These credentials will be stored under your home directory in folder `.anki_vector`.
+.. note:: Running ``configure.py`` will automatically download the Vector robot certificate to your computer and store credentials to allow you to connect to Vector. These credentials will be stored under your home directory in folder ``.anki_vector``.
 
 .. warning:: These credentials give full access to your robot, including camera stream, audio stream and data. Do not share these credentials.
-
-^^^^^^^^^^^^^^^^^^
-Extra Dependencies
-^^^^^^^^^^^^^^^^^^
-
-There are a few extra packages that must be installed to run the experimental examples. To install these dependencies, enter this command::
-
-    cd vector-sdk
-    pip3 install .[experimental]
 
 ^^^^^^^^^^^^^^^
 Troubleshooting

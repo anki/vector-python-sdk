@@ -25,7 +25,7 @@ Please visit our `Anki SDK Forums <https://forums.anki.com/>`_ where you can:
 Starting Up the SDK
 -------------------
 
-1. On the computer, open Terminal (macOS/Linux) or Command Prompt (Windows) and type ``cd vector-sdk``, and press **Enter**.
+1. On the computer, open Terminal (macOS/Linux) or Command Prompt (Windows) and navigate into your ``vector_python_sdk_0.4.0`` folder by typing ``cd vector_python_sdk_0.4.0``, and press **Enter**.
 
 ----------------
 Example Program

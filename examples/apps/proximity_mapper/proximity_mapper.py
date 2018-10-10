@@ -312,7 +312,7 @@ async def map_explorer(robot: anki_vector.robot.Robot, viewer: OpenGLViewer):
 
 # Connect to the robot
 args = parse_command_args()
-with anki_vector.Robot(args.serial, show_viewer=True) as robotInstance:
+with anki_vector.Robot(args.serial, enable_camera_feed=True, show_viewer=True) as robotInstance:
     # Creates a 3d viewer for the connected robot.
     viewerInstance = OpenGLViewer(robot=robotInstance)
 

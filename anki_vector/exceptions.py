@@ -23,6 +23,8 @@ __all__ = ['VectorCameraFeedDisabledException',
            'VectorConnectionException',
            'VectorControlException',
            'VectorException',
+           'VectorInvalidVersionException',
+           'VectorNotFoundException',
            'VectorNotReadyException',
            'VectorTimeoutException',
            'VectorUnauthenticatedException',
@@ -34,17 +36,36 @@ __all__ = ['VectorCameraFeedDisabledException',
 class VectorException(Exception):
     """Base class of all Vector SDK exceptions."""
 
-# Don't add a docstring here or it prints out at runtime undesirably.
+
+class VectorInvalidVersionException(VectorException):
+    """Your SDK version is not compatible with Vector's version."""
+
+    def __init__(self, version_request, version_response):
+        host = version_response.host_version
+        min_host = version_request.min_host_version
+        client = version_request.client_version
+        if min_host > host:
+            error_message = (f"{self.__class__.__doc__}\n\n"
+                             f"Your Vector is an older version that is not supported by the SDK: min={min_host} > host={host}\n"
+                             f"Use your app to make sure that Vector is on the internet, and able to download the latest update.")
+        else:
+            error_message = (f"{self.__class__.__doc__}\n\n"
+                             f"Your SDK is an older version that is not supported by Vector: {host} > {client}\n"
+                             f"Please install the latest SDK to continue.")
+        super().__init__(error_message)
 
 
 class VectorConnectionException(VectorException):
     def __init__(self, cause):
-        self._status = cause.code()
-        self._details = cause.details()
         doc_str = self.__class__.__doc__
-        msg = (f"{self._status}: {self._details}"
-               f"\n\n{doc_str if doc_str else 'Unknown error'}")
-        super().__init__(msg)
+        if cause is not None:
+            self._status = cause.code()
+            self._details = cause.details()
+            msg = (f"{self._status}: {self._details}"
+                   f"\n\n{doc_str if doc_str else 'Unknown error'}")
+            super().__init__(msg)
+        else:
+            super().__init__(doc_str)
 
     @property
     def status(self):
@@ -89,6 +110,13 @@ class _VectorGenericException(VectorException):
     def __init__(self, cause=None):
         msg = (f"{self.__class__.__doc__}\n{cause if cause is not None else ''}")
         super().__init__(msg)
+
+
+class VectorNotFoundException(_VectorGenericException):
+    """Unable to establish a connection to Vector.
+
+Make sure you're on the same network, and Vector is connected to the internet.
+"""
 
 
 class VectorNotReadyException(_VectorGenericException):

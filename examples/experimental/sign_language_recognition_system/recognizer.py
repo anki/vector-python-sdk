@@ -184,7 +184,7 @@ class SignLanguageRecognizer():
             recognizer = SignLanguageRecognizer()
             recognizer.load_model("/path/to/model_config_filename",
                                 "/path/to/model_weights_filename")
-            with anki_vector.Robot("my_robot_serial_number", show_viewer=True) as robot:
+            with anki_vector.Robot("my_robot_serial_number", enable_camera_feed=True, show_viewer=True) as robot:
                 print("------ predicting hand signs, press ctrl+c to exit early ------")
                 try:
                     robot.loop.run_until_complete(recognizer.predict_with_camera_feed(robot))
@@ -253,7 +253,7 @@ def main():
         # Load the model's configs and weights if the corresponding paths are given
         if args.model_config and args.model_weights:
             recognizer.load_model(args.model_config, args.model_weights)
-        with anki_vector.Robot(args.serial, show_viewer=True) as robot:
+        with anki_vector.Robot(args.serial, enable_camera_feed=True, show_viewer=True) as robot:
             print("------ predicting hand signs, press ctrl+c to exit early ------")
             try:
                 # Add a rectangular overlay describing the portion of image that is used after cropping.

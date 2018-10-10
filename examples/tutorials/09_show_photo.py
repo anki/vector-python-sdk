@@ -23,6 +23,7 @@ had Vector take a photo by saying, "Hey Vector! Take a photo."
 """
 
 import io
+import sys
 
 try:
     from PIL import Image
@@ -35,7 +36,6 @@ import anki_vector
 def main():
     args = anki_vector.util.parse_command_args()
     with anki_vector.Robot(args.serial) as robot:
-        photo_info_list = robot.photos.photo_info
         for photo in robot.photos.photo_info:
             print(f"Opening photo {photo.photo_id}")
             val = robot.photos.get_photo(photo.photo_id)
@@ -43,6 +43,7 @@ def main():
             image.show()
         else:
             print('\n\nNo photos found on Vector. Ask him to take a photo first by saying, "Hey Vector! Take a photo."\n\n')
+
 
 if __name__ == "__main__":
     main()

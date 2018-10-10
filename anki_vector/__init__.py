@@ -21,6 +21,7 @@ import logging
 
 from . import messaging
 from .robot import Robot, AsyncRobot
+from .version import __version__
 
 logger = logging.getLogger('vector')  # pylint: disable=invalid-name
 

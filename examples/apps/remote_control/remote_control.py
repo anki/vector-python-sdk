@@ -672,7 +672,7 @@ def handle_updateVector():
 def run():
     args = util.parse_command_args()
 
-    with anki_vector.AsyncRobot(args.serial) as robot:
+    with anki_vector.AsyncRobot(args.serial, enable_camera_feed=True) as robot:
         flask_app.remote_control_vector = RemoteControlVector(robot)
 
         robot.behavior.drive_off_charger()

@@ -239,13 +239,6 @@ service ExternalInterface {
     };
   }
 
-  rpc UpdateSettings(UpdateSettingsRequest) returns (UpdateSettingsResponse) {
-    option (google.api.http) = {
-      post: "/v1/update_settings",
-      body: "*"
-    };
-  }
-
   rpc UpdateAccountSettings(UpdateAccountSettingsRequest) returns (UpdateAccountSettingsResponse) {
     option (google.api.http) = {
       post: "/v1/update_account_settings",
@@ -397,20 +390,6 @@ service ExternalInterface {
   rpc UpdateAndRestart(UpdateAndRestartRequest) returns (UpdateAndRestartResponse) {
     option (google.api.http) = {
       post: "/v1/update_and_restart",
-      body: "*"
-    };
-  }
-
-  rpc UploadDebugLogs(UploadDebugLogsRequest) returns (UploadDebugLogsResponse) {
-    option (google.api.http) = {
-      post: "/v1/upload_debug_logs",
-      body: "*"
-    };
-  }
-
-  rpc CheckCloudConnection(CheckCloudRequest) returns (CheckCloudResponse) {
-    option (google.api.http) = {
-      post: "/v1/check_cloud_connection",
       body: "*"
     };
   }

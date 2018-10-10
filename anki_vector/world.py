@@ -27,9 +27,8 @@ from . import objects
 from . import sync
 from . import util
 
+from .events import Events
 from .messaging import protocol
-
-# TODO How do we decide what does and does not have a leading underscore, below?
 
 
 class World(util.Component):
@@ -48,19 +47,20 @@ class World(util.Component):
 
         self._faces = {}
 
-        self.light_cube = {objects.LightCube1Type: self.light_cube_factory(robot=robot, world=self)}
-        self._objects = {}
+        self._light_cube = {objects.LIGHT_CUBE_1_TYPE: self.light_cube_factory(robot=robot)}
 
         # Subscribe to a callback that updates the world view
-        robot.events.subscribe("robot_observed_face",
-                               self._add_update_face_to_world_view)
-        # Subscribe to a callback that updates a face's id
-        robot.events.subscribe("robot_changed_observed_face_id",
-                               self._update_face_id)
+        robot.events.subscribe(
+            self._on_face_observed,
+            Events.robot_observed_face)
 
-        # Subscribe to callbacks related to objects
-        robot.events.subscribe("object_event",
-                               self.on_object_event)
+    def close(self):
+        """The world will tear down all its faces and objects."""
+        for face in self._faces.values():
+            face.teardown()
+
+        for cube in self._light_cube.values():
+            cube.teardown()
 
     @property
     def visible_faces(self):
@@ -94,75 +94,42 @@ class World(util.Component):
         """Fetches a Face instance with the given id."""
         return self._faces.get(face_id)
 
-    def _add_update_face_to_world_view(self, _, msg):
-        """Adds/Updates the world view when a face is observed."""
-        face = self.face_factory()
-        face.unpack_face_stream_data(msg)
-        self._faces[face.face_id] = face
+    def get_light_cube(self) -> objects.LightCube:
+        """Returns the vector light cube object, regardless of its connection status.
 
-    def _update_face_id(self, _, msg):
-        """Updates the face id when a tracked face (negative ID) is recognized and
-        receives a positive ID or when face records get merged"""
-        face = self.get_face(msg.old_id)
-        if face:
-            face.updated_face_id = msg.new_id
+        .. code-block:: python
 
-    def _allocate_light_cube(self, object_type: objects.LightCube, object_id: int, factory_id: str):
-        cube = self.light_cube.get(object_type)
-        if not cube:
-            self.robot.logger.error('Received invalid cube object_type=%s', object_type)
-            return None
-        cube.object_id = object_id
-        self._objects[cube.object_id] = cube
-        cube.factory_id = factory_id
-        self.robot.logger.debug('Allocated object_id=%d to light cube %s', object_id, cube)
-        return cube
-
-    def get_light_cube(self):
-        """Returns the connected light cube.
-
-        Returns:
-            :class:`anki_vector.objects.LightCube`: The LightCube object with that cube_id
+            cube = robot.world.get_light_cube()
+            print('LightCube {0} connected.'.format("is" if cube.is_connected else "isn't"))
 
         Raises:
             :class:`ValueError` if the cube_id is invalid.
         """
-        cube = self.light_cube.get(objects.LightCube1Type)
+        cube = self._light_cube.get(objects.LIGHT_CUBE_1_TYPE)
         # Only return the cube if it has an object_id
         if cube.object_id is not None:
             return cube
         return None
 
-    # TODO add docstring and return type. Note no one is calling this. Do we need this?
-    def get_object_by_id(self, object_id):
-        if object_id not in self._objects:
-            raise ValueError("Invalid object_id %s" % object_id)
-
-        return self._objects[object_id]
-
     @property
-    def connected_light_cube(self):
-        """A light cube attached to Vector, if any.
+    def connected_light_cube(self) -> objects.LightCube:
+        """A light cube connected to Vector, if any.
 
         .. code-block:: python
 
             robot.world.connect_cube()
             if robot.world.connected_light_cube:
                 dock_response = robot.behavior.dock_with_cube(robot.world.connected_light_cube)
-
-        Returns:
-            A :class:`anki_vector.objects.LightCube` instance, or None
         """
         result = None
-        cube = self.light_cube.get(objects.LightCube1Type)
+        cube = self._light_cube.get(objects.LIGHT_CUBE_1_TYPE)
         if cube and cube.is_connected:
             result = cube
 
         return result
 
-    # TODO Needs return type
     @sync.Synchronizer.wrap
-    async def connect_cube(self):
+    async def connect_cube(self) -> protocol.ConnectCubeResponse:
         """Attempt to connect to a cube.
 
         If a cube is currently connected, this will do nothing.
@@ -174,15 +141,19 @@ class World(util.Component):
         req = protocol.ConnectCubeRequest()
         result = await self.grpc_interface.ConnectCube(req)
 
-        if not result.object_id in self._objects:
-            self.light_cube[objects.LightCube1Type] = self._allocate_light_cube(objects.LightCube1Type, result.object_id, result.factory_id)
-        self._objects[result.object_id].on_connection_state_changed(result.success, result.factory_id)
+        # dispatch cube connected message
+        event = protocol.ObjectConnectionState(
+            object_id=result.object_id,
+            factory_id=result.factory_id,
+            connected=result.success,
+            object_type=objects.LIGHT_CUBE_1_TYPE)
+
+        self._robot.events.dispatch_event(event, Events.object_connection_state)
 
         return result
 
-    # TODO Needs return type
     @sync.Synchronizer.wrap
-    async def disconnect_cube(self):
+    async def disconnect_cube(self) -> protocol.DisconnectCubeResponse:
         """Requests a disconnection from the currently connected cube.
 
         .. code-block:: python
@@ -192,9 +163,8 @@ class World(util.Component):
         req = protocol.DisconnectCubeRequest()
         return await self.grpc_interface.DisconnectCube(req)
 
-    # TODO Needs return type
     @sync.Synchronizer.wrap
-    async def flash_cube_lights(self):
+    async def flash_cube_lights(self) -> protocol.FlashCubeLightsResponse:
         """Flash cube lights
 
         Plays the default cube connection animation on the currently
@@ -203,9 +173,8 @@ class World(util.Component):
         req = protocol.FlashCubeLightsRequest()
         return await self.grpc_interface.FlashCubeLights(req)
 
-    # TODO Needs return type
     @sync.Synchronizer.wrap
-    async def forget_preferred_cube(self):
+    async def forget_preferred_cube(self) -> protocol.ForgetPreferredCubeResponse:
         """Forget preferred cube.
 
         'Forget' the robot's preferred cube. This will cause the robot to
@@ -219,9 +188,8 @@ class World(util.Component):
         req = protocol.ForgetPreferredCubeRequest()
         return await self.grpc_interface.ForgetPreferredCube(req)
 
-    # TODO Needs return type
     @sync.Synchronizer.wrap
-    async def set_preferred_cube(self, factory_id: str):
+    async def set_preferred_cube(self, factory_id: str) -> protocol.SetPreferredCubeResponse:
         """Set preferred cube.
 
         Set the robot's preferred cube and save it to disk. The robot
@@ -239,72 +207,20 @@ class World(util.Component):
         req = protocol.SetPreferredCubeRequest(factory_id=factory_id)
         return await self.grpc_interface.SetPreferredCube(req)
 
-    # TODO Add docstring
-    def on_object_event(self, _, msg):
-        object_event_type = msg.WhichOneof("object_event_type")
+    #### Private Event Handlers ####
 
-        object_event_handlers = {
-            "object_connection_state": self._on_object_connection_state,
-            "object_moved": self._on_object_moved,
-            "object_stopped_moving": self._on_object_stopped_moving,
-            "object_up_axis_changed": self._on_object_up_axis_changed,
-            "object_tapped": self._on_object_tapped,
-            "robot_observed_object": self._on_robot_observed_object}
-
-        if object_event_type in object_event_handlers:
-            handler = object_event_handlers[object_event_type]
-            handler(object_event_type, getattr(msg, object_event_type))
-        else:
-            self.logger.warning('An object_event was received with unknown type:{0}'.format(object_event_type))
-
-    def _on_object_connection_state(self, _, msg):
-        self.logger.debug('Got Object Connection State Message ( object_id: {0}, factory_id: {1}, object_type: {2}, connected: {3} )'.format(msg.object_id, msg.factory_id, msg.object_type, msg.connected))
-        # Currently only one lightcube id is supported
-        if msg.object_type == objects.LightCube1Type:
-            if not msg.object_id in self._objects:
-                self.light_cube[objects.LightCube1Type] = self._allocate_light_cube(msg.object_type, msg.object_id, msg.factory_id)
-
-            self._objects[msg.object_id].on_connection_state_changed(msg.connected, msg.factory_id)
-        else:
-            self.logger.warning('An object without the expected LightCube type is sending a connection state update, object_id:{0}, factory_id:{1}'.format(msg.object_id, msg.factory_id))
-
-    def _on_object_moved(self, _, msg):
-        self.logger.debug('Got Object Moved Message ( timestamp: {0}, object_id: {1} )'.format(msg.timestamp, msg.object_id))
-
-        if msg.object_id in self._objects:
-            self._objects[msg.object_id].on_moved(msg)
-        else:
-            self.logger.warning('An object not currently tracked by the world moved with id {0}'.format(msg.object_id))
-
-    def _on_object_stopped_moving(self, _, msg):
-        self.logger.debug('Got Object Stopped Moving Message ( timestamp: {0}, object_id: {1} )'.format(msg.timestamp, msg.object_id))
-
-        if msg.object_id in self._objects:
-            self._objects[msg.object_id].on_stopped_moving(msg)
-        else:
-            self.logger.warning('An object not currently tracked by the world stopped moving with id {0}'.format(msg.object_id))
-
-    def _on_object_up_axis_changed(self, _, msg):
-        self.logger.debug('Got Object Up Axis Changed Message ( timestamp: {0}, object_id: {1}, up_axis: {2} )'.format(msg.timestamp, msg.object_id, msg.up_axis))
-
-        if msg.object_id in self._objects:
-            self._objects[msg.object_id].on_up_axis_changed(msg)
-        else:
-            self.logger.warning('Up Axis changed on an object not currently tracked by the world with id {0}'.format(msg.object_id))
-
-    def _on_object_tapped(self, _, msg):
-        self.logger.debug('Got Object Tapped Message ( timestamp: {0}, object_id: {1} )'.format(msg.timestamp, msg.object_id))
-
-        if msg.object_id in self._objects:
-            self._objects[msg.object_id].on_tapped(msg)
-        else:
-            self.logger.warning('Tapped an object not currently tracked by the world with id {0}'.format(msg.object_id))
-
-    def _on_robot_observed_object(self, _, msg):
-        # is_active refers to whether an object has a battery, such as for a Light Cube.
-        self.logger.debug('Got Robot Observed Object Message ( timestamp: {0}, object_family: {1}, object_type: {2}, object_id: {3}, img_rect: {4}, pose: {5}, top_face_orientation_rad: {6}, is_active: {7} )'.format(msg.timestamp, msg.object_family, msg.object_type, msg.object_id, msg.img_rect, msg.pose, msg.top_face_orientation_rad, msg.is_active))
-
-        if msg.object_id in self._objects:
-            self._objects[msg.object_id].on_observed(msg)
-        else:
-            self.logger.warning('Observed an object not currently tracked by the world with id {0}'.format(msg.object_id))
+    def _on_face_observed(self, _, msg):
+        """Adds/Updates the world view when a face is observed."""
+        if msg.face_id not in self._faces:
+            pose = util.Pose(x=msg.pose.x, y=msg.pose.y, z=msg.pose.z,
+                             q0=msg.pose.q0, q1=msg.pose.q1,
+                             q2=msg.pose.q2, q3=msg.pose.q3,
+                             origin_id=msg.pose.origin_id)
+            image_rect = util.ImageRect(msg.img_rect.x_top_left,
+                                        msg.img_rect.y_top_left,
+                                        msg.img_rect.width,
+                                        msg.img_rect.height)
+            face = self.face_factory(self.robot,
+                                     pose, image_rect, msg.face_id, msg.name, msg.expression, msg.expression_values,
+                                     msg.left_eye, msg.right_eye, msg.nose, msg.mouth, msg.timestamp)
+            self._faces[face.face_id] = face

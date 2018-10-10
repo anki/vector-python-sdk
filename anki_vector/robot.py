@@ -22,7 +22,6 @@ __all__ = ['MAX_HEAD_ANGLE', 'MIN_HEAD_ANGLE', 'AsyncRobot', 'Robot']
 import asyncio
 import configparser
 import functools
-import sys
 from pathlib import Path
 
 from . import (animation, audio, behavior, camera,
@@ -77,7 +76,7 @@ class Robot:
     :param config: A custom :class:`dict` to override values in Vector's configuration. (optional)
                    Example: :code:`{"cert": "/path/to/file.cert", "name": "Vector-XXXX", "guid": "<secret_key>"}`
                    where :code:`cert` is the certificate to identify Vector, :code:`name` is the name on Vector's face
-                   when his backpack is double clicked on the charger, and :code:`guid` is the authorization token
+                   when his backpack is double-clicked on the charger, and :code:`guid` is the authorization token
                    that identifies the SDK user. Note: Never share your authentication credentials with anyone.
     :param loop: The async loop on which the Vector commands will execute.
     :param default_logging: Disable default logging.
@@ -96,7 +95,7 @@ class Robot:
                  behavior_activation_timeout: int = 10,
                  cache_animation_list: bool = True,
                  enable_vision_mode: bool = False,
-                 enable_camera_feed: bool = True,
+                 enable_camera_feed: bool = False,
                  enable_audio_feed: bool = False,
                  show_viewer: bool = False):
 
@@ -127,11 +126,12 @@ class Robot:
                              '{"name":"Vector-XXXX", "ip":"XX.XX.XX.XX", "cert":"/path/to/cert_file", "guid":"<secret_key>"}')
 
         #: :class:`anki_vector.connection.Connection`: The active connection to the robot.
-        self.conn = connection.Connection(self._name, ':'.join([self._ip, self._port]), self._cert_file, self._guid)
-        self.events = events.EventHandler()
+        self._conn = connection.Connection(self._name, ':'.join([self._ip, self._port]), self._cert_file, self._guid)
+        self._events = events.EventHandler()
+
         # placeholders for components before they exist
         self._anim: animation.AnimationComponent = None
-        #self._audio: audio.AudioComponent = None // TODO turn on
+        self._audio: audio.AudioComponent = None
         self._behavior: behavior.BehaviorComponent = None
         self._camera: camera.CameraComponent = None
         self._faces: faces.FaceComponent = None
@@ -184,11 +184,20 @@ class Robot:
 
         return dict_entry
 
-    # TODO sample code
     @property
     def robot(self) -> 'Robot':
         """A reference to the Robot object instance."""
         return self
+
+    @property
+    def conn(self) -> connection.Connection:
+        """A reference to the Connection instance."""
+        return self._conn
+
+    @property
+    def events(self) -> events.EventHandler:
+        """A reference to the EventHandler instance."""
+        return self._events
 
     @property
     def anim(self) -> animation.AnimationComponent:
@@ -199,9 +208,7 @@ class Robot:
 
     @property
     def audio(self) -> audio.AudioComponent:
-        """:class:`anki_vector.audio.AudioComponent`: The audio instance used to control
-        Vector's audio feed
-        """
+        """The audio instance used to control Vector's audio feed."""
         if self._audio is None:
             raise exceptions.VectorNotReadyException("AudioComponent is not yet initialized")
         return self._audio
@@ -213,8 +220,7 @@ class Robot:
 
     @property
     def camera(self) -> camera.CameraComponent:
-        """:class:`anki_vector.camera.CameraComponent`: The camera instance used to control
-        Vector's camera feed.
+        """The camera instance used to control Vector's camera feed.
 
         .. code-block:: python
 
@@ -464,7 +470,7 @@ class Robot:
         """The audio feed enabled/disabled
 
         :getter: Returns whether the audio feed is enabled
-        :setter: Enable/disable the audio feeed
+        :setter: Enable/disable the audio feed
 
         .. code-block:: python
 
@@ -486,7 +492,7 @@ class Robot:
         """The camera feed enabled/disabled
 
         :getter: Returns whether the camera feed is enabled
-        :setter: Enable/disable the camera feeed
+        :setter: Enable/disable the camera feed
 
         .. code-block:: python
 
@@ -549,7 +555,7 @@ class Robot:
 
         # Initialize components
         self._anim = animation.AnimationComponent(self)
-        self._audio = audio.AudioComponent(self)
+        # self._audio = audio.AudioComponent(self) # TODO turn on
         self._behavior = behavior.BehaviorComponent(self)
         self._camera = camera.CameraComponent(self)
         self._faces = faces.FaceComponent(self)
@@ -582,8 +588,7 @@ class Robot:
         self._faces.enable_vision_mode(enable=self.enable_vision_mode)
 
         # Subscribe to a callback that updates the robot's local properties
-        # See Robot properties including robot.pose, robot.accel and robot.gyro to access data from robot_state.
-        self.events.subscribe("robot_state", self._unpack_robot_state)
+        self.events.subscribe(self._unpack_robot_state, events.Events.robot_state)
 
     def disconnect(self) -> None:
         """Close the connection with Vector.
@@ -608,7 +613,10 @@ class Robot:
         # Shutdown camera feed
         self.camera.close_camera_feed()
         # Shutdown audio feed
-        self.audio.close_audio_feed()
+        if self._audio is not None:
+            self._audio.close_audio_feed()
+        # Close the world and cleanup its objects
+        self.world.close()
 
         self.events.close()
         self.conn.close()
@@ -718,7 +726,7 @@ class AsyncRobot(Robot):
     :param config: A custom :class:`dict` to override values in Vector's configuration. (optional)
                    Example: :code:`{"cert": "/path/to/file.cert", "name": "Vector-XXXX", "guid": "<secret_key>"}`
                    where :code:`cert` is the certificate to identify Vector, :code:`name` is the name on Vector's face
-                   when his backpack is double clicked on the charger, and :code:`guid` is the authorization token
+                   when his backpack is double-clicked on the charger, and :code:`guid` is the authorization token
                    that identifies the SDK user. Note: Never share your authentication credentials with anyone.
     :param loop: The async loop on which the Vector commands will execute.
     :param default_logging: Disable default logging.

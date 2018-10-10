@@ -140,11 +140,6 @@ enum ObjectFamily {
   OBJECT_FAMILY_COUNT = 7;
 }
 
-// Indicates that a the connection subscribed through ConnectCube has
-// been lost.
-message CubeConnectionLost {
-}
-
 message ObjectAvailable {
   string factory_id = 1;
 }
@@ -203,6 +198,11 @@ message RobotObservedObject {
     PoseStruct   pose                     = 6;
     float        top_face_orientation_rad = 7; // absolute orienation of top face, iff isActive==true
     uint32       is_active                = 8;
+}
+
+// Indicates that a the connection subscribed through ConnectCube has
+// been lost.
+message CubeConnectionLost {
 }
 
 message ObjectEvent {

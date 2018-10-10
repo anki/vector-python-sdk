@@ -168,11 +168,6 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_settings__pb2.PullJdocsRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_settings__pb2.PullJdocsResponse.FromString,
         )
-    self.UpdateSettings = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/UpdateSettings',
-        request_serializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateSettingsRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateSettingsResponse.FromString,
-        )
     self.UpdateAccountSettings = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/UpdateAccountSettings',
         request_serializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateAccountSettingsRequest.SerializeToString,
@@ -282,16 +277,6 @@ class ExternalInterfaceStub(object):
         '/Anki.Vector.external_interface.ExternalInterface/UpdateAndRestart',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.UpdateAndRestartRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.UpdateAndRestartResponse.FromString,
-        )
-    self.UploadDebugLogs = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/UploadDebugLogs',
-        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.UploadDebugLogsRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.UploadDebugLogsResponse.FromString,
-        )
-    self.CheckCloudConnection = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/CheckCloudConnection',
-        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CheckCloudRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CheckCloudResponse.FromString,
         )
 
 
@@ -510,13 +495,6 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def UpdateSettings(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
   def UpdateAccountSettings(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -680,20 +658,6 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def UploadDebugLogs(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def CheckCloudConnection(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
 
 def add_ExternalInterfaceServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -847,11 +811,6 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           request_deserializer=anki__vector_dot_messaging_dot_settings__pb2.PullJdocsRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_settings__pb2.PullJdocsResponse.SerializeToString,
       ),
-      'UpdateSettings': grpc.unary_unary_rpc_method_handler(
-          servicer.UpdateSettings,
-          request_deserializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateSettingsRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateSettingsResponse.SerializeToString,
-      ),
       'UpdateAccountSettings': grpc.unary_unary_rpc_method_handler(
           servicer.UpdateAccountSettings,
           request_deserializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateAccountSettingsRequest.FromString,
@@ -961,16 +920,6 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.UpdateAndRestart,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.UpdateAndRestartRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.UpdateAndRestartResponse.SerializeToString,
-      ),
-      'UploadDebugLogs': grpc.unary_unary_rpc_method_handler(
-          servicer.UploadDebugLogs,
-          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.UploadDebugLogsRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.UploadDebugLogsResponse.SerializeToString,
-      ),
-      'CheckCloudConnection': grpc.unary_unary_rpc_method_handler(
-          servicer.CheckCloudConnection,
-          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CheckCloudRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CheckCloudResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

@@ -61,6 +61,7 @@ from typing import List
 import opengl
 import opengl_vector
 
+from anki_vector.events import Events
 from anki_vector.robot import Robot
 from anki_vector import util
 
@@ -538,7 +539,7 @@ class OpenGLViewer():
 
         # Register for robot state events
         robot = self._robot
-        robot.events.subscribe("robot_state", self._on_robot_state_update)
+        robot.events.subscribe(self._on_robot_state_update, Events.robot_state)
 
         # Determine how many arguments the function accepts
         function_args = []

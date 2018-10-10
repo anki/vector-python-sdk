@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='anki_vector/messaging/cube.proto',
   package='Anki.Vector.external_interface',
   syntax='proto3',
-  serialized_pb=_b('\n anki_vector/messaging/cube.proto\x12\x1e\x41nki.Vector.external_interface\x1a$anki_vector/messaging/messages.proto\"\x14\n\x12\x43onnectCubeRequest\"\x8d\x01\n\x13\x43onnectCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x0f\n\x07success\x18\x02 \x01(\x08\x12\x11\n\tobject_id\x18\x03 \x01(\r\x12\x12\n\nfactory_id\x18\x04 \x01(\t\"\x17\n\x15\x43ubesAvailableRequest\"m\n\x16\x43ubesAvailableResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x13\n\x0b\x66\x61\x63tory_ids\x18\x02 \x03(\t\"\x17\n\x15\x44isconnectCubeRequest\"X\n\x16\x44isconnectCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x18\n\x16\x46lashCubeLightsRequest\"Y\n\x17\x46lashCubeLightsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x1c\n\x1a\x46orgetPreferredCubeRequest\"]\n\x1b\x46orgetPreferredCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"-\n\x17SetPreferredCubeRequest\x12\x12\n\nfactory_id\x18\x01 \x01(\t\"Z\n\x18SetPreferredCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\xb0\x03\n\x14SetCubeLightsRequest\x12\x11\n\tobject_id\x18\x01 \x01(\r\x12\x10\n\x08on_color\x18\x02 \x03(\r\x12\x11\n\toff_color\x18\x03 \x03(\r\x12\x14\n\x0con_period_ms\x18\x04 \x03(\r\x12\x15\n\roff_period_ms\x18\x05 \x03(\r\x12\x1f\n\x17transition_on_period_ms\x18\x06 \x03(\r\x12 \n\x18transition_off_period_ms\x18\x07 \x03(\r\x12\x0e\n\x06offset\x18\x08 \x03(\x05\x12\x15\n\rrelative_to_x\x18\t \x01(\x02\x12\x15\n\rrelative_to_y\x18\n \x01(\x02\x12\x0e\n\x06rotate\x18\x0b \x01(\x08\x12\\\n\rmake_relative\x18\x0c \x01(\x0e\x32\x45.Anki.Vector.external_interface.SetCubeLightsRequest.MakeRelativeMode\"D\n\x10MakeRelativeMode\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x07\n\x03OFF\x10\x01\x12\r\n\tBY_CORNER\x10\x02\x12\x0b\n\x07\x42Y_SIDE\x10\x03\"W\n\x15SetCubeLightsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x14\n\x12\x43ubeConnectionLost\"%\n\x0fObjectAvailable\x12\x12\n\nfactory_id\x18\x01 \x01(\t\"\x92\x01\n\x15ObjectConnectionState\x12\x11\n\tobject_id\x18\x01 \x01(\r\x12\x12\n\nfactory_id\x18\x02 \x01(\t\x12?\n\x0bobject_type\x18\x03 \x01(\x0e\x32*.Anki.Vector.external_interface.ObjectType\x12\x11\n\tconnected\x18\x04 \x01(\x08\"3\n\x0bObjectMoved\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\";\n\x13ObjectStoppedMoving\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\"t\n\x13ObjectUpAxisChanged\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\x12\x37\n\x07up_axis\x18\x03 \x01(\x0e\x32&.Anki.Vector.external_interface.UpAxis\"4\n\x0cObjectTapped\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\"\xec\x02\n\x13RobotObservedObject\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x43\n\robject_family\x18\x02 \x01(\x0e\x32,.Anki.Vector.external_interface.ObjectFamily\x12?\n\x0bobject_type\x18\x03 \x01(\x0e\x32*.Anki.Vector.external_interface.ObjectType\x12\x11\n\tobject_id\x18\x04 \x01(\x05\x12:\n\x08img_rect\x18\x05 \x01(\x0b\x32(.Anki.Vector.external_interface.CladRect\x12\x38\n\x04pose\x18\x06 \x01(\x0b\x32*.Anki.Vector.external_interface.PoseStruct\x12 \n\x18top_face_orientation_rad\x18\x07 \x01(\x02\x12\x11\n\tis_active\x18\x08 \x01(\r\"\xac\x05\n\x0bObjectEvent\x12K\n\x10object_available\x18\x01 \x01(\x0b\x32/.Anki.Vector.external_interface.ObjectAvailableH\x00\x12X\n\x17object_connection_state\x18\x02 \x01(\x0b\x32\x35.Anki.Vector.external_interface.ObjectConnectionStateH\x00\x12\x43\n\x0cobject_moved\x18\x03 \x01(\x0b\x32+.Anki.Vector.external_interface.ObjectMovedH\x00\x12T\n\x15object_stopped_moving\x18\x04 \x01(\x0b\x32\x33.Anki.Vector.external_interface.ObjectStoppedMovingH\x00\x12U\n\x16object_up_axis_changed\x18\x05 \x01(\x0b\x32\x33.Anki.Vector.external_interface.ObjectUpAxisChangedH\x00\x12\x45\n\robject_tapped\x18\x06 \x01(\x0b\x32,.Anki.Vector.external_interface.ObjectTappedH\x00\x12T\n\x15robot_observed_object\x18\x07 \x01(\x0b\x32\x33.Anki.Vector.external_interface.RobotObservedObjectH\x00\x12R\n\x14\x63ube_connection_lost\x18\x08 \x01(\x0b\x32\x32.Anki.Vector.external_interface.CubeConnectionLostH\x00\x42\x13\n\x11object_event_type*a\n\nObjectType\x12\x12\n\x0eINVALID_OBJECT\x10\x00\x12\x12\n\x0eUNKNOWN_OBJECT\x10\x01\x12\x14\n\x10\x42LOCK_LIGHTCUBE1\x10\x02\x12\x15\n\x11OBJECT_TYPE_COUNT\x10&*w\n\x0cObjectFamily\x12\x12\n\x0eINVALID_FAMILY\x10\x00\x12\x12\n\x0eUNKNOWN_FAMILY\x10\x01\x12\t\n\x05\x42LOCK\x10\x02\x12\x0e\n\nLIGHT_CUBE\x10\x03\x12\x0b\n\x07\x43HARGER\x10\x04\x12\x17\n\x13OBJECT_FAMILY_COUNT\x10\x07*\x88\x01\n\x06UpAxis\x12\x10\n\x0cINVALID_AXIS\x10\x00\x12\x0e\n\nX_NEGATIVE\x10\x01\x12\x0e\n\nX_POSITIVE\x10\x02\x12\x0e\n\nY_NEGATIVE\x10\x03\x12\x0e\n\nY_POSITIVE\x10\x04\x12\x0e\n\nZ_NEGATIVE\x10\x05\x12\x0e\n\nZ_POSITIVE\x10\x06\x12\x0c\n\x08NUM_AXES\x10\x07\x62\x06proto3')
+  serialized_pb=_b('\n anki_vector/messaging/cube.proto\x12\x1e\x41nki.Vector.external_interface\x1a$anki_vector/messaging/messages.proto\"\x14\n\x12\x43onnectCubeRequest\"\x8d\x01\n\x13\x43onnectCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x0f\n\x07success\x18\x02 \x01(\x08\x12\x11\n\tobject_id\x18\x03 \x01(\r\x12\x12\n\nfactory_id\x18\x04 \x01(\t\"\x17\n\x15\x43ubesAvailableRequest\"m\n\x16\x43ubesAvailableResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x13\n\x0b\x66\x61\x63tory_ids\x18\x02 \x03(\t\"\x17\n\x15\x44isconnectCubeRequest\"X\n\x16\x44isconnectCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x18\n\x16\x46lashCubeLightsRequest\"Y\n\x17\x46lashCubeLightsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x1c\n\x1a\x46orgetPreferredCubeRequest\"]\n\x1b\x46orgetPreferredCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"-\n\x17SetPreferredCubeRequest\x12\x12\n\nfactory_id\x18\x01 \x01(\t\"Z\n\x18SetPreferredCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\xb0\x03\n\x14SetCubeLightsRequest\x12\x11\n\tobject_id\x18\x01 \x01(\r\x12\x10\n\x08on_color\x18\x02 \x03(\r\x12\x11\n\toff_color\x18\x03 \x03(\r\x12\x14\n\x0con_period_ms\x18\x04 \x03(\r\x12\x15\n\roff_period_ms\x18\x05 \x03(\r\x12\x1f\n\x17transition_on_period_ms\x18\x06 \x03(\r\x12 \n\x18transition_off_period_ms\x18\x07 \x03(\r\x12\x0e\n\x06offset\x18\x08 \x03(\x05\x12\x15\n\rrelative_to_x\x18\t \x01(\x02\x12\x15\n\rrelative_to_y\x18\n \x01(\x02\x12\x0e\n\x06rotate\x18\x0b \x01(\x08\x12\\\n\rmake_relative\x18\x0c \x01(\x0e\x32\x45.Anki.Vector.external_interface.SetCubeLightsRequest.MakeRelativeMode\"D\n\x10MakeRelativeMode\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x07\n\x03OFF\x10\x01\x12\r\n\tBY_CORNER\x10\x02\x12\x0b\n\x07\x42Y_SIDE\x10\x03\"W\n\x15SetCubeLightsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"%\n\x0fObjectAvailable\x12\x12\n\nfactory_id\x18\x01 \x01(\t\"\x92\x01\n\x15ObjectConnectionState\x12\x11\n\tobject_id\x18\x01 \x01(\r\x12\x12\n\nfactory_id\x18\x02 \x01(\t\x12?\n\x0bobject_type\x18\x03 \x01(\x0e\x32*.Anki.Vector.external_interface.ObjectType\x12\x11\n\tconnected\x18\x04 \x01(\x08\"3\n\x0bObjectMoved\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\";\n\x13ObjectStoppedMoving\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\"t\n\x13ObjectUpAxisChanged\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\x12\x37\n\x07up_axis\x18\x03 \x01(\x0e\x32&.Anki.Vector.external_interface.UpAxis\"4\n\x0cObjectTapped\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\"\xec\x02\n\x13RobotObservedObject\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x43\n\robject_family\x18\x02 \x01(\x0e\x32,.Anki.Vector.external_interface.ObjectFamily\x12?\n\x0bobject_type\x18\x03 \x01(\x0e\x32*.Anki.Vector.external_interface.ObjectType\x12\x11\n\tobject_id\x18\x04 \x01(\x05\x12:\n\x08img_rect\x18\x05 \x01(\x0b\x32(.Anki.Vector.external_interface.CladRect\x12\x38\n\x04pose\x18\x06 \x01(\x0b\x32*.Anki.Vector.external_interface.PoseStruct\x12 \n\x18top_face_orientation_rad\x18\x07 \x01(\x02\x12\x11\n\tis_active\x18\x08 \x01(\r\"\x14\n\x12\x43ubeConnectionLost\"\xac\x05\n\x0bObjectEvent\x12K\n\x10object_available\x18\x01 \x01(\x0b\x32/.Anki.Vector.external_interface.ObjectAvailableH\x00\x12X\n\x17object_connection_state\x18\x02 \x01(\x0b\x32\x35.Anki.Vector.external_interface.ObjectConnectionStateH\x00\x12\x43\n\x0cobject_moved\x18\x03 \x01(\x0b\x32+.Anki.Vector.external_interface.ObjectMovedH\x00\x12T\n\x15object_stopped_moving\x18\x04 \x01(\x0b\x32\x33.Anki.Vector.external_interface.ObjectStoppedMovingH\x00\x12U\n\x16object_up_axis_changed\x18\x05 \x01(\x0b\x32\x33.Anki.Vector.external_interface.ObjectUpAxisChangedH\x00\x12\x45\n\robject_tapped\x18\x06 \x01(\x0b\x32,.Anki.Vector.external_interface.ObjectTappedH\x00\x12T\n\x15robot_observed_object\x18\x07 \x01(\x0b\x32\x33.Anki.Vector.external_interface.RobotObservedObjectH\x00\x12R\n\x14\x63ube_connection_lost\x18\x08 \x01(\x0b\x32\x32.Anki.Vector.external_interface.CubeConnectionLostH\x00\x42\x13\n\x11object_event_type*a\n\nObjectType\x12\x12\n\x0eINVALID_OBJECT\x10\x00\x12\x12\n\x0eUNKNOWN_OBJECT\x10\x01\x12\x14\n\x10\x42LOCK_LIGHTCUBE1\x10\x02\x12\x15\n\x11OBJECT_TYPE_COUNT\x10&*w\n\x0cObjectFamily\x12\x12\n\x0eINVALID_FAMILY\x10\x00\x12\x12\n\x0eUNKNOWN_FAMILY\x10\x01\x12\t\n\x05\x42LOCK\x10\x02\x12\x0e\n\nLIGHT_CUBE\x10\x03\x12\x0b\n\x07\x43HARGER\x10\x04\x12\x17\n\x13OBJECT_FAMILY_COUNT\x10\x07*\x88\x01\n\x06UpAxis\x12\x10\n\x0cINVALID_AXIS\x10\x00\x12\x0e\n\nX_NEGATIVE\x10\x01\x12\x0e\n\nX_POSITIVE\x10\x02\x12\x0e\n\nY_NEGATIVE\x10\x03\x12\x0e\n\nY_POSITIVE\x10\x04\x12\x0e\n\nZ_NEGATIVE\x10\x05\x12\x0e\n\nZ_POSITIVE\x10\x06\x12\x0c\n\x08NUM_AXES\x10\x07\x62\x06proto3')
   ,
   dependencies=[anki__vector_dot_messaging_dot_messages__pb2.DESCRIPTOR,])
 
@@ -698,30 +698,6 @@ _SETCUBELIGHTSRESPONSE = _descriptor.Descriptor(
 )
 
 
-_CUBECONNECTIONLOST = _descriptor.Descriptor(
-  name='CubeConnectionLost',
-  full_name='Anki.Vector.external_interface.CubeConnectionLost',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1428,
-  serialized_end=1448,
-)
-
-
 _OBJECTAVAILABLE = _descriptor.Descriptor(
   name='ObjectAvailable',
   full_name='Anki.Vector.external_interface.ObjectAvailable',
@@ -748,8 +724,8 @@ _OBJECTAVAILABLE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1450,
-  serialized_end=1487,
+  serialized_start=1428,
+  serialized_end=1465,
 )
 
 
@@ -800,8 +776,8 @@ _OBJECTCONNECTIONSTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1490,
-  serialized_end=1636,
+  serialized_start=1468,
+  serialized_end=1614,
 )
 
 
@@ -838,8 +814,8 @@ _OBJECTMOVED = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1638,
-  serialized_end=1689,
+  serialized_start=1616,
+  serialized_end=1667,
 )
 
 
@@ -876,8 +852,8 @@ _OBJECTSTOPPEDMOVING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1691,
-  serialized_end=1750,
+  serialized_start=1669,
+  serialized_end=1728,
 )
 
 
@@ -921,8 +897,8 @@ _OBJECTUPAXISCHANGED = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1752,
-  serialized_end=1868,
+  serialized_start=1730,
+  serialized_end=1846,
 )
 
 
@@ -959,8 +935,8 @@ _OBJECTTAPPED = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1870,
-  serialized_end=1922,
+  serialized_start=1848,
+  serialized_end=1900,
 )
 
 
@@ -1039,7 +1015,31 @@ _ROBOTOBSERVEDOBJECT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1925,
+  serialized_start=1903,
+  serialized_end=2267,
+)
+
+
+_CUBECONNECTIONLOST = _descriptor.Descriptor(
+  name='CubeConnectionLost',
+  full_name='Anki.Vector.external_interface.CubeConnectionLost',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2269,
   serialized_end=2289,
 )
 
@@ -1187,7 +1187,6 @@ DESCRIPTOR.message_types_by_name['SetPreferredCubeRequest'] = _SETPREFERREDCUBER
 DESCRIPTOR.message_types_by_name['SetPreferredCubeResponse'] = _SETPREFERREDCUBERESPONSE
 DESCRIPTOR.message_types_by_name['SetCubeLightsRequest'] = _SETCUBELIGHTSREQUEST
 DESCRIPTOR.message_types_by_name['SetCubeLightsResponse'] = _SETCUBELIGHTSRESPONSE
-DESCRIPTOR.message_types_by_name['CubeConnectionLost'] = _CUBECONNECTIONLOST
 DESCRIPTOR.message_types_by_name['ObjectAvailable'] = _OBJECTAVAILABLE
 DESCRIPTOR.message_types_by_name['ObjectConnectionState'] = _OBJECTCONNECTIONSTATE
 DESCRIPTOR.message_types_by_name['ObjectMoved'] = _OBJECTMOVED
@@ -1195,6 +1194,7 @@ DESCRIPTOR.message_types_by_name['ObjectStoppedMoving'] = _OBJECTSTOPPEDMOVING
 DESCRIPTOR.message_types_by_name['ObjectUpAxisChanged'] = _OBJECTUPAXISCHANGED
 DESCRIPTOR.message_types_by_name['ObjectTapped'] = _OBJECTTAPPED
 DESCRIPTOR.message_types_by_name['RobotObservedObject'] = _ROBOTOBSERVEDOBJECT
+DESCRIPTOR.message_types_by_name['CubeConnectionLost'] = _CUBECONNECTIONLOST
 DESCRIPTOR.message_types_by_name['ObjectEvent'] = _OBJECTEVENT
 DESCRIPTOR.enum_types_by_name['ObjectType'] = _OBJECTTYPE
 DESCRIPTOR.enum_types_by_name['ObjectFamily'] = _OBJECTFAMILY
@@ -1299,13 +1299,6 @@ SetCubeLightsResponse = _reflection.GeneratedProtocolMessageType('SetCubeLightsR
   ))
 _sym_db.RegisterMessage(SetCubeLightsResponse)
 
-CubeConnectionLost = _reflection.GeneratedProtocolMessageType('CubeConnectionLost', (_message.Message,), dict(
-  DESCRIPTOR = _CUBECONNECTIONLOST,
-  __module__ = 'anki_vector.messaging.cube_pb2'
-  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.CubeConnectionLost)
-  ))
-_sym_db.RegisterMessage(CubeConnectionLost)
-
 ObjectAvailable = _reflection.GeneratedProtocolMessageType('ObjectAvailable', (_message.Message,), dict(
   DESCRIPTOR = _OBJECTAVAILABLE,
   __module__ = 'anki_vector.messaging.cube_pb2'
@@ -1354,6 +1347,13 @@ RobotObservedObject = _reflection.GeneratedProtocolMessageType('RobotObservedObj
   # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.RobotObservedObject)
   ))
 _sym_db.RegisterMessage(RobotObservedObject)
+
+CubeConnectionLost = _reflection.GeneratedProtocolMessageType('CubeConnectionLost', (_message.Message,), dict(
+  DESCRIPTOR = _CUBECONNECTIONLOST,
+  __module__ = 'anki_vector.messaging.cube_pb2'
+  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.CubeConnectionLost)
+  ))
+_sym_db.RegisterMessage(CubeConnectionLost)
 
 ObjectEvent = _reflection.GeneratedProtocolMessageType('ObjectEvent', (_message.Message,), dict(
   DESCRIPTOR = _OBJECTEVENT,

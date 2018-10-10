@@ -28,10 +28,9 @@ observable events whenever the face is observed, has its ID updated.
 __all__ = ['Expression', 'Face', 'FaceComponent']
 
 from enum import Enum
-import math
-import time
+from typing import List
 
-from . import sync, util
+from . import sync, util, objects, events
 from .messaging import protocol
 
 
@@ -54,7 +53,7 @@ class Expression(Enum):
     SADNESS = protocol.FacialExpression.Value("EXPRESSION_SADNESS")
 
 
-class Face:
+class Face(objects.ObservableObject):
     """A single face that Vector has detected.
 
     May represent a face that has previously been enrolled, in which case
@@ -65,46 +64,82 @@ class Face:
     which face he is looking at.
     """
 
-    def __init__(self, face_id=None):
+    def __init__(self,
+                 robot,
+                 pose: util.Pose,
+                 image_rect: util.ImageRect,
+                 face_id: int,
+                 name: str,
+                 expression: str,
+                 expression_score: List[int],
+                 left_eye: List[protocol.CladPoint],
+                 right_eye: List[protocol.CladPoint],
+                 nose: List[protocol.CladPoint],
+                 mouth: List[protocol.CladPoint],
+                 instantiation_timestamp: float,
+                 **kw):
+
+        super(Face, self).__init__(robot, **kw)
+
         self._face_id = face_id
         self._updated_face_id = None
-        self._name = ''
-        self._expression = None
-        self._last_observed_time: int = None
-        self._last_observed_robot_timestamp: int = None
-        self._pose = None
-        self._face_rect = None
+        self._name = name
+        self._expression = expression
 
-        # Individual expression values histogram, sums to 100 (Exception: all
-        # zero if expression=Unknown)
-        self._expression_score = None
+        # Individual expression values histogram, sums to 100
+        # (Exception: all zero if expression=Unknown)
+        self._expression_score = expression_score
 
         # Face landmarks
-        self._left_eye = None
-        self._right_eye = None
-        self._nose = None
-        self._mouth = None
+        self._left_eye = left_eye
+        self._right_eye = right_eye
+        self._nose = nose
+        self._mouth = mouth
+
+        self._on_observed(pose, image_rect, instantiation_timestamp)
+
+        self._robot.events.subscribe(
+            self._on_face_observed,
+            events.Events.robot_observed_face)
+
+        self._robot.events.subscribe(
+            self._on_face_id_changed,
+            events.Events.robot_changed_observed_face_id)
 
     def __repr__(self):
         return (f"<{self.__class__.__name__} Face id: {self.face_id} "
                 f"Updated face id: {self.updated_face_id} Name: {self.name} "
                 f"Expression: {protocol.FacialExpression.Name(self.expression)}>")
 
-    # TODO sample code
+    def teardown(self):
+        """All faces will be torn down by the world when no longer needed."""
+        self._robot.events.unsubscribe(
+            self._on_face_observed,
+            events.Events.robot_observed_face)
+
+        self._robot.events.unsubscribe(
+            self._on_face_id_changed,
+            events.Events.robot_changed_observed_face_id)
+
     @property
-    def face_id(self):
+    def face_id(self) -> int:
         """The internal ID assigned to the face.
 
         This value can only be assigned once as it is static in the engine.
 
         :getter: Returns the face ID
         :setter: Sets the face ID
+
+        .. code-block:: python
+
+            # Print the visible face ids
+            for face in robot.world.visible_faces:
+                print(f"Visible id: {face.face_id}")
         """
         return self._face_id if self._updated_face_id is None else self._updated_face_id
 
-    # TODO sample code
     @face_id.setter
-    def face_id(self, face_id):
+    def face_id(self, face_id: str):
         if self._face_id is not None:
             raise ValueError(f"Cannot change face ID once set (from {self._face_id} to {face_id})")
         self._face_id = face_id
@@ -119,65 +154,35 @@ class Face:
         """
         return self._updated_face_id is not None
 
-    # TODO sample code
     @property
     def updated_face_id(self) -> int:
-        """The ID for the face that superseded this one (if any, otherwise :meth:`face_id`)"""
+        """The ID for the face that superseded this one (if any, otherwise :meth:`face_id`)
+
+        .. code-block:: python
+
+            face = robot.world.get_face(VALID_ID)
+            updated_id = face.updated_face_id
+        """
         if self._updated_face_id:
             return self._updated_face_id
         return self._face_id
 
-    # TODO sample code
     @property
-    def name(self):
-        """string: The name Vector has associated with the face.
+    def name(self) -> str:
+        """The name Vector has associated with the face.
 
         This string will be empty if the face is not recognized or enrolled.
-        """
-        return self._name
-
-    # TODO sample code
-    @property
-    def last_observed_time(self) -> float:
-        """The time the face was last observed by the robot.
-        ``None`` if the face has not yet been observed.
-        """
-        return self._last_observed_time
-
-    @property
-    def time_since_last_seen(self) -> float:
-        """The time since this face was last seen (math.inf if never)
 
         .. code-block:: python
 
-            last_seen_time = face.time_since_last_seen
+            face = robot.world.get_face(VALID_ID)
+            name = face.name
         """
-        if self._last_observed_time is None:
-            return math.inf
-        return time.time() - self._last_observed_time
+        return self._name
 
-    # TODO sample code
     @property
-    def timestamp(self):
-        """int: Timestamp of event"""
-        return self._last_observed_robot_timestamp
-
-    # TODO sample code
-    @property
-    def pose(self):
-        """:class:`anki_vector.util.Pose`: Position and rotation of the face observed"""
-        return self._pose
-
-    # TODO sample code
-    @property
-    def face_rect(self) -> util.ImageRect:
-        """Rect representing position of face."""
-        return self._face_rect
-
-    # TODO sample code
-    @property
-    def expression(self):
-        """string: The facial expression Vector has recognized on the face.
+    def expression(self) -> str:
+        """The facial expression Vector has recognized on the face.
 
         Will be :attr:`Expression.UNKNOWN` by default if you haven't called
         :meth:`anki_vector.robot.Robot.enable_vision_mode` to enable
@@ -185,76 +190,122 @@ class Face:
         :attr:`Expression.NEUTRAL`, :attr:`Expression.HAPPINESS`,
         :attr:`Expression.SURPRISE`, :attr:`Expression.ANGER`,
         or :attr:`Expression.SADNESS`.
+
+        .. code-block:: python
+
+            face = robot.world.get_face(VALID_ID)
+            expression = face.expression
         """
         return self._expression
 
-    # TODO sample code
     @property
-    def expression_score(self):
-        """int: The score/confidence that :attr:`expression` was correct.
+    def expression_score(self) -> List[int]:
+        """The score/confidence that :attr:`expression` was correct.
 
         Will be 0 if expression is :attr:`Expression.UNKNOWN` (e.g. if
         :meth:`anki_vector.robot.Robot.enable_vision_mode` wasn't
         called yet). The maximum possible score is 100.
+
+        .. code-block:: python
+
+            face = robot.world.get_face(VALID_ID)
+            expression_score = face.expression_score
         """
         return self._expression_score
 
-    # TODO sample code
     @property
-    def left_eye(self):
-        """sequence of tuples of float (x,y): points representing the outline of the left eye."""
+    def left_eye(self) -> List[protocol.CladPoint]:
+        """sequence of tuples of float (x,y): points representing the outline of the left eye.
+
+        .. code-block:: python
+
+            face = robot.world.get_face(VALID_ID)
+            left_eye = face.left_eye
+        """
         return self._left_eye
 
-    # TODO sample code
     @property
-    def right_eye(self):
-        """sequence of tuples of float (x,y): points representing the outline of the right eye."""
+    def right_eye(self) -> List[protocol.CladPoint]:
+        """sequence of tuples of float (x,y): points representing the outline of the right eye.
+
+        .. code-block:: python
+
+            face = robot.world.get_face(VALID_ID)
+            right_eye = face.right_eye
+        """
         return self._right_eye
 
-    # TODO sample code
     @property
-    def nose(self):
-        """sequence of tuples of float (x,y): points representing the outline of the nose."""
+    def nose(self) -> List[protocol.CladPoint]:
+        """sequence of tuples of float (x,y): points representing the outline of the nose.
+
+        .. code-block:: python
+
+            face = robot.world.get_face(VALID_ID)
+            nose = face.nose
+        """
         return self._nose
 
-    # TODO sample code
     @property
-    def mouth(self):
-        """sequence of tuples of float (x,y): points representing the outline of the mouth."""
+    def mouth(self) -> List[protocol.CladPoint]:
+        """sequence of tuples of float (x,y): points representing the outline of the mouth.
+
+        .. code-block:: python
+
+            face = robot.world.get_face(VALID_ID)
+            mouth = face.mouth
+        """
         return self._mouth
 
-    def unpack_face_stream_data(self, msg):
+    #### Private Event Handlers ####
+
+    def _on_face_observed(self, _, msg):
         """Unpacks the face observed stream data from Vector into a Face instance."""
-        self._face_id = msg.face_id
-        self._name = msg.name
-        self._last_observed_time = time.time()
-        self._last_observed_robot_timestamp = msg.timestamp
-        self._pose = util.Pose(x=msg.pose.x, y=msg.pose.y, z=msg.pose.z,
-                               q0=msg.pose.q0, q1=msg.pose.q1,
-                               q2=msg.pose.q2, q3=msg.pose.q3,
-                               origin_id=msg.pose.origin_id)
-        self._face_rect = util.ImageRect(msg.img_rect.x_top_left,
-                                         msg.img_rect.y_top_left,
-                                         msg.img_rect.width,
-                                         msg.img_rect.height)
-        self._expression = msg.expression
-        self._expression_score = msg.expression_values
-        self._left_eye = msg.left_eye
-        self._right_eye = msg.right_eye
-        self._nose = msg.nose
-        self._mouth = msg.mouth
+        if self._face_id == msg.face_id:
+
+            pose = util.Pose(x=msg.pose.x, y=msg.pose.y, z=msg.pose.z,
+                             q0=msg.pose.q0, q1=msg.pose.q1,
+                             q2=msg.pose.q2, q3=msg.pose.q3,
+                             origin_id=msg.pose.origin_id)
+            image_rect = util.ImageRect(msg.img_rect.x_top_left,
+                                        msg.img_rect.y_top_left,
+                                        msg.img_rect.width,
+                                        msg.img_rect.height)
+
+            self._name = msg.name
+
+            self._expression = msg.expression
+            self._expression_score = msg.expression_values
+            self._left_eye = msg.left_eye
+            self._right_eye = msg.right_eye
+            self._nose = msg.nose
+            self._mouth = msg.mouth
+
+            self._on_observed(pose, image_rect, msg.timestamp)
+
+    def _on_face_id_changed(self, _, msg):
+        """Updates the face id when a tracked face (negative ID) is recognized and
+        receives a positive ID or when face records get merged"""
+        if self._face_id == msg.old_id:
+            self._updated_face_id = msg.new_id
 
 
 class FaceComponent(util.Component):
     """Manage the state of the faces on the robot."""
 
-    # TODO document, needs sample code and return value. It returns an array of LoadedKnownFace
     @sync.Synchronizer.wrap
-    async def request_enrolled_names(self):
+    async def request_enrolled_names(self) -> protocol.RequestEnrolledNamesRequest:
+        """Asks the robot for the list of names attached to faces that it can identify.
+
+        .. code-block:: python
+
+            name_data_list = robot.faces.request_enrolled_names()
+            for name_data in name_data_list:
+                print('{0} was last seen {1} seconds ago'.format(name_data.name, name_data.seconds_since_last_seen))
+        """
         req = protocol.RequestEnrolledNamesRequest()
         return await self.grpc_interface.RequestEnrolledNames(req)
 
-    # TODO needs sample code
     @sync.Synchronizer.wrap
     async def update_enrolled_face_by_id(self, face_id: int, old_name: str, new_name: str):
         """Update the name enrolled for a given face.
@@ -262,41 +313,46 @@ class FaceComponent(util.Component):
         :param face_id: The ID of the face to rename.
         :param old_name: The old name of the face (must be correct, otherwise message is ignored).
         :param new_name: The new name for the face.
+
+        .. code-block:: python
+
+            robot.faces.update_enrolled_face_by_id(VALID_ID, CURRENT_NAME_STRING, 'Boris')
         """
         req = protocol.UpdateEnrolledFaceByIDRequest(faceID=face_id,
                                                      oldName=old_name, newName=new_name)
         return await self.grpc_interface.UpdateEnrolledFaceByID(req)
 
-    # TODO needs sample code
     @sync.Synchronizer.wrap
     async def erase_enrolled_face_by_id(self, face_id: int):
         """Erase the enrollment (name) record for the face with this ID.
 
         :param face_id: The ID of the face to erase.
+
+        .. code-block:: python
+
+            robot.faces.erase_enrolled_face_by_id(VALID_ID)
         """
         req = protocol.EraseEnrolledFaceByIDRequest(faceID=face_id)
         return await self.grpc_interface.EraseEnrolledFaceByID(req)
 
-    # TODO needs sample code
     @sync.Synchronizer.wrap
     async def erase_all_enrolled_faces(self):
-        """Erase the enrollment (name) records for all faces."""
+        """Erase the enrollment (name) records for all faces.
+
+        .. code-block:: python
+
+            robot.faces.erase_all_enrolled_faces()
+        """
         req = protocol.EraseAllEnrolledFacesRequest()
         return await self.grpc_interface.EraseAllEnrolledFaces(req)
 
     # TODO move out of face component? This is general to objects, not specific to faces? Move to new vision component? Needs sample code.
     # TODO improve list of modes as shown in docs
     @sync.Synchronizer.wrap
-    async def enable_vision_mode(self, enable: bool, mode: protocol.VisionMode = protocol.VisionMode.Value("VISION_MODE_DETECTING_FACES")):
-        """Enable a vision mode
-
-        The vision system can be enabled for modes including the following:
-        Marker detection: `VISION_MODE_DETECTING_MARKERS`
-        Face detection and recognition: `VISION_MODE_DETECTING_FACES`
-        Motion detection: `VISION_MODE_DETECTING_MOTION`
+    async def enable_vision_mode(self, enable: bool):
+        """Enable facial detection on the robot's camera
 
         :param enable: Enable/Disable the mode specified.
-        :param mode: Specifies the vision mode to edit.
         """
-        enable_vision_mode_request = protocol.EnableVisionModeRequest(mode=mode, enable=enable)
+        enable_vision_mode_request = protocol.EnableVisionModeRequest(mode=protocol.VisionMode.Value("VISION_MODE_DETECTING_FACES"), enable=enable)
         return await self.grpc_interface.EnableVisionMode(enable_vision_mode_request)

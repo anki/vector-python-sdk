@@ -33,6 +33,7 @@ from concurrent.futures import CancelledError
 import sys
 
 from . import util
+from .events import Events
 from .messaging import protocol
 
 try:
@@ -74,8 +75,8 @@ class AudioComponent(util.Component):
         self._audio_feed_task: asyncio.Task = None
 
         # Subscribe to callbacks related to objects
-        robot.events.subscribe("audio_send_mode_changed",
-                               self._on_audio_send_mode_changed_event)
+        robot.events.subscribe(self._on_audio_send_mode_changed_event,
+                               Events.audio_send_mode_changed)
 
     # @TODO: Implement audio history as ringbuffer, caching only recent audio
     # @TODO: Add function to return a recent chunk of the audio history in a standardized python audio package format
@@ -108,7 +109,7 @@ class AudioComponent(util.Component):
 
     @property
     def latest_sample_id(self) -> int:
-        """The most recent recieved audio sample from the robot.
+        """The most recent received audio sample from the robot.
 
         :getter: Returns the id for the latest audio sample
         """
@@ -157,7 +158,7 @@ class AudioComponent(util.Component):
 
     async def _request_and_handle_audio(self) -> None:
         """Queries and listens for audio feed events from the robot.
-        Recieved events are parsed by a helper function."""
+        Received events are parsed by a helper function."""
         try:
             req = protocol.AudioFeedRequest()
             async for evt in self.grpc_interface.AudioFeed(req):
