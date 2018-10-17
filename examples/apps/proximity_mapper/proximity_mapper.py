@@ -75,7 +75,7 @@ PROXIMITY_SCAN_BIND_THRESHOLD_MM = 30.0
 PROXIMITY_EXPLORATION_SHUTDOWN_DELAY_S = 8.0
 
 
-# @TODO: once pathfinding is more reliable, this should be enabled.
+# @TODO enable when testing shows it is ready to go
 #: ACTIVELY_EXPLORE_SPACE can be activated to allow the robot to move
 #: into an open space after scanning, and continue the process until all open
 #: spaces are explored.
@@ -268,9 +268,9 @@ async def map_explorer(robot: anki_vector.robot.Robot, viewer: OpenGLViewer):
         # Add where the robot is to the map's cleared territories.
         state.cleared_territories.append(ClearedTerritory(robot.pose.position, PROXIMITY_SCAN_DISTANCE_THRESHOLD_MM))
 
-        # @TODO: This is currently unreliable.  This whole block should ideally be replaced with the go_to_pose actions when
-        # that action's reliability is improved.  Alternatively, the turn&drive commands can be modified to respond to collisions
-        # by cancelling rather than hanging indefinitely.  After either change, ACTIVELY_EXPLORE_SPACE should be defaulted True
+        # @TODO: This whole block should ideally be replaced with the go_to_pose actions when that is ready to go.
+        # Alternatively, the turn&drive commands can be modified to respond to collisions by cancelling.  After
+        # either change, ACTIVELY_EXPLORE_SPACE should be defaulted True
         if ACTIVELY_EXPLORE_SPACE and state.open_nodes:
             # Sort the open nodes and find our next navigation point.
             state.open_nodes.sort(key=open_point_sort_func)

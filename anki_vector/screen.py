@@ -39,7 +39,9 @@ SCREEN_HEIGHT = 96
 def dimensions():
     """Return the dimension (width, height) of the Screen.
 
-    .. code-block:: python
+    .. testcode::
+
+        import anki_vector
 
         screen_dimensions = anki_vector.screen.SCREEN_WIDTH, anki_vector.screen.SCREEN_HEIGHT
 
@@ -56,9 +58,17 @@ def convert_pixels_to_screen_data(pixel_data: list, image_width: int, image_heig
     :param image_width: width of the image defined by the pixel_data
     :param image_height: height of the image defined by the pixel_data
 
-    .. code-block:: python
+    .. testcode::
 
-        image_data = pil_image.getdata()
+        import anki_vector
+
+        try:
+            from PIL import Image
+        except ImportError:
+            sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
+
+        image_file = Image.open('../examples/face_images/cozmo_image.jpg')
+        image_data = image_file.getdata()
         pixel_bytes = convert_pixels_to_screen_data(image_data, pil_image.width, pil_image.height)
 
     Returns:
@@ -98,14 +108,22 @@ def convert_pixels_to_screen_data(pixel_data: list, image_width: int, image_heig
 def convert_image_to_screen_data(pil_image: Image.Image):
     """Convert an image into the correct format to display on Vector's face.
 
-    .. code-block:: python
+    .. testcode::
 
-        # Load an image
-        image_file = Image.open('path/to/my/image.jpg')
+        import anki_vector
 
-        # Convert the image to the format used by the Screen
-        screen_data = anki_vector.screen.convert_image_to_screen_data(image_file)
-        robot.screen.set_screen_with_image_data(screen_data, 4.0)
+        try:
+            from PIL import Image
+        except ImportError:
+            sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
+
+        with anki_vector.Robot("my_robot_serial_number") as robot:
+            # Load an image
+            image_file = Image.open('../examples/face_images/cozmo_image.jpg')
+
+            # Convert the image to the format used by the Screen
+            screen_data = anki_vector.screen.convert_image_to_screen_data(image_file)
+            robot.screen.set_screen_with_image_data(screen_data, 4.0)
 
     :param pil_image: The image to display on Vector's face
 
@@ -125,14 +143,22 @@ class ScreenComponent(util.Component):
         """
         Display an image on Vector's Screen (his "face").
 
-        .. code-block:: python
+        .. testcode::
 
-            # Load an image
-            image_file = Image.open('path/to/my/image.jpg')
+            import anki_vector
 
-            # Convert the image to the format used by the Screen
-            screen_data = anki_vector.screen.convert_image_to_screen_data(image_file)
-            robot.screen.set_screen_with_image_data(screen_data, 4.0)
+            try:
+                from PIL import Image
+            except ImportError:
+                sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                # Load an image
+                image_file = Image.open('../examples/face_images/cozmo_image.jpg')
+
+                # Convert the image to the format used by the Screen
+                screen_data = anki_vector.screen.convert_image_to_screen_data(image_file)
+                robot.screen.set_screen_with_image_data(screen_data, 4.0)
 
         :param image_data: A :class:`bytes` object representing all of the pixels (16bit color in rgb565 format)
         :param duration_sec: The number of seconds the image should remain on Vector's face.
@@ -156,9 +182,12 @@ class ScreenComponent(util.Component):
         """
         Set Vector's Screen (his "face"). to a solid color.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.screen.set_screen_to_color(anki_vector.color.Color(rgb=[255, 128, 0]), duration_sec=1.0)
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.screen.set_screen_to_color(anki_vector.color.Color(rgb=[255, 128, 0]), duration_sec=1.0)
 
         :param solid_color: Desired color to set Vector's Screen.
         :param duration_sec: The number of seconds the color should remain on Vector's face.

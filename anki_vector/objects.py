@@ -187,7 +187,9 @@ class ObservableObject(util.Component):
     def time_since_last_seen(self) -> float:
         """Time since this object was last seen. math.inf if never seen.
 
-        .. code-block:: python
+        .. testcode::
+
+            import anki_vector
 
             last_seen_time = obj.time_since_last_seen
         """
@@ -380,19 +382,24 @@ class LightCube(ObservableObject):
                                 color_profile: lights.ColorProfile = lights.WHITE_BALANCED_CUBE_PROFILE):
         """Set the light for each corner.
 
-        .. code-block:: python
+        .. testcode::
 
-            # ensure we are connected to a cube
-            robot.world.connect_cube()
+            import anki_vector
 
-            if robot.world.connected_light_cube:
-                cube = robot.world.connected_light_cube
+            import time
 
-                cube.set_light_corners(anki_vector.lights.blue_light,
-                                       anki_vector.lights.green_light,
-                                       anki_vector.lights.red_light,
-                                       anki_vector.lights.white_light)
-                time.sleep(3)
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                # ensure we are connected to a cube
+                robot.world.connect_cube()
+
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+
+                    cube.set_light_corners(anki_vector.lights.blue_light,
+                                           anki_vector.lights.green_light,
+                                           anki_vector.lights.red_light,
+                                           anki_vector.lights.white_light)
+                    time.sleep(3)
 
         :param light1: The settings for the first light.
         :param light2: The settings for the second light.
@@ -419,17 +426,22 @@ class LightCube(ObservableObject):
     def set_lights(self, light: lights.Light, color_profile: lights.ColorProfile = lights.WHITE_BALANCED_CUBE_PROFILE):
         """Set all lights on the cube
 
-        .. code-block:: python
+        .. testcode::
 
-            # ensure we are connected to a cube
-            robot.world.connect_cube()
+            import anki_vector
 
-            if robot.world.connected_light_cube:
-                cube = robot.world.connected_light_cube
+            import time
 
-                # Set cube lights to yellow
-                cube.set_lights(anki_vector.lights.yellow_light)
-                time.sleep(3)
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                # ensure we are connected to a cube
+                robot.world.connect_cube()
+
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+
+                    # Set cube lights to yellow
+                    cube.set_lights(anki_vector.lights.yellow_light)
+                    time.sleep(3)
 
         :param light: The settings for the lights
         :param color_profile: The profile to be used for the cube lights
@@ -439,20 +451,25 @@ class LightCube(ObservableObject):
     def set_lights_off(self, color_profile: lights.ColorProfile = lights.WHITE_BALANCED_CUBE_PROFILE):
         """Set all lights off on the cube
 
-        .. code-block:: python
+        .. testcode::
 
-            # ensure we are connected to a cube
-            robot.world.connect_cube()
+            import anki_vector
 
-            if robot.world.connected_light_cube:
-                cube = robot.world.connected_light_cube
+            import time
 
-                # Set cube lights to yellow
-                cube.set_lights(anki_vector.lights.yellow_light)
-                time.sleep(3)
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                # ensure we are connected to a cube
+                robot.world.connect_cube()
 
-                # Turn off cube lights
-                cube.set_lights_off()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+
+                    # Set cube lights to yellow
+                    cube.set_lights(anki_vector.lights.yellow_light)
+                    time.sleep(3)
+
+                    # Turn off cube lights
+                    cube.set_lights_off()
 
         :param color_profile: The profile to be used for the cube lights
         """
@@ -470,9 +487,12 @@ class LightCube(ObservableObject):
     def last_tapped_time(self) -> float:
         """The time the object was last tapped in SDK time.
 
-        .. code-block:: python
+        .. testcode::
 
-            last_tapped_time = robot.world.connected_light_cube.last_tapped_time
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                last_tapped_time = robot.world.connected_light_cube.last_tapped_time
         """
         return self._last_tapped_time
 
@@ -480,9 +500,12 @@ class LightCube(ObservableObject):
     def last_tapped_robot_timestamp(self) -> float:
         """The time the object was last tapped in robot time.
 
-        .. code-block:: python
+        .. testcode::
 
-            last_tapped_robot_timestamp = robot.world.connected_light_cube.last_tapped_robot_timestamp
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                last_tapped_robot_timestamp = robot.world.connected_light_cube.last_tapped_robot_timestamp
         """
         return self._last_tapped_robot_timestamp
 
@@ -490,9 +513,12 @@ class LightCube(ObservableObject):
     def last_moved_time(self) -> float:
         """The time the object was last moved in SDK time.
 
-        .. code-block:: python
+        .. testcode::
 
-            last_moved_time = robot.world.connected_light_cube.last_moved_time
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                last_moved_time = robot.world.connected_light_cube.last_moved_time
         """
         return self._last_moved_time
 
@@ -500,9 +526,12 @@ class LightCube(ObservableObject):
     def last_moved_robot_timestamp(self) -> float:
         """The time the object was last moved in robot time.
 
-        .. code-block:: python
+        .. testcode::
 
-            last_moved_robot_timestamp = robot.world.connected_light_cube.last_moved_robot_timestamp
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                last_moved_robot_timestamp = robot.world.connected_light_cube.last_moved_robot_timestamp
         """
         return self._last_moved_robot_timestamp
 
@@ -510,9 +539,12 @@ class LightCube(ObservableObject):
     def last_moved_start_time(self) -> float:
         """The time the object most recently started moving in SDK time.
 
-        .. code-block:: python
+        .. testcode::
 
-            last_moved_start_time = robot.world.connected_light_cube.last_moved_start_time
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                last_moved_start_time = robot.world.connected_light_cube.last_moved_start_time
         """
         return self._last_moved_start_time
 
@@ -520,9 +552,12 @@ class LightCube(ObservableObject):
     def last_moved_start_robot_timestamp(self) -> float:
         """The time the object more recently started moving in robot time.
 
-        .. code-block:: python
+        .. testcode::
 
-            last_moved_start_robot_timestamp = robot.world.connected_light_cube.last_moved_start_robot_timestamp
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                last_moved_start_robot_timestamp = robot.world.connected_light_cube.last_moved_start_robot_timestamp
         """
         return self._last_moved_start_robot_timestamp
 
@@ -530,9 +565,12 @@ class LightCube(ObservableObject):
     def last_up_axis_changed_time(self) -> float:
         """The time the object's orientation last changed in SDK time.
 
-        .. code-block:: python
+        .. testcode::
 
-            last_up_axis_changed_time = robot.world.connected_light_cube.last_up_axis_changed_time
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                last_up_axis_changed_time = robot.world.connected_light_cube.last_up_axis_changed_time
         """
         return self._last_up_axis_changed_time
 
@@ -540,9 +578,12 @@ class LightCube(ObservableObject):
     def last_up_axis_changed_robot_timestamp(self) -> float:
         """Time the object's orientation last changed in robot time.
 
-        .. code-block:: python
+        .. testcode::
 
-            last_up_axis_changed_robot_timestamp = robot.world.connected_light_cube.last_up_axis_changed_robot_timestamp
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                last_up_axis_changed_robot_timestamp = robot.world.connected_light_cube.last_up_axis_changed_robot_timestamp
         """
         return self._last_up_axis_changed_robot_timestamp
 
@@ -550,9 +591,12 @@ class LightCube(ObservableObject):
     def up_axis(self) -> protocol.UpAxis:
         """The object's up_axis value from the last time it changed.
 
-        .. code-block:: python
+        .. testcode::
 
-            up_axis = robot.world.connected_light_cube.up_axis
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                up_axis = robot.world.connected_light_cube.up_axis
         """
         return self._up_axis
 
@@ -560,9 +604,12 @@ class LightCube(ObservableObject):
     def is_moving(self) -> bool:
         """True if the cube's accelerometer indicates that the cube is moving.
 
-        .. code-block:: python
+        .. testcode::
 
-            is_moving = robot.world.connected_light_cube.is_moving
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                is_moving = robot.world.connected_light_cube.is_moving
         """
         return self._is_moving
 
@@ -570,9 +617,12 @@ class LightCube(ObservableObject):
     def is_connected(self) -> bool:
         """True if the cube is currently connected to the robot.
 
-        .. code-block:: python
+        .. testcode::
 
-            is_connected = robot.world.connected_light_cube.is_connected
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                is_connected = robot.world.connected_light_cube.is_connected
         """
         return self._is_connected
 
@@ -580,9 +630,12 @@ class LightCube(ObservableObject):
     def top_face_orientation_rad(self) -> float:
         """Angular distance from the current reported up axis.
 
-        .. code-block:: python
+        .. testcode::
 
-            top_face_orientation_rad = robot.world.connected_light_cube.top_face_orientation_rad
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                top_face_orientation_rad = robot.world.connected_light_cube.top_face_orientation_rad
         """
         return self._top_face_orientation_rad
 
@@ -590,9 +643,12 @@ class LightCube(ObservableObject):
     def factory_id(self) -> str:
         """The unique hardware id of the physical cube.
 
-        .. code-block:: python
+        .. testcode::
 
-            factory_id = robot.world.connected_light_cube.factory_id
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                factory_id = robot.world.connected_light_cube.factory_id
         """
         return self._factory_id
 
@@ -607,9 +663,12 @@ class LightCube(ObservableObject):
         Note: Sub-classes should override this to add any other relevant info
         for that object type.
 
-        .. code-block:: python
+        .. testcode::
 
-            descriptive_name = robot.world.connected_light_cube.descriptive_name
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                descriptive_name = robot.world.connected_light_cube.descriptive_name
         """
         return "{0} id={1} factory_id={2} is_connected={3}".format(self.__class__.__name__, self._object_id, self._factory_id, self._is_connected)
 
@@ -619,9 +678,12 @@ class LightCube(ObservableObject):
 
         This value can only be assigned once as it is static on the robot.
 
-        .. code-block:: python
+        .. testcode::
 
-            object_id = robot.world.connected_light_cube.object_id
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                object_id = robot.world.connected_light_cube.object_id
         """
         return self._object_id
 

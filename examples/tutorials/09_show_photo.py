@@ -41,6 +41,7 @@ def main():
             val = robot.photos.get_photo(photo.photo_id)
             image = Image.open(io.BytesIO(val.image))
             image.show()
+            break
         else:
             print('\n\nNo photos found on Vector. Ask him to take a photo first by saying, "Hey Vector! Take a photo."\n\n')
 

@@ -130,7 +130,9 @@ class Face(objects.ObservableObject):
         :getter: Returns the face ID
         :setter: Sets the face ID
 
-        .. code-block:: python
+        .. testcode::
+
+            import anki_vector
 
             # Print the visible face ids
             for face in robot.world.visible_faces:
@@ -148,9 +150,13 @@ class Face(objects.ObservableObject):
     def has_updated_face_id(self) -> bool:
         """True if this face been updated / superseded by a face with a new ID.
 
-        .. code-block:: python
+        .. testcode::
 
-            was_face_originally_unrecognized_but_is_now_recognized = face.has_updated_face_id
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                face = robot.world.get_face(1)
+                was_face_originally_unrecognized_but_is_now_recognized = face.has_updated_face_id
         """
         return self._updated_face_id is not None
 
@@ -158,10 +164,13 @@ class Face(objects.ObservableObject):
     def updated_face_id(self) -> int:
         """The ID for the face that superseded this one (if any, otherwise :meth:`face_id`)
 
-        .. code-block:: python
+        .. testcode::
 
-            face = robot.world.get_face(VALID_ID)
-            updated_id = face.updated_face_id
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                face = robot.world.get_face(1)
+                updated_id = face.updated_face_id
         """
         if self._updated_face_id:
             return self._updated_face_id
@@ -173,10 +182,13 @@ class Face(objects.ObservableObject):
 
         This string will be empty if the face is not recognized or enrolled.
 
-        .. code-block:: python
+        .. testcode::
 
-            face = robot.world.get_face(VALID_ID)
-            name = face.name
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                face = robot.world.get_face(1)
+                name = face.name
         """
         return self._name
 
@@ -191,10 +203,13 @@ class Face(objects.ObservableObject):
         :attr:`Expression.SURPRISE`, :attr:`Expression.ANGER`,
         or :attr:`Expression.SADNESS`.
 
-        .. code-block:: python
+        .. testcode::
 
-            face = robot.world.get_face(VALID_ID)
-            expression = face.expression
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                face = robot.world.get_face(1)
+                expression = face.expression
         """
         return self._expression
 
@@ -206,10 +221,13 @@ class Face(objects.ObservableObject):
         :meth:`anki_vector.robot.Robot.enable_vision_mode` wasn't
         called yet). The maximum possible score is 100.
 
-        .. code-block:: python
+        .. testcode::
 
-            face = robot.world.get_face(VALID_ID)
-            expression_score = face.expression_score
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                face = robot.world.get_face(1)
+                expression_score = face.expression_score
         """
         return self._expression_score
 
@@ -217,10 +235,13 @@ class Face(objects.ObservableObject):
     def left_eye(self) -> List[protocol.CladPoint]:
         """sequence of tuples of float (x,y): points representing the outline of the left eye.
 
-        .. code-block:: python
+        .. testcode::
 
-            face = robot.world.get_face(VALID_ID)
-            left_eye = face.left_eye
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                face = robot.world.get_face(1)
+                left_eye = face.left_eye
         """
         return self._left_eye
 
@@ -228,10 +249,13 @@ class Face(objects.ObservableObject):
     def right_eye(self) -> List[protocol.CladPoint]:
         """sequence of tuples of float (x,y): points representing the outline of the right eye.
 
-        .. code-block:: python
+        .. testcode::
 
-            face = robot.world.get_face(VALID_ID)
-            right_eye = face.right_eye
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                face = robot.world.get_face(1)
+                right_eye = face.right_eye
         """
         return self._right_eye
 
@@ -239,10 +263,13 @@ class Face(objects.ObservableObject):
     def nose(self) -> List[protocol.CladPoint]:
         """sequence of tuples of float (x,y): points representing the outline of the nose.
 
-        .. code-block:: python
+        .. testcode::
 
-            face = robot.world.get_face(VALID_ID)
-            nose = face.nose
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                face = robot.world.get_face(1)
+                nose = face.nose
         """
         return self._nose
 
@@ -250,10 +277,13 @@ class Face(objects.ObservableObject):
     def mouth(self) -> List[protocol.CladPoint]:
         """sequence of tuples of float (x,y): points representing the outline of the mouth.
 
-        .. code-block:: python
+        .. testcode::
 
-            face = robot.world.get_face(VALID_ID)
-            mouth = face.mouth
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                face = robot.world.get_face(1)
+                mouth = face.mouth
         """
         return self._mouth
 
@@ -297,11 +327,12 @@ class FaceComponent(util.Component):
     async def request_enrolled_names(self) -> protocol.RequestEnrolledNamesRequest:
         """Asks the robot for the list of names attached to faces that it can identify.
 
-        .. code-block:: python
+        .. testcode::
 
-            name_data_list = robot.faces.request_enrolled_names()
-            for name_data in name_data_list:
-                print('{0} was last seen {1} seconds ago'.format(name_data.name, name_data.seconds_since_last_seen))
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                name_data_list = robot.faces.request_enrolled_names()
         """
         req = protocol.RequestEnrolledNamesRequest()
         return await self.grpc_interface.RequestEnrolledNames(req)
@@ -314,12 +345,15 @@ class FaceComponent(util.Component):
         :param old_name: The old name of the face (must be correct, otherwise message is ignored).
         :param new_name: The new name for the face.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.faces.update_enrolled_face_by_id(VALID_ID, CURRENT_NAME_STRING, 'Boris')
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.faces.update_enrolled_face_by_id(1, 'Hanns', 'Boris')
         """
-        req = protocol.UpdateEnrolledFaceByIDRequest(faceID=face_id,
-                                                     oldName=old_name, newName=new_name)
+        req = protocol.UpdateEnrolledFaceByIDRequest(face_id=face_id,
+                                                     old_name=old_name, new_name=new_name)
         return await self.grpc_interface.UpdateEnrolledFaceByID(req)
 
     @sync.Synchronizer.wrap
@@ -328,26 +362,31 @@ class FaceComponent(util.Component):
 
         :param face_id: The ID of the face to erase.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.faces.erase_enrolled_face_by_id(VALID_ID)
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.faces.erase_enrolled_face_by_id(1)
         """
-        req = protocol.EraseEnrolledFaceByIDRequest(faceID=face_id)
+        req = protocol.EraseEnrolledFaceByIDRequest(face_id=face_id)
         return await self.grpc_interface.EraseEnrolledFaceByID(req)
 
     @sync.Synchronizer.wrap
     async def erase_all_enrolled_faces(self):
         """Erase the enrollment (name) records for all faces.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.faces.erase_all_enrolled_faces()
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.faces.erase_all_enrolled_faces()
         """
         req = protocol.EraseAllEnrolledFacesRequest()
         return await self.grpc_interface.EraseAllEnrolledFaces(req)
 
-    # TODO move out of face component? This is general to objects, not specific to faces? Move to new vision component? Needs sample code.
-    # TODO improve list of modes as shown in docs
+    # TODO move out of face component as this is general to objects if not specific to faces (to a new vision component?). Needs sample code.
     @sync.Synchronizer.wrap
     async def enable_vision_mode(self, enable: bool):
         """Enable facial detection on the robot's camera

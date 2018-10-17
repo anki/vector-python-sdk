@@ -23,7 +23,7 @@ During setup, you will configure your `anki_vector` SDK authentication from a te
 
 By running this script, you will be asked to provide your Anki account credentials, and the script will download an authentication token and cert that will grant you access to the robot and his capabilities (such as camera and audio) as well as data stored on the robot (such as faces and photos).
 
-The downloaded access token is equivalent to your account credentials. It will be stored in your user directory along with a robot identity certificate and other useful data for establishing a connection. Do not share your access token.
+The downloaded access token is equivalent to your account credentials. It will be stored in your user directory (~/.anki_vector) along with a robot identity certificate and other useful data for establishing a connection. Do not share your access token.
 
 If you have any trouble, please post to the Vector forums at https://forums.anki.com/
 

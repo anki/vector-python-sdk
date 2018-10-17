@@ -66,23 +66,26 @@ class World(util.Component):
     def visible_faces(self):
         """generator: yields each face that Vector can currently see.
 
-        .. code-block:: python
+        .. testcode::
 
-            # Print the visible face's attributes
-            for face in robot.world.visible_faces:
-                print("Face attributes:")
-                print(f"Face id: {face.face_id}")
-                print(f"Updated face id: {face.updated_face_id}")
-                print(f"Name: {face.name}")
-                print(f"Expression: {face.expression}")
-                print(f"Timestamp: {face.timestamp}")
-                print(f"Pose: {face.pose}")
-                print(f"Image Rect: {face.face_rect}")
-                print(f"Expression score: {face.expression_score}")
-                print(f"Left eye: {face.left_eye}")
-                print(f"Right eye: {face.right_eye}")
-                print(f"Nose: {face.nose}")
-                print(f"Mouth: {face.mouth}")
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                # Print the visible face's attributes
+                for face in robot.world.visible_faces:
+                    print("Face attributes:")
+                    print(f"Face id: {face.face_id}")
+                    print(f"Updated face id: {face.updated_face_id}")
+                    print(f"Name: {face.name}")
+                    print(f"Expression: {face.expression}")
+                    print(f"Timestamp: {face.timestamp}")
+                    print(f"Pose: {face.pose}")
+                    print(f"Image Rect: {face.face_rect}")
+                    print(f"Expression score: {face.expression_score}")
+                    print(f"Left eye: {face.left_eye}")
+                    print(f"Right eye: {face.right_eye}")
+                    print(f"Nose: {face.nose}")
+                    print(f"Mouth: {face.mouth}")
 
         Returns:
             A generator yielding :class:`anki_vector.faces.Face` instances
@@ -97,7 +100,9 @@ class World(util.Component):
     def get_light_cube(self) -> objects.LightCube:
         """Returns the vector light cube object, regardless of its connection status.
 
-        .. code-block:: python
+        .. testcode::
+
+            import anki_vector
 
             cube = robot.world.get_light_cube()
             print('LightCube {0} connected.'.format("is" if cube.is_connected else "isn't"))
@@ -115,11 +120,14 @@ class World(util.Component):
     def connected_light_cube(self) -> objects.LightCube:
         """A light cube connected to Vector, if any.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.world.connect_cube()
-            if robot.world.connected_light_cube:
-                dock_response = robot.behavior.dock_with_cube(robot.world.connected_light_cube)
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    dock_response = robot.behavior.dock_with_cube(robot.world.connected_light_cube)
         """
         result = None
         cube = self._light_cube.get(objects.LIGHT_CUBE_1_TYPE)
@@ -134,9 +142,12 @@ class World(util.Component):
 
         If a cube is currently connected, this will do nothing.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.world.connect_cube()
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.world.connect_cube()
         """
         req = protocol.ConnectCubeRequest()
         result = await self.grpc_interface.ConnectCube(req)
@@ -156,9 +167,12 @@ class World(util.Component):
     async def disconnect_cube(self) -> protocol.DisconnectCubeResponse:
         """Requests a disconnection from the currently connected cube.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.world.disconnect_cube()
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.world.disconnect_cube()
         """
         req = protocol.DisconnectCubeRequest()
         return await self.grpc_interface.DisconnectCube(req)
@@ -181,9 +195,12 @@ class World(util.Component):
         connect to the cube with the highest RSSI (signal strength) next
         time a connection is requested.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.world.forget_preferred_cube()
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.world.forget_preferred_cube()
         """
         req = protocol.ForgetPreferredCubeRequest()
         return await self.grpc_interface.ForgetPreferredCube(req)
@@ -196,11 +213,14 @@ class World(util.Component):
         will always attempt to connect to this cube if it is available.
         This is only used in simulation (for now).
 
-        .. code-block:: python
+        .. testcode::
 
-            connected_cube = robot.world.connected_light_cube
-            if connected_cube:
-                robot.world.set_preferred_cube(connected_cube.factory_id)
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                connected_cube = robot.world.connected_light_cube
+                if connected_cube:
+                    robot.world.set_preferred_cube(connected_cube.factory_id)
 
         :param factory_id: The unique hardware id of the physical cube.
         """

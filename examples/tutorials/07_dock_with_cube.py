@@ -17,7 +17,7 @@
 """Tell Vector to drive up to a seen cube.
 
 This example demonstrates Vector driving to and docking with a cube, without
-picking it up.  Vector will line his lift hooks up with the cube so that they are
+picking it up.  Vector will line his arm hooks up with the cube so that they are
 inserted into the cube's corners.
 
 You must place a cube in front of Vector so that he can see it.

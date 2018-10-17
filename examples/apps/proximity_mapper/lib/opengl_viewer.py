@@ -34,7 +34,7 @@ Warning:
     This package requires Python to have the PyOpenGL package installed, along
     with an implementation of GLUT (OpenGL Utility Toolkit).
 
-    To install the Python packages do ``pip3 install --user "anki_vector[3dviewer]"``
+    To install the Python packages do ``pip install .[3dviewer]``
 
     On Windows and Linux you must also install freeglut (macOS / OSX has one
     preinstalled).
@@ -46,6 +46,8 @@ Warning:
     next to your Python script, or install it somewhere in your PATH to allow any
     script to use it."
 """
+
+# TODO Update install line above to: ``pip3 install --user "anki_vector[3dviewer]"``
 
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ['OpenGLViewer']

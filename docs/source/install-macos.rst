@@ -13,7 +13,7 @@ Prerequisites
 * Vector is powered on.
 * You have successfully created an Anki account.
 * Vector has been set up with the Vector companion app.
-* You have updated Vector to OS 1.0.1 or later. Check the OS version by putting Vector on the charger, double-tapping his backpack button, and raising and lowering his lift once.
+* You have updated Vector to OS 1.0.1 or later. Check the OS version by putting Vector on the charger, double-tapping his backpack button, and raising and lowering his arms once.
 * The Vector companion app is *not* currently connected to Vector.
 * Vector is connected to the same network as your computer.
 * You can see Vector's eyes on his screen.
@@ -31,17 +31,15 @@ Python Installation
 
     brew install python3
 
+The Vector SDK supports Python 3.6.1 or later.
+
+
 ^^^^^^^^^^^^^^^^
 SDK Installation
 ^^^^^^^^^^^^^^^^
 
-To install the SDK, first download file ``vector_python_sdk_0.4.0.zip`` to your ``Downloads/`` directory.
+To install the SDK, navigate into the SDK folder and type the following into a Terminal window::
 
-Uncompress the file in Finder by double-clicking on ``vector_python_sdk_0.4.0.zip``.
-
-Navigate into the SDK folder and install by typing the following into a Terminal window::
-
-    cd ~/Downloads
     cd vector_python_sdk_0.4.0
     python3 -m pip install .
 
@@ -54,7 +52,9 @@ To authenticate with the robot, type the following into the Terminal window::
     cd vector_python_sdk_0.4.0
     ./configure.py
 
-You will be prompted for your robot's name, ip address and serial number. You will also be asked for your Anki login and password.
+You will be prompted for your robot's name, ip address and serial number. You will also be asked for your Anki login and password. Make sure to use the same account that was used to set up your Vector.
+
+You will see "SUCCESS!" when this script successfully completes.
 
 .. note:: Running ``configure.py`` will automatically download the Vector robot certificate to your computer and store credentials to allow you to connect to Vector. These credentials will be stored under your home directory in folder ``.anki_vector``.
 

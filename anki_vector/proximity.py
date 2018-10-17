@@ -43,9 +43,12 @@ class ProximitySensorData:
     def distance(self) -> float:
         """The distance between the sensor and a detected object
 
-        .. code-block:: python
+        .. testcode::
 
-           distance = robot.proximity.last_sensor_reading.distance
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                distance = robot.proximity.last_sensor_reading.distance
         """
         return self._distance
 
@@ -57,9 +60,12 @@ class ProximitySensorData:
         this value represents the likelihood of the reported distance being
         a solid surface.
 
-        .. code-block:: python
+        .. testcode::
 
-           signal_quality = robot.proximity.last_sensor_reading.signal_quality
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                signal_quality = robot.proximity.last_sensor_reading.signal_quality
         """
         return self._signal_quality
 
@@ -69,9 +75,12 @@ class ProximitySensorData:
         to be considered useful. Past a certain threshold, distance readings
         become unreliable.
 
-        .. code-block:: python
+        .. testcode::
 
-           is_in_valid_range = robot.proximity.last_sensor_reading.is_in_valid_range
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                is_in_valid_range = robot.proximity.last_sensor_reading.is_in_valid_range
         """
         return self._is_in_valid_range
 
@@ -80,9 +89,12 @@ class ProximitySensorData:
         """Whether the engine considers the detected signal to be reliable enough
         to be considered an object in proximity.
 
-        .. code-block:: python
+        .. testcode::
 
-           is_valid_signal_quality = robot.proximity.last_sensor_reading.is_valid_signal_quality
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                is_valid_signal_quality = robot.proximity.last_sensor_reading.is_valid_signal_quality
         """
         return self._is_valid_signal_quality
 
@@ -92,9 +104,12 @@ class ProximitySensorData:
         the lift will send clear proximity signals, it's not useful for object
         detection.
 
-        .. code-block:: python
+        .. testcode::
 
-           is_lift_in_fov = robot.proximity.last_sensor_reading.is_lift_in_fov
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                is_lift_in_fov = robot.proximity.last_sensor_reading.is_lift_in_fov
         """
         return self._is_lift_in_fov
 
@@ -104,9 +119,12 @@ class ProximitySensorData:
         for the time-of-flight data to usefully describe obstacles in the driving
         plane.
 
-        .. code-block:: python
+        .. testcode::
 
-           is_too_pitched = robot.proximity.last_sensor_reading.is_too_pitched
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                is_too_pitched = robot.proximity.last_sensor_reading.is_too_pitched
         """
         return self._is_too_pitched
 
@@ -123,9 +141,12 @@ class ProximitySensorData:
         """Comprehensive judgment of whether the reported distance is useful for
         object proximity detection.
 
-        .. code-block:: python
+        .. testcode::
 
-           is_valid = robot.proximity.last_sensor_reading.is_valid
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                is_valid = robot.proximity.last_sensor_reading.is_valid
         """
         return self._is_in_valid_range and self._is_valid_signal_quality and not self._is_lift_in_fov and not self._is_too_pitched
 
@@ -139,12 +160,14 @@ class ProximityComponent(util.Component):
 
     An example of how to extract sensor data:
 
-      .. code-block:: python
+    .. testcode::
 
-         with anki_vector.Robot("my_robot_serial_number") as robot:
-             proximity_data = robot.proximity.last_sensor_reading
-             if proximity_data is not None:
-                 print('Proximity distance: {0}, engine considers useful: {1}'.format(proximity_data.distance, proximity_data.is_valid))
+        import anki_vector
+
+        with anki_vector.Robot("my_robot_serial_number") as robot:
+            proximity_data = robot.proximity.last_sensor_reading
+            if proximity_data is not None:
+                print('Proximity distance: {0}, engine considers useful: {1}'.format(proximity_data.distance, proximity_data.is_valid))
     """
 
     def __init__(self, robot):
@@ -156,9 +179,12 @@ class ProximityComponent(util.Component):
     def last_sensor_reading(self) -> ProximitySensorData:
         """:class:`anki_vector.proximity.ProximitySensorData`: The last reported sensor data.
 
-        .. code-block:: python
+        .. testcode::
 
-           last_sensor_reading = robot.proximity.last_sensor_reading
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                last_sensor_reading = robot.proximity.last_sensor_reading
         """
         return self._last_sensor_reading
 
@@ -167,9 +193,12 @@ class ProximityComponent(util.Component):
         """:class:`anki_vector.proximity.ProximitySensorData`: The last reported sensor data
         which is considered useful for object detection.
 
-        .. code-block:: python
+        .. testcode::
 
-           last_valid_sensor_reading = robot.proximity.last_valid_sensor_reading
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                last_valid_sensor_reading = robot.proximity.last_valid_sensor_reading
         """
         return self._last_valid_sensor_reading
 

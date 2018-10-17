@@ -15,6 +15,7 @@ Welcome to the Vector SDK!
     install-windows.rst
     install-linux.rst
     troubleshooting.rst
+    advanced-tips.rst
 
 .. toctree::
     :maxdepth: 2

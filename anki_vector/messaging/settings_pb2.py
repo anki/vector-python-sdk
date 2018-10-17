@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='anki_vector/messaging/settings.proto',
   package='Anki.Vector.external_interface',
   syntax='proto3',
-  serialized_pb=_b('\n$anki_vector/messaging/settings.proto\x12\x1e\x41nki.Vector.external_interface\x1a$anki_vector/messaging/messages.proto\"\xdb\x03\n\x13RobotSettingsConfig\x12\x17\n\rclock_24_hour\x18\x01 \x01(\x08H\x00\x12=\n\teye_color\x18\x02 \x01(\x0e\x32(.Anki.Vector.external_interface.EyeColorH\x01\x12\x1a\n\x10\x64\x65\x66\x61ult_location\x18\x03 \x01(\tH\x02\x12\x18\n\x0e\x64ist_is_metric\x18\x04 \x01(\x08H\x03\x12\x10\n\x06locale\x18\x05 \x01(\tH\x04\x12?\n\rmaster_volume\x18\x06 \x01(\x0e\x32&.Anki.Vector.external_interface.VolumeH\x05\x12\x1c\n\x12temp_is_fahrenheit\x18\x07 \x01(\x08H\x06\x12\x13\n\ttime_zone\x18\x08 \x01(\tH\x07\x42\x15\n\x13oneof_clock_24_hourB\x11\n\x0foneof_eye_colorB\x18\n\x16oneof_default_locationB\x16\n\x14oneof_dist_is_metricB\x0e\n\x0coneof_localeB\x15\n\x13oneof_master_volumeB\x1a\n\x18oneof_temp_is_fahrenheitB\x11\n\x0foneof_time_zone\"u\n\x15\x41\x63\x63ountSettingsConfig\x12\x19\n\x0f\x64\x61ta_collection\x18\x01 \x01(\x08H\x00\x12\x14\n\napp_locale\x18\x02 \x01(\tH\x01\x42\x17\n\x15oneof_data_collectionB\x12\n\x10oneof_app_locale\"N\n\x16UserEntitlementsConfig\x12\x1a\n\x10kickstarter_eyes\x18\x01 \x01(\x08H\x00\x42\x18\n\x16oneof_kickstarter_eyes\"[\n\x04Jdoc\x12\x13\n\x0b\x64oc_version\x18\x01 \x01(\x04\x12\x13\n\x0b\x66mt_version\x18\x02 \x01(\x04\x12\x17\n\x0f\x63lient_metadata\x18\x03 \x01(\t\x12\x10\n\x08json_doc\x18\x04 \x01(\t\"{\n\tNamedJdoc\x12;\n\tjdoc_type\x18\x01 \x01(\x0e\x32(.Anki.Vector.external_interface.JdocType\x12\x31\n\x03\x64oc\x18\x02 \x01(\x0b\x32$.Anki.Vector.external_interface.Jdoc\"P\n\x10PullJdocsRequest\x12<\n\njdoc_types\x18\x01 \x03(\x0e\x32(.Anki.Vector.external_interface.JdocType\"\x93\x01\n\x11PullJdocsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12>\n\x0bnamed_jdocs\x18\x02 \x03(\x0b\x32).Anki.Vector.external_interface.NamedJdoc\"^\n\x15UpdateSettingsRequest\x12\x45\n\x08settings\x18\x01 \x01(\x0b\x32\x33.Anki.Vector.external_interface.RobotSettingsConfig\"\xc5\x01\n\x16UpdateSettingsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x38\n\x04\x63ode\x18\x02 \x01(\x0e\x32*.Anki.Vector.external_interface.ResultCode\x12\x31\n\x03\x64oc\x18\x03 \x01(\x0b\x32$.Anki.Vector.external_interface.Jdoc\"o\n\x1cUpdateAccountSettingsRequest\x12O\n\x10\x61\x63\x63ount_settings\x18\x01 \x01(\x0b\x32\x35.Anki.Vector.external_interface.AccountSettingsConfig\"\xcc\x01\n\x1dUpdateAccountSettingsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x38\n\x04\x63ode\x18\x02 \x01(\x0e\x32*.Anki.Vector.external_interface.ResultCode\x12\x31\n\x03\x64oc\x18\x03 \x01(\x0b\x32$.Anki.Vector.external_interface.Jdoc\"r\n\x1dUpdateUserEntitlementsRequest\x12Q\n\x11user_entitlements\x18\x01 \x01(\x0b\x32\x36.Anki.Vector.external_interface.UserEntitlementsConfig\"\xcd\x01\n\x1eUpdateUserEntitlementsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x38\n\x04\x63ode\x18\x02 \x01(\x0e\x32*.Anki.Vector.external_interface.ResultCode\x12\x31\n\x03\x64oc\x18\x03 \x01(\x0b\x32$.Anki.Vector.external_interface.Jdoc*%\n\nApiVersion\x12\x0b\n\x07INVALID\x10\x00\x12\n\n\x06LATEST\x10\x01*e\n\x08JdocType\x12\x12\n\x0eROBOT_SETTINGS\x10\x00\x12\x18\n\x14ROBOT_LIFETIME_STATS\x10\x01\x12\x14\n\x10\x41\x43\x43OUNT_SETTINGS\x10\x02\x12\x15\n\x11USER_ENTITLEMENTS\x10\x03*\xa0\x01\n\x0cRobotSetting\x12\x11\n\rclock_24_hour\x10\x00\x12\r\n\teye_color\x10\x01\x12\x14\n\x10\x64\x65\x66\x61ult_location\x10\x02\x12\x12\n\x0e\x64ist_is_metric\x10\x03\x12\n\n\x06locale\x10\x04\x12\x11\n\rmaster_volume\x10\x05\x12\x16\n\x12temp_is_fahrenheit\x10\x06\x12\r\n\ttime_zone\x10\x07*R\n\x06Volume\x12\x08\n\x04MUTE\x10\x00\x12\x07\n\x03LOW\x10\x01\x12\x0e\n\nMEDIUM_LOW\x10\x02\x12\n\n\x06MEDIUM\x10\x03\x12\x0f\n\x0bMEDIUM_HIGH\x10\x04\x12\x08\n\x04HIGH\x10\x05*\xab\x01\n\x08\x45yeColor\x12\x11\n\rTIP_OVER_TEAL\x10\x00\x12\x12\n\x0eOVERFIT_ORANGE\x10\x01\x12\x12\n\x0eUNCANNY_YELLOW\x10\x02\x12\x13\n\x0fNON_LINEAR_LIME\x10\x03\x12\x18\n\x14SINGULARITY_SAPPHIRE\x10\x04\x12\x19\n\x15\x46\x41LSE_POSITIVE_PURPLE\x10\x05\x12\x1a\n\x16\x43ONFUSION_MATRIX_GREEN\x10\x06*5\n\x0e\x41\x63\x63ountSetting\x12\x13\n\x0f\x44\x41TA_COLLECTION\x10\x00\x12\x0e\n\nAPP_LOCALE\x10\x01*\'\n\x0fUserEntitlement\x12\x14\n\x10KICKSTARTER_EYES\x10\x00*A\n\nResultCode\x12\x15\n\x11SETTINGS_ACCEPTED\x10\x00\x12\x1c\n\x18\x45RROR_UPDATE_IN_PROGRESS\x10\x01\x62\x06proto3')
+  serialized_pb=_b('\n$anki_vector/messaging/settings.proto\x12\x1e\x41nki.Vector.external_interface\x1a$anki_vector/messaging/messages.proto\"\xdb\x03\n\x13RobotSettingsConfig\x12\x17\n\rclock_24_hour\x18\x01 \x01(\x08H\x00\x12=\n\teye_color\x18\x02 \x01(\x0e\x32(.Anki.Vector.external_interface.EyeColorH\x01\x12\x1a\n\x10\x64\x65\x66\x61ult_location\x18\x03 \x01(\tH\x02\x12\x18\n\x0e\x64ist_is_metric\x18\x04 \x01(\x08H\x03\x12\x10\n\x06locale\x18\x05 \x01(\tH\x04\x12?\n\rmaster_volume\x18\x06 \x01(\x0e\x32&.Anki.Vector.external_interface.VolumeH\x05\x12\x1c\n\x12temp_is_fahrenheit\x18\x07 \x01(\x08H\x06\x12\x13\n\ttime_zone\x18\x08 \x01(\tH\x07\x42\x15\n\x13oneof_clock_24_hourB\x11\n\x0foneof_eye_colorB\x18\n\x16oneof_default_locationB\x16\n\x14oneof_dist_is_metricB\x0e\n\x0coneof_localeB\x15\n\x13oneof_master_volumeB\x1a\n\x18oneof_temp_is_fahrenheitB\x11\n\x0foneof_time_zone\"u\n\x15\x41\x63\x63ountSettingsConfig\x12\x19\n\x0f\x64\x61ta_collection\x18\x01 \x01(\x08H\x00\x12\x14\n\napp_locale\x18\x02 \x01(\tH\x01\x42\x17\n\x15oneof_data_collectionB\x12\n\x10oneof_app_locale\"[\n\x04Jdoc\x12\x13\n\x0b\x64oc_version\x18\x01 \x01(\x04\x12\x13\n\x0b\x66mt_version\x18\x02 \x01(\x04\x12\x17\n\x0f\x63lient_metadata\x18\x03 \x01(\t\x12\x10\n\x08json_doc\x18\x04 \x01(\t\"{\n\tNamedJdoc\x12;\n\tjdoc_type\x18\x01 \x01(\x0e\x32(.Anki.Vector.external_interface.JdocType\x12\x31\n\x03\x64oc\x18\x02 \x01(\x0b\x32$.Anki.Vector.external_interface.Jdoc\"P\n\x10PullJdocsRequest\x12<\n\njdoc_types\x18\x01 \x03(\x0e\x32(.Anki.Vector.external_interface.JdocType\"\x93\x01\n\x11PullJdocsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12>\n\x0bnamed_jdocs\x18\x02 \x03(\x0b\x32).Anki.Vector.external_interface.NamedJdoc\"^\n\x15UpdateSettingsRequest\x12\x45\n\x08settings\x18\x01 \x01(\x0b\x32\x33.Anki.Vector.external_interface.RobotSettingsConfig\"\xc5\x01\n\x16UpdateSettingsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x38\n\x04\x63ode\x18\x02 \x01(\x0e\x32*.Anki.Vector.external_interface.ResultCode\x12\x31\n\x03\x64oc\x18\x03 \x01(\x0b\x32$.Anki.Vector.external_interface.Jdoc\"o\n\x1cUpdateAccountSettingsRequest\x12O\n\x10\x61\x63\x63ount_settings\x18\x01 \x01(\x0b\x32\x35.Anki.Vector.external_interface.AccountSettingsConfig\"\xcc\x01\n\x1dUpdateAccountSettingsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x38\n\x04\x63ode\x18\x02 \x01(\x0e\x32*.Anki.Vector.external_interface.ResultCode\x12\x31\n\x03\x64oc\x18\x03 \x01(\x0b\x32$.Anki.Vector.external_interface.Jdoc*%\n\nApiVersion\x12\x0b\n\x07INVALID\x10\x00\x12\n\n\x06LATEST\x10\x01*e\n\x08JdocType\x12\x12\n\x0eROBOT_SETTINGS\x10\x00\x12\x18\n\x14ROBOT_LIFETIME_STATS\x10\x01\x12\x14\n\x10\x41\x43\x43OUNT_SETTINGS\x10\x02\x12\x15\n\x11USER_ENTITLEMENTS\x10\x03*;\n\x11JdocResolveMethod\x12\x11\n\rPUSH_TO_CLOUD\x10\x00\x12\x13\n\x0fPULL_FROM_CLOUD\x10\x01*\xa0\x01\n\x0cRobotSetting\x12\x11\n\rclock_24_hour\x10\x00\x12\r\n\teye_color\x10\x01\x12\x14\n\x10\x64\x65\x66\x61ult_location\x10\x02\x12\x12\n\x0e\x64ist_is_metric\x10\x03\x12\n\n\x06locale\x10\x04\x12\x11\n\rmaster_volume\x10\x05\x12\x16\n\x12temp_is_fahrenheit\x10\x06\x12\r\n\ttime_zone\x10\x07*R\n\x06Volume\x12\x08\n\x04MUTE\x10\x00\x12\x07\n\x03LOW\x10\x01\x12\x0e\n\nMEDIUM_LOW\x10\x02\x12\n\n\x06MEDIUM\x10\x03\x12\x0f\n\x0bMEDIUM_HIGH\x10\x04\x12\x08\n\x04HIGH\x10\x05*\xab\x01\n\x08\x45yeColor\x12\x11\n\rTIP_OVER_TEAL\x10\x00\x12\x12\n\x0eOVERFIT_ORANGE\x10\x01\x12\x12\n\x0eUNCANNY_YELLOW\x10\x02\x12\x13\n\x0fNON_LINEAR_LIME\x10\x03\x12\x18\n\x14SINGULARITY_SAPPHIRE\x10\x04\x12\x19\n\x15\x46\x41LSE_POSITIVE_PURPLE\x10\x05\x12\x1a\n\x16\x43ONFUSION_MATRIX_GREEN\x10\x06*5\n\x0e\x41\x63\x63ountSetting\x12\x13\n\x0f\x44\x41TA_COLLECTION\x10\x00\x12\x0e\n\nAPP_LOCALE\x10\x01*A\n\nResultCode\x12\x15\n\x11SETTINGS_ACCEPTED\x10\x00\x12\x1c\n\x18\x45RROR_UPDATE_IN_PROGRESS\x10\x01\x62\x06proto3')
   ,
   dependencies=[anki__vector_dot_messaging_dot_messages__pb2.DESCRIPTOR,])
 
@@ -42,8 +42,8 @@ _APIVERSION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2177,
-  serialized_end=2214,
+  serialized_start=1773,
+  serialized_end=1810,
 )
 _sym_db.RegisterEnumDescriptor(_APIVERSION)
 
@@ -73,12 +73,35 @@ _JDOCTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2216,
-  serialized_end=2317,
+  serialized_start=1812,
+  serialized_end=1913,
 )
 _sym_db.RegisterEnumDescriptor(_JDOCTYPE)
 
 JdocType = enum_type_wrapper.EnumTypeWrapper(_JDOCTYPE)
+_JDOCRESOLVEMETHOD = _descriptor.EnumDescriptor(
+  name='JdocResolveMethod',
+  full_name='Anki.Vector.external_interface.JdocResolveMethod',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='PUSH_TO_CLOUD', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='PULL_FROM_CLOUD', index=1, number=1,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=1915,
+  serialized_end=1974,
+)
+_sym_db.RegisterEnumDescriptor(_JDOCRESOLVEMETHOD)
+
+JdocResolveMethod = enum_type_wrapper.EnumTypeWrapper(_JDOCRESOLVEMETHOD)
 _ROBOTSETTING = _descriptor.EnumDescriptor(
   name='RobotSetting',
   full_name='Anki.Vector.external_interface.RobotSetting',
@@ -120,8 +143,8 @@ _ROBOTSETTING = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2320,
-  serialized_end=2480,
+  serialized_start=1977,
+  serialized_end=2137,
 )
 _sym_db.RegisterEnumDescriptor(_ROBOTSETTING)
 
@@ -159,8 +182,8 @@ _VOLUME = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2482,
-  serialized_end=2564,
+  serialized_start=2139,
+  serialized_end=2221,
 )
 _sym_db.RegisterEnumDescriptor(_VOLUME)
 
@@ -202,8 +225,8 @@ _EYECOLOR = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2567,
-  serialized_end=2738,
+  serialized_start=2224,
+  serialized_end=2395,
 )
 _sym_db.RegisterEnumDescriptor(_EYECOLOR)
 
@@ -225,31 +248,12 @@ _ACCOUNTSETTING = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2740,
-  serialized_end=2793,
+  serialized_start=2397,
+  serialized_end=2450,
 )
 _sym_db.RegisterEnumDescriptor(_ACCOUNTSETTING)
 
 AccountSetting = enum_type_wrapper.EnumTypeWrapper(_ACCOUNTSETTING)
-_USERENTITLEMENT = _descriptor.EnumDescriptor(
-  name='UserEntitlement',
-  full_name='Anki.Vector.external_interface.UserEntitlement',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='KICKSTARTER_EYES', index=0, number=0,
-      options=None,
-      type=None),
-  ],
-  containing_type=None,
-  options=None,
-  serialized_start=2795,
-  serialized_end=2834,
-)
-_sym_db.RegisterEnumDescriptor(_USERENTITLEMENT)
-
-UserEntitlement = enum_type_wrapper.EnumTypeWrapper(_USERENTITLEMENT)
 _RESULTCODE = _descriptor.EnumDescriptor(
   name='ResultCode',
   full_name='Anki.Vector.external_interface.ResultCode',
@@ -267,8 +271,8 @@ _RESULTCODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2836,
-  serialized_end=2901,
+  serialized_start=2452,
+  serialized_end=2517,
 )
 _sym_db.RegisterEnumDescriptor(_RESULTCODE)
 
@@ -279,6 +283,8 @@ ROBOT_SETTINGS = 0
 ROBOT_LIFETIME_STATS = 1
 ACCOUNT_SETTINGS = 2
 USER_ENTITLEMENTS = 3
+PUSH_TO_CLOUD = 0
+PULL_FROM_CLOUD = 1
 clock_24_hour = 0
 eye_color = 1
 default_location = 2
@@ -302,7 +308,6 @@ FALSE_POSITIVE_PURPLE = 5
 CONFUSION_MATRIX_GREEN = 6
 DATA_COLLECTION = 0
 APP_LOCALE = 1
-KICKSTARTER_EYES = 0
 SETTINGS_ACCEPTED = 0
 ERROR_UPDATE_IN_PROGRESS = 1
 
@@ -456,40 +461,6 @@ _ACCOUNTSETTINGSCONFIG = _descriptor.Descriptor(
 )
 
 
-_USERENTITLEMENTSCONFIG = _descriptor.Descriptor(
-  name='UserEntitlementsConfig',
-  full_name='Anki.Vector.external_interface.UserEntitlementsConfig',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='kickstarter_eyes', full_name='Anki.Vector.external_interface.UserEntitlementsConfig.kickstarter_eyes', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-    _descriptor.OneofDescriptor(
-      name='oneof_kickstarter_eyes', full_name='Anki.Vector.external_interface.UserEntitlementsConfig.oneof_kickstarter_eyes',
-      index=0, containing_type=None, fields=[]),
-  ],
-  serialized_start=707,
-  serialized_end=785,
-)
-
-
 _JDOC = _descriptor.Descriptor(
   name='Jdoc',
   full_name='Anki.Vector.external_interface.Jdoc',
@@ -537,8 +508,8 @@ _JDOC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=787,
-  serialized_end=878,
+  serialized_start=707,
+  serialized_end=798,
 )
 
 
@@ -575,8 +546,8 @@ _NAMEDJDOC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=880,
-  serialized_end=1003,
+  serialized_start=800,
+  serialized_end=923,
 )
 
 
@@ -606,8 +577,8 @@ _PULLJDOCSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1005,
-  serialized_end=1085,
+  serialized_start=925,
+  serialized_end=1005,
 )
 
 
@@ -644,8 +615,8 @@ _PULLJDOCSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1088,
-  serialized_end=1235,
+  serialized_start=1008,
+  serialized_end=1155,
 )
 
 
@@ -675,8 +646,8 @@ _UPDATESETTINGSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1237,
-  serialized_end=1331,
+  serialized_start=1157,
+  serialized_end=1251,
 )
 
 
@@ -720,8 +691,8 @@ _UPDATESETTINGSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1334,
-  serialized_end=1531,
+  serialized_start=1254,
+  serialized_end=1451,
 )
 
 
@@ -751,8 +722,8 @@ _UPDATEACCOUNTSETTINGSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1533,
-  serialized_end=1644,
+  serialized_start=1453,
+  serialized_end=1564,
 )
 
 
@@ -796,84 +767,8 @@ _UPDATEACCOUNTSETTINGSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1647,
-  serialized_end=1851,
-)
-
-
-_UPDATEUSERENTITLEMENTSREQUEST = _descriptor.Descriptor(
-  name='UpdateUserEntitlementsRequest',
-  full_name='Anki.Vector.external_interface.UpdateUserEntitlementsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='user_entitlements', full_name='Anki.Vector.external_interface.UpdateUserEntitlementsRequest.user_entitlements', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1853,
-  serialized_end=1967,
-)
-
-
-_UPDATEUSERENTITLEMENTSRESPONSE = _descriptor.Descriptor(
-  name='UpdateUserEntitlementsResponse',
-  full_name='Anki.Vector.external_interface.UpdateUserEntitlementsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='status', full_name='Anki.Vector.external_interface.UpdateUserEntitlementsResponse.status', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='code', full_name='Anki.Vector.external_interface.UpdateUserEntitlementsResponse.code', index=1,
-      number=2, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='doc', full_name='Anki.Vector.external_interface.UpdateUserEntitlementsResponse.doc', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1970,
-  serialized_end=2175,
+  serialized_start=1567,
+  serialized_end=1771,
 )
 
 _ROBOTSETTINGSCONFIG.fields_by_name['eye_color'].enum_type = _EYECOLOR
@@ -908,9 +803,6 @@ _ACCOUNTSETTINGSCONFIG.fields_by_name['data_collection'].containing_oneof = _ACC
 _ACCOUNTSETTINGSCONFIG.oneofs_by_name['oneof_app_locale'].fields.append(
   _ACCOUNTSETTINGSCONFIG.fields_by_name['app_locale'])
 _ACCOUNTSETTINGSCONFIG.fields_by_name['app_locale'].containing_oneof = _ACCOUNTSETTINGSCONFIG.oneofs_by_name['oneof_app_locale']
-_USERENTITLEMENTSCONFIG.oneofs_by_name['oneof_kickstarter_eyes'].fields.append(
-  _USERENTITLEMENTSCONFIG.fields_by_name['kickstarter_eyes'])
-_USERENTITLEMENTSCONFIG.fields_by_name['kickstarter_eyes'].containing_oneof = _USERENTITLEMENTSCONFIG.oneofs_by_name['oneof_kickstarter_eyes']
 _NAMEDJDOC.fields_by_name['jdoc_type'].enum_type = _JDOCTYPE
 _NAMEDJDOC.fields_by_name['doc'].message_type = _JDOC
 _PULLJDOCSREQUEST.fields_by_name['jdoc_types'].enum_type = _JDOCTYPE
@@ -924,13 +816,8 @@ _UPDATEACCOUNTSETTINGSREQUEST.fields_by_name['account_settings'].message_type = 
 _UPDATEACCOUNTSETTINGSRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_messages__pb2._RESPONSESTATUS
 _UPDATEACCOUNTSETTINGSRESPONSE.fields_by_name['code'].enum_type = _RESULTCODE
 _UPDATEACCOUNTSETTINGSRESPONSE.fields_by_name['doc'].message_type = _JDOC
-_UPDATEUSERENTITLEMENTSREQUEST.fields_by_name['user_entitlements'].message_type = _USERENTITLEMENTSCONFIG
-_UPDATEUSERENTITLEMENTSRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_messages__pb2._RESPONSESTATUS
-_UPDATEUSERENTITLEMENTSRESPONSE.fields_by_name['code'].enum_type = _RESULTCODE
-_UPDATEUSERENTITLEMENTSRESPONSE.fields_by_name['doc'].message_type = _JDOC
 DESCRIPTOR.message_types_by_name['RobotSettingsConfig'] = _ROBOTSETTINGSCONFIG
 DESCRIPTOR.message_types_by_name['AccountSettingsConfig'] = _ACCOUNTSETTINGSCONFIG
-DESCRIPTOR.message_types_by_name['UserEntitlementsConfig'] = _USERENTITLEMENTSCONFIG
 DESCRIPTOR.message_types_by_name['Jdoc'] = _JDOC
 DESCRIPTOR.message_types_by_name['NamedJdoc'] = _NAMEDJDOC
 DESCRIPTOR.message_types_by_name['PullJdocsRequest'] = _PULLJDOCSREQUEST
@@ -939,15 +826,13 @@ DESCRIPTOR.message_types_by_name['UpdateSettingsRequest'] = _UPDATESETTINGSREQUE
 DESCRIPTOR.message_types_by_name['UpdateSettingsResponse'] = _UPDATESETTINGSRESPONSE
 DESCRIPTOR.message_types_by_name['UpdateAccountSettingsRequest'] = _UPDATEACCOUNTSETTINGSREQUEST
 DESCRIPTOR.message_types_by_name['UpdateAccountSettingsResponse'] = _UPDATEACCOUNTSETTINGSRESPONSE
-DESCRIPTOR.message_types_by_name['UpdateUserEntitlementsRequest'] = _UPDATEUSERENTITLEMENTSREQUEST
-DESCRIPTOR.message_types_by_name['UpdateUserEntitlementsResponse'] = _UPDATEUSERENTITLEMENTSRESPONSE
 DESCRIPTOR.enum_types_by_name['ApiVersion'] = _APIVERSION
 DESCRIPTOR.enum_types_by_name['JdocType'] = _JDOCTYPE
+DESCRIPTOR.enum_types_by_name['JdocResolveMethod'] = _JDOCRESOLVEMETHOD
 DESCRIPTOR.enum_types_by_name['RobotSetting'] = _ROBOTSETTING
 DESCRIPTOR.enum_types_by_name['Volume'] = _VOLUME
 DESCRIPTOR.enum_types_by_name['EyeColor'] = _EYECOLOR
 DESCRIPTOR.enum_types_by_name['AccountSetting'] = _ACCOUNTSETTING
-DESCRIPTOR.enum_types_by_name['UserEntitlement'] = _USERENTITLEMENT
 DESCRIPTOR.enum_types_by_name['ResultCode'] = _RESULTCODE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -964,13 +849,6 @@ AccountSettingsConfig = _reflection.GeneratedProtocolMessageType('AccountSetting
   # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.AccountSettingsConfig)
   ))
 _sym_db.RegisterMessage(AccountSettingsConfig)
-
-UserEntitlementsConfig = _reflection.GeneratedProtocolMessageType('UserEntitlementsConfig', (_message.Message,), dict(
-  DESCRIPTOR = _USERENTITLEMENTSCONFIG,
-  __module__ = 'anki_vector.messaging.settings_pb2'
-  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.UserEntitlementsConfig)
-  ))
-_sym_db.RegisterMessage(UserEntitlementsConfig)
 
 Jdoc = _reflection.GeneratedProtocolMessageType('Jdoc', (_message.Message,), dict(
   DESCRIPTOR = _JDOC,
@@ -1027,20 +905,6 @@ UpdateAccountSettingsResponse = _reflection.GeneratedProtocolMessageType('Update
   # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.UpdateAccountSettingsResponse)
   ))
 _sym_db.RegisterMessage(UpdateAccountSettingsResponse)
-
-UpdateUserEntitlementsRequest = _reflection.GeneratedProtocolMessageType('UpdateUserEntitlementsRequest', (_message.Message,), dict(
-  DESCRIPTOR = _UPDATEUSERENTITLEMENTSREQUEST,
-  __module__ = 'anki_vector.messaging.settings_pb2'
-  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.UpdateUserEntitlementsRequest)
-  ))
-_sym_db.RegisterMessage(UpdateUserEntitlementsRequest)
-
-UpdateUserEntitlementsResponse = _reflection.GeneratedProtocolMessageType('UpdateUserEntitlementsResponse', (_message.Message,), dict(
-  DESCRIPTOR = _UPDATEUSERENTITLEMENTSRESPONSE,
-  __module__ = 'anki_vector.messaging.settings_pb2'
-  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.UpdateUserEntitlementsResponse)
-  ))
-_sym_db.RegisterMessage(UpdateUserEntitlementsResponse)
 
 
 # @@protoc_insertion_point(module_scope)

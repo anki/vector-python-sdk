@@ -72,9 +72,12 @@ class EventHandler:
     def start(self, connection: Connection, loop: asyncio.BaseEventLoop):
         """Start listening for events. Automatically called by the :class:`anki_vector.robot.Robot` class.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.events.start(robot.conn, robot.loop)
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.events.start(robot.conn, robot.loop)
 
         :param connection: A reference to the connection from the SDK to the robot.
         :param loop: The loop to run the event task on.
@@ -87,9 +90,12 @@ class EventHandler:
     def close(self):
         """Stop listening for events. Automatically called by the :class:`anki_vector.robot.Robot` class.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.events.close()
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.events.close()
         """
         self.listening_for_events = False
         self.event_task.cancel()
@@ -98,14 +104,16 @@ class EventHandler:
     def dispatch_event_by_name(self, event_data, event_name: str = None):
         """Dispatches event to event listeners by name.
 
-        .. code-block:: python
+        .. testcode::
+
+            import anki_vector
 
             def event_listener(_, msg):
                 print(msg)
 
-            robot.events.subscribe_by_name(event_listener, event_name='my_event')
-
-            robot.events.dispatch_event_by_name('my_event dispatched', event_name='my_event')
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.events.subscribe_by_name(event_listener, event_name='my_event')
+                robot.events.dispatch_event_by_name('my_event dispatched', event_name='my_event')
         """
 
         if not event_name:
@@ -153,14 +161,16 @@ class EventHandler:
     def subscribe_by_name(self, func: callable, event_name: str = None):
         """Receive a method call when the specified event occurs.
 
-        .. code-block:: python
-        
+        .. testcode::
+
+            import anki_vector
+
             def event_listener(_, msg):
                 print(msg)
 
-            robot.events.subscribe_by_name(event_listener, event_name='my_event')
-
-            robot.events.dispatch_event_by_name('my_event dispatched', event_name='my_event')
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.events.subscribe_by_name(event_listener, event_name='my_event')
+                robot.events.dispatch_event_by_name('my_event dispatched', event_name='my_event')
 
         :param func: A method implemented in your code that will be called when the event is fired.
         :param event_name: The name of the event that will result in func being called.
@@ -175,10 +185,20 @@ class EventHandler:
     def subscribe(self, func: callable, event_type: Events = None):
         """Receive a method call when the specified event occurs.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.events.subscribe(on_robot_observed_face,
-                                   Events.robot_observed_face)
+            import anki_vector
+            from anki_vector.events import Events
+
+            import functools
+
+            def on_robot_observed_face():
+                print("Vector sees a face")
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                on_robot_observed_face = functools.partial(on_robot_observed_face, robot)
+                robot.events.subscribe(on_robot_observed_face,
+                                       Events.robot_observed_face)
 
         :param func: A method implemented in your code that will be called when the event is fired.
         :param event_type: The enum type of the event that will result in func being called.
@@ -193,9 +213,19 @@ class EventHandler:
     def unsubscribe_by_name(self, func: callable, event_name: str = None):
         """Unregister a previously subscribed method from an event.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.events.unsubscribe_by_name(my_function, 'my_event')
+            import anki_vector
+            from anki_vector.events import Events
+
+            import functools
+
+            def on_robot_observed_face(robot, event_type, event):
+                print("Vector sees a face")
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                on_robot_observed_face = functools.partial(on_robot_observed_face, robot)
+                robot.events.unsubscribe_by_name(on_robot_observed_face, Events.robot_observed_face)
 
         :param func: The method you no longer wish to be called when an event fires.
         :param event_name: The name of the event for which you no longer want to receive a method call.
@@ -218,10 +248,14 @@ class EventHandler:
     def unsubscribe(self, func: callable, event_type: Events = None):
         """Unregister a previously subscribed method from an event.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.events.unsubscribe(on_robot_observed_face,
-                                     Events.robot_observed_face)
+            import anki_vector
+            from anki_vector.events import Events
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.events.unsubscribe(on_robot_observed_face,
+                                         Events.robot_observed_face)
 
         :param func: The enum type of the event you no longer wish to be called when an event fires.
         :param event_type: The name of the event for which you no longer want to receive a method call.

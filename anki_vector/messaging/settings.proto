@@ -32,6 +32,11 @@ enum JdocType {
   USER_ENTITLEMENTS = 3;
 }
 
+enum JdocResolveMethod {
+  PUSH_TO_CLOUD = 0;
+  PULL_FROM_CLOUD = 1;
+}
+
 // RobotSetting enum values are not in all caps for historical reasons.
 // Changing that now would involve a format migration because we're now
 // saving robot settings jdocs in the cloud.
@@ -86,14 +91,6 @@ message AccountSettingsConfig {
   oneof oneof_app_locale { string app_locale = 2; }
 }
 
-enum UserEntitlement {
-  KICKSTARTER_EYES = 0;
-}
-
-message UserEntitlementsConfig {
-  oneof oneof_kickstarter_eyes { bool kickstarter_eyes = 1; }
-}
-
 enum ResultCode {
   SETTINGS_ACCEPTED        = 0;
   ERROR_UPDATE_IN_PROGRESS = 1;
@@ -135,16 +132,6 @@ message UpdateAccountSettingsRequest {
 }
 
 message UpdateAccountSettingsResponse {
-  ResponseStatus status = 1;
-  ResultCode code = 2;
-  Jdoc doc = 3;
-}
-
-message UpdateUserEntitlementsRequest {
-  UserEntitlementsConfig user_entitlements = 1;
-}
-
-message UpdateUserEntitlementsResponse {
   ResponseStatus status = 1;
   ResultCode code = 2;
   Jdoc doc = 3;

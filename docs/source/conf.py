@@ -71,6 +71,7 @@ extensions = [
     'sphinx_autodoc_typehints',
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
+    'sphinx.ext.doctest', # Test sample code snippets in the docs
     'ext.verlink', # build versioned links for example packages
     'ext.custopoleon' # Customizes the Napoleon package
     #'sphinx.ext.napoleon'

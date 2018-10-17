@@ -38,9 +38,12 @@ class MotorComponent(util.Component):
 
         To unlock the wheel track, call `set_wheel_motors(0, 0)`.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.motors.set_wheel_motors(25, 50)
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.motors.set_wheel_motors(25, 50)
 
         :param left_wheel_speed: Speed of the left tread (in millimeters per second).
         :param right_wheel_speed: Speed of the right tread (in millimeters per second).
@@ -64,9 +67,12 @@ class MotorComponent(util.Component):
 
         To unlock the head track, call `set_head_motor(0)`.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.motors.set_head_motor(-5.0)
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.motors.set_head_motor(-5.0)
 
         :param speed: Motor speed for Vector's head, measured in radians per second.
         '''
@@ -82,9 +88,12 @@ class MotorComponent(util.Component):
 
         To unlock the lift track, call `set_lift_motor(0)`.
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.motors.set_lift_motor(-5.0)
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                robot.motors.set_lift_motor(-5.0)
 
         :param speed: Motor speed for Vector's lift, measured in radians per second.
         '''

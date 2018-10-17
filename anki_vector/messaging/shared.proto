@@ -124,8 +124,6 @@ message GatewayWrapper {
     UpdateSettingsResponse        update_settings_response           = 63;
     UpdateAccountSettingsRequest  update_account_settings_request    = 64;
     UpdateAccountSettingsResponse update_account_settings_response   = 65;
-    UpdateUserEntitlementsRequest  update_user_entitlements_request  = 66;
-    UpdateUserEntitlementsResponse update_user_entitlements_response = 67;
 
     // ------------ sdk behavior request/response pairs --------------------
     DriveOffChargerRequest        drive_off_charger_request          = 70;
@@ -184,10 +182,6 @@ message GatewayWrapper {
     // ------------ Image chunks sent from the vision component ------------
     ImageRequest                  image_request                      = 140;
     ImageChunk                    image_chunk                        = 141;
-
-    // ------------ Message and response for cloud connectivity check ------------
-    CheckCloudRequest             check_cloud_request                = 160;
-    CheckCloudResponse            check_cloud_response               = 161;
 
     // ------------ Audio chunks sent from the animProcess ------------
     AudioSendModeRequest          audio_send_mode_request            = 170;

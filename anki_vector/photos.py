@@ -28,13 +28,14 @@ from .messaging import protocol
 class PhotographComponent(util.Component):
     """Access the photos on Vector.
 
-    .. code-block:: python
+    .. testcode::
 
+        import anki_vector
         from PIL import Image
 
         with anki_vector.Robot("my_robot_serial_number") as robot:
-            if len(robot.photo_info) > 0:
-                first_photo = robot.photo_info[0]
+            if len(robot.photos.photo_info) > 0:
+                first_photo = robot.photos.photo_info[0]
                 photo = robot.photos.get_photo(first_photo)
                 image = Image.open(io.BytesIO(photo.image))
                 image.show()
@@ -52,9 +53,11 @@ class PhotographComponent(util.Component):
 
         If the photo info hasn't been loaded yet, accessing this property will request it from the robot.
 
-        .. code-block:: python
+        .. testcode::
 
-            photos = robot.photos.photos_info
+            import anki_vector
+
+            photos = robot.photos.photo_info
             if len(photos) > 0:
                 photo = photos[0]
                 photo.photo_id # the id to use to grab a photo from the robot
@@ -71,7 +74,9 @@ class PhotographComponent(util.Component):
     async def load_photo_info(self) -> protocol.PhotosInfoResponse:
         """Request the photo information from the robot.
 
-        .. code-block:: python
+        .. testcode::
+
+            import anki_vector
 
             robot.photos.load_photo_info()
 
@@ -87,14 +92,14 @@ class PhotographComponent(util.Component):
     async def get_photo(self, photo_id: int) -> protocol.PhotoResponse:
         """Download a full-resolution photo from the robot's storage.
 
-        .. code-block:: python
-            :emphasize-lines: 6
+        .. testcode::
 
+            import anki_vector
             from PIL import Image
 
             with anki_vector.Robot("my_robot_serial_number") as robot:
-                if len(robot.photo_info) > 0:
-                    first_photo = robot.photo_info[0]
+                if len(robot.photos.photo_info) > 0:
+                    first_photo = robot.photos.photo_info[0]
                     photo = robot.photos.get_photo(first_photo)
                     image = Image.open(io.BytesIO(photo.image))
                     image.show()
@@ -116,13 +121,13 @@ class PhotographComponent(util.Component):
         You may use this function to pull all of the images off the robot in a smaller format, and
         then determine which one to download as full resolution.
 
-        .. code-block:: python
-            :emphasize-lines: 5
+        .. testcode::
 
+            import anki_vector
             from PIL import Image
 
             with anki_vector.Robot("my_robot_serial_number") as robot:
-                for photo in robot.photo_info:
+                for photo in robot.photos.photo_info:
                     photo = robot.photos.get_thumbnail(photo)
                     image = Image.open(io.BytesIO(photo.image))
                     image.show()

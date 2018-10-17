@@ -23,8 +23,8 @@ import asyncio
 from enum import Enum
 from concurrent import futures
 
-import aiogrpc
 import grpc
+import aiogrpc
 
 from . import exceptions, util
 from .messaging import client, protocol
@@ -33,13 +33,13 @@ from .messaging import client, protocol
 class CONTROL_PRIORITY_LEVEL(Enum):
     """Enum used to specify the priority level for the program."""
 
-    #: Runs below Mandatory Physical Reactions such as tucking Vector's head and lift during a fall,
+    #: Runs below Mandatory Physical Reactions such as tucking Vector's head and arms during a fall,
     #: yet above Trigger-Word Detection.
     TOP_PRIORITY_AI = protocol.ControlRequest.TOP_PRIORITY_AI  # pylint: disable=no-member
 
 
 class _ControlEventManager:
-    """This manages every :class:`asyncio.Event` that handle the behavior control
+    """This manages every :class:`asyncio.Event` that handles the behavior control
     system.
 
     These include three events: granted, lost, and request.
@@ -126,11 +126,13 @@ class Connection:
 
     .. code-block:: python
 
+        import anki_vector
+
         # Connect to your Vector
         conn = connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/to/file.cert", "<secret_key>")
         conn.connect()
         # Run your commands
-        anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_blackjack_victorwin_01")
+        anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_turn_left_01")
         await conn.grpc_interface.PlayAnimation(anim) # This needs to be run in an asyncio loop
         # Close the connection
         conn.close()
@@ -140,6 +142,7 @@ class Connection:
     :param cert_file: The location of the certificate file on disk
     :param loop: The asyncio loop for the control events to run inside
     """
+    # TODO When sample code is ready, convert `.. code-block:: python` to `.. testcode::`
 
     def __init__(self, name: str, host: str, cert_file: str, guid: str):
         if cert_file is None:
@@ -164,9 +167,12 @@ class Connection:
 
         .. code-block:: python
 
-            anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_blackjack_victorwin_01")
+            import anki_vector
+
+            anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_turn_left_01")
             await conn.grpc_interface.PlayAnimation(anim) # This needs to be run in an asyncio loop
         """
+        # TODO When sample code is ready, convert `.. code-block:: python` to `.. testcode::`
         return self._interface
 
     @property
@@ -174,8 +180,9 @@ class Connection:
         """This provides an :class:`asyncio.Event` that a user may :func:`wait()` upon to
         detect when Vector has taken control of the behaviors at a higher priority.
 
-        .. code-block:: python
-            :emphasize-lines: 2
+        .. testcode::
+
+            import anki_vector
 
             async def auto_reconnect(conn: anki_vector.connection.Connection):
                 await conn.control_lost_event.wait()
@@ -186,8 +193,9 @@ class Connection:
     def request_control(self, timeout: float = 10.0):
         """Explicitly request control. Typically used after detecting :func:`control_lost_event`.
 
-        .. code-block:: python
-            :emphasize-lines: 3
+        .. testcode::
+
+            import anki_vector
 
             async def auto_reconnect(conn: anki_vector.connection.Connection):
                 await conn.control_lost_event.wait()
@@ -205,20 +213,22 @@ class Connection:
         """Connect to Vector
 
         .. code-block:: python
-            :emphasize-lines: 4
+
+            import anki_vector
 
             # Connect to your Vector
             conn = connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/to/file.cert", "<secret_key>")
             # Add a 5 second timeout to reduce the amount of time allowed for a connection
             conn.connect(timeout=5.0)
             # Run your commands
-            anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_blackjack_victorwin_01")
+            anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_turn_left_01")
             await conn.grpc_interface.PlayAnimation(anim) # This needs to be run in an asyncio loop
             # Close the connection
             conn.close()
 
         :param timeout: The time allotted to attempt a connection, in seconds.
         """
+        # TODO When sample code is ready, convert `.. code-block:: python` to `.. testcode::`
         self._loop = loop
         self._control_events = _ControlEventManager(loop)
         trusted_certs = None
@@ -279,8 +289,6 @@ class Connection:
                     self._control_events.update(False)
         except futures.CancelledError:
             self._logger.debug('Behavior handler task was cancelled. This is expected during disconnection.')
-        except Exception as e:  # pylint: disable=broad-except
-            self._logger.error(e)  # TODO: better handle errors due to auth failure (and remove pylint disable)
 
     def close(self):
         """Cleanup the connection, and shutdown all the even handlers.
@@ -288,17 +296,19 @@ class Connection:
         Usually this should be invoked by the Robot class when it closes.
 
         .. code-block:: python
-            :emphasize-lines: 8
+
+            import anki_vector
 
             # Connect to your Vector
             conn = connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/to/file.cert", "<secret_key>")
             conn.connect()
             # Run your commands
-            anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_blackjack_victorwin_01")
+            anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_turn_left_01")
             await conn.grpc_interface.PlayAnimation(anim) # This needs to be run in an asyncio loop
             # Close the connection
             conn.close()
         """
+        # TODO When sample code is ready, convert `.. code-block:: python` to `.. testcode::`
         if self._control_events:
             self._control_events.shutdown()
         if self._control_stream_task:

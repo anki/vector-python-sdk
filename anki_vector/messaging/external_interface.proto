@@ -239,16 +239,16 @@ service ExternalInterface {
     };
   }
 
-  rpc UpdateAccountSettings(UpdateAccountSettingsRequest) returns (UpdateAccountSettingsResponse) {
+  rpc UpdateSettings(UpdateSettingsRequest) returns (UpdateSettingsResponse) {
     option (google.api.http) = {
-      post: "/v1/update_account_settings",
+      post: "/v1/update_settings",
       body: "*"
     };
   }
 
-  rpc UpdateUserEntitlements(UpdateUserEntitlementsRequest) returns (UpdateUserEntitlementsResponse) {
+  rpc UpdateAccountSettings(UpdateAccountSettingsRequest) returns (UpdateAccountSettingsResponse) {
     option (google.api.http) = {
-      post: "/v1/update_user_entitlements",
+      post: "/v1/update_account_settings",
       body: "*"
     };
   }

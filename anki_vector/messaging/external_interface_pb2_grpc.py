@@ -168,15 +168,15 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_settings__pb2.PullJdocsRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_settings__pb2.PullJdocsResponse.FromString,
         )
+    self.UpdateSettings = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/UpdateSettings',
+        request_serializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateSettingsRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateSettingsResponse.FromString,
+        )
     self.UpdateAccountSettings = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/UpdateAccountSettings',
         request_serializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateAccountSettingsRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateAccountSettingsResponse.FromString,
-        )
-    self.UpdateUserEntitlements = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/UpdateUserEntitlements',
-        request_serializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateUserEntitlementsRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateUserEntitlementsResponse.FromString,
         )
     self.DriveStraight = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/DriveStraight',
@@ -495,14 +495,14 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def UpdateAccountSettings(self, request, context):
+  def UpdateSettings(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def UpdateUserEntitlements(self, request, context):
+  def UpdateAccountSettings(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -811,15 +811,15 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           request_deserializer=anki__vector_dot_messaging_dot_settings__pb2.PullJdocsRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_settings__pb2.PullJdocsResponse.SerializeToString,
       ),
+      'UpdateSettings': grpc.unary_unary_rpc_method_handler(
+          servicer.UpdateSettings,
+          request_deserializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateSettingsRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateSettingsResponse.SerializeToString,
+      ),
       'UpdateAccountSettings': grpc.unary_unary_rpc_method_handler(
           servicer.UpdateAccountSettings,
           request_deserializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateAccountSettingsRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateAccountSettingsResponse.SerializeToString,
-      ),
-      'UpdateUserEntitlements': grpc.unary_unary_rpc_method_handler(
-          servicer.UpdateUserEntitlements,
-          request_deserializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateUserEntitlementsRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateUserEntitlementsResponse.SerializeToString,
       ),
       'DriveStraight': grpc.unary_unary_rpc_method_handler(
           servicer.DriveStraight,

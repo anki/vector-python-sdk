@@ -51,12 +51,15 @@ class AnimationComponent(util.Component):
         Animation names are dynamically retrieved from the robot when the Python
         script connects to it.
 
-        .. code-block:: python
+        .. testcode::
 
-            print("List all animation names:")
-            anim_names = robot.anim.anim_list
-            for anim_name in anim_names:
-                print(anim_name)
+            import anki_vector
+
+            with anki_vector.Robot("my_robot_serial_number") as robot:
+                print("List all animation names:")
+                anim_names = robot.anim.anim_list
+                for anim_name in anim_names:
+                    print(anim_name)
         """
         if not self._anim_dict:
             self.logger.warning("Anim list was empty. Lazy-loading anim list now.")
@@ -88,9 +91,11 @@ class AnimationComponent(util.Component):
         When the request has completed, anim_list will be populated with
         the list of animations the robot knows how to run.
 
-        .. code-block:: python
+        .. testcode::
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            import anki_vector
+
+            with anki_vector.AsyncRobot("my_robot_serial_number") as robot:
                 anim_request = robot.anim.load_animation_list()
                 anim_request.wait_for_completed()
                 anim_names = robot.anim.anim_list
@@ -113,9 +118,11 @@ class AnimationComponent(util.Component):
             If you want your program to work more reliably across all versions
             we recommend using :meth:`play_animation_trigger` instead. (:meth:`play_animation_trigger` is still in development.)
 
-        .. code-block:: python
+        .. testcode::
 
-            robot.anim.play_animation('anim_pounce_success_02')
+            import anki_vector
+
+            robot.anim.play_animation('anim_turn_left_01')
 
         :param anim: The animation to play. Can be of type str or :class:`anki_vector.protocol.Animation`.
         :param loop_count: Number of times to play the animation.
