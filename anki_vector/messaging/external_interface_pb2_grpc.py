@@ -4,7 +4,6 @@ import grpc
 from anki_vector.messaging import behavior_pb2 as anki__vector_dot_messaging_dot_behavior__pb2
 from anki_vector.messaging import cube_pb2 as anki__vector_dot_messaging_dot_cube__pb2
 from anki_vector.messaging import messages_pb2 as anki__vector_dot_messaging_dot_messages__pb2
-from anki_vector.messaging import settings_pb2 as anki__vector_dot_messaging_dot_settings__pb2
 from anki_vector.messaging import shared_pb2 as anki__vector_dot_messaging_dot_shared__pb2
 
 
@@ -68,11 +67,6 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlResponse.FromString,
         )
-    self.AppIntent = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/AppIntent',
-        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.AppIntentRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.AppIntentResponse.FromString,
-        )
     self.CancelFaceEnrollment = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/CancelFaceEnrollment',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CancelFaceEnrollmentRequest.SerializeToString,
@@ -128,16 +122,6 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.DriveOnChargerRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.DriveOnChargerResponse.FromString,
         )
-    self.GetOnboardingState = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/GetOnboardingState',
-        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.OnboardingStateRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.OnboardingStateResponse.FromString,
-        )
-    self.SendOnboardingInput = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/SendOnboardingInput',
-        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.OnboardingInputRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.OnboardingInputResponse.FromString,
-        )
     self.PhotosInfo = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/PhotosInfo',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.PhotosInfoRequest.SerializeToString,
@@ -157,26 +141,6 @@ class ExternalInterfaceStub(object):
         '/Anki.Vector.external_interface.ExternalInterface/DeletePhoto',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.DeletePhotoRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.DeletePhotoResponse.FromString,
-        )
-    self.GetLatestAttentionTransfer = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/GetLatestAttentionTransfer',
-        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.LatestAttentionTransferRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.LatestAttentionTransferResponse.FromString,
-        )
-    self.PullJdocs = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/PullJdocs',
-        request_serializer=anki__vector_dot_messaging_dot_settings__pb2.PullJdocsRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_settings__pb2.PullJdocsResponse.FromString,
-        )
-    self.UpdateSettings = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/UpdateSettings',
-        request_serializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateSettingsRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateSettingsResponse.FromString,
-        )
-    self.UpdateAccountSettings = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/UpdateAccountSettings',
-        request_serializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateAccountSettingsRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateAccountSettingsResponse.FromString,
         )
     self.DriveStraight = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/DriveStraight',
@@ -268,16 +232,6 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CameraFeedRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CameraFeedResponse.FromString,
         )
-    self.CheckUpdateStatus = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/CheckUpdateStatus',
-        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CheckUpdateStatusRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CheckUpdateStatusResponse.FromString,
-        )
-    self.UpdateAndRestart = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/UpdateAndRestart',
-        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.UpdateAndRestartRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.UpdateAndRestartResponse.FromString,
-        )
 
 
 class ExternalInterfaceServicer(object):
@@ -351,13 +305,6 @@ class ExternalInterfaceServicer(object):
   def AssumeBehaviorControl(self, request, context):
     """Acquire control of Vector's AI system.
     """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def AppIntent(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
@@ -439,20 +386,6 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def GetOnboardingState(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def SendOnboardingInput(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
   def PhotosInfo(self, request, context):
     """Get the photos info.
     """
@@ -477,34 +410,6 @@ class ExternalInterfaceServicer(object):
   def DeletePhoto(self, request, context):
     """Delete a photo by ID.
     """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def GetLatestAttentionTransfer(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def PullJdocs(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def UpdateSettings(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def UpdateAccountSettings(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
@@ -644,20 +549,6 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def CheckUpdateStatus(self, request, context):
-    """CheckUpdateStatus tells if the robot is ready to reboot and update.
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def UpdateAndRestart(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
 
 def add_ExternalInterfaceServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -710,11 +601,6 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.AssumeBehaviorControl,
           request_deserializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlResponse.SerializeToString,
-      ),
-      'AppIntent': grpc.unary_unary_rpc_method_handler(
-          servicer.AppIntent,
-          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.AppIntentRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.AppIntentResponse.SerializeToString,
       ),
       'CancelFaceEnrollment': grpc.unary_unary_rpc_method_handler(
           servicer.CancelFaceEnrollment,
@@ -771,16 +657,6 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.DriveOnChargerRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.DriveOnChargerResponse.SerializeToString,
       ),
-      'GetOnboardingState': grpc.unary_unary_rpc_method_handler(
-          servicer.GetOnboardingState,
-          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.OnboardingStateRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.OnboardingStateResponse.SerializeToString,
-      ),
-      'SendOnboardingInput': grpc.unary_unary_rpc_method_handler(
-          servicer.SendOnboardingInput,
-          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.OnboardingInputRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.OnboardingInputResponse.SerializeToString,
-      ),
       'PhotosInfo': grpc.unary_unary_rpc_method_handler(
           servicer.PhotosInfo,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.PhotosInfoRequest.FromString,
@@ -800,26 +676,6 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.DeletePhoto,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.DeletePhotoRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.DeletePhotoResponse.SerializeToString,
-      ),
-      'GetLatestAttentionTransfer': grpc.unary_unary_rpc_method_handler(
-          servicer.GetLatestAttentionTransfer,
-          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.LatestAttentionTransferRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.LatestAttentionTransferResponse.SerializeToString,
-      ),
-      'PullJdocs': grpc.unary_unary_rpc_method_handler(
-          servicer.PullJdocs,
-          request_deserializer=anki__vector_dot_messaging_dot_settings__pb2.PullJdocsRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_settings__pb2.PullJdocsResponse.SerializeToString,
-      ),
-      'UpdateSettings': grpc.unary_unary_rpc_method_handler(
-          servicer.UpdateSettings,
-          request_deserializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateSettingsRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateSettingsResponse.SerializeToString,
-      ),
-      'UpdateAccountSettings': grpc.unary_unary_rpc_method_handler(
-          servicer.UpdateAccountSettings,
-          request_deserializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateAccountSettingsRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_settings__pb2.UpdateAccountSettingsResponse.SerializeToString,
       ),
       'DriveStraight': grpc.unary_unary_rpc_method_handler(
           servicer.DriveStraight,
@@ -910,16 +766,6 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.CameraFeed,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CameraFeedRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CameraFeedResponse.SerializeToString,
-      ),
-      'CheckUpdateStatus': grpc.unary_unary_rpc_method_handler(
-          servicer.CheckUpdateStatus,
-          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CheckUpdateStatusRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CheckUpdateStatusResponse.SerializeToString,
-      ),
-      'UpdateAndRestart': grpc.unary_unary_rpc_method_handler(
-          servicer.UpdateAndRestart,
-          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.UpdateAndRestartRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.UpdateAndRestartResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

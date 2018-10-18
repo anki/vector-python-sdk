@@ -89,11 +89,6 @@ message ListAnimationsResponse {
   repeated Animation animation_names = 2;
 }
 
-message FeatureStatus {
-  string feature_name = 1;
-  string source      = 2; // Voice, App, AI, Unknown
-}
-
 message DisplayFaceImageRGBRequest {
   bytes face_data = 1;
   uint32 duration_ms = 2;
@@ -114,25 +109,9 @@ message MeetVictorFaceScanComplete
 
 message Status {
   oneof status_type {
-    FeatureStatus                   feature_status                   = 1;
     MeetVictorFaceScanStarted       meet_victor_face_scan_started    = 2;
     MeetVictorFaceScanComplete      meet_victor_face_scan_complete   = 3;
     FaceEnrollmentCompleted         face_enrollment_completed        = 4;
-  }
-}
-
-message Onboarding {
-  oneof onboarding_type {
-    OnboardingState                    onboarding_state              = 1;
-    OnboardingOnCharger                onboarding_on_charger         = 2;
-    OnboardingLowBattery               onboarding_battery            = 3;
-    OnboardingPhysicalInterruption     onboarding_physical           = 4;
-    OnboardingSeesCube                 onboarding_sees_cube          = 5;
-    OnboardingCantFindCube             onboarding_cant_find_cube     = 6;
-    OnboardingRobotExpectingStep       onboarding_expecting_step     = 7;
-    OnboardingHabitatDetected          onboarding_habitat_detected   = 8;
-    OnboardingWakeUpFinished           onboarding_wake_up_finished   = 9;
-    Onboarding1p0ChargingInfo          onboarding_1p0_charging_info  = 10;
   }
 }
 
@@ -146,13 +125,6 @@ message WakeWord {
 message TimeStampedStatus {
   Status status = 1;
   uint32 timestamp_utc = 2;
-}
-
-message RobotHistoryRequest {
-}
-
-message RobotHistoryResponse {
-  repeated TimeStampedStatus messages = 1;
 }
 
 message PoseStruct {
@@ -391,146 +363,6 @@ message DriveOnChargerResponse {
   BehaviorResults result = 2;
 }
 
-enum OnboardingStages
-{
-  NotStarted = 0;
-  // TODO: re-enable
-  // FinishedComeHere = 1;
-  // FinishedMeetVictor = 2;
-  Complete = 3;
-  DevDoNothing = 4;
-}
-
-message OnboardingState {
-  OnboardingStages stage = 1;
-}
-
-message OnboardingOnCharger {
-  bool on_charger = 1;
-  bool needs_to_charge = 2;
-  float required_charge_time_s = 3;
-}
-
-message OnboardingLowBattery {
-  bool low_battery = 1;
-}
-
-enum OnboardingPhysicalInterruptions {
-  ONBOARDING_INTERRUPTION_NONE         = 0;
-  ONBOARDING_INTERRUPTION_PICKED_UP    = 1;
-  ONBOARDING_INTERRUPTION_PHYSICAL     = 2;
-  ONBOARDING_INTERRUPTION_POWER_BUTTON = 3;
-}
-message OnboardingPhysicalInterruption {
-  OnboardingPhysicalInterruptions type = 1;
-}
-
-message OnboardingSeesCube {
-  bool sees_cube = 1;
-}
-
-message OnboardingCantFindCube {
-}
-
-message OnboardingStateRequest {
-}
-
-message OnboardingStateResponse {
-  ResponseStatus status = 1;
-  OnboardingState onboarding_state = 2;
-}
-
-message OnboardingContinue {
-  OnboardingSteps step_number = 1;
-}
-
-message OnboardingContinueResponse {
-  bool accepted = 1;
-  OnboardingSteps robot_step_number = 2;
-  OnboardingSteps request_step_number = 3;
-}
-
-message OnboardingSkip {
-}
-
-message OnboardingRetryCharging {
-}
-
-message OnboardingSkipOnboarding {
-}
-
-message OnboardingRestart {
-}
-
-message OnboardingGetStep {
-}
-
-message OnboardingStepResponse {
-  OnboardingSteps step_number = 1;
-}
-
-message OnboardingInputRequest {
-  oneof oneof_message_type {
-    OnboardingCompleteRequest onboarding_complete_request    = 1;
-    OnboardingWakeUpRequest onboarding_wake_up_request       = 2;
-    OnboardingContinue onboarding_continue                   = 3;
-    OnboardingSkip onboarding_skip                           = 4;
-    OnboardingRetryCharging onboarding_retry_charging        = 5;
-    OnboardingGetStep onboarding_get_step                    = 6;
-    OnboardingSkipOnboarding onboarding_skip_onboarding      = 7;
-    OnboardingRestart onboarding_restart                     = 8;
-    OnboardingWakeUpStartedRequest onboarding_wake_up_started_request = 9;
-  }
-}
-
-message OnboardingInputResponse {
-  ResponseStatus status = 1;
-  oneof oneof_message_type {
-    OnboardingCompleteResponse   onboarding_complete_response    = 2;
-    OnboardingWakeUpResponse     onboarding_wake_up_response     = 3;
-    OnboardingContinueResponse   onboarding_continue_response    = 4;
-    OnboardingStepResponse       onboarding_step_response        = 5;
-    OnboardingWakeUpStartedResponse onboarding_wake_up_started_response = 6;
-  }
-}
-
-message OnboardingRobotExpectingStep {
-  OnboardingSteps step_number = 1;
-}
-
-message OnboardingHabitatDetected {
-}
-
-message OnboardingCompleteRequest {
-}
-
-message OnboardingCompleteResponse {
-  bool completed = 1;
-}
-
-message OnboardingWakeUpStartedRequest {
-}
-
-message OnboardingWakeUpStartedResponse {
-  bool already_started = 1;
-}
-
-message OnboardingWakeUpRequest {
-}
-
-message OnboardingWakeUpResponse {
-  bool waking_up = 1;
-  Onboarding1p0ChargingInfo charging_info = 2;
-}
-
-message Onboarding1p0ChargingInfo {
-  bool on_charger = 1;
-  bool needs_to_charge = 2;
-  float suggested_charger_time = 3;
-}
-
-message OnboardingWakeUpFinished {
-}
 
 message WakeWordBegin {
 }
@@ -596,34 +428,6 @@ message DeletePhotoResponse {
 
 message PhotoTaken {
   uint32 photo_id = 1;
-}
-
-// NOTE: must match attentionTransferTypes.clad
-enum AttentionTransferReason {
-  Invalid = 0;
-
-  NoCloudConnection = 1;
-  NoWifi = 2;
-  UnmatchedIntent = 3;
-}
-
-message AttentionTransfer {
-  AttentionTransferReason reason = 1;
-  float seconds_ago = 2;
-}
-
-message LatestAttentionTransferRequest {
-}
-
-message LatestAttentionTransfer {
-  oneof oneof_message_type {
-    AttentionTransfer attention_transfer = 1;
-  }
-}
-
-message LatestAttentionTransferResponse {
-  ResponseStatus status = 1;
-  LatestAttentionTransfer latest_attention_transfer = 2;
 }
 
 enum VisionMode {
@@ -1024,21 +828,4 @@ message CameraFeedResponse {
   uint32                   image_id = 2;
   ImageChunk.ImageEncoding image_encoding = 3;
   bytes                    data = 4;
-}
-
-message CheckUpdateStatusRequest{}
-
-message CheckUpdateStatusResponse{
-  ResponseStatus status = 1;
-  enum UpdateStatus {
-    NO_UPDATE = 0;
-    READY_TO_INSTALL = 1;
-  }
-  UpdateStatus update_status = 2;
-}
-
-message UpdateAndRestartRequest{}
-
-message UpdateAndRestartResponse{
-  ResponseStatus status = 1;
 }

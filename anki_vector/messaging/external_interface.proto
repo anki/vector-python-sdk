@@ -22,7 +22,6 @@ import "google/api/annotations.proto";
 import "anki_vector/messaging/behavior.proto";
 import "anki_vector/messaging/cube.proto";
 import "anki_vector/messaging/messages.proto";
-import "anki_vector/messaging/settings.proto";
 import "anki_vector/messaging/shared.proto";
 
 // The grpc-defined connection between the SDK and Anki's Vector robot.
@@ -87,12 +86,6 @@ service ExternalInterface {
     };
   }
 
-  rpc AppIntent(AppIntentRequest) returns (AppIntentResponse) {
-    option (google.api.http) = {
-      post: "/v1/app_intent",
-      body: "*"
-    };
-  }
   rpc CancelFaceEnrollment(CancelFaceEnrollmentRequest) returns (CancelFaceEnrollmentResponse) {
     option (google.api.http) = {
       post: "/v1/cancel_face_enrollment",
@@ -179,20 +172,6 @@ service ExternalInterface {
     };
   }
 
-  rpc GetOnboardingState(OnboardingStateRequest) returns (OnboardingStateResponse) {
-    option (google.api.http) = {
-      post: "/v1/get_onboarding_state",
-      body: "*"
-    };
-  }
-
-  rpc SendOnboardingInput(OnboardingInputRequest) returns (OnboardingInputResponse) {
-    option (google.api.http) = {
-      post: "/v1/send_onboarding_input",
-      body: "*"
-    };
-  }
-
   // Get the photos info.
   rpc PhotosInfo(PhotosInfoRequest) returns (PhotosInfoResponse) {
     option (google.api.http) = {
@@ -221,34 +200,6 @@ service ExternalInterface {
   rpc DeletePhoto(DeletePhotoRequest) returns (DeletePhotoResponse) {
     option (google.api.http) = {
       post: "/v1/delete_photo",
-      body: "*"
-    };
-  }
-
-  rpc GetLatestAttentionTransfer(LatestAttentionTransferRequest) returns (LatestAttentionTransferResponse) {
-    option (google.api.http) = {
-      post: "/v1/get_latest_attention_transfer",
-      body: "*"
-    };
-  }
-
-  rpc PullJdocs(PullJdocsRequest) returns (PullJdocsResponse) {
-    option (google.api.http) = {
-      post: "/v1/pull_jdocs",
-      body: "*"
-    };
-  }
-
-  rpc UpdateSettings(UpdateSettingsRequest) returns (UpdateSettingsResponse) {
-    option (google.api.http) = {
-      post: "/v1/update_settings",
-      body: "*"
-    };
-  }
-
-  rpc UpdateAccountSettings(UpdateAccountSettingsRequest) returns (UpdateAccountSettingsResponse) {
-    option (google.api.http) = {
-      post: "/v1/update_account_settings",
       body: "*"
     };
   }
@@ -375,21 +326,6 @@ service ExternalInterface {
   rpc CameraFeed(CameraFeedRequest) returns (stream CameraFeedResponse) {
     option (google.api.http) = {
       post: "/v1/camera_feed",
-      body: "*"
-    };
-  }
-
-  // CheckUpdateStatus tells if the robot is ready to reboot and update.
-  rpc CheckUpdateStatus(CheckUpdateStatusRequest) returns (CheckUpdateStatusResponse) {
-    option (google.api.http) = {
-      post: "/v1/check_update_status",
-      body: "*"
-    };
-  }
-
-  rpc UpdateAndRestart(UpdateAndRestartRequest) returns (UpdateAndRestartResponse) {
-    option (google.api.http) = {
-      post: "/v1/update_and_restart",
       body: "*"
     };
   }

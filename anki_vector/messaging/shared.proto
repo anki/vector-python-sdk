@@ -47,9 +47,7 @@ message ConnectionResponse {
 message Event {
   oneof event_type {
     TimeStampedStatus                time_stamped_status                 = 1;
-    Onboarding                       onboarding                          = 2;
     WakeWord                         wake_word                           = 3;
-    AttentionTransfer                attention_transfer                  = 4;
     RobotObservedFace                robot_observed_face                 = 5;
     RobotChangedObservedFaceID       robot_changed_observed_face_id      = 6;
     ObjectEvent                      object_event                        = 7;
@@ -86,27 +84,6 @@ message GatewayWrapper {
     // ------------ messages sent from robot to app ----------------------
     Event event                                                      = 1;
 
-    // ------------ onboarding requests and responses --------------------
-    OnboardingStateRequest        onboarding_state_request           = 2;
-    OnboardingState               onboarding_state                   = 3;
-    OnboardingContinue            onboarding_continue                = 4;
-    OnboardingContinueResponse    onboarding_continue_response       = 5;
-    OnboardingSkip                onboarding_skip                    = 6;
-    OnboardingSkipOnboarding      onboarding_skip_onboarding         = 7;
-    OnboardingRestart             onboarding_restart                 = 8;
-    OnboardingGetStep             onboarding_get_step                = 9;
-    OnboardingStepResponse        onboarding_step_response           = 10;
-    OnboardingCompleteRequest     onboarding_complete_request        = 11;
-    OnboardingCompleteResponse    onboarding_complete_response       = 12;
-    OnboardingWakeUpRequest       onboarding_wake_up_request         = 13;
-    OnboardingWakeUpResponse      onboarding_wake_up_response        = 14;
-    OnboardingWakeUpStartedRequest  onboarding_wake_up_started_request = 15;
-    OnboardingWakeUpStartedResponse onboarding_wake_up_started_response = 16;
-
-    // ------------ Attention transfer -----------------------------------
-    LatestAttentionTransferRequest latest_attention_transfer_request = 30;
-    LatestAttentionTransfer        latest_attention_transfer         = 31;
-
     // ------------ photos request/response pairs ------------------------
     PhotosInfoRequest             photos_info_request                = 40;
     PhotosInfoResponse            photos_info_response               = 41;
@@ -116,14 +93,6 @@ message GatewayWrapper {
     ThumbnailPathMessage          thumbnail_path_message             = 45;
     DeletePhotoRequest            delete_photo_request               = 46;
     DeletePhotoResponse           delete_photo_response              = 47;
-
-    // ------------ settings pairs ---------------------------------------
-    PullJdocsRequest              pull_jdocs_request                 = 60;
-    PullJdocsResponse             pull_jdocs_response                = 61;
-    UpdateSettingsRequest         update_settings_request            = 62;
-    UpdateSettingsResponse        update_settings_response           = 63;
-    UpdateAccountSettingsRequest  update_account_settings_request    = 64;
-    UpdateAccountSettingsResponse update_account_settings_response   = 65;
 
     // ------------ sdk behavior request/response pairs --------------------
     DriveOffChargerRequest        drive_off_charger_request          = 70;
@@ -146,10 +115,6 @@ message GatewayWrapper {
     GoToPoseResponse              go_to_pose_response                = 151;
     DockWithCubeRequest           dock_with_cube_request             = 152;
     DockWithCubeResponse          dock_with_cube_response            = 153;
-
-    // ------------ status history --------------------
-    RobotHistoryRequest           robot_history_request              = 80;
-    RobotHistoryResponse          robot_history_response             = 81;
 
     // ------------ cube connections --------------------
     ConnectCubeRequest            connect_cube_request               = 100;

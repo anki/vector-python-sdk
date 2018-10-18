@@ -142,6 +142,8 @@ class EventHandler:
                 return self._unpackage_event('object_event_type', event_data)
             except ValueError:
                 pass
+            except TypeError:
+                pass
 
         return event_key, event_data
 
@@ -157,6 +159,8 @@ class EventHandler:
                 self.dispatch_event_by_name(unpackaged_event_data, unpackaged_event_key)
         except CancelledError:
             self.logger.debug('Event handler task was cancelled. This is expected during disconnection.')
+        except TypeError:
+            self.logger.debug('Unknown Event type')
 
     def subscribe_by_name(self, func: callable, event_name: str = None):
         """Receive a method call when the specified event occurs.
