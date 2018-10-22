@@ -19,9 +19,9 @@
 __all__ = ['ViewerComponent']
 
 import asyncio
-from concurrent.futures import CancelledError
+import multiprocessing as mp
 import sys
-import time
+from typing import Optional
 
 try:
     import cv2
@@ -38,36 +38,102 @@ try:
 except ImportError:
     sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
 
-from .exceptions import VectorCameraFeedDisabledException
 from . import util
 
 
 class ViewerComponent(util.Component):
-    """This component is used to render a video using the images
-    obtained from Vector's camera.
+    """This component opens a window and renders the images obtained from Vector's camera.
+    This viewer window is run in a separate process spawned by :func:`~ViewerComponent.show_video`.
+    Being on a separate process means the rendering of the camera does not block the main thread
+    of the calling code, and allows the viewer to have its own ui thread which it can operate on.
+    :func:`~ViewerComponent.stop_video` will stop the viewer process.
 
     .. testcode::
 
         import anki_vector
 
-        import asyncio
+        import time
 
-        with anki_vector.Robot("my_robot_serial_number", show_viewer=True) as robot:
-            robot.loop.run_until_complete(asyncio.sleep(5))
+        with anki_vector.Robot(enable_camera_feed=True, show_viewer=True) as robot:
+            time.sleep(5)
 
     :param robot: A reference to the owner Robot object. (May be :class:`None`)
     """
 
     def __init__(self, robot):
         super().__init__(robot)
-        self.render_task: asyncio.Task = None
         self.overlays: list = []
+        self._frame_queue: mp.Queue = None
+        self._loop: asyncio.BaseEventLoop = None
+        self._process = None
 
-    @staticmethod
-    def _close_window(window_name: str) -> None:
-        # Close the openCV window
-        cv2.destroyWindow(window_name)
-        cv2.waitKey(1)
+    def show_video(self, timeout: float = 10.0) -> None:
+        """Render a video stream using the images obtained from
+        Vector's camera feed.
+
+        Be sure to create your Robot object with the camera feed enabled
+        by using "show_viewer=True" and "enable_camera_feed=True".
+
+        .. testcode::
+
+            import anki_vector
+            import time
+
+            with anki_vector.Robot(enable_camera_feed=True) as robot:
+                robot.viewer.show_video()
+                time.sleep(10)
+
+        :param timeout: Render video for the given time. (Renders forever, if timeout not given)
+        """
+        ctx = mp.get_context('spawn')
+        self._frame_queue = ctx.Queue(maxsize=4)
+        self._process = ctx.Process(target=ViewerComponent._render_frames, args=(self._frame_queue, self.overlays, timeout), daemon=True)
+        self._process.start()
+
+    def stop_video(self) -> None:
+        """Stop rendering video of Vector's camera feed and close the viewer process.
+
+        .. testcode::
+
+            import anki_vector
+            import time
+
+            with anki_vector.Robot(show_viewer=True) as robot:
+                time.sleep(10)
+                robot.viewer.stop_video()
+        """
+        if self._frame_queue:
+            self._frame_queue.put(None, False)
+            self._frame_queue = None
+        if self._process:
+            self._process.join(timeout=5)
+            self._process = None
+
+    def enqueue_frame(self, image: Image.Image):
+        """Sends a frame to the viewer's rendering process. Sending `None` to the viewer
+        will cause it to gracefully shutdown.
+
+        .. note::
+
+            This function will be called automatically from the camera feed when the
+            :class:`~anki_vector.robot.Robot` object is created with ``enable_camera_feed=True``.
+
+        .. code-block:: python
+
+            import anki_vector
+            from PIL.Image import Image
+
+            image = Image()
+            with anki_vector.Robot(show_viewer=True) as robot:
+                robot.viewer.enqueue_frame(image)
+
+        :param image: A frame from Vector's camera.
+        """
+        if self._frame_queue is not None:
+            try:
+                self._frame_queue.put(image, False)
+            except mp.queues.Full:
+                pass
 
     def _apply_overlays(self, image: Image.Image) -> None:
         """Apply all overlays attached to viewer instance on to image from camera feed."""
@@ -75,71 +141,31 @@ class ViewerComponent(util.Component):
             overlay.apply_overlay(image)
         return image
 
-    async def _render_frames(self, timeout: float) -> None:
-        latest_image_id = None
-        opencv_window_name = "Vector Camera Feed"
-        cv2.namedWindow(opencv_window_name, cv2.WINDOW_NORMAL)
-        start_time = time.time()
+    @staticmethod
+    def _render_frames(queue: mp.Queue, overlays: list = None, timeout: float = 10.0) -> None:
+        """Rendering the frames in another process. This allows the UI to have the
+        main thread of its process while the user code continues to execute.
+
+        :param queue: A queue to send frames between main thread and other process.
+        :param overlays: overlays to be drawn on the images of the renderer.
+        :param timeout: The time without a new frame before the process will exit.
+        """
+        window_name = "Vector Camera Feed"
+        cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
         try:
-            while True:
-                # Stop rendering if feed is disabled
-                if not self.robot.enable_camera_feed:
-                    raise VectorCameraFeedDisabledException()
+            image = queue.get(True, timeout=timeout)
+            while image:
+                if overlays:
+                    for overlay in overlays:
+                        overlay.apply_overlay(image)
+                image = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
+                cv2.imshow(window_name, image)
+                cv2.waitKey(1)
+                image = queue.get(True, timeout=timeout)
+        except TimeoutError:
+            pass
+        except KeyboardInterrupt:
+            pass
 
-                if timeout and ((time.time() - start_time) >= timeout):
-                    # Close the openCV window
-                    self._close_window(opencv_window_name)
-                    break
-
-                # Render image only if new image is available
-                if self.robot.camera.latest_image_id != latest_image_id:
-                    image = self.robot.camera.latest_image.copy()
-                    if self.overlays:
-                        image = self._apply_overlays(image)
-
-                    cv2.imshow(opencv_window_name, np.array(image))
-                    cv2.waitKey(1)
-                    latest_image_id = self.robot.camera.latest_image_id
-                await asyncio.sleep(0.1)
-        except CancelledError:
-            self.logger.debug('Event handler task was cancelled. This is expected during disconnection.')
-            # Close the openCV window
-            self._close_window(opencv_window_name)
-
-    def show_video(self, timeout: float = None) -> None:
-        """Render a video stream using the images obtained from
-        Vector's camera feed.
-
-        Be sure to create your Robot object with the camera feed enabled
-        by using "show_viewer=True".
-
-        .. testcode::
-
-            import anki_vector
-            import asyncio
-
-            with anki_vector.Robot("my_robot_serial_number", show_viewer=True) as robot:
-                robot.viewer.show_video()
-                robot.loop.run_until_complete(asyncio.sleep(5))
-
-        :param timeout: Render video for the given time. (Renders forever, if timeout not given)
-        """
-        if not self.render_task or self.render_task.done():
-            self.render_task = self.robot.loop.create_task(self._render_frames(timeout))
-
-    def stop_video(self) -> None:
-        """Stop rendering video of Vector's camera feed
-
-        .. testcode::
-
-            import anki_vector
-            import asyncio
-
-            with anki_vector.Robot("my_robot_serial_number", show_viewer=True) as robot:
-                robot.loop.run_until_complete(asyncio.sleep(5))
-                robot.viewer.stop_video()
-                robot.loop.run_until_complete(asyncio.sleep(5))
-        """
-        if self.render_task:
-            self.render_task.cancel()
-            self.robot.loop.run_until_complete(self.render_task)
+        cv2.destroyWindow(window_name)
+        cv2.waitKey(1)

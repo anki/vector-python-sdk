@@ -70,7 +70,7 @@ def parse_command_args(parser: argparse.ArgumentParser = None):
 
         parser = argparse.ArgumentParser()
         parser.add_argument("--new_param")
-        args = anki_vector.util.parse_command_args(parse)
+        args = anki_vector.util.parse_command_args(parser)
 
     :param parser: To add new command line arguments,
          pass an argparse parser with the new options
@@ -264,7 +264,7 @@ class Vector3:
         return self._x, self._y, self._z
 
     def __repr__(self):
-        return f"<{self.__class__.__name__} x: {self.x:.2} y: {self.y:.2} z: {self.z:.2}>"
+        return f"<{self.__class__.__name__} x: {self.x:.2f} y: {self.y:.2f} z: {self.z:.2f}>"
 
     def __add__(self, other):
         if not isinstance(other, Vector3):
@@ -322,7 +322,7 @@ class Angle:
         return self._radians / math.pi * 180
 
     def __repr__(self):
-        return f"<{self.__class__.__name__} Radians: {self.radians:.2} Degrees: {self.degrees:.2}>"
+        return f"<{self.__class__.__name__} Radians: {self.radians:.2f} Degrees: {self.degrees:.2f}>"
 
     def __add__(self, other):
         if not isinstance(other, Angle):
@@ -608,8 +608,8 @@ class Quaternion:
                         0.0, 0.0, 0.0, 1.0)
 
     def __repr__(self):
-        return (f"<{self.__class__.__name__} q0: {self.q0:.2} q1: {self.q1:.2}"
-                f" q2: {self.q2:.2} q3: {self.q3:.2} {self.angle_z}>")
+        return (f"<{self.__class__.__name__} q0: {self.q0:.2f} q1: {self.q1:.2f}"
+                f" q2: {self.q2:.2f} q3: {self.q3:.2f} {self.angle_z}>")
 
 
 class Position(Vector3):
@@ -644,7 +644,7 @@ class Pose:
 
         import anki_vector
 
-        with anki_vector.Robot("my_robot_serial_number") as robot:
+        with anki_vector.Robot() as robot:
             pose = anki_vector.util.Pose(x=50, y=0, z=0, angle_z=anki_vector.util.Angle(degrees=0))
             robot.behavior.go_to_pose(pose)
     """
@@ -955,6 +955,14 @@ class Component:
     @property
     def robot(self):
         return self._robot
+
+    @property
+    def conn(self):
+        return self._robot.conn
+
+    @property
+    def force_async(self):
+        return self._robot.force_async
 
     @property
     def grpc_interface(self):

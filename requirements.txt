@@ -3,6 +3,6 @@ cryptography
 flask
 googleapis-common-protos
 numpy
-opencv-python
+opencv-python>=3.4
 Pillow
 requests

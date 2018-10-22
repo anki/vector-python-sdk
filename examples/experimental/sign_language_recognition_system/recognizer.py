@@ -187,7 +187,7 @@ class SignLanguageRecognizer():
             with anki_vector.Robot("my_robot_serial_number", enable_camera_feed=True, show_viewer=True) as robot:
                 print("------ predicting hand signs, press ctrl+c to exit early ------")
                 try:
-                    robot.loop.run_until_complete(recognizer.predict_with_camera_feed(robot))
+                    robot.conn.run_coroutine(recognizer.predict_with_camera_feed(robot))
                 except KeyboardInterrupt:
                     print("------ predicting done ------")
         """
@@ -261,7 +261,7 @@ def main():
                 # @TODO: The rectangle overlay should feed in a full rect, not just a size
                 frame_of_interest = anki_vector.util.RectangleOverlay(util.NetworkConstants.IMAGE_WIDTH, util.NetworkConstants.IMAGE_HEIGHT)
                 robot.viewer.overlays.append(frame_of_interest)
-                robot.loop.run_until_complete(recognizer.predict_with_camera_feed(robot))
+                robot.conn.run_coroutine(recognizer.predict_with_camera_feed(robot))
             except (KeyboardInterrupt, CancelledError):
                 print("------ predicting done ------")
 

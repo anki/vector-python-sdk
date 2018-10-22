@@ -60,10 +60,11 @@ class CameraComponent(util.Component):
     .. testcode::
 
         import anki_vector
-
+        import time
         from PIL import Image
 
-        with anki_vector.Robot("my_robot_serial_number") as robot:
+        with anki_vector.Robot(enable_camera_feed=True) as robot:
+            time.sleep(1)
             image = robot.camera.latest_image
             image.show()
 
@@ -86,8 +87,10 @@ class CameraComponent(util.Component):
         .. testcode::
 
             import anki_vector
+            import time
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot(enable_camera_feed=True) as robot:
+                time.sleep(1)
                 image = robot.camera.latest_image
                 image.show()
         """
@@ -107,13 +110,14 @@ class CameraComponent(util.Component):
     def init_camera_feed(self) -> None:
         """Begin camera feed task."""
         if not self._camera_feed_task or self._camera_feed_task.done():
-            self._camera_feed_task = self.robot.loop.create_task(self._request_and_handle_images())
+            self._camera_feed_task = self.conn.loop.create_task(self._request_and_handle_images())
 
     def close_camera_feed(self) -> None:
         """Cancel camera feed task."""
         if self._camera_feed_task:
             self._camera_feed_task.cancel()
-            self.robot.loop.run_until_complete(self._camera_feed_task)
+            future = self.conn.run_coroutine(self._camera_feed_task)
+            future.result()
 
     def _unpack_image(self, msg: protocol.CameraFeedResponse) -> None:
         """Processes raw data from the robot into a more more useful image structure."""
@@ -130,6 +134,7 @@ class CameraComponent(util.Component):
         # Convert to Pillow Image
         self._latest_image = Image.fromarray(imageArray)
         self._latest_image_id = msg.image_id
+        self.robot.viewer.enqueue_frame(self._latest_image)
 
     async def _request_and_handle_images(self) -> None:
         """Queries and listens for camera feed events from the robot.

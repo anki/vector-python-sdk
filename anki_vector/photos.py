@@ -19,9 +19,10 @@ Photo related classes, functions, events and values.
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ["PhotographComponent"]
 
+import concurrent
 from typing import List
 
-from . import sync, util
+from . import connection, util
 from .messaging import protocol
 
 
@@ -33,7 +34,7 @@ class PhotographComponent(util.Component):
         import anki_vector
         from PIL import Image
 
-        with anki_vector.Robot("my_robot_serial_number") as robot:
+        with anki_vector.Robot() as robot:
             if len(robot.photos.photo_info) > 0:
                 first_photo = robot.photos.photo_info[0]
                 photo = robot.photos.get_photo(first_photo)
@@ -66,11 +67,11 @@ class PhotographComponent(util.Component):
         if not self._photo_info:
             self.logger.debug("Photo list was empty. Lazy-loading photo list now.")
             result = self.load_photo_info()
-            if isinstance(result, sync.Synchronizer):
-                result.wait_for_completed()
+            if isinstance(result, concurrent.futures.Future):
+                result.result()
         return self._photo_info
 
-    @sync.Synchronizer.wrap
+    @connection.on_connection_thread()
     async def load_photo_info(self) -> protocol.PhotosInfoResponse:
         """Request the photo information from the robot.
 
@@ -78,7 +79,8 @@ class PhotographComponent(util.Component):
 
             import anki_vector
 
-            robot.photos.load_photo_info()
+            with anki_vector.Robot() as robot:
+                robot.photos.load_photo_info()
 
         :return: The response from the PhotosInfo rpc call
         """
@@ -87,8 +89,7 @@ class PhotographComponent(util.Component):
         self._photo_info = result.photo_infos
         return result
 
-    @sync.Synchronizer.wrap
-    @sync.Synchronizer.disable_log
+    @connection.on_connection_thread(log_messaging=False)
     async def get_photo(self, photo_id: int) -> protocol.PhotoResponse:
         """Download a full-resolution photo from the robot's storage.
 
@@ -97,7 +98,7 @@ class PhotographComponent(util.Component):
             import anki_vector
             from PIL import Image
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 if len(robot.photos.photo_info) > 0:
                     first_photo = robot.photos.photo_info[0]
                     photo = robot.photos.get_photo(first_photo)
@@ -113,8 +114,7 @@ class PhotographComponent(util.Component):
         req = protocol.PhotoRequest(photo_id=photo_id)
         return await self.grpc_interface.Photo(req)
 
-    @sync.Synchronizer.wrap
-    @sync.Synchronizer.disable_log
+    @connection.on_connection_thread(log_messaging=False)
     async def get_thumbnail(self, photo_id: int) -> protocol.ThumbnailResponse:
         """Download a thumbnail of a given photo from the robot's storage.
 
@@ -126,7 +126,7 @@ class PhotographComponent(util.Component):
             import anki_vector
             from PIL import Image
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 for photo in robot.photos.photo_info:
                     photo = robot.photos.get_thumbnail(photo)
                     image = Image.open(io.BytesIO(photo.image))

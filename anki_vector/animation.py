@@ -30,9 +30,9 @@ in the AnimationComponent.
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ["AnimationComponent"]
 
-import asyncio
+import concurrent
 
-from . import exceptions, sync, util
+from . import connection, exceptions, util
 from .messaging import protocol
 
 
@@ -55,7 +55,7 @@ class AnimationComponent(util.Component):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 print("List all animation names:")
                 anim_names = robot.anim.anim_list
                 for anim_name in anim_names:
@@ -64,8 +64,8 @@ class AnimationComponent(util.Component):
         if not self._anim_dict:
             self.logger.warning("Anim list was empty. Lazy-loading anim list now.")
             result = self.load_animation_list()
-            if isinstance(result, sync.Synchronizer):
-                result.wait_for_completed()
+            if isinstance(result, concurrent.futures.Future):
+                result.result()
         return list(self._anim_dict.keys())
 
     async def _ensure_loaded(self):
@@ -79,12 +79,16 @@ class AnimationComponent(util.Component):
         """
         if not self._anim_dict:
             self.logger.warning("Anim list was empty. Lazy-loading anim list now.")
-            result = self.load_animation_list()
-            if asyncio.iscoroutine(result):
-                await result
+            await self._load_animation_list()
 
-    @sync.Synchronizer.wrap
-    @sync.Synchronizer.disable_log
+    async def _load_animation_list(self):
+        req = protocol.ListAnimationsRequest()
+        result = await self.grpc_interface.ListAnimations(req)
+        self.logger.debug(f"status: {result.status}, number_of_animations:{len(result.animation_names)}")
+        self._anim_dict = {a.name: a for a in result.animation_names}
+        return result
+
+    @connection.on_connection_thread(log_messaging=False)
     async def load_animation_list(self):
         """Request the list of animations from the robot
 
@@ -95,20 +99,16 @@ class AnimationComponent(util.Component):
 
             import anki_vector
 
-            with anki_vector.AsyncRobot("my_robot_serial_number") as robot:
+            with anki_vector.AsyncRobot() as robot:
                 anim_request = robot.anim.load_animation_list()
-                anim_request.wait_for_completed()
+                anim_request.result()
                 anim_names = robot.anim.anim_list
                 for anim_name in anim_names:
                     print(anim_name)
         """
-        req = protocol.ListAnimationsRequest()
-        result = await self.grpc_interface.ListAnimations(req)
-        self.logger.debug(f"status: {result.status}, number_of_animations:{len(result.animation_names)}")
-        self._anim_dict = {a.name: a for a in result.animation_names}
-        return result
+        return await self._load_animation_list()
 
-    @sync.Synchronizer.wrap
+    @connection.on_connection_thread()
     async def play_animation(self, anim: str, loop_count: int = 1, ignore_body_track: bool = False, ignore_head_track: bool = False, ignore_lift_track: bool = False):
         """Starts an animation playing on a robot.
 
@@ -122,7 +122,8 @@ class AnimationComponent(util.Component):
 
             import anki_vector
 
-            robot.anim.play_animation('anim_turn_left_01')
+            with anki_vector.Robot() as robot:
+                robot.anim.play_animation('anim_turn_left_01')
 
         :param anim: The animation to play. Can be of type str or :class:`anki_vector.protocol.Animation`.
         :param loop_count: Number of times to play the animation.

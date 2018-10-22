@@ -30,7 +30,7 @@ __all__ = ['Expression', 'Face', 'FaceComponent']
 from enum import Enum
 from typing import List
 
-from . import sync, util, objects, events
+from . import connection, util, objects, events
 from .messaging import protocol
 
 
@@ -96,7 +96,7 @@ class Face(objects.ObservableObject):
         self._nose = nose
         self._mouth = mouth
 
-        self._on_observed(pose, image_rect, instantiation_timestamp)
+        self.conn.run_soon(self._on_observed(pose, image_rect, instantiation_timestamp))
 
         self._robot.events.subscribe(
             self._on_face_observed,
@@ -154,7 +154,7 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 face = robot.world.get_face(1)
                 was_face_originally_unrecognized_but_is_now_recognized = face.has_updated_face_id
         """
@@ -168,7 +168,7 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 face = robot.world.get_face(1)
                 updated_id = face.updated_face_id
         """
@@ -186,7 +186,7 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 face = robot.world.get_face(1)
                 name = face.name
         """
@@ -207,7 +207,7 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 face = robot.world.get_face(1)
                 expression = face.expression
         """
@@ -225,7 +225,7 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 face = robot.world.get_face(1)
                 expression_score = face.expression_score
         """
@@ -239,7 +239,7 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 face = robot.world.get_face(1)
                 left_eye = face.left_eye
         """
@@ -253,7 +253,7 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 face = robot.world.get_face(1)
                 right_eye = face.right_eye
         """
@@ -267,7 +267,7 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 face = robot.world.get_face(1)
                 nose = face.nose
         """
@@ -281,7 +281,7 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 face = robot.world.get_face(1)
                 mouth = face.mouth
         """
@@ -310,8 +310,7 @@ class Face(objects.ObservableObject):
             self._right_eye = msg.right_eye
             self._nose = msg.nose
             self._mouth = msg.mouth
-
-            self._on_observed(pose, image_rect, msg.timestamp)
+            self._robot.conn.run_soon(self._on_observed(pose, image_rect, msg.timestamp))
 
     def _on_face_id_changed(self, _, msg):
         """Updates the face id when a tracked face (negative ID) is recognized and
@@ -323,7 +322,7 @@ class Face(objects.ObservableObject):
 class FaceComponent(util.Component):
     """Manage the state of the faces on the robot."""
 
-    @sync.Synchronizer.wrap
+    @connection.on_connection_thread()
     async def request_enrolled_names(self) -> protocol.RequestEnrolledNamesRequest:
         """Asks the robot for the list of names attached to faces that it can identify.
 
@@ -331,13 +330,13 @@ class FaceComponent(util.Component):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 name_data_list = robot.faces.request_enrolled_names()
         """
         req = protocol.RequestEnrolledNamesRequest()
         return await self.grpc_interface.RequestEnrolledNames(req)
 
-    @sync.Synchronizer.wrap
+    @connection.on_connection_thread()
     async def update_enrolled_face_by_id(self, face_id: int, old_name: str, new_name: str):
         """Update the name enrolled for a given face.
 
@@ -349,14 +348,14 @@ class FaceComponent(util.Component):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 robot.faces.update_enrolled_face_by_id(1, 'Hanns', 'Boris')
         """
         req = protocol.UpdateEnrolledFaceByIDRequest(face_id=face_id,
                                                      old_name=old_name, new_name=new_name)
         return await self.grpc_interface.UpdateEnrolledFaceByID(req)
 
-    @sync.Synchronizer.wrap
+    @connection.on_connection_thread()
     async def erase_enrolled_face_by_id(self, face_id: int):
         """Erase the enrollment (name) record for the face with this ID.
 
@@ -366,13 +365,13 @@ class FaceComponent(util.Component):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 robot.faces.erase_enrolled_face_by_id(1)
         """
         req = protocol.EraseEnrolledFaceByIDRequest(face_id=face_id)
         return await self.grpc_interface.EraseEnrolledFaceByID(req)
 
-    @sync.Synchronizer.wrap
+    @connection.on_connection_thread()
     async def erase_all_enrolled_faces(self):
         """Erase the enrollment (name) records for all faces.
 
@@ -380,14 +379,14 @@ class FaceComponent(util.Component):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 robot.faces.erase_all_enrolled_faces()
         """
         req = protocol.EraseAllEnrolledFacesRequest()
         return await self.grpc_interface.EraseAllEnrolledFaces(req)
 
     # TODO move out of face component as this is general to objects if not specific to faces (to a new vision component?). Needs sample code.
-    @sync.Synchronizer.wrap
+    @connection.on_connection_thread()
     async def enable_vision_mode(self, enable: bool):
         """Enable facial detection on the robot's camera
 

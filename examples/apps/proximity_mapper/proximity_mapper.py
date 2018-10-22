@@ -222,7 +222,7 @@ async def scan_area(robot: anki_vector.robot.Robot, state: MapState):
     # Turn around in place.
     turn_call = robot.behavior.turn_in_place(angle=degrees(360.0), speed=degrees(360.0 / PROXIMITY_SCAN_TURN_DURATION_S))
     # Activate the collection task while the robot turns in place.
-    collect_task = robot.loop.create_task(collect_proximity_data_loop(robot, collect_future, state))
+    collect_task = robot.conn.loop.create_task(collect_proximity_data_loop(robot, collect_future, state))
 
     # Wait for the turning to finish, then send the signal to kill the collection task.
     await turn_call
@@ -297,8 +297,7 @@ async def map_explorer(robot: anki_vector.robot.Robot, viewer: OpenGLViewer):
                 # likely means the robot encountered a cliff or obstacle.
                 expected_drive_time = nav_distance / EXPLORE_DRIVE_SPEED_MMPS
                 await asyncio.wait_for(robot.behavior.drive_straight(distance=distance_mm(nav_distance), speed=speed_mmps(EXPLORE_DRIVE_SPEED_MMPS)),
-                                       1.25 * expected_drive_time,
-                                       loop=robot.loop)
+                                       1.25 * expected_drive_time)
             except asyncio.TimeoutError:
                 print('obstacle encountered while moving, continuing exploration from current position')
 
@@ -310,15 +309,18 @@ async def map_explorer(robot: anki_vector.robot.Robot, viewer: OpenGLViewer):
         await asyncio.sleep(PROXIMITY_EXPLORATION_SHUTDOWN_DELAY_S)
 
 
-# Connect to the robot
-args = parse_command_args()
-with anki_vector.Robot(args.serial, enable_camera_feed=True, show_viewer=True) as robotInstance:
-    # Creates a 3d viewer for the connected robot.
-    viewerInstance = OpenGLViewer(robot=robotInstance)
+if __name__ == '__main__':
+    # Connect to the robot
+    args = parse_command_args()
+    with anki_vector.Robot(args.serial, enable_camera_feed=True, show_viewer=True) as robotInstance:
+        import time
+        time.sleep(1)
+        # Creates a 3d viewer for the connected robot.
+        viewerInstance = OpenGLViewer(robot=robotInstance)
 
-    # The opengl 3d viewer has to run on the main thread, so control is given to
-    # it via the blocking 'run' call.  The core loop of our program is injected into
-    # this call to run in parallel on a secondary thread.  When the injected function
-    # finishes, the viewer will automatically shut down and relinquish control of the
-    # main thread.
-    viewerInstance.run(map_explorer)
+        # The opengl 3d viewer has to run on the main thread, so control is given to
+        # it via the blocking 'run' call.  The core loop of our program is injected into
+        # this call to run in parallel on a secondary thread.  When the injected function
+        # finishes, the viewer will automatically shut down and relinquish control of the
+        # main thread.
+        viewerInstance.run(map_explorer)

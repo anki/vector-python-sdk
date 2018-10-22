@@ -58,7 +58,7 @@ class AudioComponent(util.Component):
         except ImportError as exc:
             sys.exit("Cannot import scipy: Do `pip3 install scipy` to install")
 
-        with anki_vector.Robot("my_robot_serial_number", enable_audio_feed=True) as robot:
+        with anki_vector.Robot(enable_audio_feed=True) as robot:
             robot.loop.run_until_complete(asyncio.sleep(5))
             wavfile.write("outputfile.wav", anki_vector.protocol.PROCESSED_SAMPLE_RATE, robot.audio.raw_audio_waveform_history)
 
@@ -103,7 +103,7 @@ class AudioComponent(util.Component):
             except ImportError as exc:
                 sys.exit("Cannot import scipy: Do `pip3 install scipy` to install")
 
-            with anki_vector.Robot("my_robot_serial_number", enable_audio_feed=True) as robot:
+            with anki_vector.Robot(enable_audio_feed=True) as robot:
                 robot.loop.run_until_complete(asyncio.sleep(5))
                 wavfile.write("outputfile.wav", anki_vector.protocol.PROCESSED_SAMPLE_RATE, robot.audio.raw_audio_waveform_history)
 

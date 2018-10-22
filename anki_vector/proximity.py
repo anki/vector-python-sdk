@@ -47,7 +47,7 @@ class ProximitySensorData:
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 distance = robot.proximity.last_sensor_reading.distance
         """
         return self._distance
@@ -64,7 +64,7 @@ class ProximitySensorData:
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 signal_quality = robot.proximity.last_sensor_reading.signal_quality
         """
         return self._signal_quality
@@ -79,7 +79,7 @@ class ProximitySensorData:
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 is_in_valid_range = robot.proximity.last_sensor_reading.is_in_valid_range
         """
         return self._is_in_valid_range
@@ -93,7 +93,7 @@ class ProximitySensorData:
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 is_valid_signal_quality = robot.proximity.last_sensor_reading.is_valid_signal_quality
         """
         return self._is_valid_signal_quality
@@ -108,7 +108,7 @@ class ProximitySensorData:
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 is_lift_in_fov = robot.proximity.last_sensor_reading.is_lift_in_fov
         """
         return self._is_lift_in_fov
@@ -123,7 +123,7 @@ class ProximitySensorData:
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 is_too_pitched = robot.proximity.last_sensor_reading.is_too_pitched
         """
         return self._is_too_pitched
@@ -145,7 +145,7 @@ class ProximitySensorData:
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 is_valid = robot.proximity.last_sensor_reading.is_valid
         """
         return self._is_in_valid_range and self._is_valid_signal_quality and not self._is_lift_in_fov and not self._is_too_pitched
@@ -164,7 +164,7 @@ class ProximityComponent(util.Component):
 
         import anki_vector
 
-        with anki_vector.Robot("my_robot_serial_number") as robot:
+        with anki_vector.Robot() as robot:
             proximity_data = robot.proximity.last_sensor_reading
             if proximity_data is not None:
                 print('Proximity distance: {0}, engine considers useful: {1}'.format(proximity_data.distance, proximity_data.is_valid))
@@ -183,7 +183,7 @@ class ProximityComponent(util.Component):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 last_sensor_reading = robot.proximity.last_sensor_reading
         """
         return self._last_sensor_reading
@@ -197,7 +197,7 @@ class ProximityComponent(util.Component):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 last_valid_sensor_reading = robot.proximity.last_valid_sensor_reading
         """
         return self._last_valid_sensor_reading

@@ -52,12 +52,10 @@ Warning:
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ['OpenGLViewer']
 
-import asyncio
 import collections
 import concurrent
 import inspect
 import math
-import threading
 from typing import List
 
 import opengl
@@ -89,53 +87,6 @@ except ImportError as import_exc:
 
 class VectorException(BaseException):
     """Raised by a failure in the owned Vector thread while the openGL viewer is running."""
-
-
-class _LoopThread:
-    """Takes care of managing an event loop running in a dedicated thread.
-
-    :param loop: The loop to run
-    :param f: Optional code to execute on the loop's thread
-    :param argument: external argument to inject into the function.
-    """
-
-    def __init__(self, loop: asyncio.BaseEventLoop, f: callable = None, argument: object = None):
-        self._loop = loop
-        self._f = f
-        self._argument = argument
-        self._thread = None
-        self._running = False
-
-    def start(self):
-        """Start a thread."""
-        def run_loop():
-            asyncio.set_event_loop(self._loop)
-
-            if self._f:
-                asyncio.ensure_future(self._f(self._argument))
-            self._loop.run_forever()
-
-        self._thread = threading.Thread(target=run_loop)
-        self._thread.start()
-
-        self._running = True
-
-    def stop(self):
-        """Cleaning shutdown the running loop and thread."""
-        if self._running:
-            async def _stop():
-                self._loop.call_soon(lambda: self._loop.stop())  # pylint: disable=unnecessary-lambda
-            asyncio.run_coroutine_threadsafe(_stop(), self._loop).result()
-            self._thread.join()
-            self._running = False
-
-    def abort(self, exc: BaseException):  # pylint: disable=unused-argument
-        """Abort the running loop and thread.
-
-        :param exc: exception being raised
-        """
-        if self._running:
-            self.stop()
 
 
 class _OpenGLViewController():
@@ -553,25 +504,8 @@ class OpenGLViewer():
             else:
                 raise ValueError("the delegate_function injected into OpenGLViewer.run requires an unrecognized parameter, only 'robot' and 'viewer' are supported")
 
-        async def run_function(robot):
-            try:
-                if inspect.iscoroutinefunction(delegate_function):
-                    await delegate_function(*function_args)
-                else:
-                    # await robot.loop.run_in_executor(None, f, base._SyncProxy(robot))
-                    await robot.loop.run_in_executor(None, delegate_function, *function_args)
-            finally:
-                self._internal_function_finished = True
-                self.close()
-
-        #thread = None
         try:
-            # if not inspect.iscoroutinefunction(f):
-            #     conn_factory = functools.partial(conn_factory, _sync_abort_future=abort_future)
-            #thread = threading.Thread(target=run_function)
-            # thread.start()
-            lt = _LoopThread(robot.loop, f=run_function, argument=robot)
-            lt.start()
+            robot.conn.run_coroutine(delegate_function(*function_args))
 
             self._main_window.initialize(self._on_window_update)
             self._view_controller.initialize()
@@ -594,8 +528,6 @@ class OpenGLViewer():
         except BaseException as e:
             abort_future.set_exception(VectorException(repr(e)))
             raise
-        finally:
-            lt.stop()
 
         global opengl_viewer  # pylint: disable=global-statement
         opengl_viewer = None

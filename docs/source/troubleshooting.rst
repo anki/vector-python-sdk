@@ -30,6 +30,15 @@ If you run into trouble installing Python packages, please upgrade your pip inst
     After applying these updates, retry your Python package installation.
 
 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Tutorial program does not run
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Before running a Python program, be sure you can see Vector's eyes. If instead you see an image of a mobile device, the Customer Care Info screen, a missing Wifi icon, or something else, please complete setup of your Vector first and then you will be ready set up the SDK.
+
+Also, check whether Vector's IP address has changed since the last time you ran ``configure.py``. If so, see :ref:`moving_between_wifi` to set up the robot with the new IP address.
+
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Failure to run configure.py
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -43,6 +52,13 @@ The prerequisites to run ``configure.py`` are:
 * The Vector companion app is *not* currently connected to Vector.
 * Vector is connected to the same network as your computer.
 * You can see Vector's eyes on his screen.
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Vector behaves unexpectedly
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You may need to reboot your robot when you are finished running programs with the pre-alpha Vector SDK.
 
 
 ^^^^^^^^^^^^^^^^^^^^^
@@ -60,17 +76,10 @@ Your Vector's serial number looks like "00e20142". Find your robot serial number
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Can't find Vector's ip address
+Can't find Vector's IP address
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Your Vector ip address looks like "192.168.40.134". Find the ip address from Vector's debug screen: double-click his backpack, move his arms up and down, then look for "IP" on his screen.
-
-
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Tutorial program does not run
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Before running a program, be sure that you can see Vector's eyes. The robot should not be displaying another screen.
+Your Vector IP address looks like "192.168.40.134". Find the IP address from Vector's debug screen: double-click his backpack, move his arms up and down, then look for "IP" on his screen.
 
 
 ^^^^^^^^^^^^^^^

@@ -19,7 +19,6 @@
 This example lets you control Vector by Remote Control, using a webpage served by Flask.
 """
 
-import asyncio
 import io
 import json
 import sys
@@ -266,12 +265,8 @@ class RemoteControlVector:
             self.action_queue.pop(0)
         self.action_queue.append(new_action)
 
-    async def dummy_wait(self):
-        await asyncio.sleep(0)
-
     def update(self):
         """Try and execute the next queued action"""
-        self.vector.loop.run_until_complete(self.dummy_wait())
         if self.action_queue:
             queued_action, action_args = self.action_queue[0]
             if queued_action(action_args):

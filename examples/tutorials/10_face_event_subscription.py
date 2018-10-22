@@ -21,8 +21,8 @@ subscribes to event 'robot_observed_face'. When that event is dispatched,
 method 'on_robot_observed_face' is called, which prints text to the console.
 """
 
-import asyncio
 import functools
+import time
 
 import anki_vector
 from anki_vector.events import Events
@@ -47,7 +47,7 @@ def main():
 
         try:
             # Wait 5 seconds to see a face
-            robot.loop.run_until_complete(asyncio.sleep(5))
+            time.sleep(5)
         except KeyboardInterrupt:
             pass
 

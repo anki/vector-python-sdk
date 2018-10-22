@@ -42,7 +42,7 @@ __all__ = ['LIGHT_CUBE_1_TYPE', 'OBJECT_VISIBILITY_TIMEOUT',
 import math
 import time
 
-from . import lights, sync, util
+from . import connection, lights, util
 from .events import Events
 
 from .messaging import protocol
@@ -218,16 +218,15 @@ class ObservableObject(util.Component):
     def _reset_observed_timeout_handler(self):
         if self._observed_timeout_handler is not None:
             self._observed_timeout_handler.cancel()
-        self._observed_timeout_handler = self._robot.loop.call_later(
-            self.visibility_timeout, self._observed_timeout)
+        self._observed_timeout_handler = self.conn.loop.call_later(self.visibility_timeout, self._observed_timeout)
 
     def _observed_timeout(self):
         # Triggered when the element is no longer considered "visible".
         # i.e. visibility_timeout seconds after the last observed event.
         self._is_visible = False
-        self._robot.events.dispatch_event(EvtObjectDisappeared(self), Events.object_disappeared)
+        self.conn.run_soon(self._robot.events.dispatch_event(EvtObjectDisappeared(self), Events.object_disappeared))
 
-    def _on_observed(self, pose: util.Pose, image_rect: util.ImageRect, robot_timestamp: int):
+    async def _on_observed(self, pose: util.Pose, image_rect: util.ImageRect, robot_timestamp: int):
         # Called from subclasses on their corresponding observed messages.
         newly_visible = self._is_visible is False
         self._is_visible = True
@@ -239,10 +238,10 @@ class ObservableObject(util.Component):
         self._last_observed_image_rect = image_rect
         self._pose = pose
         self._reset_observed_timeout_handler()
-        self._robot.events.dispatch_event(EvtObjectObserved(self, image_rect, pose), Events.object_observed)
+        await self._robot.events.dispatch_event(EvtObjectObserved(self, image_rect, pose), Events.object_observed)
 
         if newly_visible:
-            self._robot.events.dispatch_event(EvtObjectAppeared(self, image_rect, pose), Events.object_appeared)
+            await self._robot.events.dispatch_event(EvtObjectAppeared(self, image_rect, pose), Events.object_appeared)
 
 
 #: LIGHT_CUBE_1_TYPE's markers look like 2 concentric circles with lines and gaps.
@@ -373,7 +372,7 @@ class LightCube(ObservableObject):
             self._on_object_connection_lost,
             Events.cube_connection_lost)
 
-    @sync.Synchronizer.wrap
+    @connection.on_connection_thread()
     async def set_light_corners(self,
                                 light1: lights.Light,
                                 light2: lights.Light,
@@ -388,7 +387,7 @@ class LightCube(ObservableObject):
 
             import time
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 # ensure we are connected to a cube
                 robot.world.connect_cube()
 
@@ -432,7 +431,7 @@ class LightCube(ObservableObject):
 
             import time
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 # ensure we are connected to a cube
                 robot.world.connect_cube()
 
@@ -457,7 +456,7 @@ class LightCube(ObservableObject):
 
             import time
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 # ensure we are connected to a cube
                 robot.world.connect_cube()
 
@@ -491,7 +490,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 last_tapped_time = robot.world.connected_light_cube.last_tapped_time
         """
         return self._last_tapped_time
@@ -504,7 +503,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 last_tapped_robot_timestamp = robot.world.connected_light_cube.last_tapped_robot_timestamp
         """
         return self._last_tapped_robot_timestamp
@@ -517,7 +516,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 last_moved_time = robot.world.connected_light_cube.last_moved_time
         """
         return self._last_moved_time
@@ -530,7 +529,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 last_moved_robot_timestamp = robot.world.connected_light_cube.last_moved_robot_timestamp
         """
         return self._last_moved_robot_timestamp
@@ -543,7 +542,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 last_moved_start_time = robot.world.connected_light_cube.last_moved_start_time
         """
         return self._last_moved_start_time
@@ -556,7 +555,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 last_moved_start_robot_timestamp = robot.world.connected_light_cube.last_moved_start_robot_timestamp
         """
         return self._last_moved_start_robot_timestamp
@@ -569,7 +568,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 last_up_axis_changed_time = robot.world.connected_light_cube.last_up_axis_changed_time
         """
         return self._last_up_axis_changed_time
@@ -582,7 +581,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 last_up_axis_changed_robot_timestamp = robot.world.connected_light_cube.last_up_axis_changed_robot_timestamp
         """
         return self._last_up_axis_changed_robot_timestamp
@@ -595,7 +594,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 up_axis = robot.world.connected_light_cube.up_axis
         """
         return self._up_axis
@@ -608,7 +607,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 is_moving = robot.world.connected_light_cube.is_moving
         """
         return self._is_moving
@@ -621,7 +620,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 is_connected = robot.world.connected_light_cube.is_connected
         """
         return self._is_connected
@@ -634,7 +633,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 top_face_orientation_rad = robot.world.connected_light_cube.top_face_orientation_rad
         """
         return self._top_face_orientation_rad
@@ -647,7 +646,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 factory_id = robot.world.connected_light_cube.factory_id
         """
         return self._factory_id
@@ -667,7 +666,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 descriptive_name = robot.world.connected_light_cube.descriptive_name
         """
         return "{0} id={1} factory_id={2} is_connected={3}".format(self.__class__.__name__, self._object_id, self._factory_id, self._is_connected)
@@ -682,7 +681,7 @@ class LightCube(ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot("my_robot_serial_number") as robot:
+            with anki_vector.Robot() as robot:
                 object_id = robot.world.connected_light_cube.object_id
         """
         return self._object_id
@@ -730,7 +729,7 @@ class LightCube(ObservableObject):
         else:
             self.logger.warning('An object not currently tracked by the world moved with id {0}'.format(msg.object_id))
 
-    def _on_object_stopped_moving(self, _, msg):
+    async def _on_object_stopped_moving(self, _, msg):
         if msg.object_id == self._object_id:
             now = time.time()
             self._last_event_time = now
@@ -742,7 +741,7 @@ class LightCube(ObservableObject):
             if self._is_moving:
                 self._is_moving = False
                 move_duration = now - self._last_moved_start_time
-            self._robot.events.dispatch_event(EvtObjectFinishedMove(self, move_duration), Events.object_finished_move)
+            await self._robot.events.dispatch_event(EvtObjectFinishedMove(self, move_duration), Events.object_finished_move)
         else:
             self.logger.warning('An object not currently tracked by the world stopped moving with id {0}'.format(msg.object_id))
 
@@ -780,7 +779,7 @@ class LightCube(ObservableObject):
                                         msg.img_rect.height)
             self._top_face_orientation_rad = msg.top_face_orientation_rad
 
-            self._on_observed(pose, image_rect, msg.timestamp)
+            self.conn.run_soon(self._on_observed(pose, image_rect, msg.timestamp))
         else:
             self.logger.warning('Observed an object not currently tracked by the world with id {0}'.format(msg.object_id))
 
