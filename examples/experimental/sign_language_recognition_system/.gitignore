@@ -1,6 +1,0 @@
-*
-!.gitignore
-!data_gen.py
-!recognizer.py
-!util.py
-!README.md
