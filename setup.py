@@ -26,7 +26,7 @@ def fetch_version():
 VERSION_DATA = fetch_version()
 VERSION = VERSION_DATA['__version__']
 
-def get_requirements() -> list:
+def get_requirements():
     """Load the requirements from requirements.txt into a list"""
     reqs = []
     with open(os.path.join(HERE, 'requirements.txt')) as requirements_file:

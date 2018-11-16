@@ -22,6 +22,7 @@ from grpc import RpcError, StatusCode
 __all__ = ['VectorCameraFeedDisabledException',
            'VectorConnectionException',
            'VectorControlException',
+           'VectorControlTimeoutException',
            'VectorException',
            'VectorInvalidVersionException',
            'VectorNotFoundException',
@@ -53,6 +54,16 @@ class VectorInvalidVersionException(VectorException):
                              f"Your SDK is an older version that is not supported by Vector: {host} > {client}\n"
                              f"Please install the latest SDK to continue.")
         super().__init__(error_message)
+
+
+class VectorControlException(VectorException):
+    """Unable to run a function which requires behavior control."""
+
+    def __init__(self, function):
+        msg = (f"Unable to run '{function}' because it requires behavior control.\n\n"
+               "Make sure to request control from Vector either by providing the 'enable_behavior_control' parameter to Robot, "
+               "or directly call 'request_control()' on your connection.")
+        super().__init__(msg)
 
 
 class VectorConnectionException(VectorException):
@@ -123,7 +134,7 @@ class VectorNotReadyException(_VectorGenericException):
     """Vector tried to do something before it was ready."""
 
 
-class VectorControlException(_VectorGenericException):
+class VectorControlTimeoutException(_VectorGenericException):
     """Failed to get control of Vector.
 
 Please verify that Vector is connected to the internet, and consider trying to request a higher control level.

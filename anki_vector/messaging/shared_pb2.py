@@ -18,15 +18,16 @@ from anki_vector.messaging import cube_pb2 as anki__vector_dot_messaging_dot_cub
 from anki_vector.messaging import messages_pb2 as anki__vector_dot_messaging_dot_messages__pb2
 from anki_vector.messaging import settings_pb2 as anki__vector_dot_messaging_dot_settings__pb2
 from anki_vector.messaging import extensions_pb2 as anki__vector_dot_messaging_dot_extensions__pb2
+from anki_vector.messaging import response_status_pb2 as anki__vector_dot_messaging_dot_response__status__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='anki_vector/messaging/shared.proto',
   package='Anki.Vector.external_interface',
   syntax='proto3',
-  serialized_pb=_b('\n\"anki_vector/messaging/shared.proto\x12\x1e\x41nki.Vector.external_interface\x1a$anki_vector/messaging/behavior.proto\x1a anki_vector/messaging/cube.proto\x1a$anki_vector/messaging/messages.proto\x1a$anki_vector/messaging/settings.proto\x1a&anki_vector/messaging/extensions.proto\"J\n\x16ProtocolVersionRequest\x12\x16\n\x0e\x63lient_version\x18\x01 \x01(\x03\x12\x18\n\x10min_host_version\x18\x02 \x01(\x03\"\xa7\x01\n\x17ProtocolVersionResponse\x12N\n\x06result\x18\x01 \x01(\x0e\x32>.Anki.Vector.external_interface.ProtocolVersionResponse.Result\x12\x14\n\x0chost_version\x18\x02 \x01(\x03\"&\n\x06Result\x12\x0f\n\x0bUNSUPPORTED\x10\x00\x12\x0b\n\x07SUCCESS\x10\x01\"h\n\x12\x43onnectionResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x12\n\nis_primary\x18\x02 \x01(\x08\"\xd3\x06\n\x05\x45vent\x12P\n\x13time_stamped_status\x18\x01 \x01(\x0b\x32\x31.Anki.Vector.external_interface.TimeStampedStatusH\x00\x12=\n\twake_word\x18\x03 \x01(\x0b\x32(.Anki.Vector.external_interface.WakeWordH\x00\x12P\n\x13robot_observed_face\x18\x05 \x01(\x0b\x32\x31.Anki.Vector.external_interface.RobotObservedFaceH\x00\x12\x64\n\x1erobot_changed_observed_face_id\x18\x06 \x01(\x0b\x32:.Anki.Vector.external_interface.RobotChangedObservedFaceIDH\x00\x12\x43\n\x0cobject_event\x18\x07 \x01(\x0b\x32+.Anki.Vector.external_interface.ObjectEventH\x00\x12K\n\x10stimulation_info\x18\x08 \x01(\x0b\x32/.Anki.Vector.external_interface.StimulationInfoH\x00\x12\x41\n\x0bphoto_taken\x18\t \x01(\x0b\x32*.Anki.Vector.external_interface.PhotoTakenH\x00\x12\x41\n\x0brobot_state\x18\n \x01(\x0b\x32*.Anki.Vector.external_interface.RobotStateH\x00\x12\x43\n\x0c\x63ube_battery\x18\x0b \x01(\x0b\x32+.Anki.Vector.external_interface.CubeBatteryH\x00\x12\x43\n\nkeep_alive\x18\x0c \x01(\x0b\x32-.Anki.Vector.external_interface.KeepAlivePingH\x00\x12Q\n\x13\x63onnection_response\x18\r \x01(\x0b\x32\x32.Anki.Vector.external_interface.ConnectionResponseH\x00\x42\x0c\n\nevent_type\"\x1a\n\nFilterList\x12\x0c\n\x04list\x18\x01 \x03(\t\"\xb6\x01\n\x0c\x45ventRequest\x12@\n\nwhite_list\x18\x01 \x01(\x0b\x32*.Anki.Vector.external_interface.FilterListH\x00\x12@\n\nblack_list\x18\x02 \x01(\x0b\x32*.Anki.Vector.external_interface.FilterListH\x00\x12\x15\n\rconnection_id\x18\x03 \x01(\tB\x0b\n\tlist_type\"\x8b\x01\n\rEventResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x34\n\x05\x65vent\x18\x02 \x01(\x0b\x32%.Anki.Vector.external_interface.Event:\x04\x80\xa6\x1d\x01\"\xfb\"\n\x0eGatewayWrapper\x12\x36\n\x05\x65vent\x18\x01 \x01(\x0b\x32%.Anki.Vector.external_interface.EventH\x00\x12P\n\x13photos_info_request\x18( \x01(\x0b\x32\x31.Anki.Vector.external_interface.PhotosInfoRequestH\x00\x12R\n\x14photos_info_response\x18) \x01(\x0b\x32\x32.Anki.Vector.external_interface.PhotosInfoResponseH\x00\x12\x45\n\rphoto_request\x18* \x01(\x0b\x32,.Anki.Vector.external_interface.PhotoRequestH\x00\x12N\n\x12photo_path_message\x18+ \x01(\x0b\x32\x30.Anki.Vector.external_interface.PhotoPathMessageH\x00\x12M\n\x11thumbnail_request\x18, \x01(\x0b\x32\x30.Anki.Vector.external_interface.ThumbnailRequestH\x00\x12V\n\x16thumbnail_path_message\x18- \x01(\x0b\x32\x34.Anki.Vector.external_interface.ThumbnailPathMessageH\x00\x12R\n\x14\x64\x65lete_photo_request\x18. \x01(\x0b\x32\x32.Anki.Vector.external_interface.DeletePhotoRequestH\x00\x12T\n\x15\x64\x65lete_photo_response\x18/ \x01(\x0b\x32\x33.Anki.Vector.external_interface.DeletePhotoResponseH\x00\x12[\n\x19\x64rive_off_charger_request\x18\x46 \x01(\x0b\x32\x36.Anki.Vector.external_interface.DriveOffChargerRequestH\x00\x12]\n\x1a\x64rive_off_charger_response\x18G \x01(\x0b\x32\x37.Anki.Vector.external_interface.DriveOffChargerResponseH\x00\x12Y\n\x18\x64rive_on_charger_request\x18H \x01(\x0b\x32\x35.Anki.Vector.external_interface.DriveOnChargerRequestH\x00\x12[\n\x19\x64rive_on_charger_response\x18I \x01(\x0b\x32\x36.Anki.Vector.external_interface.DriveOnChargerResponseH\x00\x12S\n\x15turn_in_place_request\x18Z \x01(\x0b\x32\x32.Anki.Vector.external_interface.TurnInPlaceRequestH\x00\x12U\n\x16turn_in_place_response\x18[ \x01(\x0b\x32\x33.Anki.Vector.external_interface.TurnInPlaceResponseH\x00\x12V\n\x16\x64rive_straight_request\x18\\ \x01(\x0b\x32\x34.Anki.Vector.external_interface.DriveStraightRequestH\x00\x12X\n\x17\x64rive_straight_response\x18] \x01(\x0b\x32\x35.Anki.Vector.external_interface.DriveStraightResponseH\x00\x12U\n\x16set_head_angle_request\x18^ \x01(\x0b\x32\x33.Anki.Vector.external_interface.SetHeadAngleRequestH\x00\x12W\n\x17set_head_angle_response\x18_ \x01(\x0b\x32\x34.Anki.Vector.external_interface.SetHeadAngleResponseH\x00\x12W\n\x17set_lift_height_request\x18` \x01(\x0b\x32\x34.Anki.Vector.external_interface.SetLiftHeightRequestH\x00\x12Y\n\x18set_lift_height_response\x18\x61 \x01(\x0b\x32\x35.Anki.Vector.external_interface.SetLiftHeightResponseH\x00\x12V\n\x16play_animation_request\x18\x62 \x01(\x0b\x32\x34.Anki.Vector.external_interface.PlayAnimationRequestH\x00\x12X\n\x17play_animation_response\x18\x63 \x01(\x0b\x32\x35.Anki.Vector.external_interface.PlayAnimationResponseH\x00\x12N\n\x12go_to_pose_request\x18\x96\x01 \x01(\x0b\x32/.Anki.Vector.external_interface.GoToPoseRequestH\x00\x12P\n\x13go_to_pose_response\x18\x97\x01 \x01(\x0b\x32\x30.Anki.Vector.external_interface.GoToPoseResponseH\x00\x12V\n\x16\x64ock_with_cube_request\x18\x98\x01 \x01(\x0b\x32\x33.Anki.Vector.external_interface.DockWithCubeRequestH\x00\x12X\n\x17\x64ock_with_cube_response\x18\x99\x01 \x01(\x0b\x32\x34.Anki.Vector.external_interface.DockWithCubeResponseH\x00\x12R\n\x14\x63onnect_cube_request\x18\x64 \x01(\x0b\x32\x32.Anki.Vector.external_interface.ConnectCubeRequestH\x00\x12T\n\x15\x63onnect_cube_response\x18\x65 \x01(\x0b\x32\x33.Anki.Vector.external_interface.ConnectCubeResponseH\x00\x12X\n\x17\x64isconnect_cube_request\x18\x66 \x01(\x0b\x32\x35.Anki.Vector.external_interface.DisconnectCubeRequestH\x00\x12[\n\x19\x66lash_cube_lights_request\x18g \x01(\x0b\x32\x36.Anki.Vector.external_interface.FlashCubeLightsRequestH\x00\x12\x63\n\x1d\x66orget_preferred_cube_request\x18h \x01(\x0b\x32:.Anki.Vector.external_interface.ForgetPreferredCubeRequestH\x00\x12]\n\x1aset_preferred_cube_request\x18i \x01(\x0b\x32\x37.Anki.Vector.external_interface.SetPreferredCubeRequestH\x00\x12W\n\x17set_cube_lights_request\x18j \x01(\x0b\x32\x34.Anki.Vector.external_interface.SetCubeLightsRequestH\x00\x12X\n\x17\x63ubes_available_request\x18k \x01(\x0b\x32\x35.Anki.Vector.external_interface.CubesAvailableRequestH\x00\x12Z\n\x18\x63ubes_available_response\x18l \x01(\x0b\x32\x36.Anki.Vector.external_interface.CubesAvailableResponseH\x00\x12T\n\x15\x62\x61ttery_state_request\x18n \x01(\x0b\x32\x33.Anki.Vector.external_interface.BatteryStateRequestH\x00\x12V\n\x16\x62\x61ttery_state_response\x18o \x01(\x0b\x32\x34.Anki.Vector.external_interface.BatteryStateResponseH\x00\x12T\n\x15version_state_request\x18p \x01(\x0b\x32\x33.Anki.Vector.external_interface.VersionStateRequestH\x00\x12V\n\x16version_state_response\x18q \x01(\x0b\x32\x34.Anki.Vector.external_interface.VersionStateResponseH\x00\x12T\n\x15network_state_request\x18r \x01(\x0b\x32\x33.Anki.Vector.external_interface.NetworkStateRequestH\x00\x12V\n\x16network_state_response\x18s \x01(\x0b\x32\x34.Anki.Vector.external_interface.NetworkStateResponseH\x00\x12J\n\x10say_text_request\x18x \x01(\x0b\x32..Anki.Vector.external_interface.SayTextRequestH\x00\x12L\n\x11say_text_response\x18y \x01(\x0b\x32/.Anki.Vector.external_interface.SayTextResponseH\x00\x12J\n\x0f\x63ontrol_request\x18\x82\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ControlRequestH\x00\x12J\n\x0f\x63ontrol_release\x18\x83\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ControlReleaseH\x00\x12]\n\x19\x62\x65havior_control_response\x18\x84\x01 \x01(\x0b\x32\x37.Anki.Vector.external_interface.BehaviorControlResponseH\x00\x12\x46\n\rimage_request\x18\x8c\x01 \x01(\x0b\x32,.Anki.Vector.external_interface.ImageRequestH\x00\x12\x42\n\x0bimage_chunk\x18\x8d\x01 \x01(\x0b\x32*.Anki.Vector.external_interface.ImageChunkH\x00\x12X\n\x17\x61udio_send_mode_request\x18\xaa\x01 \x01(\x0b\x32\x34.Anki.Vector.external_interface.AudioSendModeRequestH\x00\x12X\n\x17\x61udio_send_mode_changed\x18\xab\x01 \x01(\x0b\x32\x34.Anki.Vector.external_interface.AudioSendModeChangedH\x00\x12\x42\n\x0b\x61udio_chunk\x18\xac\x01 \x01(\x0b\x32*.Anki.Vector.external_interface.AudioChunkH\x00\x42\x14\n\x12oneof_message_type\"4\n\x19UserAuthenticationRequest\x12\x17\n\x0fuser_session_id\x18\x01 \x01(\x0c\"\xf0\x01\n\x1aUserAuthenticationResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12M\n\x04\x63ode\x18\x02 \x01(\x0e\x32?.Anki.Vector.external_interface.UserAuthenticationResponse.Code\x12\x19\n\x11\x63lient_token_guid\x18\x03 \x01(\x0c\"(\n\x04\x43ode\x12\x10\n\x0cUNAUTHORIZED\x10\x00\x12\x0e\n\nAUTHORIZED\x10\x01\x62\x06proto3')
+  serialized_pb=_b('\n\"anki_vector/messaging/shared.proto\x12\x1e\x41nki.Vector.external_interface\x1a$anki_vector/messaging/behavior.proto\x1a anki_vector/messaging/cube.proto\x1a$anki_vector/messaging/messages.proto\x1a$anki_vector/messaging/settings.proto\x1a&anki_vector/messaging/extensions.proto\x1a+anki_vector/messaging/response_status.proto\"J\n\x16ProtocolVersionRequest\x12\x16\n\x0e\x63lient_version\x18\x01 \x01(\x03\x12\x18\n\x10min_host_version\x18\x02 \x01(\x03\"\xa7\x01\n\x17ProtocolVersionResponse\x12N\n\x06result\x18\x01 \x01(\x0e\x32>.Anki.Vector.external_interface.ProtocolVersionResponse.Result\x12\x14\n\x0chost_version\x18\x02 \x01(\x03\"&\n\x06Result\x12\x0f\n\x0bUNSUPPORTED\x10\x00\x12\x0b\n\x07SUCCESS\x10\x01\"h\n\x12\x43onnectionResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x12\n\nis_primary\x18\x02 \x01(\x08\"\x86\x08\n\x05\x45vent\x12P\n\x13time_stamped_status\x18\x01 \x01(\x0b\x32\x31.Anki.Vector.external_interface.TimeStampedStatusH\x00\x12=\n\twake_word\x18\x03 \x01(\x0b\x32(.Anki.Vector.external_interface.WakeWordH\x00\x12P\n\x13robot_observed_face\x18\x05 \x01(\x0b\x32\x31.Anki.Vector.external_interface.RobotObservedFaceH\x00\x12\x64\n\x1erobot_changed_observed_face_id\x18\x06 \x01(\x0b\x32:.Anki.Vector.external_interface.RobotChangedObservedFaceIDH\x00\x12\x43\n\x0cobject_event\x18\x07 \x01(\x0b\x32+.Anki.Vector.external_interface.ObjectEventH\x00\x12K\n\x10stimulation_info\x18\x08 \x01(\x0b\x32/.Anki.Vector.external_interface.StimulationInfoH\x00\x12\x41\n\x0bphoto_taken\x18\t \x01(\x0b\x32*.Anki.Vector.external_interface.PhotoTakenH\x00\x12\x41\n\x0brobot_state\x18\n \x01(\x0b\x32*.Anki.Vector.external_interface.RobotStateH\x00\x12\x43\n\x0c\x63ube_battery\x18\x0b \x01(\x0b\x32+.Anki.Vector.external_interface.CubeBatteryH\x00\x12\x43\n\nkeep_alive\x18\x0c \x01(\x0b\x32-.Anki.Vector.external_interface.KeepAlivePingH\x00\x12Q\n\x13\x63onnection_response\x18\r \x01(\x0b\x32\x32.Anki.Vector.external_interface.ConnectionResponseH\x00\x12R\n\x14mirror_mode_disabled\x18\x10 \x01(\x0b\x32\x32.Anki.Vector.external_interface.MirrorModeDisabledH\x00\x12]\n\x1avision_modes_auto_disabled\x18\x11 \x01(\x0b\x32\x37.Anki.Vector.external_interface.VisionModesAutoDisabledH\x00\x42\x0c\n\nevent_type\"\x1a\n\nFilterList\x12\x0c\n\x04list\x18\x01 \x03(\t\"\xb6\x01\n\x0c\x45ventRequest\x12@\n\nwhite_list\x18\x01 \x01(\x0b\x32*.Anki.Vector.external_interface.FilterListH\x00\x12@\n\nblack_list\x18\x02 \x01(\x0b\x32*.Anki.Vector.external_interface.FilterListH\x00\x12\x15\n\rconnection_id\x18\x03 \x01(\tB\x0b\n\tlist_type\"\x8b\x01\n\rEventResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x34\n\x05\x65vent\x18\x02 \x01(\x0b\x32%.Anki.Vector.external_interface.Event:\x04\x80\xa6\x1d\x01\"4\n\x19UserAuthenticationRequest\x12\x17\n\x0fuser_session_id\x18\x01 \x01(\x0c\"\xf0\x01\n\x1aUserAuthenticationResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12M\n\x04\x63ode\x18\x02 \x01(\x0e\x32?.Anki.Vector.external_interface.UserAuthenticationResponse.Code\x12\x19\n\x11\x63lient_token_guid\x18\x03 \x01(\x0c\"(\n\x04\x43ode\x12\x10\n\x0cUNAUTHORIZED\x10\x00\x12\x0e\n\nAUTHORIZED\x10\x01\x62\x06proto3')
   ,
-  dependencies=[anki__vector_dot_messaging_dot_behavior__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_cube__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_messages__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_settings__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_extensions__pb2.DESCRIPTOR,])
+  dependencies=[anki__vector_dot_messaging_dot_behavior__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_cube__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_messages__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_settings__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_extensions__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_response__status__pb2.DESCRIPTOR,])
 
 
 
@@ -47,8 +48,8 @@ _PROTOCOLVERSIONRESPONSE_RESULT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=464,
-  serialized_end=502,
+  serialized_start=509,
+  serialized_end=547,
 )
 _sym_db.RegisterEnumDescriptor(_PROTOCOLVERSIONRESPONSE_RESULT)
 
@@ -69,8 +70,8 @@ _USERAUTHENTICATIONRESPONSE_CODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=6552,
-  serialized_end=6592,
+  serialized_start=2298,
+  serialized_end=2338,
 )
 _sym_db.RegisterEnumDescriptor(_USERAUTHENTICATIONRESPONSE_CODE)
 
@@ -108,8 +109,8 @@ _PROTOCOLVERSIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=258,
-  serialized_end=332,
+  serialized_start=303,
+  serialized_end=377,
 )
 
 
@@ -147,8 +148,8 @@ _PROTOCOLVERSIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=335,
-  serialized_end=502,
+  serialized_start=380,
+  serialized_end=547,
 )
 
 
@@ -185,8 +186,8 @@ _CONNECTIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=504,
-  serialized_end=608,
+  serialized_start=549,
+  serialized_end=653,
 )
 
 
@@ -274,6 +275,20 @@ _EVENT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='mirror_mode_disabled', full_name='Anki.Vector.external_interface.Event.mirror_mode_disabled', index=11,
+      number=16, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='vision_modes_auto_disabled', full_name='Anki.Vector.external_interface.Event.vision_modes_auto_disabled', index=12,
+      number=17, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -289,8 +304,8 @@ _EVENT = _descriptor.Descriptor(
       name='event_type', full_name='Anki.Vector.external_interface.Event.event_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=611,
-  serialized_end=1462,
+  serialized_start=656,
+  serialized_end=1686,
 )
 
 
@@ -320,8 +335,8 @@ _FILTERLIST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1464,
-  serialized_end=1490,
+  serialized_start=1688,
+  serialized_end=1714,
 )
 
 
@@ -368,8 +383,8 @@ _EVENTREQUEST = _descriptor.Descriptor(
       name='list_type', full_name='Anki.Vector.external_interface.EventRequest.list_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1493,
-  serialized_end=1675,
+  serialized_start=1717,
+  serialized_end=1899,
 )
 
 
@@ -406,399 +421,8 @@ _EVENTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1678,
-  serialized_end=1817,
-)
-
-
-_GATEWAYWRAPPER = _descriptor.Descriptor(
-  name='GatewayWrapper',
-  full_name='Anki.Vector.external_interface.GatewayWrapper',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='event', full_name='Anki.Vector.external_interface.GatewayWrapper.event', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='photos_info_request', full_name='Anki.Vector.external_interface.GatewayWrapper.photos_info_request', index=1,
-      number=40, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='photos_info_response', full_name='Anki.Vector.external_interface.GatewayWrapper.photos_info_response', index=2,
-      number=41, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='photo_request', full_name='Anki.Vector.external_interface.GatewayWrapper.photo_request', index=3,
-      number=42, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='photo_path_message', full_name='Anki.Vector.external_interface.GatewayWrapper.photo_path_message', index=4,
-      number=43, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='thumbnail_request', full_name='Anki.Vector.external_interface.GatewayWrapper.thumbnail_request', index=5,
-      number=44, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='thumbnail_path_message', full_name='Anki.Vector.external_interface.GatewayWrapper.thumbnail_path_message', index=6,
-      number=45, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='delete_photo_request', full_name='Anki.Vector.external_interface.GatewayWrapper.delete_photo_request', index=7,
-      number=46, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='delete_photo_response', full_name='Anki.Vector.external_interface.GatewayWrapper.delete_photo_response', index=8,
-      number=47, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='drive_off_charger_request', full_name='Anki.Vector.external_interface.GatewayWrapper.drive_off_charger_request', index=9,
-      number=70, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='drive_off_charger_response', full_name='Anki.Vector.external_interface.GatewayWrapper.drive_off_charger_response', index=10,
-      number=71, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='drive_on_charger_request', full_name='Anki.Vector.external_interface.GatewayWrapper.drive_on_charger_request', index=11,
-      number=72, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='drive_on_charger_response', full_name='Anki.Vector.external_interface.GatewayWrapper.drive_on_charger_response', index=12,
-      number=73, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='turn_in_place_request', full_name='Anki.Vector.external_interface.GatewayWrapper.turn_in_place_request', index=13,
-      number=90, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='turn_in_place_response', full_name='Anki.Vector.external_interface.GatewayWrapper.turn_in_place_response', index=14,
-      number=91, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='drive_straight_request', full_name='Anki.Vector.external_interface.GatewayWrapper.drive_straight_request', index=15,
-      number=92, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='drive_straight_response', full_name='Anki.Vector.external_interface.GatewayWrapper.drive_straight_response', index=16,
-      number=93, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='set_head_angle_request', full_name='Anki.Vector.external_interface.GatewayWrapper.set_head_angle_request', index=17,
-      number=94, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='set_head_angle_response', full_name='Anki.Vector.external_interface.GatewayWrapper.set_head_angle_response', index=18,
-      number=95, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='set_lift_height_request', full_name='Anki.Vector.external_interface.GatewayWrapper.set_lift_height_request', index=19,
-      number=96, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='set_lift_height_response', full_name='Anki.Vector.external_interface.GatewayWrapper.set_lift_height_response', index=20,
-      number=97, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='play_animation_request', full_name='Anki.Vector.external_interface.GatewayWrapper.play_animation_request', index=21,
-      number=98, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='play_animation_response', full_name='Anki.Vector.external_interface.GatewayWrapper.play_animation_response', index=22,
-      number=99, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='go_to_pose_request', full_name='Anki.Vector.external_interface.GatewayWrapper.go_to_pose_request', index=23,
-      number=150, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='go_to_pose_response', full_name='Anki.Vector.external_interface.GatewayWrapper.go_to_pose_response', index=24,
-      number=151, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='dock_with_cube_request', full_name='Anki.Vector.external_interface.GatewayWrapper.dock_with_cube_request', index=25,
-      number=152, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='dock_with_cube_response', full_name='Anki.Vector.external_interface.GatewayWrapper.dock_with_cube_response', index=26,
-      number=153, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='connect_cube_request', full_name='Anki.Vector.external_interface.GatewayWrapper.connect_cube_request', index=27,
-      number=100, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='connect_cube_response', full_name='Anki.Vector.external_interface.GatewayWrapper.connect_cube_response', index=28,
-      number=101, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='disconnect_cube_request', full_name='Anki.Vector.external_interface.GatewayWrapper.disconnect_cube_request', index=29,
-      number=102, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='flash_cube_lights_request', full_name='Anki.Vector.external_interface.GatewayWrapper.flash_cube_lights_request', index=30,
-      number=103, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='forget_preferred_cube_request', full_name='Anki.Vector.external_interface.GatewayWrapper.forget_preferred_cube_request', index=31,
-      number=104, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='set_preferred_cube_request', full_name='Anki.Vector.external_interface.GatewayWrapper.set_preferred_cube_request', index=32,
-      number=105, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='set_cube_lights_request', full_name='Anki.Vector.external_interface.GatewayWrapper.set_cube_lights_request', index=33,
-      number=106, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='cubes_available_request', full_name='Anki.Vector.external_interface.GatewayWrapper.cubes_available_request', index=34,
-      number=107, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='cubes_available_response', full_name='Anki.Vector.external_interface.GatewayWrapper.cubes_available_response', index=35,
-      number=108, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='battery_state_request', full_name='Anki.Vector.external_interface.GatewayWrapper.battery_state_request', index=36,
-      number=110, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='battery_state_response', full_name='Anki.Vector.external_interface.GatewayWrapper.battery_state_response', index=37,
-      number=111, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='version_state_request', full_name='Anki.Vector.external_interface.GatewayWrapper.version_state_request', index=38,
-      number=112, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='version_state_response', full_name='Anki.Vector.external_interface.GatewayWrapper.version_state_response', index=39,
-      number=113, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='network_state_request', full_name='Anki.Vector.external_interface.GatewayWrapper.network_state_request', index=40,
-      number=114, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='network_state_response', full_name='Anki.Vector.external_interface.GatewayWrapper.network_state_response', index=41,
-      number=115, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='say_text_request', full_name='Anki.Vector.external_interface.GatewayWrapper.say_text_request', index=42,
-      number=120, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='say_text_response', full_name='Anki.Vector.external_interface.GatewayWrapper.say_text_response', index=43,
-      number=121, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='control_request', full_name='Anki.Vector.external_interface.GatewayWrapper.control_request', index=44,
-      number=130, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='control_release', full_name='Anki.Vector.external_interface.GatewayWrapper.control_release', index=45,
-      number=131, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='behavior_control_response', full_name='Anki.Vector.external_interface.GatewayWrapper.behavior_control_response', index=46,
-      number=132, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='image_request', full_name='Anki.Vector.external_interface.GatewayWrapper.image_request', index=47,
-      number=140, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='image_chunk', full_name='Anki.Vector.external_interface.GatewayWrapper.image_chunk', index=48,
-      number=141, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='audio_send_mode_request', full_name='Anki.Vector.external_interface.GatewayWrapper.audio_send_mode_request', index=49,
-      number=170, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='audio_send_mode_changed', full_name='Anki.Vector.external_interface.GatewayWrapper.audio_send_mode_changed', index=50,
-      number=171, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='audio_chunk', full_name='Anki.Vector.external_interface.GatewayWrapper.audio_chunk', index=51,
-      number=172, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-    _descriptor.OneofDescriptor(
-      name='oneof_message_type', full_name='Anki.Vector.external_interface.GatewayWrapper.oneof_message_type',
-      index=0, containing_type=None, fields=[]),
-  ],
-  serialized_start=1820,
-  serialized_end=6295,
+  serialized_start=1902,
+  serialized_end=2041,
 )
 
 
@@ -828,8 +452,8 @@ _USERAUTHENTICATIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6297,
-  serialized_end=6349,
+  serialized_start=2043,
+  serialized_end=2095,
 )
 
 
@@ -874,13 +498,13 @@ _USERAUTHENTICATIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6352,
-  serialized_end=6592,
+  serialized_start=2098,
+  serialized_end=2338,
 )
 
 _PROTOCOLVERSIONRESPONSE.fields_by_name['result'].enum_type = _PROTOCOLVERSIONRESPONSE_RESULT
 _PROTOCOLVERSIONRESPONSE_RESULT.containing_type = _PROTOCOLVERSIONRESPONSE
-_CONNECTIONRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_messages__pb2._RESPONSESTATUS
+_CONNECTIONRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
 _EVENT.fields_by_name['time_stamped_status'].message_type = anki__vector_dot_messaging_dot_messages__pb2._TIMESTAMPEDSTATUS
 _EVENT.fields_by_name['wake_word'].message_type = anki__vector_dot_messaging_dot_messages__pb2._WAKEWORD
 _EVENT.fields_by_name['robot_observed_face'].message_type = anki__vector_dot_messaging_dot_messages__pb2._ROBOTOBSERVEDFACE
@@ -892,6 +516,8 @@ _EVENT.fields_by_name['robot_state'].message_type = anki__vector_dot_messaging_d
 _EVENT.fields_by_name['cube_battery'].message_type = anki__vector_dot_messaging_dot_messages__pb2._CUBEBATTERY
 _EVENT.fields_by_name['keep_alive'].message_type = anki__vector_dot_messaging_dot_messages__pb2._KEEPALIVEPING
 _EVENT.fields_by_name['connection_response'].message_type = _CONNECTIONRESPONSE
+_EVENT.fields_by_name['mirror_mode_disabled'].message_type = anki__vector_dot_messaging_dot_messages__pb2._MIRRORMODEDISABLED
+_EVENT.fields_by_name['vision_modes_auto_disabled'].message_type = anki__vector_dot_messaging_dot_messages__pb2._VISIONMODESAUTODISABLED
 _EVENT.oneofs_by_name['event_type'].fields.append(
   _EVENT.fields_by_name['time_stamped_status'])
 _EVENT.fields_by_name['time_stamped_status'].containing_oneof = _EVENT.oneofs_by_name['event_type']
@@ -925,6 +551,12 @@ _EVENT.fields_by_name['keep_alive'].containing_oneof = _EVENT.oneofs_by_name['ev
 _EVENT.oneofs_by_name['event_type'].fields.append(
   _EVENT.fields_by_name['connection_response'])
 _EVENT.fields_by_name['connection_response'].containing_oneof = _EVENT.oneofs_by_name['event_type']
+_EVENT.oneofs_by_name['event_type'].fields.append(
+  _EVENT.fields_by_name['mirror_mode_disabled'])
+_EVENT.fields_by_name['mirror_mode_disabled'].containing_oneof = _EVENT.oneofs_by_name['event_type']
+_EVENT.oneofs_by_name['event_type'].fields.append(
+  _EVENT.fields_by_name['vision_modes_auto_disabled'])
+_EVENT.fields_by_name['vision_modes_auto_disabled'].containing_oneof = _EVENT.oneofs_by_name['event_type']
 _EVENTREQUEST.fields_by_name['white_list'].message_type = _FILTERLIST
 _EVENTREQUEST.fields_by_name['black_list'].message_type = _FILTERLIST
 _EVENTREQUEST.oneofs_by_name['list_type'].fields.append(
@@ -933,217 +565,9 @@ _EVENTREQUEST.fields_by_name['white_list'].containing_oneof = _EVENTREQUEST.oneo
 _EVENTREQUEST.oneofs_by_name['list_type'].fields.append(
   _EVENTREQUEST.fields_by_name['black_list'])
 _EVENTREQUEST.fields_by_name['black_list'].containing_oneof = _EVENTREQUEST.oneofs_by_name['list_type']
-_EVENTRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_messages__pb2._RESPONSESTATUS
+_EVENTRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
 _EVENTRESPONSE.fields_by_name['event'].message_type = _EVENT
-_GATEWAYWRAPPER.fields_by_name['event'].message_type = _EVENT
-_GATEWAYWRAPPER.fields_by_name['photos_info_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._PHOTOSINFOREQUEST
-_GATEWAYWRAPPER.fields_by_name['photos_info_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._PHOTOSINFORESPONSE
-_GATEWAYWRAPPER.fields_by_name['photo_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._PHOTOREQUEST
-_GATEWAYWRAPPER.fields_by_name['photo_path_message'].message_type = anki__vector_dot_messaging_dot_messages__pb2._PHOTOPATHMESSAGE
-_GATEWAYWRAPPER.fields_by_name['thumbnail_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._THUMBNAILREQUEST
-_GATEWAYWRAPPER.fields_by_name['thumbnail_path_message'].message_type = anki__vector_dot_messaging_dot_messages__pb2._THUMBNAILPATHMESSAGE
-_GATEWAYWRAPPER.fields_by_name['delete_photo_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._DELETEPHOTOREQUEST
-_GATEWAYWRAPPER.fields_by_name['delete_photo_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._DELETEPHOTORESPONSE
-_GATEWAYWRAPPER.fields_by_name['drive_off_charger_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._DRIVEOFFCHARGERREQUEST
-_GATEWAYWRAPPER.fields_by_name['drive_off_charger_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._DRIVEOFFCHARGERRESPONSE
-_GATEWAYWRAPPER.fields_by_name['drive_on_charger_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._DRIVEONCHARGERREQUEST
-_GATEWAYWRAPPER.fields_by_name['drive_on_charger_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._DRIVEONCHARGERRESPONSE
-_GATEWAYWRAPPER.fields_by_name['turn_in_place_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._TURNINPLACEREQUEST
-_GATEWAYWRAPPER.fields_by_name['turn_in_place_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._TURNINPLACERESPONSE
-_GATEWAYWRAPPER.fields_by_name['drive_straight_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._DRIVESTRAIGHTREQUEST
-_GATEWAYWRAPPER.fields_by_name['drive_straight_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._DRIVESTRAIGHTRESPONSE
-_GATEWAYWRAPPER.fields_by_name['set_head_angle_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._SETHEADANGLEREQUEST
-_GATEWAYWRAPPER.fields_by_name['set_head_angle_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._SETHEADANGLERESPONSE
-_GATEWAYWRAPPER.fields_by_name['set_lift_height_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._SETLIFTHEIGHTREQUEST
-_GATEWAYWRAPPER.fields_by_name['set_lift_height_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._SETLIFTHEIGHTRESPONSE
-_GATEWAYWRAPPER.fields_by_name['play_animation_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._PLAYANIMATIONREQUEST
-_GATEWAYWRAPPER.fields_by_name['play_animation_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._PLAYANIMATIONRESPONSE
-_GATEWAYWRAPPER.fields_by_name['go_to_pose_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._GOTOPOSEREQUEST
-_GATEWAYWRAPPER.fields_by_name['go_to_pose_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._GOTOPOSERESPONSE
-_GATEWAYWRAPPER.fields_by_name['dock_with_cube_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._DOCKWITHCUBEREQUEST
-_GATEWAYWRAPPER.fields_by_name['dock_with_cube_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._DOCKWITHCUBERESPONSE
-_GATEWAYWRAPPER.fields_by_name['connect_cube_request'].message_type = anki__vector_dot_messaging_dot_cube__pb2._CONNECTCUBEREQUEST
-_GATEWAYWRAPPER.fields_by_name['connect_cube_response'].message_type = anki__vector_dot_messaging_dot_cube__pb2._CONNECTCUBERESPONSE
-_GATEWAYWRAPPER.fields_by_name['disconnect_cube_request'].message_type = anki__vector_dot_messaging_dot_cube__pb2._DISCONNECTCUBEREQUEST
-_GATEWAYWRAPPER.fields_by_name['flash_cube_lights_request'].message_type = anki__vector_dot_messaging_dot_cube__pb2._FLASHCUBELIGHTSREQUEST
-_GATEWAYWRAPPER.fields_by_name['forget_preferred_cube_request'].message_type = anki__vector_dot_messaging_dot_cube__pb2._FORGETPREFERREDCUBEREQUEST
-_GATEWAYWRAPPER.fields_by_name['set_preferred_cube_request'].message_type = anki__vector_dot_messaging_dot_cube__pb2._SETPREFERREDCUBEREQUEST
-_GATEWAYWRAPPER.fields_by_name['set_cube_lights_request'].message_type = anki__vector_dot_messaging_dot_cube__pb2._SETCUBELIGHTSREQUEST
-_GATEWAYWRAPPER.fields_by_name['cubes_available_request'].message_type = anki__vector_dot_messaging_dot_cube__pb2._CUBESAVAILABLEREQUEST
-_GATEWAYWRAPPER.fields_by_name['cubes_available_response'].message_type = anki__vector_dot_messaging_dot_cube__pb2._CUBESAVAILABLERESPONSE
-_GATEWAYWRAPPER.fields_by_name['battery_state_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._BATTERYSTATEREQUEST
-_GATEWAYWRAPPER.fields_by_name['battery_state_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._BATTERYSTATERESPONSE
-_GATEWAYWRAPPER.fields_by_name['version_state_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._VERSIONSTATEREQUEST
-_GATEWAYWRAPPER.fields_by_name['version_state_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._VERSIONSTATERESPONSE
-_GATEWAYWRAPPER.fields_by_name['network_state_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._NETWORKSTATEREQUEST
-_GATEWAYWRAPPER.fields_by_name['network_state_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._NETWORKSTATERESPONSE
-_GATEWAYWRAPPER.fields_by_name['say_text_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._SAYTEXTREQUEST
-_GATEWAYWRAPPER.fields_by_name['say_text_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._SAYTEXTRESPONSE
-_GATEWAYWRAPPER.fields_by_name['control_request'].message_type = anki__vector_dot_messaging_dot_behavior__pb2._CONTROLREQUEST
-_GATEWAYWRAPPER.fields_by_name['control_release'].message_type = anki__vector_dot_messaging_dot_behavior__pb2._CONTROLRELEASE
-_GATEWAYWRAPPER.fields_by_name['behavior_control_response'].message_type = anki__vector_dot_messaging_dot_behavior__pb2._BEHAVIORCONTROLRESPONSE
-_GATEWAYWRAPPER.fields_by_name['image_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._IMAGEREQUEST
-_GATEWAYWRAPPER.fields_by_name['image_chunk'].message_type = anki__vector_dot_messaging_dot_messages__pb2._IMAGECHUNK
-_GATEWAYWRAPPER.fields_by_name['audio_send_mode_request'].message_type = anki__vector_dot_messaging_dot_messages__pb2._AUDIOSENDMODEREQUEST
-_GATEWAYWRAPPER.fields_by_name['audio_send_mode_changed'].message_type = anki__vector_dot_messaging_dot_messages__pb2._AUDIOSENDMODECHANGED
-_GATEWAYWRAPPER.fields_by_name['audio_chunk'].message_type = anki__vector_dot_messaging_dot_messages__pb2._AUDIOCHUNK
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['event'])
-_GATEWAYWRAPPER.fields_by_name['event'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['photos_info_request'])
-_GATEWAYWRAPPER.fields_by_name['photos_info_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['photos_info_response'])
-_GATEWAYWRAPPER.fields_by_name['photos_info_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['photo_request'])
-_GATEWAYWRAPPER.fields_by_name['photo_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['photo_path_message'])
-_GATEWAYWRAPPER.fields_by_name['photo_path_message'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['thumbnail_request'])
-_GATEWAYWRAPPER.fields_by_name['thumbnail_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['thumbnail_path_message'])
-_GATEWAYWRAPPER.fields_by_name['thumbnail_path_message'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['delete_photo_request'])
-_GATEWAYWRAPPER.fields_by_name['delete_photo_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['delete_photo_response'])
-_GATEWAYWRAPPER.fields_by_name['delete_photo_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['drive_off_charger_request'])
-_GATEWAYWRAPPER.fields_by_name['drive_off_charger_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['drive_off_charger_response'])
-_GATEWAYWRAPPER.fields_by_name['drive_off_charger_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['drive_on_charger_request'])
-_GATEWAYWRAPPER.fields_by_name['drive_on_charger_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['drive_on_charger_response'])
-_GATEWAYWRAPPER.fields_by_name['drive_on_charger_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['turn_in_place_request'])
-_GATEWAYWRAPPER.fields_by_name['turn_in_place_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['turn_in_place_response'])
-_GATEWAYWRAPPER.fields_by_name['turn_in_place_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['drive_straight_request'])
-_GATEWAYWRAPPER.fields_by_name['drive_straight_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['drive_straight_response'])
-_GATEWAYWRAPPER.fields_by_name['drive_straight_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['set_head_angle_request'])
-_GATEWAYWRAPPER.fields_by_name['set_head_angle_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['set_head_angle_response'])
-_GATEWAYWRAPPER.fields_by_name['set_head_angle_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['set_lift_height_request'])
-_GATEWAYWRAPPER.fields_by_name['set_lift_height_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['set_lift_height_response'])
-_GATEWAYWRAPPER.fields_by_name['set_lift_height_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['play_animation_request'])
-_GATEWAYWRAPPER.fields_by_name['play_animation_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['play_animation_response'])
-_GATEWAYWRAPPER.fields_by_name['play_animation_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['go_to_pose_request'])
-_GATEWAYWRAPPER.fields_by_name['go_to_pose_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['go_to_pose_response'])
-_GATEWAYWRAPPER.fields_by_name['go_to_pose_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['dock_with_cube_request'])
-_GATEWAYWRAPPER.fields_by_name['dock_with_cube_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['dock_with_cube_response'])
-_GATEWAYWRAPPER.fields_by_name['dock_with_cube_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['connect_cube_request'])
-_GATEWAYWRAPPER.fields_by_name['connect_cube_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['connect_cube_response'])
-_GATEWAYWRAPPER.fields_by_name['connect_cube_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['disconnect_cube_request'])
-_GATEWAYWRAPPER.fields_by_name['disconnect_cube_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['flash_cube_lights_request'])
-_GATEWAYWRAPPER.fields_by_name['flash_cube_lights_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['forget_preferred_cube_request'])
-_GATEWAYWRAPPER.fields_by_name['forget_preferred_cube_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['set_preferred_cube_request'])
-_GATEWAYWRAPPER.fields_by_name['set_preferred_cube_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['set_cube_lights_request'])
-_GATEWAYWRAPPER.fields_by_name['set_cube_lights_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['cubes_available_request'])
-_GATEWAYWRAPPER.fields_by_name['cubes_available_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['cubes_available_response'])
-_GATEWAYWRAPPER.fields_by_name['cubes_available_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['battery_state_request'])
-_GATEWAYWRAPPER.fields_by_name['battery_state_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['battery_state_response'])
-_GATEWAYWRAPPER.fields_by_name['battery_state_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['version_state_request'])
-_GATEWAYWRAPPER.fields_by_name['version_state_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['version_state_response'])
-_GATEWAYWRAPPER.fields_by_name['version_state_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['network_state_request'])
-_GATEWAYWRAPPER.fields_by_name['network_state_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['network_state_response'])
-_GATEWAYWRAPPER.fields_by_name['network_state_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['say_text_request'])
-_GATEWAYWRAPPER.fields_by_name['say_text_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['say_text_response'])
-_GATEWAYWRAPPER.fields_by_name['say_text_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['control_request'])
-_GATEWAYWRAPPER.fields_by_name['control_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['control_release'])
-_GATEWAYWRAPPER.fields_by_name['control_release'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['behavior_control_response'])
-_GATEWAYWRAPPER.fields_by_name['behavior_control_response'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['image_request'])
-_GATEWAYWRAPPER.fields_by_name['image_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['image_chunk'])
-_GATEWAYWRAPPER.fields_by_name['image_chunk'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['audio_send_mode_request'])
-_GATEWAYWRAPPER.fields_by_name['audio_send_mode_request'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['audio_send_mode_changed'])
-_GATEWAYWRAPPER.fields_by_name['audio_send_mode_changed'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_GATEWAYWRAPPER.oneofs_by_name['oneof_message_type'].fields.append(
-  _GATEWAYWRAPPER.fields_by_name['audio_chunk'])
-_GATEWAYWRAPPER.fields_by_name['audio_chunk'].containing_oneof = _GATEWAYWRAPPER.oneofs_by_name['oneof_message_type']
-_USERAUTHENTICATIONRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_messages__pb2._RESPONSESTATUS
+_USERAUTHENTICATIONRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
 _USERAUTHENTICATIONRESPONSE.fields_by_name['code'].enum_type = _USERAUTHENTICATIONRESPONSE_CODE
 _USERAUTHENTICATIONRESPONSE_CODE.containing_type = _USERAUTHENTICATIONRESPONSE
 DESCRIPTOR.message_types_by_name['ProtocolVersionRequest'] = _PROTOCOLVERSIONREQUEST
@@ -1153,7 +577,6 @@ DESCRIPTOR.message_types_by_name['Event'] = _EVENT
 DESCRIPTOR.message_types_by_name['FilterList'] = _FILTERLIST
 DESCRIPTOR.message_types_by_name['EventRequest'] = _EVENTREQUEST
 DESCRIPTOR.message_types_by_name['EventResponse'] = _EVENTRESPONSE
-DESCRIPTOR.message_types_by_name['GatewayWrapper'] = _GATEWAYWRAPPER
 DESCRIPTOR.message_types_by_name['UserAuthenticationRequest'] = _USERAUTHENTICATIONREQUEST
 DESCRIPTOR.message_types_by_name['UserAuthenticationResponse'] = _USERAUTHENTICATIONRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -1206,13 +629,6 @@ EventResponse = _reflection.GeneratedProtocolMessageType('EventResponse', (_mess
   # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.EventResponse)
   ))
 _sym_db.RegisterMessage(EventResponse)
-
-GatewayWrapper = _reflection.GeneratedProtocolMessageType('GatewayWrapper', (_message.Message,), dict(
-  DESCRIPTOR = _GATEWAYWRAPPER,
-  __module__ = 'anki_vector.messaging.shared_pb2'
-  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.GatewayWrapper)
-  ))
-_sym_db.RegisterMessage(GatewayWrapper)
 
 UserAuthenticationRequest = _reflection.GeneratedProtocolMessageType('UserAuthenticationRequest', (_message.Message,), dict(
   DESCRIPTOR = _USERAUTHENTICATIONREQUEST,

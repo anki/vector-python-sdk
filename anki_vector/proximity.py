@@ -16,7 +16,7 @@
 Support for Vector's distance sensor.
 
 Vector's time-of-flight distance sensor has a usable range of about 30 mm to 1200 mm
-(max useful range closer to 300mm for Victor) with a field of view of 25 degrees.
+(max useful range closer to 300mm for Vector) with a field of view of 25 degrees.
 
 The distance sensor can be used to detect objects in front of the robot.
 """
@@ -25,6 +25,8 @@ The distance sensor can be used to detect objects in front of the robot.
 __all__ = ["ProximityComponent", "ProximitySensorData"]
 
 from . import util
+from .events import Events
+from .messaging import protocol
 
 
 class ProximitySensorData:
@@ -38,6 +40,14 @@ class ProximitySensorData:
     for the robot's internal pathfinding. Respecting these is optional, but will help python code respect the
     behavior of the robot's innate object avoidance.
     """
+
+    def __init__(self, proto_data: protocol.ProxData):
+        self._distance = util.Distance(distance_mm=proto_data.distance_mm)
+        self._signal_quality = proto_data.signal_quality
+        self._is_in_valid_range = proto_data.is_in_valid_range
+        self._is_valid_signal_quality = proto_data.is_valid_signal_quality
+        self._is_lift_in_fov = proto_data.is_lift_in_fov
+        self._is_too_pitched = proto_data.is_too_pitched
 
     @property
     def distance(self) -> float:
@@ -128,14 +138,6 @@ class ProximitySensorData:
         """
         return self._is_too_pitched
 
-    def __init__(self, proto_data):
-        self._distance = util.Distance(distance_mm=proto_data.distance_mm)
-        self._signal_quality = proto_data.signal_quality
-        self._is_in_valid_range = proto_data.is_in_valid_range
-        self._is_valid_signal_quality = proto_data.is_valid_signal_quality
-        self._is_lift_in_fov = proto_data.is_lift_in_fov
-        self._is_too_pitched = proto_data.is_too_pitched
-
     @property
     def is_valid(self) -> bool:
         """Comprehensive judgment of whether the reported distance is useful for
@@ -175,6 +177,15 @@ class ProximityComponent(util.Component):
         self._last_valid_sensor_reading = None
         self._last_sensor_reading = None
 
+        # Subscribe to a callback that updates the robot's local properties - which includes proximity data.
+        self._robot.events.subscribe(self._on_robot_state,
+                                     Events.robot_state)
+
+    def close(self):
+        """Closing the touch component will unsubscribe from robot state updates."""
+        self._robot.events.unsubscribe(self._on_robot_state,
+                                       Events.robot_state)
+
     @property
     def last_sensor_reading(self) -> ProximitySensorData:
         """:class:`anki_vector.proximity.ProximitySensorData`: The last reported sensor data.
@@ -202,8 +213,7 @@ class ProximityComponent(util.Component):
         """
         return self._last_valid_sensor_reading
 
-    # TODO Should this be private? Otherwise needs docstring, sample code
-    def on_proximity_update(self, prox_data: ProximitySensorData):
-        self._last_sensor_reading = ProximitySensorData(prox_data)
+    def _on_robot_state(self, _, msg):
+        self._last_sensor_reading = ProximitySensorData(msg.prox_data)
         if self._last_sensor_reading.is_valid:
             self._last_valid_sensor_reading = self._last_sensor_reading

@@ -17,7 +17,7 @@ The main robot class for managing Vector.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
-__all__ = ['MAX_HEAD_ANGLE', 'MIN_HEAD_ANGLE', 'AsyncRobot', 'Robot']
+__all__ = ['AsyncRobot', 'Robot']
 
 import concurrent
 import configparser
@@ -26,17 +26,9 @@ from pathlib import Path
 
 from . import (animation, audio, behavior, camera,
                connection, events, exceptions, faces,
-               motors, screen, photos, proximity, util,
-               viewer, world)
+               motors, nav_map, screen, photos, proximity,
+               touch, util, viewer, vision, world)
 from .messaging import protocol
-
-# Constants
-
-#: The minimum angle the robot's head can be set to
-MIN_HEAD_ANGLE = util.degrees(-22)
-
-#: The maximum angle the robot's head can be set to
-MAX_HEAD_ANGLE = util.degrees(45)
 
 
 class Robot:
@@ -83,12 +75,16 @@ class Robot:
                    where :code:`cert` is the certificate to identify Vector, :code:`name` is the name on Vector's face
                    when his backpack is double-clicked on the charger, and :code:`guid` is the authorization token
                    that identifies the SDK user. Note: Never share your authentication credentials with anyone.
-    :param default_logging: Disable default logging.
+    :param default_logging: Toggle default logging.
     :param behavior_activation_timeout: The time to wait for control of the robot before failing.
-    :param enable_vision_mode: Turn on face detection.
+    :param enable_face_detection: Turn on face detection.
     :param enable_camera_feed: Turn camera feed on/off.
     :param enable_audio_feed: Turn audio feed on/off.
-    :param show_viewer: Render camera feed on/off."""
+    :param enable_nav_map_feed: Turn nav map feed on/off.
+    :param show_viewer: Render camera feed on/off.
+    :param requires_behavior_control: Request control of Vector's behavior system."""
+
+    # TODO For both Robot and AsyncRobot, consider adding equivalent of use_3d_viewer param so OpenGLViewer starts automatically.
 
     def __init__(self,
                  serial: str = None,
@@ -97,10 +93,13 @@ class Robot:
                  default_logging: bool = True,
                  behavior_activation_timeout: int = 10,
                  cache_animation_list: bool = True,
-                 enable_vision_mode: bool = False,
+                 enable_face_detection: bool = False,
                  enable_camera_feed: bool = False,
                  enable_audio_feed: bool = False,
-                 show_viewer: bool = False):
+                 show_viewer: bool = False,
+                 enable_custom_object_detection: bool = False,
+                 enable_nav_map_feed: bool = False,
+                 requires_behavior_control: bool = True):
 
         if default_logging:
             util.setup_basic_logging()
@@ -124,7 +123,7 @@ class Robot:
                              '{"name":"Vector-XXXX", "ip":"XX.XX.XX.XX", "cert":"/path/to/cert_file", "guid":"<secret_key>"}')
 
         #: :class:`anki_vector.connection.Connection`: The active connection to the robot.
-        self._conn = connection.Connection(self._name, ':'.join([self._ip, self._port]), self._cert_file, self._guid)
+        self._conn = connection.Connection(self._name, ':'.join([self._ip, self._port]), self._cert_file, self._guid, requires_behavior_control=requires_behavior_control)
         self._events = events.EventHandler()
 
         # placeholders for components before they exist
@@ -134,14 +133,18 @@ class Robot:
         self._camera: camera.CameraComponent = None
         self._faces: faces.FaceComponent = None
         self._motors: motors.MotorComponent = None
+        self._nav_map: nav_map.NavMapComponent = None
         self._screen: screen.ScreenComponent = None
         self._photos: photos.PhotographComponent = None
         self._proximity: proximity.ProximityComponent = None
+        self._touch: touch.TouchComponent = None
         self._viewer: viewer.ViewerComponent = None
+        self._vision: vision.VisionComponent = None
         self._world: world.World = None
 
         self.behavior_activation_timeout = behavior_activation_timeout
-        self.enable_vision_mode = enable_vision_mode
+        self.enable_face_detection = enable_face_detection
+        self.enable_custom_object_detection = enable_custom_object_detection
         self.cache_animation_list = cache_animation_list
 
         # Robot state/sensor data
@@ -163,6 +166,7 @@ class Robot:
 
         self._enable_camera_feed = enable_camera_feed
         self._enable_audio_feed = enable_audio_feed
+        self._enable_nav_map_feed = enable_nav_map_feed
         self._show_viewer = show_viewer
 
     def _read_configuration(self, serial: str) -> dict:
@@ -236,13 +240,13 @@ class Robot:
     def camera(self) -> camera.CameraComponent:
         """The camera instance used to control Vector's camera feed.
 
-        .. code-block:: python
+        .. testcode::
 
             with anki_vector.Robot() as robot:
+                time.sleep(1)
                 image = Image.fromarray(robot.camera.latest_image)
                 image.show()
         """
-        # TODO When latest_image is ready, convert `.. code-block:: python` to `.. testcode::`
         if self._camera is None:
             raise exceptions.VectorNotReadyException("CameraComponent is not yet initialized")
         return self._camera
@@ -260,6 +264,13 @@ class Robot:
         if self._motors is None:
             raise exceptions.VectorNotReadyException("MotorComponent is not yet initialized")
         return self._motors
+
+    @property
+    def nav_map(self) -> nav_map.NavMapComponent:
+        """A reference to the NavMapComponent instance."""
+        if self._nav_map is None:
+            raise exceptions.VectorNotReadyException("NavMapComponent is not yet initialized")
+        return self._nav_map
 
     @property
     def screen(self) -> screen.ScreenComponent:
@@ -282,11 +293,24 @@ class Robot:
         .. testcode::
 
             import anki_vector
-            proximity_data = robot.proximity.last_valid_sensor_reading
-            if proximity_data is not None:
-                print(proximity_data.distance)
+            with anki_vector.Robot() as robot:
+                proximity_data = robot.proximity.last_valid_sensor_reading
+                if proximity_data is not None:
+                    print(proximity_data.distance)
         """
         return self._proximity
+
+    @property
+    def touch(self) -> touch.TouchComponent:
+        """Component containing state related to object touch detection.
+
+        .. testcode::
+
+            import anki_vector
+            with anki_vector.Robot() as robot:
+                print('Robot is being touched: {0}'.format(robot.touch.last_sensor_reading.is_being_touched))
+        """
+        return self._touch
 
     @property
     def viewer(self) -> viewer.ViewerComponent:
@@ -311,6 +335,18 @@ class Robot:
         if self._viewer is None:
             raise exceptions.VectorNotReadyException("ViewerComponent is not yet initialized")
         return self._viewer
+
+    @property
+    def vision(self) -> vision.VisionComponent:
+        """Component containing functionality related to vision based object detection.
+
+        .. testcode::
+
+            import anki_vector
+            with anki_vector.Robot() as robot:
+                robot.vision.set_vision_mode(detect_faces=True)
+        """
+        return self._vision
 
     @property
     def world(self) -> world.World:
@@ -480,27 +516,27 @@ class Robot:
     def status(self) -> float:
         """Describes Vector's status.
 
-           Possible values include:
-           NoneRobotStatusFlag     = 0
-           IS_MOVING               = 0x1
-           IS_CARRYING_BLOCK       = 0x2
-           IS_PICKING_OR_PLACING   = 0x4
-           IS_PICKED_UP            = 0x8
-           IS_BUTTON_PRESSED       = 0x10
-           IS_FALLING              = 0x20
-           IS_ANIMATING            = 0x40
-           IS_PATHING              = 0x80
-           LIFT_IN_POS             = 0x100
-           HEAD_IN_POS             = 0x200
-           CALM_POWER_MODE         = 0x400
-           IS_BATTERY_DISCONNECTED = 0x800
-           IS_ON_CHARGER           = 0x1000
-           IS_CHARGING             = 0x2000
-           CLIFF_DETECTED          = 0x4000
-           ARE_WHEELS_MOVING       = 0x8000
-           IS_BEING_HELD           = 0x10000
-           IS_MOTION_DETECTED      = 0x20000
-           IS_BATTERY_OVERHEATED   = 0x40000
+        Possible values include:
+         |  NoneRobotStatusFlag     = 0
+         |  IS_MOVING               = 0x1
+         |  IS_CARRYING_BLOCK       = 0x2
+         |  IS_PICKING_OR_PLACING   = 0x4
+         |  IS_PICKED_UP            = 0x8
+         |  IS_BUTTON_PRESSED       = 0x10
+         |  IS_FALLING              = 0x20
+         |  IS_ANIMATING            = 0x40
+         |  IS_PATHING              = 0x80
+         |  LIFT_IN_POS             = 0x100
+         |  HEAD_IN_POS             = 0x200
+         |  CALM_POWER_MODE         = 0x400
+         |  IS_BATTERY_DISCONNECTED = 0x800
+         |  IS_ON_CHARGER           = 0x1000
+         |  IS_CHARGING             = 0x2000
+         |  CLIFF_DETECTED          = 0x4000
+         |  ARE_WHEELS_MOVING       = 0x8000
+         |  IS_BEING_HELD           = 0x10000
+         |  IS_MOTION_DETECTED      = 0x20000
+         |  IS_BATTERY_OVERHEATED   = 0x40000
 
         .. testcode::
 
@@ -564,6 +600,8 @@ class Robot:
         self._enable_camera_feed = enable
         if self.enable_camera_feed:
             self.camera.init_camera_feed()
+        else:
+            self.camera.close_camera_feed()
 
     # Unpack streamed data to robot's internal properties
     def _unpack_robot_state(self, _, msg):
@@ -584,7 +622,6 @@ class Robot:
         self._localized_to_object_id = msg.localized_to_object_id
         self._last_image_time_stamp = msg.last_image_time_stamp
         self._status = msg.status
-        self._proximity.on_proximity_update(msg.prox_data)
 
     def connect(self, timeout: int = 10) -> None:
         """Start the connection to Vector.
@@ -611,10 +648,13 @@ class Robot:
         self._camera = camera.CameraComponent(self)
         self._faces = faces.FaceComponent(self)
         self._motors = motors.MotorComponent(self)
+        self._nav_map = nav_map.NavMapComponent(self)
         self._screen = screen.ScreenComponent(self)
         self._photos = photos.PhotographComponent(self)
         self._proximity = proximity.ProximityComponent(self)
+        self._touch = touch.TouchComponent(self)
         self._viewer = viewer.ViewerComponent(self)
+        self._vision = vision.VisionComponent(self)
         self._world = world.World(self)
 
         if self.cache_animation_list:
@@ -635,8 +675,12 @@ class Robot:
         if self._show_viewer:
             self.viewer.show_video()
 
+        if self._enable_nav_map_feed:
+            self.nav_map.init_nav_map_feed()
+
         # Enable face detection, to allow Vector to add faces to its world view
-        self._faces.enable_vision_mode(enable=self.enable_vision_mode)
+        self.vision.enable_face_detection(detect_faces=self.enable_face_detection, estimate_expression=False)
+        self.vision.enable_custom_object_detection(detect_custom_objects=self.enable_custom_object_detection)
 
         # Subscribe to a callback that updates the robot's local properties
         self.events.subscribe(self._unpack_robot_state, events.Events.robot_state)
@@ -652,7 +696,7 @@ class Robot:
             robot.anim.play_animation("anim_turn_left_01")
             robot.disconnect()
         """
-        vision_mode = self._faces.enable_vision_mode(enable=False)
+        vision_mode = self.vision.disable_all_vision_modes()  # pylint: disable=assignment-from-no-return
         if isinstance(vision_mode, concurrent.futures.Future):
             vision_mode.result()
 
@@ -663,8 +707,13 @@ class Robot:
         # Shutdown audio feed
         if self._audio is not None:
             self._audio.close_audio_feed()
+        # Shutdown nav map feed
+        self.nav_map.close_nav_map_feed()
         # Close the world and cleanup its objects
         self.world.close()
+
+        self.proximity.close()
+        self.touch.close()
 
         self.events.close()
         self.conn.close()
@@ -676,9 +725,16 @@ class Robot:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.disconnect()
 
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(requires_control=False)
     async def get_battery_state(self) -> protocol.BatteryStateResponse:
-        """Check the current state of the battery.
+        """Check the current state of the robot and cube batteries.
+
+        Vector is considered fully-charged above 4.1 volts. At 3.6V, the robot is approaching low charge.
+
+        Battery_level values are as follows:
+         |  Low = 1: 3.6V or less. If on charger, 4V or less.
+         |  Nominal = 2
+         |  Full = 3: This state can only be achieved when Vector is on the charger.
 
         .. testcode::
 
@@ -686,12 +742,16 @@ class Robot:
             with anki_vector.Robot() as robot:
                 battery_state = robot.get_battery_state()
                 if battery_state:
-                    print("Vector's Battery Voltage: {0}".format(battery_state.battery_volts))
+                    print("Robot battery voltage: {0}".format(battery_state.battery_volts))
+                    print("Robot battery Level: {0}".format(battery_state.battery_level))
+                    print("Robot battery is charging: {0}".format(battery_state.is_charging))
+                    print("Robot is on charger platform: {0}".format(battery_state.is_on_charger_platform))
+                    print("Robot's suggested charger time: {0}".format(battery_state.suggested_charger_sec))
         """
         get_battery_state_request = protocol.BatteryStateRequest()
         return await self.conn.grpc_interface.BatteryState(get_battery_state_request)
 
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(requires_control=False)
     async def get_version_state(self) -> protocol.VersionStateResponse:
         """Get the versioning information for Vector.
 
@@ -704,7 +764,7 @@ class Robot:
         get_version_state_request = protocol.VersionStateRequest()
         return await self.conn.grpc_interface.VersionState(get_version_state_request)
 
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(requires_control=False)
     async def get_network_state(self) -> protocol.NetworkStateResponse:
         """Get the network information for Vector.
 
@@ -779,12 +839,13 @@ class AsyncRobot(Robot):
                    where :code:`cert` is the certificate to identify Vector, :code:`name` is the name on Vector's face
                    when his backpack is double-clicked on the charger, and :code:`guid` is the authorization token
                    that identifies the SDK user. Note: Never share your authentication credentials with anyone.
-    :param default_logging: Disable default logging.
+    :param default_logging: Toggle default logging.
     :param behavior_activation_timeout: The time to wait for control of the robot before failing.
-    :param enable_vision_mode: Turn on face detection.
+    :param enable_face_detection: Turn on face detection.
     :param enable_camera_feed: Turn camera feed on/off.
     :param enable_audio_feed: Turn audio feed on/off.
-    :param show_viewer: Render camera feed on/off."""
+    :param show_viewer: Render camera feed on/off.
+    :param requires_behavior_control: Request control of Vector's behavior system."""
 
     @functools.wraps(Robot.__init__)
     def __init__(self, *args, **kwargs):

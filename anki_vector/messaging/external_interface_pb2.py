@@ -17,6 +17,7 @@ from google.api import annotations_pb2 as google_dot_api_dot_annotations__pb2
 from anki_vector.messaging import behavior_pb2 as anki__vector_dot_messaging_dot_behavior__pb2
 from anki_vector.messaging import cube_pb2 as anki__vector_dot_messaging_dot_cube__pb2
 from anki_vector.messaging import messages_pb2 as anki__vector_dot_messaging_dot_messages__pb2
+from anki_vector.messaging import nav_map_pb2 as anki__vector_dot_messaging_dot_nav__map__pb2
 from anki_vector.messaging import shared_pb2 as anki__vector_dot_messaging_dot_shared__pb2
 
 
@@ -24,9 +25,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='anki_vector/messaging/external_interface.proto',
   package='Anki.Vector.external_interface',
   syntax='proto3',
-  serialized_pb=_b('\n.anki_vector/messaging/external_interface.proto\x12\x1e\x41nki.Vector.external_interface\x1a\x1cgoogle/api/annotations.proto\x1a$anki_vector/messaging/behavior.proto\x1a anki_vector/messaging/cube.proto\x1a$anki_vector/messaging/messages.proto\x1a\"anki_vector/messaging/shared.proto2\x83\x34\n\x11\x45xternalInterface\x12\xa3\x01\n\x0fProtocolVersion\x12\x36.Anki.Vector.external_interface.ProtocolVersionRequest\x1a\x37.Anki.Vector.external_interface.ProtocolVersionResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x14/v1/protocol_version:\x01*\x12x\n\x0b\x44riveWheels\x12\x32.Anki.Vector.external_interface.DriveWheelsRequest\x1a\x33.Anki.Vector.external_interface.DriveWheelsResponse\"\x00\x12~\n\rPlayAnimation\x12\x34.Anki.Vector.external_interface.PlayAnimationRequest\x1a\x35.Anki.Vector.external_interface.PlayAnimationResponse\"\x00\x12\x9f\x01\n\x0eListAnimations\x12\x35.Anki.Vector.external_interface.ListAnimationsRequest\x1a\x36.Anki.Vector.external_interface.ListAnimationsResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/list_animations:\x01*\x12o\n\x08MoveHead\x12/.Anki.Vector.external_interface.MoveHeadRequest\x1a\x30.Anki.Vector.external_interface.MoveHeadResponse\"\x00\x12o\n\x08MoveLift\x12/.Anki.Vector.external_interface.MoveLiftRequest\x1a\x30.Anki.Vector.external_interface.MoveLiftResponse\"\x00\x12\xb5\x01\n\x13\x44isplayFaceImageRGB\x12:.Anki.Vector.external_interface.DisplayFaceImageRGBRequest\x1a;.Anki.Vector.external_interface.DisplayFaceImageRGBResponse\"%\x82\xd3\xe4\x93\x02\x1f\"\x1a/v1/display_face_image_rgb:\x01*\x12\x9d\x01\n\x0b\x45ventStream\x12,.Anki.Vector.external_interface.EventRequest\x1a-.Anki.Vector.external_interface.EventResponse\"/\x82\xd3\xe4\x93\x02)\"\x10/v1/event_stream:\x01*Z\x12\x12\x10/v1/event_stream0\x01\x12\x88\x01\n\x0f\x42\x65haviorControl\x12\x36.Anki.Vector.external_interface.BehaviorControlRequest\x1a\x37.Anki.Vector.external_interface.BehaviorControlResponse\"\x00(\x01\x30\x01\x12\xb2\x01\n\x15\x41ssumeBehaviorControl\x12\x36.Anki.Vector.external_interface.BehaviorControlRequest\x1a\x37.Anki.Vector.external_interface.BehaviorControlResponse\"&\x82\xd3\xe4\x93\x02 \"\x1b/v1/assume_behavior_control:\x01*0\x01\x12\xb8\x01\n\x14\x43\x61ncelFaceEnrollment\x12;.Anki.Vector.external_interface.CancelFaceEnrollmentRequest\x1a<.Anki.Vector.external_interface.CancelFaceEnrollmentResponse\"%\x82\xd3\xe4\x93\x02\x1f\"\x1a/v1/cancel_face_enrollment:\x01*\x12\xb8\x01\n\x14RequestEnrolledNames\x12;.Anki.Vector.external_interface.RequestEnrolledNamesRequest\x1a<.Anki.Vector.external_interface.RequestEnrolledNamesResponse\"%\x82\xd3\xe4\x93\x02\x1f\"\x1a/v1/request_enrolled_names:\x01*\x12\xc2\x01\n\x16UpdateEnrolledFaceByID\x12=.Anki.Vector.external_interface.UpdateEnrolledFaceByIDRequest\x1a>.Anki.Vector.external_interface.UpdateEnrolledFaceByIDResponse\")\x82\xd3\xe4\x93\x02#\"\x1e/v1/update_enrolled_face_by_id:\x01*\x12\xbe\x01\n\x15\x45raseEnrolledFaceByID\x12<.Anki.Vector.external_interface.EraseEnrolledFaceByIDRequest\x1a=.Anki.Vector.external_interface.EraseEnrolledFaceByIDResponse\"(\x82\xd3\xe4\x93\x02\"\"\x1d/v1/erase_enrolled_face_by_id:\x01*\x12\xbd\x01\n\x15\x45raseAllEnrolledFaces\x12<.Anki.Vector.external_interface.EraseAllEnrolledFacesRequest\x1a=.Anki.Vector.external_interface.EraseAllEnrolledFacesResponse\"\'\x82\xd3\xe4\x93\x02!\"\x1c/v1/erase_all_enrolled_faces:\x01*\x12\xa5\x01\n\x0fSetFaceToEnroll\x12\x36.Anki.Vector.external_interface.SetFaceToEnrollRequest\x1a\x37.Anki.Vector.external_interface.SetFaceToEnrollResponse\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/set_face_to_enroll:\x01*\x12\xa8\x01\n\x10\x45nableVisionMode\x12\x37.Anki.Vector.external_interface.EnableVisionModeRequest\x1a\x38.Anki.Vector.external_interface.EnableVisionModeResponse\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/enable_vision_mode:\x01*\x12\x88\x01\n\x08GoToPose\x12/.Anki.Vector.external_interface.GoToPoseRequest\x1a\x30.Anki.Vector.external_interface.GoToPoseResponse\"\x19\x82\xd3\xe4\x93\x02\x13\"\x0e/v1/go_to_pose:\x01*\x12\x98\x01\n\x0c\x44ockWithCube\x12\x33.Anki.Vector.external_interface.DockWithCubeRequest\x1a\x34.Anki.Vector.external_interface.DockWithCubeResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\"\x12/v1/dock_with_cube:\x01*\x12\xa4\x01\n\x0f\x44riveOffCharger\x12\x36.Anki.Vector.external_interface.DriveOffChargerRequest\x1a\x37.Anki.Vector.external_interface.DriveOffChargerResponse\" \x82\xd3\xe4\x93\x02\x1a\"\x15/v1/drive_off_charger:\x01*\x12\xa0\x01\n\x0e\x44riveOnCharger\x12\x35.Anki.Vector.external_interface.DriveOnChargerRequest\x1a\x36.Anki.Vector.external_interface.DriveOnChargerResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x14/v1/drive_on_charger:\x01*\x12\x8f\x01\n\nPhotosInfo\x12\x31.Anki.Vector.external_interface.PhotosInfoRequest\x1a\x32.Anki.Vector.external_interface.PhotosInfoResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\"\x0f/v1/photos_info:\x01*\x12z\n\x05Photo\x12,.Anki.Vector.external_interface.PhotoRequest\x1a-.Anki.Vector.external_interface.PhotoResponse\"\x14\x82\xd3\xe4\x93\x02\x0e\"\t/v1/photo:\x01*\x12\x8a\x01\n\tThumbnail\x12\x30.Anki.Vector.external_interface.ThumbnailRequest\x1a\x31.Anki.Vector.external_interface.ThumbnailResponse\"\x18\x82\xd3\xe4\x93\x02\x12\"\r/v1/thumbnail:\x01*\x12\x93\x01\n\x0b\x44\x65letePhoto\x12\x32.Anki.Vector.external_interface.DeletePhotoRequest\x1a\x33.Anki.Vector.external_interface.DeletePhotoResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x10/v1/delete_photo:\x01*\x12~\n\rDriveStraight\x12\x34.Anki.Vector.external_interface.DriveStraightRequest\x1a\x35.Anki.Vector.external_interface.DriveStraightResponse\"\x00\x12x\n\x0bTurnInPlace\x12\x32.Anki.Vector.external_interface.TurnInPlaceRequest\x1a\x33.Anki.Vector.external_interface.TurnInPlaceResponse\"\x00\x12{\n\x0cSetHeadAngle\x12\x33.Anki.Vector.external_interface.SetHeadAngleRequest\x1a\x34.Anki.Vector.external_interface.SetHeadAngleResponse\"\x00\x12~\n\rSetLiftHeight\x12\x34.Anki.Vector.external_interface.SetLiftHeightRequest\x1a\x35.Anki.Vector.external_interface.SetLiftHeightResponse\"\x00\x12\xaf\x01\n\x12UserAuthentication\x12\x39.Anki.Vector.external_interface.UserAuthenticationRequest\x1a:.Anki.Vector.external_interface.UserAuthenticationResponse\"\"\x82\xd3\xe4\x93\x02\x1c\"\x17/v1/user_authentication:\x01*\x12\x97\x01\n\x0c\x42\x61tteryState\x12\x33.Anki.Vector.external_interface.BatteryStateRequest\x1a\x34.Anki.Vector.external_interface.BatteryStateResponse\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/battery_state:\x01*\x12\x97\x01\n\x0cVersionState\x12\x33.Anki.Vector.external_interface.VersionStateRequest\x1a\x34.Anki.Vector.external_interface.VersionStateResponse\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/version_state:\x01*\x12\x97\x01\n\x0cNetworkState\x12\x33.Anki.Vector.external_interface.NetworkStateRequest\x1a\x34.Anki.Vector.external_interface.NetworkStateResponse\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/network_state:\x01*\x12\x83\x01\n\x07SayText\x12..Anki.Vector.external_interface.SayTextRequest\x1a/.Anki.Vector.external_interface.SayTextResponse\"\x17\x82\xd3\xe4\x93\x02\x11\"\x0c/v1/say_text:\x01*\x12\x93\x01\n\x0b\x43onnectCube\x12\x32.Anki.Vector.external_interface.ConnectCubeRequest\x1a\x33.Anki.Vector.external_interface.ConnectCubeResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x10/v1/connect_cube:\x01*\x12\x9f\x01\n\x0e\x44isconnectCube\x12\x35.Anki.Vector.external_interface.DisconnectCubeRequest\x1a\x36.Anki.Vector.external_interface.DisconnectCubeResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/disconnect_cube:\x01*\x12\x9f\x01\n\x0e\x43ubesAvailable\x12\x35.Anki.Vector.external_interface.CubesAvailableRequest\x1a\x36.Anki.Vector.external_interface.CubesAvailableResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/cubes_available:\x01*\x12\xa4\x01\n\x0f\x46lashCubeLights\x12\x36.Anki.Vector.external_interface.FlashCubeLightsRequest\x1a\x37.Anki.Vector.external_interface.FlashCubeLightsResponse\" \x82\xd3\xe4\x93\x02\x1a\"\x15/v1/flash_cube_lights:\x01*\x12\xb4\x01\n\x13\x46orgetPreferredCube\x12:.Anki.Vector.external_interface.ForgetPreferredCubeRequest\x1a;.Anki.Vector.external_interface.ForgetPreferredCubeResponse\"$\x82\xd3\xe4\x93\x02\x1e\"\x19/v1/forget_preferred_cube:\x01*\x12\xa8\x01\n\x10SetPreferredCube\x12\x37.Anki.Vector.external_interface.SetPreferredCubeRequest\x1a\x38.Anki.Vector.external_interface.SetPreferredCubeResponse\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/set_preferred_cube:\x01*\x12~\n\rSetCubeLights\x12\x34.Anki.Vector.external_interface.SetCubeLightsRequest\x1a\x35.Anki.Vector.external_interface.SetCubeLightsResponse\"\x00\x12\x8d\x01\n\tAudioFeed\x12\x30.Anki.Vector.external_interface.AudioFeedRequest\x1a\x31.Anki.Vector.external_interface.AudioFeedResponse\"\x19\x82\xd3\xe4\x93\x02\x13\"\x0e/v1/audio_feed:\x01*0\x01\x12\x91\x01\n\nCameraFeed\x12\x31.Anki.Vector.external_interface.CameraFeedRequest\x1a\x32.Anki.Vector.external_interface.CameraFeedResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\"\x0f/v1/camera_feed:\x01*0\x01\x62\x06proto3')
+  serialized_pb=_b('\n.anki_vector/messaging/external_interface.proto\x12\x1e\x41nki.Vector.external_interface\x1a\x1cgoogle/api/annotations.proto\x1a$anki_vector/messaging/behavior.proto\x1a anki_vector/messaging/cube.proto\x1a$anki_vector/messaging/messages.proto\x1a#anki_vector/messaging/nav_map.proto\x1a\"anki_vector/messaging/shared.proto2\xff\x41\n\x11\x45xternalInterface\x12\xa3\x01\n\x0fProtocolVersion\x12\x36.Anki.Vector.external_interface.ProtocolVersionRequest\x1a\x37.Anki.Vector.external_interface.ProtocolVersionResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x14/v1/protocol_version:\x01*\x12\xab\x01\n\x11SDKInitialization\x12\x38.Anki.Vector.external_interface.SDKInitializationRequest\x1a\x39.Anki.Vector.external_interface.SDKInitializationResponse\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/sdk_initialization:\x01*\x12x\n\x0b\x44riveWheels\x12\x32.Anki.Vector.external_interface.DriveWheelsRequest\x1a\x33.Anki.Vector.external_interface.DriveWheelsResponse\"\x00\x12~\n\rPlayAnimation\x12\x34.Anki.Vector.external_interface.PlayAnimationRequest\x1a\x35.Anki.Vector.external_interface.PlayAnimationResponse\"\x00\x12\x9f\x01\n\x0eListAnimations\x12\x35.Anki.Vector.external_interface.ListAnimationsRequest\x1a\x36.Anki.Vector.external_interface.ListAnimationsResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/list_animations:\x01*\x12o\n\x08MoveHead\x12/.Anki.Vector.external_interface.MoveHeadRequest\x1a\x30.Anki.Vector.external_interface.MoveHeadResponse\"\x00\x12o\n\x08MoveLift\x12/.Anki.Vector.external_interface.MoveLiftRequest\x1a\x30.Anki.Vector.external_interface.MoveLiftResponse\"\x00\x12\xb5\x01\n\x13\x44isplayFaceImageRGB\x12:.Anki.Vector.external_interface.DisplayFaceImageRGBRequest\x1a;.Anki.Vector.external_interface.DisplayFaceImageRGBResponse\"%\x82\xd3\xe4\x93\x02\x1f\"\x1a/v1/display_face_image_rgb:\x01*\x12\x9d\x01\n\x0b\x45ventStream\x12,.Anki.Vector.external_interface.EventRequest\x1a-.Anki.Vector.external_interface.EventResponse\"/\x82\xd3\xe4\x93\x02)\"\x10/v1/event_stream:\x01*Z\x12\x12\x10/v1/event_stream0\x01\x12\x88\x01\n\x0f\x42\x65haviorControl\x12\x36.Anki.Vector.external_interface.BehaviorControlRequest\x1a\x37.Anki.Vector.external_interface.BehaviorControlResponse\"\x00(\x01\x30\x01\x12\xb2\x01\n\x15\x41ssumeBehaviorControl\x12\x36.Anki.Vector.external_interface.BehaviorControlRequest\x1a\x37.Anki.Vector.external_interface.BehaviorControlResponse\"&\x82\xd3\xe4\x93\x02 \"\x1b/v1/assume_behavior_control:\x01*0\x01\x12\xb8\x01\n\x14\x43\x61ncelFaceEnrollment\x12;.Anki.Vector.external_interface.CancelFaceEnrollmentRequest\x1a<.Anki.Vector.external_interface.CancelFaceEnrollmentResponse\"%\x82\xd3\xe4\x93\x02\x1f\"\x1a/v1/cancel_face_enrollment:\x01*\x12\xb8\x01\n\x14RequestEnrolledNames\x12;.Anki.Vector.external_interface.RequestEnrolledNamesRequest\x1a<.Anki.Vector.external_interface.RequestEnrolledNamesResponse\"%\x82\xd3\xe4\x93\x02\x1f\"\x1a/v1/request_enrolled_names:\x01*\x12\xc2\x01\n\x16UpdateEnrolledFaceByID\x12=.Anki.Vector.external_interface.UpdateEnrolledFaceByIDRequest\x1a>.Anki.Vector.external_interface.UpdateEnrolledFaceByIDResponse\")\x82\xd3\xe4\x93\x02#\"\x1e/v1/update_enrolled_face_by_id:\x01*\x12\xbe\x01\n\x15\x45raseEnrolledFaceByID\x12<.Anki.Vector.external_interface.EraseEnrolledFaceByIDRequest\x1a=.Anki.Vector.external_interface.EraseEnrolledFaceByIDResponse\"(\x82\xd3\xe4\x93\x02\"\"\x1d/v1/erase_enrolled_face_by_id:\x01*\x12\xbd\x01\n\x15\x45raseAllEnrolledFaces\x12<.Anki.Vector.external_interface.EraseAllEnrolledFacesRequest\x1a=.Anki.Vector.external_interface.EraseAllEnrolledFacesResponse\"\'\x82\xd3\xe4\x93\x02!\"\x1c/v1/erase_all_enrolled_faces:\x01*\x12\xa5\x01\n\x0fSetFaceToEnroll\x12\x36.Anki.Vector.external_interface.SetFaceToEnrollRequest\x1a\x37.Anki.Vector.external_interface.SetFaceToEnrollResponse\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/set_face_to_enroll:\x01*\x12\xbc\x01\n\x15\x45nableMarkerDetection\x12<.Anki.Vector.external_interface.EnableMarkerDetectionRequest\x1a=.Anki.Vector.external_interface.EnableMarkerDetectionResponse\"&\x82\xd3\xe4\x93\x02 \"\x1b/v1/enable_marker_detection:\x01*\x12\xb4\x01\n\x13\x45nableFaceDetection\x12:.Anki.Vector.external_interface.EnableFaceDetectionRequest\x1a;.Anki.Vector.external_interface.EnableFaceDetectionResponse\"$\x82\xd3\xe4\x93\x02\x1e\"\x19/v1/enable_face_detection:\x01*\x12\xbc\x01\n\x15\x45nableMotionDetection\x12<.Anki.Vector.external_interface.EnableMotionDetectionRequest\x1a=.Anki.Vector.external_interface.EnableMotionDetectionResponse\"&\x82\xd3\xe4\x93\x02 \"\x1b/v1/enable_motion_detection:\x01*\x12\xa8\x01\n\x10\x45nableMirrorMode\x12\x37.Anki.Vector.external_interface.EnableMirrorModeRequest\x1a\x38.Anki.Vector.external_interface.EnableMirrorModeResponse\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/enable_mirror_mode:\x01*\x12\xb8\x01\n\x14\x45nableImageStreaming\x12;.Anki.Vector.external_interface.EnableImageStreamingRequest\x1a<.Anki.Vector.external_interface.EnableImageStreamingResponse\"%\x82\xd3\xe4\x93\x02\x1f\"\x1a/v1/enable_image_streaming:\x01*\x12\x88\x01\n\x08GoToPose\x12/.Anki.Vector.external_interface.GoToPoseRequest\x1a\x30.Anki.Vector.external_interface.GoToPoseResponse\"\x19\x82\xd3\xe4\x93\x02\x13\"\x0e/v1/go_to_pose:\x01*\x12\x98\x01\n\x0c\x44ockWithCube\x12\x33.Anki.Vector.external_interface.DockWithCubeRequest\x1a\x34.Anki.Vector.external_interface.DockWithCubeResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\"\x12/v1/dock_with_cube:\x01*\x12\xa4\x01\n\x0f\x44riveOffCharger\x12\x36.Anki.Vector.external_interface.DriveOffChargerRequest\x1a\x37.Anki.Vector.external_interface.DriveOffChargerResponse\" \x82\xd3\xe4\x93\x02\x1a\"\x15/v1/drive_off_charger:\x01*\x12\xa0\x01\n\x0e\x44riveOnCharger\x12\x35.Anki.Vector.external_interface.DriveOnChargerRequest\x1a\x36.Anki.Vector.external_interface.DriveOnChargerResponse\"\x1f\x82\xd3\xe4\x93\x02\x19\"\x14/v1/drive_on_charger:\x01*\x12\x8f\x01\n\nPhotosInfo\x12\x31.Anki.Vector.external_interface.PhotosInfoRequest\x1a\x32.Anki.Vector.external_interface.PhotosInfoResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\"\x0f/v1/photos_info:\x01*\x12z\n\x05Photo\x12,.Anki.Vector.external_interface.PhotoRequest\x1a-.Anki.Vector.external_interface.PhotoResponse\"\x14\x82\xd3\xe4\x93\x02\x0e\"\t/v1/photo:\x01*\x12\x8a\x01\n\tThumbnail\x12\x30.Anki.Vector.external_interface.ThumbnailRequest\x1a\x31.Anki.Vector.external_interface.ThumbnailResponse\"\x18\x82\xd3\xe4\x93\x02\x12\"\r/v1/thumbnail:\x01*\x12\x93\x01\n\x0b\x44\x65letePhoto\x12\x32.Anki.Vector.external_interface.DeletePhotoRequest\x1a\x33.Anki.Vector.external_interface.DeletePhotoResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x10/v1/delete_photo:\x01*\x12~\n\rDriveStraight\x12\x34.Anki.Vector.external_interface.DriveStraightRequest\x1a\x35.Anki.Vector.external_interface.DriveStraightResponse\"\x00\x12x\n\x0bTurnInPlace\x12\x32.Anki.Vector.external_interface.TurnInPlaceRequest\x1a\x33.Anki.Vector.external_interface.TurnInPlaceResponse\"\x00\x12{\n\x0cSetHeadAngle\x12\x33.Anki.Vector.external_interface.SetHeadAngleRequest\x1a\x34.Anki.Vector.external_interface.SetHeadAngleResponse\"\x00\x12~\n\rSetLiftHeight\x12\x34.Anki.Vector.external_interface.SetLiftHeightRequest\x1a\x35.Anki.Vector.external_interface.SetLiftHeightResponse\"\x00\x12\xaf\x01\n\x12UserAuthentication\x12\x39.Anki.Vector.external_interface.UserAuthenticationRequest\x1a:.Anki.Vector.external_interface.UserAuthenticationResponse\"\"\x82\xd3\xe4\x93\x02\x1c\"\x17/v1/user_authentication:\x01*\x12\x97\x01\n\x0c\x42\x61tteryState\x12\x33.Anki.Vector.external_interface.BatteryStateRequest\x1a\x34.Anki.Vector.external_interface.BatteryStateResponse\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/battery_state:\x01*\x12\x97\x01\n\x0cVersionState\x12\x33.Anki.Vector.external_interface.VersionStateRequest\x1a\x34.Anki.Vector.external_interface.VersionStateResponse\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/version_state:\x01*\x12\x97\x01\n\x0cNetworkState\x12\x33.Anki.Vector.external_interface.NetworkStateRequest\x1a\x34.Anki.Vector.external_interface.NetworkStateResponse\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/network_state:\x01*\x12\x83\x01\n\x07SayText\x12..Anki.Vector.external_interface.SayTextRequest\x1a/.Anki.Vector.external_interface.SayTextResponse\"\x17\x82\xd3\xe4\x93\x02\x11\"\x0c/v1/say_text:\x01*\x12\x93\x01\n\x0b\x43onnectCube\x12\x32.Anki.Vector.external_interface.ConnectCubeRequest\x1a\x33.Anki.Vector.external_interface.ConnectCubeResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x10/v1/connect_cube:\x01*\x12\x9f\x01\n\x0e\x44isconnectCube\x12\x35.Anki.Vector.external_interface.DisconnectCubeRequest\x1a\x36.Anki.Vector.external_interface.DisconnectCubeResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/disconnect_cube:\x01*\x12\x9f\x01\n\x0e\x43ubesAvailable\x12\x35.Anki.Vector.external_interface.CubesAvailableRequest\x1a\x36.Anki.Vector.external_interface.CubesAvailableResponse\"\x1e\x82\xd3\xe4\x93\x02\x18\"\x13/v1/cubes_available:\x01*\x12\xa4\x01\n\x0f\x46lashCubeLights\x12\x36.Anki.Vector.external_interface.FlashCubeLightsRequest\x1a\x37.Anki.Vector.external_interface.FlashCubeLightsResponse\" \x82\xd3\xe4\x93\x02\x1a\"\x15/v1/flash_cube_lights:\x01*\x12\xb4\x01\n\x13\x46orgetPreferredCube\x12:.Anki.Vector.external_interface.ForgetPreferredCubeRequest\x1a;.Anki.Vector.external_interface.ForgetPreferredCubeResponse\"$\x82\xd3\xe4\x93\x02\x1e\"\x19/v1/forget_preferred_cube:\x01*\x12\xa8\x01\n\x10SetPreferredCube\x12\x37.Anki.Vector.external_interface.SetPreferredCubeRequest\x1a\x38.Anki.Vector.external_interface.SetPreferredCubeResponse\"!\x82\xd3\xe4\x93\x02\x1b\"\x16/v1/set_preferred_cube:\x01*\x12\xb4\x01\n\x13\x44\x65leteCustomObjects\x12:.Anki.Vector.external_interface.DeleteCustomObjectsRequest\x1a;.Anki.Vector.external_interface.DeleteCustomObjectsResponse\"$\x82\xd3\xe4\x93\x02\x1e\"\x19/v1/delete_custom_objects:\x01*\x12\xc5\x01\n\x17\x43reateFixedCustomObject\x12>.Anki.Vector.external_interface.CreateFixedCustomObjectRequest\x1a?.Anki.Vector.external_interface.CreateFixedCustomObjectResponse\")\x82\xd3\xe4\x93\x02#\"\x1e/v1/create_fixed_custom_object:\x01*\x12\xb0\x01\n\x12\x44\x65\x66ineCustomObject\x12\x39.Anki.Vector.external_interface.DefineCustomObjectRequest\x1a:.Anki.Vector.external_interface.DefineCustomObjectResponse\"#\x82\xd3\xe4\x93\x02\x1d\"\x18/v1/define_custom_object:\x01*\x12~\n\rSetCubeLights\x12\x34.Anki.Vector.external_interface.SetCubeLightsRequest\x1a\x35.Anki.Vector.external_interface.SetCubeLightsResponse\"\x00\x12\x8d\x01\n\tAudioFeed\x12\x30.Anki.Vector.external_interface.AudioFeedRequest\x1a\x31.Anki.Vector.external_interface.AudioFeedResponse\"\x19\x82\xd3\xe4\x93\x02\x13\"\x0e/v1/audio_feed:\x01*0\x01\x12\x91\x01\n\nCameraFeed\x12\x31.Anki.Vector.external_interface.CameraFeedRequest\x1a\x32.Anki.Vector.external_interface.CameraFeedResponse\"\x1a\x82\xd3\xe4\x93\x02\x14\"\x0f/v1/camera_feed:\x01*0\x01\x12\x94\x01\n\x0bSetEyeColor\x12\x32.Anki.Vector.external_interface.SetEyeColorRequest\x1a\x33.Anki.Vector.external_interface.SetEyeColorResponse\"\x1c\x82\xd3\xe4\x93\x02\x16\"\x11/v1/set_eye_color:\x01*\x12\x92\x01\n\nNavMapFeed\x12\x31.Anki.Vector.external_interface.NavMapFeedRequest\x1a\x32.Anki.Vector.external_interface.NavMapFeedResponse\"\x1b\x82\xd3\xe4\x93\x02\x15\"\x10/v1/nav_map_feed:\x01*0\x01\x62\x06proto3')
   ,
-  dependencies=[google_dot_api_dot_annotations__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_behavior__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_cube__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_messages__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_shared__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_api_dot_annotations__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_behavior__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_cube__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_messages__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_nav__map__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_shared__pb2.DESCRIPTOR,])
 
 
 
@@ -40,8 +41,8 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   options=None,
-  serialized_start=259,
-  serialized_end=6918,
+  serialized_start=296,
+  serialized_end=8743,
   methods=[
   _descriptor.MethodDescriptor(
     name='ProtocolVersion',
@@ -53,9 +54,18 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
     options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002\031\"\024/v1/protocol_version:\001*')),
   ),
   _descriptor.MethodDescriptor(
+    name='SDKInitialization',
+    full_name='Anki.Vector.external_interface.ExternalInterface.SDKInitialization',
+    index=1,
+    containing_service=None,
+    input_type=anki__vector_dot_messaging_dot_messages__pb2._SDKINITIALIZATIONREQUEST,
+    output_type=anki__vector_dot_messaging_dot_messages__pb2._SDKINITIALIZATIONRESPONSE,
+    options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002\033\"\026/v1/sdk_initialization:\001*')),
+  ),
+  _descriptor.MethodDescriptor(
     name='DriveWheels',
     full_name='Anki.Vector.external_interface.ExternalInterface.DriveWheels',
-    index=1,
+    index=2,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._DRIVEWHEELSREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._DRIVEWHEELSRESPONSE,
@@ -64,7 +74,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='PlayAnimation',
     full_name='Anki.Vector.external_interface.ExternalInterface.PlayAnimation',
-    index=2,
+    index=3,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._PLAYANIMATIONREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._PLAYANIMATIONRESPONSE,
@@ -73,7 +83,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='ListAnimations',
     full_name='Anki.Vector.external_interface.ExternalInterface.ListAnimations',
-    index=3,
+    index=4,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._LISTANIMATIONSREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._LISTANIMATIONSRESPONSE,
@@ -82,7 +92,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='MoveHead',
     full_name='Anki.Vector.external_interface.ExternalInterface.MoveHead',
-    index=4,
+    index=5,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._MOVEHEADREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._MOVEHEADRESPONSE,
@@ -91,7 +101,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='MoveLift',
     full_name='Anki.Vector.external_interface.ExternalInterface.MoveLift',
-    index=5,
+    index=6,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._MOVELIFTREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._MOVELIFTRESPONSE,
@@ -100,7 +110,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='DisplayFaceImageRGB',
     full_name='Anki.Vector.external_interface.ExternalInterface.DisplayFaceImageRGB',
-    index=6,
+    index=7,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._DISPLAYFACEIMAGERGBREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._DISPLAYFACEIMAGERGBRESPONSE,
@@ -109,7 +119,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='EventStream',
     full_name='Anki.Vector.external_interface.ExternalInterface.EventStream',
-    index=7,
+    index=8,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_shared__pb2._EVENTREQUEST,
     output_type=anki__vector_dot_messaging_dot_shared__pb2._EVENTRESPONSE,
@@ -118,7 +128,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='BehaviorControl',
     full_name='Anki.Vector.external_interface.ExternalInterface.BehaviorControl',
-    index=8,
+    index=9,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_behavior__pb2._BEHAVIORCONTROLREQUEST,
     output_type=anki__vector_dot_messaging_dot_behavior__pb2._BEHAVIORCONTROLRESPONSE,
@@ -127,7 +137,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='AssumeBehaviorControl',
     full_name='Anki.Vector.external_interface.ExternalInterface.AssumeBehaviorControl',
-    index=9,
+    index=10,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_behavior__pb2._BEHAVIORCONTROLREQUEST,
     output_type=anki__vector_dot_messaging_dot_behavior__pb2._BEHAVIORCONTROLRESPONSE,
@@ -136,7 +146,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='CancelFaceEnrollment',
     full_name='Anki.Vector.external_interface.ExternalInterface.CancelFaceEnrollment',
-    index=10,
+    index=11,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._CANCELFACEENROLLMENTREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._CANCELFACEENROLLMENTRESPONSE,
@@ -145,7 +155,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='RequestEnrolledNames',
     full_name='Anki.Vector.external_interface.ExternalInterface.RequestEnrolledNames',
-    index=11,
+    index=12,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._REQUESTENROLLEDNAMESREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._REQUESTENROLLEDNAMESRESPONSE,
@@ -154,7 +164,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='UpdateEnrolledFaceByID',
     full_name='Anki.Vector.external_interface.ExternalInterface.UpdateEnrolledFaceByID',
-    index=12,
+    index=13,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._UPDATEENROLLEDFACEBYIDREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._UPDATEENROLLEDFACEBYIDRESPONSE,
@@ -163,7 +173,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='EraseEnrolledFaceByID',
     full_name='Anki.Vector.external_interface.ExternalInterface.EraseEnrolledFaceByID',
-    index=13,
+    index=14,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._ERASEENROLLEDFACEBYIDREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._ERASEENROLLEDFACEBYIDRESPONSE,
@@ -172,7 +182,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='EraseAllEnrolledFaces',
     full_name='Anki.Vector.external_interface.ExternalInterface.EraseAllEnrolledFaces',
-    index=14,
+    index=15,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._ERASEALLENROLLEDFACESREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._ERASEALLENROLLEDFACESRESPONSE,
@@ -181,25 +191,61 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='SetFaceToEnroll',
     full_name='Anki.Vector.external_interface.ExternalInterface.SetFaceToEnroll',
-    index=15,
+    index=16,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._SETFACETOENROLLREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._SETFACETOENROLLRESPONSE,
     options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002\033\"\026/v1/set_face_to_enroll:\001*')),
   ),
   _descriptor.MethodDescriptor(
-    name='EnableVisionMode',
-    full_name='Anki.Vector.external_interface.ExternalInterface.EnableVisionMode',
-    index=16,
+    name='EnableMarkerDetection',
+    full_name='Anki.Vector.external_interface.ExternalInterface.EnableMarkerDetection',
+    index=17,
     containing_service=None,
-    input_type=anki__vector_dot_messaging_dot_messages__pb2._ENABLEVISIONMODEREQUEST,
-    output_type=anki__vector_dot_messaging_dot_messages__pb2._ENABLEVISIONMODERESPONSE,
-    options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002\033\"\026/v1/enable_vision_mode:\001*')),
+    input_type=anki__vector_dot_messaging_dot_messages__pb2._ENABLEMARKERDETECTIONREQUEST,
+    output_type=anki__vector_dot_messaging_dot_messages__pb2._ENABLEMARKERDETECTIONRESPONSE,
+    options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002 \"\033/v1/enable_marker_detection:\001*')),
+  ),
+  _descriptor.MethodDescriptor(
+    name='EnableFaceDetection',
+    full_name='Anki.Vector.external_interface.ExternalInterface.EnableFaceDetection',
+    index=18,
+    containing_service=None,
+    input_type=anki__vector_dot_messaging_dot_messages__pb2._ENABLEFACEDETECTIONREQUEST,
+    output_type=anki__vector_dot_messaging_dot_messages__pb2._ENABLEFACEDETECTIONRESPONSE,
+    options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002\036\"\031/v1/enable_face_detection:\001*')),
+  ),
+  _descriptor.MethodDescriptor(
+    name='EnableMotionDetection',
+    full_name='Anki.Vector.external_interface.ExternalInterface.EnableMotionDetection',
+    index=19,
+    containing_service=None,
+    input_type=anki__vector_dot_messaging_dot_messages__pb2._ENABLEMOTIONDETECTIONREQUEST,
+    output_type=anki__vector_dot_messaging_dot_messages__pb2._ENABLEMOTIONDETECTIONRESPONSE,
+    options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002 \"\033/v1/enable_motion_detection:\001*')),
+  ),
+  _descriptor.MethodDescriptor(
+    name='EnableMirrorMode',
+    full_name='Anki.Vector.external_interface.ExternalInterface.EnableMirrorMode',
+    index=20,
+    containing_service=None,
+    input_type=anki__vector_dot_messaging_dot_messages__pb2._ENABLEMIRRORMODEREQUEST,
+    output_type=anki__vector_dot_messaging_dot_messages__pb2._ENABLEMIRRORMODERESPONSE,
+    options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002\033\"\026/v1/enable_mirror_mode:\001*')),
+  ),
+  _descriptor.MethodDescriptor(
+    name='EnableImageStreaming',
+    full_name='Anki.Vector.external_interface.ExternalInterface.EnableImageStreaming',
+    index=21,
+    containing_service=None,
+    input_type=anki__vector_dot_messaging_dot_messages__pb2._ENABLEIMAGESTREAMINGREQUEST,
+    output_type=anki__vector_dot_messaging_dot_messages__pb2._ENABLEIMAGESTREAMINGRESPONSE,
+    options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002\037\"\032/v1/enable_image_streaming:\001*')),
   ),
   _descriptor.MethodDescriptor(
     name='GoToPose',
     full_name='Anki.Vector.external_interface.ExternalInterface.GoToPose',
-    index=17,
+    index=22,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._GOTOPOSEREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._GOTOPOSERESPONSE,
@@ -208,7 +254,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='DockWithCube',
     full_name='Anki.Vector.external_interface.ExternalInterface.DockWithCube',
-    index=18,
+    index=23,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._DOCKWITHCUBEREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._DOCKWITHCUBERESPONSE,
@@ -217,7 +263,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='DriveOffCharger',
     full_name='Anki.Vector.external_interface.ExternalInterface.DriveOffCharger',
-    index=19,
+    index=24,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._DRIVEOFFCHARGERREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._DRIVEOFFCHARGERRESPONSE,
@@ -226,7 +272,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='DriveOnCharger',
     full_name='Anki.Vector.external_interface.ExternalInterface.DriveOnCharger',
-    index=20,
+    index=25,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._DRIVEONCHARGERREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._DRIVEONCHARGERRESPONSE,
@@ -235,7 +281,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='PhotosInfo',
     full_name='Anki.Vector.external_interface.ExternalInterface.PhotosInfo',
-    index=21,
+    index=26,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._PHOTOSINFOREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._PHOTOSINFORESPONSE,
@@ -244,7 +290,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='Photo',
     full_name='Anki.Vector.external_interface.ExternalInterface.Photo',
-    index=22,
+    index=27,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._PHOTOREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._PHOTORESPONSE,
@@ -253,7 +299,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='Thumbnail',
     full_name='Anki.Vector.external_interface.ExternalInterface.Thumbnail',
-    index=23,
+    index=28,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._THUMBNAILREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._THUMBNAILRESPONSE,
@@ -262,7 +308,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='DeletePhoto',
     full_name='Anki.Vector.external_interface.ExternalInterface.DeletePhoto',
-    index=24,
+    index=29,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._DELETEPHOTOREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._DELETEPHOTORESPONSE,
@@ -271,7 +317,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='DriveStraight',
     full_name='Anki.Vector.external_interface.ExternalInterface.DriveStraight',
-    index=25,
+    index=30,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._DRIVESTRAIGHTREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._DRIVESTRAIGHTRESPONSE,
@@ -280,7 +326,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='TurnInPlace',
     full_name='Anki.Vector.external_interface.ExternalInterface.TurnInPlace',
-    index=26,
+    index=31,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._TURNINPLACEREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._TURNINPLACERESPONSE,
@@ -289,7 +335,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='SetHeadAngle',
     full_name='Anki.Vector.external_interface.ExternalInterface.SetHeadAngle',
-    index=27,
+    index=32,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._SETHEADANGLEREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._SETHEADANGLERESPONSE,
@@ -298,7 +344,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='SetLiftHeight',
     full_name='Anki.Vector.external_interface.ExternalInterface.SetLiftHeight',
-    index=28,
+    index=33,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._SETLIFTHEIGHTREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._SETLIFTHEIGHTRESPONSE,
@@ -307,7 +353,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='UserAuthentication',
     full_name='Anki.Vector.external_interface.ExternalInterface.UserAuthentication',
-    index=29,
+    index=34,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_shared__pb2._USERAUTHENTICATIONREQUEST,
     output_type=anki__vector_dot_messaging_dot_shared__pb2._USERAUTHENTICATIONRESPONSE,
@@ -316,7 +362,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='BatteryState',
     full_name='Anki.Vector.external_interface.ExternalInterface.BatteryState',
-    index=30,
+    index=35,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._BATTERYSTATEREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._BATTERYSTATERESPONSE,
@@ -325,7 +371,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='VersionState',
     full_name='Anki.Vector.external_interface.ExternalInterface.VersionState',
-    index=31,
+    index=36,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._VERSIONSTATEREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._VERSIONSTATERESPONSE,
@@ -334,7 +380,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='NetworkState',
     full_name='Anki.Vector.external_interface.ExternalInterface.NetworkState',
-    index=32,
+    index=37,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._NETWORKSTATEREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._NETWORKSTATERESPONSE,
@@ -343,7 +389,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='SayText',
     full_name='Anki.Vector.external_interface.ExternalInterface.SayText',
-    index=33,
+    index=38,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._SAYTEXTREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._SAYTEXTRESPONSE,
@@ -352,7 +398,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='ConnectCube',
     full_name='Anki.Vector.external_interface.ExternalInterface.ConnectCube',
-    index=34,
+    index=39,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_cube__pb2._CONNECTCUBEREQUEST,
     output_type=anki__vector_dot_messaging_dot_cube__pb2._CONNECTCUBERESPONSE,
@@ -361,7 +407,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='DisconnectCube',
     full_name='Anki.Vector.external_interface.ExternalInterface.DisconnectCube',
-    index=35,
+    index=40,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_cube__pb2._DISCONNECTCUBEREQUEST,
     output_type=anki__vector_dot_messaging_dot_cube__pb2._DISCONNECTCUBERESPONSE,
@@ -370,7 +416,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='CubesAvailable',
     full_name='Anki.Vector.external_interface.ExternalInterface.CubesAvailable',
-    index=36,
+    index=41,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_cube__pb2._CUBESAVAILABLEREQUEST,
     output_type=anki__vector_dot_messaging_dot_cube__pb2._CUBESAVAILABLERESPONSE,
@@ -379,7 +425,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='FlashCubeLights',
     full_name='Anki.Vector.external_interface.ExternalInterface.FlashCubeLights',
-    index=37,
+    index=42,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_cube__pb2._FLASHCUBELIGHTSREQUEST,
     output_type=anki__vector_dot_messaging_dot_cube__pb2._FLASHCUBELIGHTSRESPONSE,
@@ -388,7 +434,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='ForgetPreferredCube',
     full_name='Anki.Vector.external_interface.ExternalInterface.ForgetPreferredCube',
-    index=38,
+    index=43,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_cube__pb2._FORGETPREFERREDCUBEREQUEST,
     output_type=anki__vector_dot_messaging_dot_cube__pb2._FORGETPREFERREDCUBERESPONSE,
@@ -397,16 +443,43 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='SetPreferredCube',
     full_name='Anki.Vector.external_interface.ExternalInterface.SetPreferredCube',
-    index=39,
+    index=44,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_cube__pb2._SETPREFERREDCUBEREQUEST,
     output_type=anki__vector_dot_messaging_dot_cube__pb2._SETPREFERREDCUBERESPONSE,
     options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002\033\"\026/v1/set_preferred_cube:\001*')),
   ),
   _descriptor.MethodDescriptor(
+    name='DeleteCustomObjects',
+    full_name='Anki.Vector.external_interface.ExternalInterface.DeleteCustomObjects',
+    index=45,
+    containing_service=None,
+    input_type=anki__vector_dot_messaging_dot_cube__pb2._DELETECUSTOMOBJECTSREQUEST,
+    output_type=anki__vector_dot_messaging_dot_cube__pb2._DELETECUSTOMOBJECTSRESPONSE,
+    options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002\036\"\031/v1/delete_custom_objects:\001*')),
+  ),
+  _descriptor.MethodDescriptor(
+    name='CreateFixedCustomObject',
+    full_name='Anki.Vector.external_interface.ExternalInterface.CreateFixedCustomObject',
+    index=46,
+    containing_service=None,
+    input_type=anki__vector_dot_messaging_dot_cube__pb2._CREATEFIXEDCUSTOMOBJECTREQUEST,
+    output_type=anki__vector_dot_messaging_dot_cube__pb2._CREATEFIXEDCUSTOMOBJECTRESPONSE,
+    options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002#\"\036/v1/create_fixed_custom_object:\001*')),
+  ),
+  _descriptor.MethodDescriptor(
+    name='DefineCustomObject',
+    full_name='Anki.Vector.external_interface.ExternalInterface.DefineCustomObject',
+    index=47,
+    containing_service=None,
+    input_type=anki__vector_dot_messaging_dot_cube__pb2._DEFINECUSTOMOBJECTREQUEST,
+    output_type=anki__vector_dot_messaging_dot_cube__pb2._DEFINECUSTOMOBJECTRESPONSE,
+    options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002\035\"\030/v1/define_custom_object:\001*')),
+  ),
+  _descriptor.MethodDescriptor(
     name='SetCubeLights',
     full_name='Anki.Vector.external_interface.ExternalInterface.SetCubeLights',
-    index=40,
+    index=48,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_cube__pb2._SETCUBELIGHTSREQUEST,
     output_type=anki__vector_dot_messaging_dot_cube__pb2._SETCUBELIGHTSRESPONSE,
@@ -415,7 +488,7 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='AudioFeed',
     full_name='Anki.Vector.external_interface.ExternalInterface.AudioFeed',
-    index=41,
+    index=49,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._AUDIOFEEDREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._AUDIOFEEDRESPONSE,
@@ -424,11 +497,29 @@ _EXTERNALINTERFACE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='CameraFeed',
     full_name='Anki.Vector.external_interface.ExternalInterface.CameraFeed',
-    index=42,
+    index=50,
     containing_service=None,
     input_type=anki__vector_dot_messaging_dot_messages__pb2._CAMERAFEEDREQUEST,
     output_type=anki__vector_dot_messaging_dot_messages__pb2._CAMERAFEEDRESPONSE,
     options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002\024\"\017/v1/camera_feed:\001*')),
+  ),
+  _descriptor.MethodDescriptor(
+    name='SetEyeColor',
+    full_name='Anki.Vector.external_interface.ExternalInterface.SetEyeColor',
+    index=51,
+    containing_service=None,
+    input_type=anki__vector_dot_messaging_dot_messages__pb2._SETEYECOLORREQUEST,
+    output_type=anki__vector_dot_messaging_dot_messages__pb2._SETEYECOLORRESPONSE,
+    options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002\026\"\021/v1/set_eye_color:\001*')),
+  ),
+  _descriptor.MethodDescriptor(
+    name='NavMapFeed',
+    full_name='Anki.Vector.external_interface.ExternalInterface.NavMapFeed',
+    index=52,
+    containing_service=None,
+    input_type=anki__vector_dot_messaging_dot_nav__map__pb2._NAVMAPFEEDREQUEST,
+    output_type=anki__vector_dot_messaging_dot_nav__map__pb2._NAVMAPFEEDRESPONSE,
+    options=_descriptor._ParseOptions(descriptor_pb2.MethodOptions(), _b('\202\323\344\223\002\025\"\020/v1/nav_map_feed:\001*')),
   ),
 ])
 _sym_db.RegisterServiceDescriptor(_EXTERNALINTERFACE)

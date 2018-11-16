@@ -21,7 +21,6 @@ __all__ = ['ViewerComponent']
 import asyncio
 import multiprocessing as mp
 import sys
-from typing import Optional
 
 try:
     import cv2
@@ -161,6 +160,8 @@ class ViewerComponent(util.Component):
                 image = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
                 cv2.imshow(window_name, image)
                 cv2.waitKey(1)
+                if cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE) < 1:
+                    break
                 image = queue.get(True, timeout=timeout)
         except TimeoutError:
             pass

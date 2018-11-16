@@ -95,7 +95,7 @@ def convert_pixels_to_screen_data(pixel_data: list, image_width: int, image_heig
         raise ValueError('Bad image_width: image_width {0} must be the resolution width: {1}'. format(image_width, SCREEN_WIDTH))
 
     if image_height != SCREEN_HEIGHT:
-        raise ValueError('Bad image_height: image_height {0} must be the resolution height: {1}'. format(image_width, SCREEN_HEIGHT))
+        raise ValueError('Bad image_height: image_height {0} must be the resolution height: {1}'. format(image_height, SCREEN_HEIGHT))
 
     color_565_data = []
     for color_tuple in pixel_data:

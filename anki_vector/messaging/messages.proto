@@ -18,25 +18,13 @@ syntax = "proto3";
 
 package Anki.Vector.external_interface;
 
+import "anki_vector/messaging/response_status.proto";
 import "anki_vector/messaging/extensions.proto";
 import "anki_vector/messaging/onboardingSteps.proto";
 
 // A null message used by streams to verify that the client is
 // still connected.
 message KeepAlivePing {}
-
-message ResponseStatus {
-  enum StatusCode {
-    UNKNOWN = 0;
-    RESPONSE_RECEIVED = 1; // The message has completed as expected
-    REQUEST_PROCESSING = 2; // The message has been sent to the robot
-    OK = 3;
-    FORBIDDEN = 100; // The user was not authorizied
-    NOT_FOUND = 101; // The requested attribute was not found
-    ERROR_UPDATE_IN_PROGRESS = 102; // Currently updating values from another call
-  }
-  StatusCode code = 1;
-}
 
 message Animation {
   string name = 1;
@@ -163,6 +151,11 @@ message ProxData {
   bool   is_too_pitched          = 6; // Robot is too far pitched up or down
 }
 
+message TouchData {
+  uint32 raw_touch_value  = 1; // Raw input from the touch sensor
+  bool   is_being_touched = 2; // Robot's context aware evaluation of whether it currently is or isn't being touched
+}
+
 message RobotState {
   PoseStruct pose = 1;
   float pose_angle_rad = 2;
@@ -180,6 +173,7 @@ message RobotState {
   uint32 last_image_time_stamp = 14;
   uint32 status = 15;
   ProxData prox_data = 16;
+  TouchData touch_data = 17;
 }
 
 message CladPoint
@@ -260,6 +254,8 @@ enum FaceEnrollmentResult
   NAMED_STORAGE_FULL = 8;
   UNKNOWN_FAILURE = 9;
 }
+
+message AppDisconnected{}
 
 message AppIntentResponse {
   ResponseStatus status = 1;
@@ -430,20 +426,6 @@ message PhotoTaken {
   uint32 photo_id = 1;
 }
 
-enum VisionMode {
-  VISION_MODE_UNKNOWN = 0;
-  VISION_MODE_DETECTING_FACES = 2;
-}
-
-message EnableVisionModeRequest {
-  VisionMode mode = 1;
-  bool       enable = 2;
-}
-
-message EnableVisionModeResponse {
-  ResponseStatus status = 1;
-}
-
 // Struct containing all the information relevant to how a 
 // path should be modified or traversed.
 message PathMotionProfile {
@@ -497,29 +479,28 @@ message ActionResult {
     NULL_SUBACTION                        = 50331673;
     PATH_PLANNING_FAILED_ABORT            = 50331674;
     PICKUP_OBJECT_UNEXPECTEDLY_MOVING     = 50331675;
-    PICKUP_OBJECT_UNEXPECTEDLY_NOT_MOVING = 50331676;
-    SEND_MESSAGE_TO_ROBOT_FAILED          = 50331677;
-    STILL_CARRYING_OBJECT                 = 50331678;
-    TIMEOUT                               = 50331679;
-    TRACKS_LOCKED                         = 50331680;
-    UNEXPECTED_DOCK_ACTION                = 50331681;
-    UNKNOWN_TOOL_CODE                     = 50331682;
-    UPDATE_DERIVED_FAILED                 = 50331683;
-    VISUAL_OBSERVATION_FAILED             = 50331684;
-    SHOULDNT_DRIVE_ON_CHARGER             = 50331685;
+    SEND_MESSAGE_TO_ROBOT_FAILED          = 50331676;
+    STILL_CARRYING_OBJECT                 = 50331677;
+    TIMEOUT                               = 50331678;
+    TRACKS_LOCKED                         = 50331679;
+    UNEXPECTED_DOCK_ACTION                = 50331680;
+    UNKNOWN_TOOL_CODE                     = 50331681;
+    UPDATE_DERIVED_FAILED                 = 50331682;
+    VISUAL_OBSERVATION_FAILED             = 50331683;
+    SHOULDNT_DRIVE_ON_CHARGER             = 50331684;
 
-
-    RETRY                           = 67108864;
-    DID_NOT_REACH_PREACTION_POSE    = 67108865;
-    FAILED_TRAVERSING_PATH          = 67108866;
-    LAST_PICK_AND_PLACE_FAILED      = 67108867;
-    MOTOR_STOPPED_MAKING_PROGRESS   = 67108868;
-    NOT_CARRYING_OBJECT_RETRY       = 67108869;
-    NOT_ON_CHARGER_RETRY            = 67108870;
-    PATH_PLANNING_FAILED_RETRY      = 67108871;
-    PLACEMENT_GOAL_NOT_FREE         = 67108872;
-    STILL_ON_CHARGER                = 67108873;
-    UNEXPECTED_PITCH_ANGLE          = 67108874;
+    RETRY                                 = 67108864;
+    DID_NOT_REACH_PREACTION_POSE          = 67108865;
+    FAILED_TRAVERSING_PATH                = 67108866;
+    LAST_PICK_AND_PLACE_FAILED            = 67108867;
+    MOTOR_STOPPED_MAKING_PROGRESS         = 67108868;
+    NOT_CARRYING_OBJECT_RETRY             = 67108869;
+    NOT_ON_CHARGER_RETRY                  = 67108870;
+    PATH_PLANNING_FAILED_RETRY            = 67108871;
+    PLACEMENT_GOAL_NOT_FREE               = 67108872;
+    PICKUP_OBJECT_UNEXPECTEDLY_NOT_MOVING = 67108873;
+    STILL_ON_CHARGER                      = 67108874;
+    UNEXPECTED_PITCH_ANGLE                = 67108875;
   }
   ActionResultCode code = 1;
 }
@@ -781,15 +762,80 @@ message AudioFeedResponse {
   uint32 noise_floor_power   = 7; // power value, convert to db with log_10(value)
 }
 
-// Request how the robot should send image data
-message ImageRequest {
-  enum ImageSendMode {
-    OFF                          = 0;
-    STREAM                       = 1;
-    SINGLE_SHOT                  = 2;
-    SINGLE_SHOT_WITH_SENSOR_DATA = 3;
-  }
-  ImageSendMode mode = 1;
+
+// When enabled, RobotObservedObject messages will be produced
+message EnableMarkerDetectionRequest
+{
+  bool enable = 1;
+}
+
+message EnableMarkerDetectionResponse
+{
+  ResponseStatus status = 1;
+}
+
+// When enabled, RobotObservedFace messages will be produced
+message EnableFaceDetectionRequest
+{
+  bool enable = 1;
+
+  bool enable_smile_detection = 2;
+  bool enable_expression_estimation = 3;
+  bool enable_blink_detection = 4;
+  bool enable_gaze_detection = 5;
+}
+
+message EnableFaceDetectionResponse
+{
+  ResponseStatus status = 1;
+}
+
+// When enabled, RobotObservedMotion messages will be produced
+message EnableMotionDetectionRequest
+{
+  bool enable = 1;
+}
+
+message EnableMotionDetectionResponse
+{
+  ResponseStatus status = 1;
+}
+
+// When enabled, camera feed will appear on the robot's face, along with any 
+// detections that are enabled from above messages
+message EnableMirrorModeRequest
+{
+  bool enable = 1;
+}
+
+message EnableMirrorModeResponse
+{
+  ResponseStatus status = 1;
+}
+
+// Sent if MirrorMode (camera feed displayed on face) is currently enabled but is automatically
+// being disabled
+message MirrorModeDisabled
+{
+
+}
+
+// Toggle image streaming at the given resolution
+message EnableImageStreamingRequest
+{
+  bool enable = 1;
+}
+
+message EnableImageStreamingResponse
+{
+  ResponseStatus status = 1;
+}
+
+// Sent when vision modes are automatically disabled due to the SDK no longer having control
+// of the robot
+message VisionModesAutoDisabled
+{
+
 }
 
 // One frame of image data and associated metadata
@@ -828,4 +874,25 @@ message CameraFeedResponse {
   uint32                   image_id = 2;
   ImageChunk.ImageEncoding image_encoding = 3;
   bytes                    data = 4;
+}
+
+message SetEyeColorRequest {
+  float hue = 1;
+  float saturation = 2;
+}
+
+message SetEyeColorResponse {
+  ResponseStatus status = 1;
+}
+
+message SDKInitializationRequest {
+  string sdk_module_version = 1;
+  string python_version = 2;
+  string python_implementation = 3;
+  string os_version = 4;
+  string cpu_version = 5;
+}
+
+message SDKInitializationResponse {
+  ResponseStatus status = 1;
 }

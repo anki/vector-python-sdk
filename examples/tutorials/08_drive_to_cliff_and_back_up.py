@@ -50,15 +50,15 @@ def main():
         robot.behavior.drive_off_charger()
 
         print("Drive Vector straight until he reaches cliff...")
-        robot.behavior.drive_straight(distance_mm(500), speed_mmps(100))
+        robot.behavior.drive_straight(distance_mm(5000), speed_mmps(100))
 
-        robot.conn.control_lost_event.wait()
+        robot.conn.run_coroutine(robot.conn.control_lost_event.wait()).result()
 
         print("Lost SDK behavior control. Request SDK behavior control again...")
         robot.conn.request_control()
 
         print("Drive Vector backward away from the cliff...")
-        robot.behavior.drive_straight(distance_mm(-200), speed_mmps(100))
+        robot.behavior.drive_straight(distance_mm(-100), speed_mmps(100))
 
 
 if __name__ == "__main__":

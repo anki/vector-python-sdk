@@ -69,7 +69,7 @@ Then, run the program.
 
         ./01_hello_world.py
 
-    The same can also be achieved on macOS/Linux with:
+    The same can also be achieved on macOS/Linux with::
 	
         python3 01_hello_world.py
 

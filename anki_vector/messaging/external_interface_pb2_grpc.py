@@ -4,6 +4,7 @@ import grpc
 from anki_vector.messaging import behavior_pb2 as anki__vector_dot_messaging_dot_behavior__pb2
 from anki_vector.messaging import cube_pb2 as anki__vector_dot_messaging_dot_cube__pb2
 from anki_vector.messaging import messages_pb2 as anki__vector_dot_messaging_dot_messages__pb2
+from anki_vector.messaging import nav_map_pb2 as anki__vector_dot_messaging_dot_nav__map__pb2
 from anki_vector.messaging import shared_pb2 as anki__vector_dot_messaging_dot_shared__pb2
 
 
@@ -21,6 +22,11 @@ class ExternalInterfaceStub(object):
         '/Anki.Vector.external_interface.ExternalInterface/ProtocolVersion',
         request_serializer=anki__vector_dot_messaging_dot_shared__pb2.ProtocolVersionRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_shared__pb2.ProtocolVersionResponse.FromString,
+        )
+    self.SDKInitialization = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/SDKInitialization',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.SDKInitializationRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SDKInitializationResponse.FromString,
         )
     self.DriveWheels = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/DriveWheels',
@@ -97,10 +103,30 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetFaceToEnrollRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetFaceToEnrollResponse.FromString,
         )
-    self.EnableVisionMode = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/EnableVisionMode',
-        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnableVisionModeRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnableVisionModeResponse.FromString,
+    self.EnableMarkerDetection = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/EnableMarkerDetection',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnableMarkerDetectionRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnableMarkerDetectionResponse.FromString,
+        )
+    self.EnableFaceDetection = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/EnableFaceDetection',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnableFaceDetectionRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnableFaceDetectionResponse.FromString,
+        )
+    self.EnableMotionDetection = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/EnableMotionDetection',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnableMotionDetectionRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnableMotionDetectionResponse.FromString,
+        )
+    self.EnableMirrorMode = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/EnableMirrorMode',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnableMirrorModeRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnableMirrorModeResponse.FromString,
+        )
+    self.EnableImageStreaming = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/EnableImageStreaming',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnableImageStreamingRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnableImageStreamingResponse.FromString,
         )
     self.GoToPose = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/GoToPose',
@@ -217,6 +243,21 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_cube__pb2.SetPreferredCubeRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_cube__pb2.SetPreferredCubeResponse.FromString,
         )
+    self.DeleteCustomObjects = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/DeleteCustomObjects',
+        request_serializer=anki__vector_dot_messaging_dot_cube__pb2.DeleteCustomObjectsRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_cube__pb2.DeleteCustomObjectsResponse.FromString,
+        )
+    self.CreateFixedCustomObject = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/CreateFixedCustomObject',
+        request_serializer=anki__vector_dot_messaging_dot_cube__pb2.CreateFixedCustomObjectRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_cube__pb2.CreateFixedCustomObjectResponse.FromString,
+        )
+    self.DefineCustomObject = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/DefineCustomObject',
+        request_serializer=anki__vector_dot_messaging_dot_cube__pb2.DefineCustomObjectRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_cube__pb2.DefineCustomObjectResponse.FromString,
+        )
     self.SetCubeLights = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/SetCubeLights',
         request_serializer=anki__vector_dot_messaging_dot_cube__pb2.SetCubeLightsRequest.SerializeToString,
@@ -232,6 +273,16 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CameraFeedRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CameraFeedResponse.FromString,
         )
+    self.SetEyeColor = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/SetEyeColor',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetEyeColorRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetEyeColorResponse.FromString,
+        )
+    self.NavMapFeed = channel.unary_stream(
+        '/Anki.Vector.external_interface.ExternalInterface/NavMapFeed',
+        request_serializer=anki__vector_dot_messaging_dot_nav__map__pb2.NavMapFeedRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_nav__map__pb2.NavMapFeedResponse.FromString,
+        )
 
 
 class ExternalInterfaceServicer(object):
@@ -241,6 +292,13 @@ class ExternalInterfaceServicer(object):
   def ProtocolVersion(self, request, context):
     """Checks the supported protocol version by passing in the client version and
     minimum host version and receiving a response to see whether the versions are supported.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def SDKInitialization(self, request, context):
+    """SDK-only message to pass version info for device OS, Python version, etc.
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
@@ -351,9 +409,37 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def EnableVisionMode(self, request, context):
-    """Turns on the provided vision mode.
-    """
+  def EnableMarkerDetection(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def EnableFaceDetection(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def EnableMotionDetection(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def EnableMirrorMode(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def EnableImageStreaming(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
@@ -527,6 +613,27 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def DeleteCustomObjects(self, request, context):
+    """Causes the robot to forget about custom objects it currently knows about.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def CreateFixedCustomObject(self, request, context):
+    """Creates a permanent custom object instance in the robot's world, with no connection to the vision system.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def DefineCustomObject(self, request, context):
+    """Creates a custom object with distinct custom marker(s).
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def SetCubeLights(self, request, context):
     """Set each of the lights on the currently connected cube based on two
     rgb values each and timing data for how to transition between them.
@@ -549,6 +656,20 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def SetEyeColor(self, request, context):
+    """Set Vector's eye color.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def NavMapFeed(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_ExternalInterfaceServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -556,6 +677,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.ProtocolVersion,
           request_deserializer=anki__vector_dot_messaging_dot_shared__pb2.ProtocolVersionRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_shared__pb2.ProtocolVersionResponse.SerializeToString,
+      ),
+      'SDKInitialization': grpc.unary_unary_rpc_method_handler(
+          servicer.SDKInitialization,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SDKInitializationRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.SDKInitializationResponse.SerializeToString,
       ),
       'DriveWheels': grpc.unary_unary_rpc_method_handler(
           servicer.DriveWheels,
@@ -632,10 +758,30 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetFaceToEnrollRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetFaceToEnrollResponse.SerializeToString,
       ),
-      'EnableVisionMode': grpc.unary_unary_rpc_method_handler(
-          servicer.EnableVisionMode,
-          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnableVisionModeRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnableVisionModeResponse.SerializeToString,
+      'EnableMarkerDetection': grpc.unary_unary_rpc_method_handler(
+          servicer.EnableMarkerDetection,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnableMarkerDetectionRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnableMarkerDetectionResponse.SerializeToString,
+      ),
+      'EnableFaceDetection': grpc.unary_unary_rpc_method_handler(
+          servicer.EnableFaceDetection,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnableFaceDetectionRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnableFaceDetectionResponse.SerializeToString,
+      ),
+      'EnableMotionDetection': grpc.unary_unary_rpc_method_handler(
+          servicer.EnableMotionDetection,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnableMotionDetectionRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnableMotionDetectionResponse.SerializeToString,
+      ),
+      'EnableMirrorMode': grpc.unary_unary_rpc_method_handler(
+          servicer.EnableMirrorMode,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnableMirrorModeRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnableMirrorModeResponse.SerializeToString,
+      ),
+      'EnableImageStreaming': grpc.unary_unary_rpc_method_handler(
+          servicer.EnableImageStreaming,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnableImageStreamingRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnableImageStreamingResponse.SerializeToString,
       ),
       'GoToPose': grpc.unary_unary_rpc_method_handler(
           servicer.GoToPose,
@@ -752,6 +898,21 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           request_deserializer=anki__vector_dot_messaging_dot_cube__pb2.SetPreferredCubeRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_cube__pb2.SetPreferredCubeResponse.SerializeToString,
       ),
+      'DeleteCustomObjects': grpc.unary_unary_rpc_method_handler(
+          servicer.DeleteCustomObjects,
+          request_deserializer=anki__vector_dot_messaging_dot_cube__pb2.DeleteCustomObjectsRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_cube__pb2.DeleteCustomObjectsResponse.SerializeToString,
+      ),
+      'CreateFixedCustomObject': grpc.unary_unary_rpc_method_handler(
+          servicer.CreateFixedCustomObject,
+          request_deserializer=anki__vector_dot_messaging_dot_cube__pb2.CreateFixedCustomObjectRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_cube__pb2.CreateFixedCustomObjectResponse.SerializeToString,
+      ),
+      'DefineCustomObject': grpc.unary_unary_rpc_method_handler(
+          servicer.DefineCustomObject,
+          request_deserializer=anki__vector_dot_messaging_dot_cube__pb2.DefineCustomObjectRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_cube__pb2.DefineCustomObjectResponse.SerializeToString,
+      ),
       'SetCubeLights': grpc.unary_unary_rpc_method_handler(
           servicer.SetCubeLights,
           request_deserializer=anki__vector_dot_messaging_dot_cube__pb2.SetCubeLightsRequest.FromString,
@@ -766,6 +927,16 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.CameraFeed,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CameraFeedRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CameraFeedResponse.SerializeToString,
+      ),
+      'SetEyeColor': grpc.unary_unary_rpc_method_handler(
+          servicer.SetEyeColor,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetEyeColorRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetEyeColorResponse.SerializeToString,
+      ),
+      'NavMapFeed': grpc.unary_stream_rpc_method_handler(
+          servicer.NavMapFeed,
+          request_deserializer=anki__vector_dot_messaging_dot_nav__map__pb2.NavMapFeedRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_nav__map__pb2.NavMapFeedResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

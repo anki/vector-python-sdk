@@ -127,7 +127,7 @@ def user_authentication(session_id: bytes, cert: bytes, ip: str, name: str) -> s
         if response.code != messaging.protocol.UserAuthenticationResponse.AUTHORIZED:
             print(colored(" ERROR", "red"))
             sys.exit("\nFailed to authorize request:\n"
-                    "Please be sure to use the Vector companion app to log into a Vector into an account first.")
+                    "Please be sure to first set up Vector using the companion app.")
     except grpc.RpcError as e:
         print(colored(" ERROR", "red"))
         sys.exit("\nFailed to authorize request:\n"

@@ -88,7 +88,7 @@ class AnimationComponent(util.Component):
         self._anim_dict = {a.name: a for a in result.animation_names}
         return result
 
-    @connection.on_connection_thread(log_messaging=False)
+    @connection.on_connection_thread(log_messaging=False, requires_control=False)
     async def load_animation_list(self):
         """Request the list of animations from the robot
 

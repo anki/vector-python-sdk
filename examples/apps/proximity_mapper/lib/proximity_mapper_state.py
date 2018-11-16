@@ -17,7 +17,7 @@
 """Contains the state of an environment being explored by the robot.
 This is a support class for the proximity_mapper example.
 
-Includes a utility for rendering the state in openGL.
+Includes a utility for rendering the state in OpenGL.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
@@ -26,9 +26,8 @@ __all__ = ['ClearedTerritory', 'MapState', 'Wall', 'WallSegment']
 from math import cos, sin, pi
 from typing import List
 
+from anki_vector import opengl
 from anki_vector.util import Vector3
-
-import opengl
 
 try:
     from OpenGL.GL import (GL_AMBIENT, GL_BLEND, GL_DIFFUSE, GL_FILL, GL_FRONT, GL_FRONT_AND_BACK, GL_LIGHTING,
@@ -43,19 +42,19 @@ except ImportError as import_exc:
 # Constants
 
 #: Visually represent not just walls, but open/loose nodes, territories and navigation
-#: points in the 3d viewer.
+#: points in the 3D Viewer.
 RENDER_METADATA_OBJECTS = True
 
-#: Display color of potential exploration targets in the 3d viewer.
+#: Display color of potential exploration targets in the 3D Viewer.
 NODE_OPEN_RENDER_COLOR = [0.0, 1.0, 1.0, 0.75]
-#: Display size (in pixels) of potential exploration targets in the 3d viewer.
+#: Display size (in pixels) of potential exploration targets in the 3D Viewer.
 NODE_OPEN_RENDER_SIZE = 5.0
 
-#: Display color of detected proximity collisions in the 3d viewer.
+#: Display color of detected proximity collisions in the 3D Viewer.
 #: These nodes will be collected into walls, and will only live long term if isolated
 #: too far from any other contact points
 NODE_CONTACT_RENDER_COLOR = [1.0, 0.0, 0.0, 0.75]
-#: Display size (in pixels) of detected proximity collisions in the 3d viewer.
+#: Display size (in pixels) of detected proximity collisions in the 3D Viewer.
 NODE_CONTACT_RENDER_SIZE = 2.0
 
 #: Display color of the rendered disc for the position the robot will next navigate to.
@@ -243,7 +242,7 @@ class MapState:
 
     @classmethod
     def _render_wall(cls, wall: Wall, height: float, color: List[float]):
-        """Draws walls out of quads in the 3d viewer.  The walls are drawn a
+        """Draws walls out of quads in the 3D Viewer.  The walls are drawn a
         constant height above their ground-plane points, as a convention.
 
         This function must be invoked inside the OpenGL render loop.

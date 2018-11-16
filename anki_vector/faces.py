@@ -38,7 +38,7 @@ class Expression(Enum):
     """Facial expressions that Vector can distinguish.
 
     Facial expression not recognized.
-    Call :func:`anki_vector.robot.Robot.enable_vision_mode` to enable recognition.
+    Call :func:`anki_vector.robot.Robot.vision.enable_face_detection(detect_faces=True)` to enable recognition.
     """
     UNKNOWN = protocol.FacialExpression.Value("EXPRESSION_UNKNOWN")
     #: Facial expression neutral
@@ -96,7 +96,7 @@ class Face(objects.ObservableObject):
         self._nose = nose
         self._mouth = mouth
 
-        self.conn.run_soon(self._on_observed(pose, image_rect, instantiation_timestamp))
+        self._on_observed(pose, image_rect, instantiation_timestamp)
 
         self._robot.events.subscribe(
             self._on_face_observed,
@@ -197,7 +197,7 @@ class Face(objects.ObservableObject):
         """The facial expression Vector has recognized on the face.
 
         Will be :attr:`Expression.UNKNOWN` by default if you haven't called
-        :meth:`anki_vector.robot.Robot.enable_vision_mode` to enable
+        :meth:`anki_vector.robot.Robot.vision.enable_face_detection(detect_faces=True, estimate_emotion=True)` to enable
         the facial expression estimation. Otherwise it will be equal to one of:
         :attr:`Expression.NEUTRAL`, :attr:`Expression.HAPPINESS`,
         :attr:`Expression.SURPRISE`, :attr:`Expression.ANGER`,
@@ -218,7 +218,7 @@ class Face(objects.ObservableObject):
         """The score/confidence that :attr:`expression` was correct.
 
         Will be 0 if expression is :attr:`Expression.UNKNOWN` (e.g. if
-        :meth:`anki_vector.robot.Robot.enable_vision_mode` wasn't
+        :meth:`anki_vector.robot.Robot.vision.enable_face_detection(detect_faces=True, estimate_emotion=True)` wasn't
         called yet). The maximum possible score is 100.
 
         .. testcode::
@@ -310,7 +310,7 @@ class Face(objects.ObservableObject):
             self._right_eye = msg.right_eye
             self._nose = msg.nose
             self._mouth = msg.mouth
-            self._robot.conn.run_soon(self._on_observed(pose, image_rect, msg.timestamp))
+            self._on_observed(pose, image_rect, msg.timestamp)
 
     def _on_face_id_changed(self, _, msg):
         """Updates the face id when a tracked face (negative ID) is recognized and
@@ -322,7 +322,7 @@ class Face(objects.ObservableObject):
 class FaceComponent(util.Component):
     """Manage the state of the faces on the robot."""
 
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(requires_control=False)
     async def request_enrolled_names(self) -> protocol.RequestEnrolledNamesRequest:
         """Asks the robot for the list of names attached to faces that it can identify.
 
@@ -336,7 +336,7 @@ class FaceComponent(util.Component):
         req = protocol.RequestEnrolledNamesRequest()
         return await self.grpc_interface.RequestEnrolledNames(req)
 
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(requires_control=False)
     async def update_enrolled_face_by_id(self, face_id: int, old_name: str, new_name: str):
         """Update the name enrolled for a given face.
 
@@ -355,7 +355,7 @@ class FaceComponent(util.Component):
                                                      old_name=old_name, new_name=new_name)
         return await self.grpc_interface.UpdateEnrolledFaceByID(req)
 
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(requires_control=False)
     async def erase_enrolled_face_by_id(self, face_id: int):
         """Erase the enrollment (name) record for the face with this ID.
 
@@ -371,7 +371,7 @@ class FaceComponent(util.Component):
         req = protocol.EraseEnrolledFaceByIDRequest(face_id=face_id)
         return await self.grpc_interface.EraseEnrolledFaceByID(req)
 
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(requires_control=False)
     async def erase_all_enrolled_faces(self):
         """Erase the enrollment (name) records for all faces.
 
@@ -384,13 +384,3 @@ class FaceComponent(util.Component):
         """
         req = protocol.EraseAllEnrolledFacesRequest()
         return await self.grpc_interface.EraseAllEnrolledFaces(req)
-
-    # TODO move out of face component as this is general to objects if not specific to faces (to a new vision component?). Needs sample code.
-    @connection.on_connection_thread()
-    async def enable_vision_mode(self, enable: bool):
-        """Enable facial detection on the robot's camera
-
-        :param enable: Enable/Disable the mode specified.
-        """
-        enable_vision_mode_request = protocol.EnableVisionModeRequest(mode=protocol.VisionMode.Value("VISION_MODE_DETECTING_FACES"), enable=enable)
-        return await self.grpc_interface.EnableVisionMode(enable_vision_mode_request)

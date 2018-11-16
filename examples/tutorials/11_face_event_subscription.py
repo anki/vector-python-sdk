@@ -19,35 +19,42 @@
 This script demonstrates how to set up a listener for an event. It
 subscribes to event 'robot_observed_face'. When that event is dispatched,
 method 'on_robot_observed_face' is called, which prints text to the console.
+Vector will also say "I see a face" one time, and the program will exit when
+he finishes speaking.
 """
 
-import functools
-import time
+import threading
 
 import anki_vector
 from anki_vector.events import Events
 from anki_vector.util import degrees
 
+said_text = False
+
 
 def main():
-    def on_robot_observed_face(robot, event_type, event):
-        """on_robot_observed_face is called when a face is seen"""
-        print("Vector sees a face")
-
     args = anki_vector.util.parse_command_args()
-    with anki_vector.Robot(args.serial, enable_vision_mode=True) as robot:
+    with anki_vector.Robot(args.serial, enable_face_detection=True) as robot:
+        evt = threading.Event()
+
+        async def on_robot_observed_face(event_type, event):
+            print("Vector sees a face")
+            global said_text
+            if not said_text:
+                said_text = True
+                await robot.say_text("I see a face!")
+                evt.set()
         # If necessary, Move Vector's Head and Lift to make it easy to see his face
         robot.behavior.set_head_angle(degrees(50.0))
         robot.behavior.set_lift_height(0.0)
 
-        on_robot_observed_face = functools.partial(on_robot_observed_face, robot)
         robot.events.subscribe(on_robot_observed_face, Events.robot_observed_face)
 
         print("------ waiting for face events, press ctrl+c to exit early ------")
 
         try:
-            # Wait 5 seconds to see a face
-            time.sleep(5)
+            if not evt.wait(timeout=5):
+                print("------ Vector never saw your face! ------")
         except KeyboardInterrupt:
             pass
 

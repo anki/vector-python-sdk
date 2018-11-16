@@ -102,13 +102,13 @@ the setter.
 
 ```python
 class MyClass:
-    '''One line summary of class.
+    """One line summary of class.
 
     Docstring for constructor should appear in the class description
 
     :param default_timeout: Default number of seconds for operations to
             wait for timeout.
-    '''
+    """
     #: string: Description of a class-level attribute.  The description
     #: may span multiple lines as long as they all begin with #:
     class_level_attr = ''
@@ -119,7 +119,7 @@ class MyClass:
 
     @property
     def timeout_enabled(self):
-        '''bool: True if a value for :attr:`default_timeout` has been set.'''
+        """bool: True if a value for :attr:`default_timeout` has been set."""
         return self.default_timeout is not None
 ```
 

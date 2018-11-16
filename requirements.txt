@@ -2,7 +2,7 @@ aiogrpc>=1.4
 cryptography
 flask
 googleapis-common-protos
-numpy
+numpy>=1.11
 opencv-python>=3.4
-Pillow
+Pillow>=3.3
 requests

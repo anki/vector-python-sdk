@@ -12,23 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""This module provides a 3D support classes for openGL, used by opengl_viewer.py
-
-Warning:
-    This package requires Python to have the PyOpenGL package installed, along
-    with an implementation of GLUT (OpenGL Utility Toolkit).
-
-    To install the Python packages do ``pip install .[3dviewer]``
-
-    On Windows and Linux you must also install freeglut (macOS / OSX has one
-    preinstalled).
-
-    On Linux: ``sudo apt-get install freeglut3``
-
-    On Windows: Go to http://freeglut.sourceforge.net/ to get a ``freeglut.dll``
-    file. It's included in any of the `Windows binaries` downloads. Place the DLL
-    next to your Python script, or install it somewhere in your PATH to allow any
-    script to use it."
+"""This module provides Vector-specific 3D support classes for OpenGL, used by opengl_viewer.py.
 """
 
 # TODO Update install line above to: ``pip3 install --user "anki_vector[3dviewer]"``
@@ -41,17 +25,17 @@ import math
 import time
 from typing import List
 
-from anki_vector.faces import Face
-from anki_vector.objects import LightCube
-from anki_vector.robot import Robot
-from anki_vector import util
-
-import opengl
+from .faces import Face
+from .objects import CustomObject, FixedCustomObject, LightCube, ObservableObject
+from .robot import Robot
+from . import nav_map, opengl, util
 
 try:
-    from OpenGL.GL import (GL_AMBIENT, GL_BLEND, GL_DIFFUSE, GL_FILL, GL_FRONT, GL_FRONT_AND_BACK, GL_LIGHTING, GL_LINE, GL_ONE_MINUS_SRC_ALPHA, GL_POLYGON, GL_SHININESS, GL_SPECULAR, GL_SRC_ALPHA,
-                           glBegin, glBlendFunc, glColor, glDisable, glEnable, glEnd, glMaterialfv, glMultMatrixf, glNormal3fv,
-                           glPolygonMode, glPopMatrix, glPushMatrix, glRotatef, glScalef, glTranslatef, glVertex3fv)
+    from OpenGL.GL import (GL_AMBIENT, GL_BLEND, GL_COMPILE, GL_DIFFUSE, GL_FILL, GL_FRONT, GL_FRONT_AND_BACK, GL_LIGHTING, GL_LINE, GL_LINE_STRIP,
+                           GL_ONE_MINUS_SRC_ALPHA, GL_POLYGON, GL_SHININESS, GL_SPECULAR, GL_SRC_ALPHA, GL_TRIANGLE_STRIP,
+                           glBegin, glBlendFunc, glCallList, glColor, glColor3f, glColor4f, glDisable, glEnable, glEnd, glEndList, glGenLists,
+                           glMaterialfv, glMultMatrixf, glNewList, glNormal3fv, glPolygonMode, glPopMatrix, glPushMatrix, glRotatef, glScalef,
+                           glTranslatef, glVertex3f, glVertex3fv)
 
 except ImportError as import_exc:
     opengl.raise_opengl_or_pillow_import_error(import_exc)
@@ -341,6 +325,104 @@ class RobotView(opengl.PrecomputedView):
         glPopMatrix()
 
 
+class NavMapView(opengl.PrecomputedView):
+    """A view containing a cube of unit size at the origin."""
+
+    def __init__(self):
+        self.logger = util.get_class_logger(__name__, self)
+        super(NavMapView, self).__init__()
+
+    def build_from_nav_map(self, new_nav_map: nav_map.NavMapGrid):
+        """Reconstructs the display list for the NavMapView based on a :class:`anki_vector.nav_map.NavMapGrid` object.
+
+        :param new_nav_map: nav map source data to be referenced for the new display list.
+        """
+        cen = new_nav_map.center
+        half_size = new_nav_map.size * 0.5
+
+        self._display_lists['_navmap'] = glGenLists(1)  # pylint: disable=assignment-from-no-return
+        glNewList(self._display_lists['_navmap'], GL_COMPILE)
+
+        glPushMatrix()
+
+        color_light_gray = (0.65, 0.65, 0.65)
+        glColor3f(*color_light_gray)
+        glBegin(GL_LINE_STRIP)
+        glVertex3f(cen.x + half_size, cen.y + half_size, cen.z)  # TL
+        glVertex3f(cen.x + half_size, cen.y - half_size, cen.z)  # TR
+        glVertex3f(cen.x - half_size, cen.y - half_size, cen.z)  # BR
+        glVertex3f(cen.x - half_size, cen.y + half_size, cen.z)  # BL
+        glVertex3f(cen.x + half_size, cen.y + half_size,
+                   cen.z)  # TL (close loop)
+        glEnd()
+
+        def color_for_content(content):
+            nct = nav_map.NavNodeContentTypes
+            colors = {nct.Unknown.value: (0.3, 0.3, 0.3),                      # dark gray
+                      nct.ClearOfObstacle.value: (0.0, 1.0, 0.0),              # green
+                      nct.ClearOfCliff.value: (0.0, 0.5, 0.0),                 # dark green
+                      nct.ObstacleCube.value: (1.0, 0.0, 0.0),                 # red
+                      nct.ObstacleProximity.value: (1.0, 0.5, 0.0),            # orange
+                      nct.ObstacleProximityExplored.value: (0.5, 1.0, 0.0),    # yellow-green
+                      nct.ObstacleUnrecognized.value: (0.5, 0.0, 0.0),         # dark red
+                      nct.Cliff.value: (0.0, 0.0, 0.0),                        # black
+                      nct.InterestingEdge.value: (1.0, 1.0, 0.0),              # yellow
+                      nct.NonInterestingEdge.value: (0.5, 0.5, 0.0),           # dark-yellow
+                      }
+
+            col = colors.get(content)
+            if col is None:
+                col = (1.0, 1.0, 1.0)  # white
+            return col
+
+        fill_z = cen.z - 0.4
+
+        def _recursive_draw(grid_node: nav_map.NavMapGridNode):
+            if grid_node.children is not None:
+                for child in grid_node.children:
+                    _recursive_draw(child)
+            else:
+                # leaf node - render as a quad
+                map_alpha = 0.5
+                cen = grid_node.center
+                half_size = grid_node.size * 0.5
+
+                # Draw outline
+                glColor4f(*color_light_gray, 1.0)  # fully opaque
+                glBegin(GL_LINE_STRIP)
+                glVertex3f(cen.x + half_size, cen.y + half_size, cen.z)
+                glVertex3f(cen.x + half_size, cen.y - half_size, cen.z)
+                glVertex3f(cen.x - half_size, cen.y - half_size, cen.z)
+                glVertex3f(cen.x - half_size, cen.y + half_size, cen.z)
+                glVertex3f(cen.x + half_size, cen.y + half_size, cen.z)
+                glEnd()
+
+                # Draw filled contents
+                glColor4f(*color_for_content(grid_node.content), map_alpha)
+                glBegin(GL_TRIANGLE_STRIP)
+                glVertex3f(cen.x + half_size, cen.y - half_size, fill_z)
+                glVertex3f(cen.x + half_size, cen.y + half_size, fill_z)
+                glVertex3f(cen.x - half_size, cen.y - half_size, fill_z)
+                glVertex3f(cen.x - half_size, cen.y + half_size, fill_z)
+                glEnd()
+
+        _recursive_draw(new_nav_map.root_node)
+
+        glPopMatrix()
+        glEndList()
+
+    def display(self):
+        """Displays the precomputed nav map view.
+        This function will do nothing if no display list has yet been built.
+        """
+        if '_navmap' in self._display_lists:
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+            glEnable(GL_BLEND)
+            glPushMatrix()
+            glCallList(self._display_lists['_navmap'])
+            glPopMatrix()
+
+
 class VectorViewManifest():
     """A collection of Vector-specific source data containing views to display.
     """
@@ -349,6 +431,7 @@ class VectorViewManifest():
         self._light_cube_view: LightCubeView = None
         self._unit_cube_view: UnitCubeView = None
         self._robot_view: RobotView = None
+        self._nav_map_view: NavMapView = None
 
     @property
     def light_cube_view(self) -> LightCubeView:
@@ -368,6 +451,13 @@ class VectorViewManifest():
         """A precomputed view of the robot."""
         return self._robot_view
 
+    @property
+    def nav_map_view(self) -> NavMapView:
+        """A precomputable view of the navigation map.  This will be updated
+        as new content comes in.
+        """
+        return self._nav_map_view
+
     def load_assets(self):
         """Loads all assets needed for the view manifest, and precomputes them
         into cached views.
@@ -384,41 +474,69 @@ class VectorViewManifest():
 
         self._unit_cube_view = UnitCubeView()
 
+        self._nav_map_view = NavMapView()
 
-class CubeRenderFrame():  # pylint: disable=too-few-public-methods
+
+class ObservableObjectRenderFrame():  # pylint: disable=too-few-public-methods
+    """Minimal copy of an object's state for 1 frame of rendering.
+
+    :param obj: the cube object to be rendered.
+    """
+
+    def __init__(self, obj: ObservableObject):
+        self.pose = obj.pose
+        self.is_visible = obj.is_visible
+        self.last_observed_time = obj.last_observed_time
+
+    @property
+    def time_since_last_seen(self) -> float:
+        # Equivalent of ObservableObject's method
+        """time since this obj was last seen (math.inf if never)"""
+        if self.last_observed_time is None:
+            return math.inf
+        return time.time() - self.last_observed_time
+
+
+class CubeRenderFrame(ObservableObjectRenderFrame):  # pylint: disable=too-few-public-methods
     """Minimal copy of a Cube's state for 1 frame of rendering.
 
     :param cube: the cube object to be rendered.
     """
 
     def __init__(self, cube: LightCube):  # pylint: disable=useless-super-delegation
-        self.pose = cube.pose
-        self.last_observed_time = cube.last_observed_time
-
-    @property
-    def time_since_last_seen(self) -> float:
-        """:return: time since this element was last seen (math.inf if never)"""
-        if self.last_observed_time is None:
-            return math.inf
-        return time.time() - self.last_observed_time
+        super().__init__(cube)
 
 
-class FaceRenderFrame():  # pylint: disable=too-few-public-methods
+class FaceRenderFrame(ObservableObjectRenderFrame):  # pylint: disable=too-few-public-methods
     """Minimal copy of a Face's state for 1 frame of rendering.
 
-    :param face: the face object to be rendered.
+    :param face: The face object to be rendered.
     """
 
     def __init__(self, face: Face):  # pylint: disable=useless-super-delegation
-        self.pose = face.pose
-        self.last_observed_time = face.last_observed_time
+        super().__init__(face)
 
-    @property
-    def time_since_last_seen(self) -> float:
-        """:return: time since this element was last seen (math.inf if never)"""
-        if self.last_observed_time is None:
-            return math.inf
-        return time.time() - self.last_observed_time
+
+class CustomObjectRenderFrame(ObservableObjectRenderFrame):  # pylint: disable=too-few-public-methods
+    """Minimal copy of a CustomObject's state for 1 frame of rendering.
+
+    :param custom_object: The custom object to be rendered.  Either :class:`anki_vector.objects.CustomObject` or :class:`anki_vector.objects.FixedCustomObject`.
+    :param is_fixed: Whether the custom object is permanently defined rather than an observable archetype.
+    """
+
+    def __init__(self, custom_object, is_fixed: bool):
+        if is_fixed:
+            # Not an observable, so init directly
+            self.pose = custom_object.pose
+            self.is_visible = None
+            self.last_observed_time = None
+        else:
+            super().__init__(custom_object)
+
+        self.is_fixed = is_fixed
+        self.x_size_mm = custom_object.archetype.x_size_mm
+        self.y_size_mm = custom_object.archetype.y_size_mm
+        self.z_size_mm = custom_object.archetype.z_size_mm
 
 
 class RobotRenderFrame():  # pylint: disable=too-few-public-methods
@@ -451,14 +569,19 @@ class WorldRenderFrame():  # pylint: disable=too-few-public-methods
         self.robot_frame = RobotRenderFrame(robot)
 
         self.cube_frames: List[CubeRenderFrame] = []
-        if robot.world.connected_light_cube is None:
-            self.cube_frames.append(None)
-        else:
+        if robot.world.connected_light_cube is not None:
             self.cube_frames.append(CubeRenderFrame(robot.world.connected_light_cube))
 
         self.face_frames: List[FaceRenderFrame] = []
         for face in robot.world.visible_faces:
             # Ignore faces that have a newer version (with updated id)
-            # or if they haven't been seen in a while).
+            # or if they haven't been seen in a while.
             if not face.has_updated_face_id and (face.time_since_last_seen < 60):
                 self.face_frames.append(FaceRenderFrame(face))
+
+        self.custom_object_frames = []
+        for obj in robot.world.all_objects:
+            is_custom = isinstance(obj, CustomObject)
+            is_fixed = isinstance(obj, FixedCustomObject)
+            if is_custom or is_fixed:
+                self.custom_object_frames.append(CustomObjectRenderFrame(obj, is_fixed))

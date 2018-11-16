@@ -22,6 +22,7 @@ import "google/api/annotations.proto";
 import "anki_vector/messaging/behavior.proto";
 import "anki_vector/messaging/cube.proto";
 import "anki_vector/messaging/messages.proto";
+import "anki_vector/messaging/nav_map.proto";
 import "anki_vector/messaging/shared.proto";
 
 // The grpc-defined connection between the SDK and Anki's Vector robot.
@@ -31,6 +32,14 @@ service ExternalInterface {
   rpc ProtocolVersion(ProtocolVersionRequest) returns (ProtocolVersionResponse) {
     option (google.api.http) = {
       post: "/v1/protocol_version",
+      body: "*"
+    };
+  }
+
+  // SDK-only message to pass version info for device OS, Python version, etc.
+  rpc SDKInitialization(SDKInitializationRequest) returns (SDKInitializationResponse) {
+    option (google.api.http) = {
+      post: "/v1/sdk_initialization",
       body: "*"
     };
   }
@@ -132,10 +141,37 @@ service ExternalInterface {
     };
   }
 
-  // Turns on the provided vision mode.
-  rpc EnableVisionMode(EnableVisionModeRequest) returns (EnableVisionModeResponse) {
+  rpc EnableMarkerDetection(EnableMarkerDetectionRequest) returns (EnableMarkerDetectionResponse) {
     option (google.api.http) = {
-      post: "/v1/enable_vision_mode",
+      post: "/v1/enable_marker_detection",
+      body: "*"
+    };
+  }
+
+  rpc EnableFaceDetection(EnableFaceDetectionRequest) returns (EnableFaceDetectionResponse) {
+    option (google.api.http) = {
+      post: "/v1/enable_face_detection",
+      body: "*"
+    };
+  }
+  
+  rpc EnableMotionDetection(EnableMotionDetectionRequest) returns (EnableMotionDetectionResponse) {
+    option (google.api.http) = {
+      post: "/v1/enable_motion_detection",
+      body: "*"
+    };
+  }
+  
+  rpc EnableMirrorMode(EnableMirrorModeRequest) returns (EnableMirrorModeResponse) {
+    option (google.api.http) = {
+      post: "/v1/enable_mirror_mode",
+      body: "*"
+    };
+  }
+  
+  rpc EnableImageStreaming(EnableImageStreamingRequest) returns (EnableImageStreamingResponse) {
+    option (google.api.http) = {
+      post: "/v1/enable_image_streaming",
       body: "*"
     };
   }
@@ -310,6 +346,30 @@ service ExternalInterface {
     };
   }
 
+  // Causes the robot to forget about custom objects it currently knows about.
+  rpc DeleteCustomObjects(DeleteCustomObjectsRequest) returns (DeleteCustomObjectsResponse) {
+    option (google.api.http) = {
+      post: "/v1/delete_custom_objects",
+      body: "*"
+    };
+  }
+
+  // Creates a permanent custom object instance in the robot's world, with no connection to the vision system.
+  rpc CreateFixedCustomObject(CreateFixedCustomObjectRequest) returns (CreateFixedCustomObjectResponse) {
+    option (google.api.http) = {
+      post: "/v1/create_fixed_custom_object",
+      body: "*"
+    };
+  }
+
+  // Creates a custom object with distinct custom marker(s).
+  rpc DefineCustomObject(DefineCustomObjectRequest) returns (DefineCustomObjectResponse) {
+    option (google.api.http) = {
+      post: "/v1/define_custom_object",
+      body: "*"
+    };
+  }
+
   // Set each of the lights on the currently connected cube based on two
   // rgb values each and timing data for how to transition between them.
   rpc SetCubeLights(SetCubeLightsRequest) returns (SetCubeLightsResponse) {}
@@ -329,4 +389,18 @@ service ExternalInterface {
       body: "*"
     };
   }
-}
+
+  // Set Vector's eye color.
+  rpc SetEyeColor(SetEyeColorRequest) returns (SetEyeColorResponse) {
+    option (google.api.http) = {
+      post: "/v1/set_eye_color",
+      body: "*"
+    };
+  }
+
+  rpc NavMapFeed(NavMapFeedRequest) returns (stream NavMapFeedResponse) {
+    option (google.api.http) = {
+      post: "/v1/nav_map_feed",
+      body: "*"
+    };
+  }}

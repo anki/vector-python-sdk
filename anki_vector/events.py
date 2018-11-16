@@ -33,7 +33,9 @@ class Events(Enum):
     """List of events available."""
 
     # Robot
-    robot_state = "robot_state"     #: Robot event containing changes to the robot's state.
+    robot_state = "robot_state"                   #: Robot event containing changes to the robot's state.
+    mirror_mode_disabled = "mirror_mode_disabled"  # : Robot event triggered when mirror mode (camera feed displayed on robot's face) is automatically disabled due to SDK no longer having control of the robot.
+    vision_modes_auto_disabled = "vision_modes_auto_disabled"  # : Robot event triggered when all vision modes are automatically disabled due to the SDK no longer having control of the robot.
 
     # Objects
     object_available = "object_available"               #: After the ConnectCube process is started, all available light cubes in range will broadcast an availability message through the Robot.
@@ -56,6 +58,7 @@ class Events(Enum):
     object_appeared = "object_appeared"             #: Python event triggered when an object first receives robot_observed_object.
     object_disappeared = "object_disappeared"       #: Python event triggered when an object has not received a robot_observed_object for a specified time.
     object_finished_move = "object_finished_move"   #: Python event triggered in response to object_stopped_moving with duration data.
+    nav_map_update = "nav_map_update"               #: Python event containing nav map data.
 
 
 class EventHandler:
@@ -124,9 +127,9 @@ class EventHandler:
             subscribers = self.subscribers[event_name].copy()
             for func in subscribers:
                 if asyncio.iscoroutinefunction(func):
-                    await func(event_name, event_data)
+                    self._conn.run_soon(func(event_name, event_data))
                 elif asyncio.iscoroutine(func):
-                    await func
+                    self._conn.run_soon(func)
                 else:
                     func(event_name, event_data)
 
@@ -160,13 +163,13 @@ class EventHandler:
             async for evt in self._conn.grpc_interface.EventStream(req):
                 if not self.listening_for_events:
                     break
-
-                unpackaged_event_key, unpackaged_event_data = self._unpackage_event('event_type', evt.event)
-                await self.dispatch_event_by_name(unpackaged_event_data, unpackaged_event_key)
+                try:
+                    unpackaged_event_key, unpackaged_event_data = self._unpackage_event('event_type', evt.event)
+                    await self.dispatch_event_by_name(unpackaged_event_data, unpackaged_event_key)
+                except TypeError:
+                    self.logger.warning('Unknown Event type')
         except CancelledError:
             self.logger.debug('Event handler task was cancelled. This is expected during disconnection.')
-        except TypeError:
-            self.logger.debug('Unknown Event type')
 
     def subscribe_by_name(self, func: Callable, event_name: str = None):
         """Receive a method call when the specified event occurs.

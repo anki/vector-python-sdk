@@ -43,10 +43,6 @@ Python Installation
 
     sudo apt install python3-pip
 
-3. Last, install Tkinter::
-
-    sudo apt-get install python3-pil.imagetk
-
 """"""""""""""""
 SDK Installation
 """"""""""""""""
