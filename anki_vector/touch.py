@@ -42,6 +42,9 @@ class TouchSensorData:
     def raw_touch_value(self) -> int:
         """The detected sensitivity from the touch sensor.
 
+        This will not map to a constant raw value, as it may be impacted by various
+        environmental factors such as whether the robot is on its charger, being held, humidity, etc.
+
         .. testcode::
 
             import anki_vector
@@ -57,9 +60,6 @@ class TouchSensorData:
     def is_being_touched(self) -> bool:
         """The robot's conclusion on whether the current value is considered
         a valid touch.
-
-        This will not map to a constant raw value, as it may be impacted by various
-        environmental factors such as whether the robot is on its charger, being held, humidity, etc.
 
         .. testcode::
 
@@ -77,8 +77,6 @@ class TouchComponent(util.Component):
     """Maintains the most recent touch sensor data
 
     This will be updated with every broadcast RobotState, and can be queried at any time.
-
-    An example of how to extract sensor data:
 
     .. testcode::
 

@@ -44,7 +44,8 @@ def main():
                 said_text = True
                 await robot.say_text("I see a face!")
                 evt.set()
-        # If necessary, Move Vector's Head and Lift to make it easy to see his face
+
+        # If necessary, move Vector's Head and Lift to make it easy to see his face
         robot.behavior.set_head_angle(degrees(50.0))
         robot.behavior.set_lift_height(0.0)
 

@@ -50,6 +50,7 @@ def main():
         robot.behavior.drive_off_charger()
 
         print("Drive Vector straight until he reaches cliff...")
+        # Once robot reaches cliff, he will play his typical cliff reactions.
         robot.behavior.drive_straight(distance_mm(5000), speed_mmps(100))
 
         robot.conn.run_coroutine(robot.conn.control_lost_event.wait()).result()

@@ -76,28 +76,30 @@ class BehaviorComponent(util.Component):
 
         self._motion_profile_map = {}
 
-    # TODO Make the motion_profile_map into a class. Make sure it is readable in the docs b/c currently motion_prof_map param is not readable.
+    # TODO Make the motion_profile_map into a class.
     @property
     def motion_profile_map(self) -> dict:
         """Tells Vector how to drive when receiving navigation and movement actions
         such as go_to_pose and dock_with_cube.
+
+        motion_prof_map values are as follows:
+         |  speed_mmps (float)
+         |  accel_mmps2 (float)
+         |  decel_mmps2 (float)
+         |  point_turn_speed_rad_per_sec (float)
+         |  point_turn_accel_rad_per_sec2 (float)
+         |  point_turn_decel_rad_per_sec2 (float)
+         |  dock_speed_mmps (float)
+         |  dock_accel_mmps2 (float)
+         |  dock_decel_mmps2 (float)
+         |  reverse_speed_mmps (float)
+         |  is_custom (bool)
 
         :getter: Returns the motion profile map
         :setter: Sets the motion profile map
 
         :param motion_prof_map: Provide custom speed, acceleration and deceleration
             values with which the robot goes to the given pose.
-            speed_mmps (float)
-            accel_mmps2 (float)
-            decel_mmps2 (float)
-            point_turn_speed_rad_per_sec (float)
-            point_turn_accel_rad_per_sec2 (float)
-            point_turn_decel_rad_per_sec2 (float)
-            dock_speed_mmps (float)
-            dock_accel_mmps2 (float)
-            dock_decel_mmps2 (float)
-            reverse_speed_mmps (float)
-            is_custom (bool)
         """
         return self._motion_profile_map
 
@@ -194,9 +196,12 @@ class BehaviorComponent(util.Component):
         .. testcode::
 
             import anki_vector
+            import time
+
             with anki_vector.Robot() as robot:
                 print("Set Vector's eye color to purple...")
                 robot.behavior.set_eye_color(0.83, 0.76)
+                time.sleep(5)
 
         :param hue: The hue to use for Vector's eyes.
         :param saturation: The saturation to use for Vector's eyes.
@@ -255,7 +260,6 @@ class BehaviorComponent(util.Component):
 
     # TODO Check that num_retries is working (and if not, same for other num_retries).
     # TODO alignment_type coming out ugly in the docs without real values
-    # TODO DockWithCubeResponse not clear what it is in docs
     @connection.on_connection_thread()
     async def dock_with_cube(self,
                              target_object: objects.LightCube,
@@ -281,8 +285,11 @@ class BehaviorComponent(util.Component):
             import anki_vector
 
             with anki_vector.Robot() as robot:
+                robot.world.connect_cube()
+
                 if robot.world.connected_light_cube:
-                    robot.behavior.dock_with_cube(object_id=robot.world.connected_light_cube)
+                    dock_response = robot.behavior.dock_with_cube(robot.world.connected_light_cube)
+                    docking_result = dock_response.result
         """
         if target_object is None:
             raise Exception("Must supply a target_object to dock_with_cube")
@@ -336,7 +343,7 @@ class BehaviorComponent(util.Component):
             from anki_vector.util import degrees, distance_mm, speed_mmps
 
             with anki_vector.Robot() as robot:
-                robot.behavior.drive_straight(distance_mm(100), speed_mmps(100))
+                robot.behavior.drive_straight(distance_mm(200), speed_mmps(100))
         """
 
         # @TODO: the id_tag we supply can be used to cancel this action,
@@ -422,7 +429,8 @@ class BehaviorComponent(util.Component):
             from anki_vector.util import degrees
 
             with anki_vector.Robot() as robot:
-                robot.behavior.set_head_angle(degrees(50.0))
+                robot.behavior.set_head_angle(degrees(-22.0))
+                robot.behavior.set_head_angle(degrees(45.0))
         """
         set_head_angle_request = protocol.SetHeadAngleRequest(angle_rad=angle.radians,
                                                               max_speed_rad_per_sec=max_speed,

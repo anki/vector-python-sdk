@@ -34,7 +34,7 @@ def main():
     with anki_vector.Robot(args.serial) as robot:
         robot.behavior.drive_off_charger()
 
-        # If necessary, Move Vector's Head and Lift down
+        # If necessary, move Vector's Head and Lift down
         robot.behavior.set_head_angle(degrees(-5.0))
         robot.behavior.set_lift_height(0.0)
 

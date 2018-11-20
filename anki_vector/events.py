@@ -50,6 +50,8 @@ class Events(Enum):
     robot_observed_face = "robot_observed_face"                       #: Robot event for when a face is observed by the robot.
     robot_changed_observed_face_id = "robot_changed_observed_face_id"  # : Robot event for when a known face changes its id.
 
+    wake_word = "wake_word"                             #: Robot event triggered when Vector hears "Hey Vector"
+
     # Audio
     audio_send_mode_changed = "audio_send_mode_changed"  #: Robot event containing changes to the robot's audio stream source data processing mode.
 
@@ -75,13 +77,6 @@ class EventHandler:
     def start(self, connection: Connection):
         """Start listening for events. Automatically called by the :class:`anki_vector.robot.Robot` class.
 
-        .. testcode::
-
-            import anki_vector
-
-            with anki_vector.Robot() as robot:
-                robot.events.start(robot.conn)
-
         :param connection: A reference to the connection from the SDK to the robot.
         :param loop: The loop to run the event task on.
         """
@@ -91,13 +86,6 @@ class EventHandler:
 
     def close(self):
         """Stop listening for events. Automatically called by the :class:`anki_vector.robot.Robot` class.
-
-        .. testcode::
-
-            import anki_vector
-
-            with anki_vector.Robot() as robot:
-                robot.events.close()
         """
         self.listening_for_events = False
         try:
@@ -118,7 +106,10 @@ class EventHandler:
 
             with anki_vector.Robot() as robot:
                 robot.events.subscribe_by_name(event_listener, event_name='my_event')
-                robot.events.dispatch_event_by_name('my_event dispatched', event_name='my_event')
+                robot.conn.run_coroutine(robot.events.dispatch_event_by_name('my_event dispatched', event_name='my_event'))
+
+        :param event_data: Data to accompany the event.
+        :param event_name: The name of the event that will result in func being called.
         """
         if not event_name:
             self.logger.error('Bad event_name in dispatch_event.')
@@ -176,12 +167,9 @@ class EventHandler:
 
         .. testcode::
 
-            import anki_vector
-
-            import asyncio
-
-            def event_listener(_, msg):
+            def event_listener(robot, msg):
                 print(msg)
+                robot.events.unsubscribe_by_name(event_listener, event_name='my_event')
 
             with anki_vector.Robot() as robot:
                 robot.events.subscribe_by_name(event_listener, event_name='my_event')
@@ -204,16 +192,38 @@ class EventHandler:
 
             import anki_vector
             from anki_vector.events import Events
+            from anki_vector.util import degrees
+            import threading
 
-            import functools
+            said_text = False
 
-            def on_robot_observed_face():
-                print("Vector sees a face")
+            args = anki_vector.util.parse_command_args()
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                evt = threading.Event()
 
-            with anki_vector.Robot() as robot:
-                on_robot_observed_face = functools.partial(on_robot_observed_face, robot)
-                robot.events.subscribe(on_robot_observed_face,
-                                       Events.robot_observed_face)
+                async def on_robot_observed_face(event_type, event):
+                    print("Vector sees a face")
+                    global said_text
+                    if not said_text:
+                        said_text = True
+                        await robot.say_text("I see a face!")
+                        evt.set()
+
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(50.0))
+                robot.behavior.set_lift_height(0.0)
+
+                robot.events.subscribe(on_robot_observed_face, Events.robot_observed_face)
+
+                print("------ waiting for face events, press ctrl+c to exit early ------")
+
+                try:
+                    if not evt.wait(timeout=5):
+                        print("------ Vector never saw your face! ------")
+                except KeyboardInterrupt:
+                    pass
+
+            robot.events.unsubscribe(on_robot_observed_face, Events.robot_observed_face)
 
         :param func: A method implemented in your code that will be called when the event is fired.
         :param event_type: The enum type of the event that will result in func being called.
@@ -230,17 +240,13 @@ class EventHandler:
 
         .. testcode::
 
-            import anki_vector
-            from anki_vector.events import Events
-
-            import functools
-
-            def on_robot_observed_face(robot, event_type, event):
-                print("Vector sees a face")
+            def event_listener(robot, msg):
+                print(msg)
+                robot.events.unsubscribe_by_name(event_listener, event_name='my_event')
 
             with anki_vector.Robot() as robot:
-                on_robot_observed_face = functools.partial(on_robot_observed_face, robot)
-                robot.events.unsubscribe_by_name(on_robot_observed_face, Events.robot_observed_face)
+                robot.events.subscribe_by_name(event_listener, event_name='my_event')
+                robot.conn.run_coroutine(robot.events.dispatch_event_by_name('my_event dispatched', event_name='my_event'))
 
         :param func: The method you no longer wish to be called when an event fires.
         :param event_name: The name of the event for which you no longer want to receive a method call.
@@ -267,10 +273,39 @@ class EventHandler:
 
             import anki_vector
             from anki_vector.events import Events
+            from anki_vector.util import degrees
+            import threading
 
-            with anki_vector.Robot() as robot:
-                robot.events.unsubscribe(on_robot_observed_face,
-                                         Events.robot_observed_face)
+            said_text = False
+
+            args = anki_vector.util.parse_command_args()
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                evt = threading.Event()
+
+                async def on_robot_observed_face(event_type, event):
+                    print("Vector sees a face")
+                    global said_text
+                    if not said_text:
+                        said_text = True
+                        await robot.say_text("I see a face!")
+                        evt.set()
+
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(50.0))
+                robot.behavior.set_lift_height(0.0)
+
+
+                robot.events.subscribe(on_robot_observed_face, Events.robot_observed_face)
+
+                print("------ waiting for face events, press ctrl+c to exit early ------")
+
+                try:
+                    if not evt.wait(timeout=5):
+                        print("------ Vector never saw your face! ------")
+                except KeyboardInterrupt:
+                    pass
+
+            robot.events.unsubscribe(on_robot_observed_face, Events.robot_observed_face)
 
         :param func: The enum type of the event you no longer wish to be called when an event fires.
         :param event_type: The name of the event for which you no longer want to receive a method call.

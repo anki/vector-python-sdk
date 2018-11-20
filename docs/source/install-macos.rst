@@ -40,7 +40,7 @@ SDK Installation
 
 To install the SDK, navigate into the SDK folder and type the following into a Terminal window::
 
-    cd vector_python_sdk_0.4.0
+    cd vector_python_sdk_0.5.0
     python3 -m pip install .
 
 ^^^^^^^^^^^^^^^^^^^^^
@@ -49,7 +49,7 @@ Vector Authentication
 
 To authenticate with the robot, type the following into the Terminal window::
 
-    cd vector_python_sdk_0.4.0
+    cd vector_python_sdk_0.5.0
     ./configure.py
 
 You will be prompted for your robot's name, ip address and serial number. You will also be asked for your Anki login and password. Make sure to use the same account that was used to set up your Vector.

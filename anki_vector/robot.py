@@ -679,8 +679,13 @@ class Robot:
             self.nav_map.init_nav_map_feed()
 
         # Enable face detection, to allow Vector to add faces to its world view
-        self.vision.enable_face_detection(detect_faces=self.enable_face_detection, estimate_expression=False)
-        self.vision.enable_custom_object_detection(detect_custom_objects=self.enable_custom_object_detection)
+        if self.conn.requires_behavior_control:
+            face_detection = self.vision.enable_face_detection(detect_faces=self.enable_face_detection, estimate_expression=False)
+            if isinstance(face_detection, concurrent.futures.Future):
+                face_detection.result()
+            object_detection = self.vision.enable_custom_object_detection(detect_custom_objects=self.enable_custom_object_detection)
+            if isinstance(object_detection, concurrent.futures.Future):
+                object_detection.result()
 
         # Subscribe to a callback that updates the robot's local properties
         self.events.subscribe(self._unpack_robot_state, events.Events.robot_state)
@@ -696,9 +701,8 @@ class Robot:
             robot.anim.play_animation("anim_turn_left_01")
             robot.disconnect()
         """
-        vision_mode = self.vision.disable_all_vision_modes()  # pylint: disable=assignment-from-no-return
-        if isinstance(vision_mode, concurrent.futures.Future):
-            vision_mode.result()
+        if self.conn.requires_behavior_control:
+            self.vision.close()
 
         # Stop rendering video
         self.viewer.stop_video()
@@ -753,7 +757,7 @@ class Robot:
 
     @connection.on_connection_thread(requires_control=False)
     async def get_version_state(self) -> protocol.VersionStateResponse:
-        """Get the versioning information for Vector.
+        """Get the versioning information for Vector, including Vector's os_version and engine_build_id.
 
         .. testcode::
 

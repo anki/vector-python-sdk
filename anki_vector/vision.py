@@ -24,6 +24,8 @@ processing on the robot.
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ['VisionComponent']
 
+from concurrent import futures
+
 from . import util, connection, events
 from .messaging import protocol
 
@@ -47,6 +49,12 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
 
         robot.events.subscribe(self._handle_mirror_mode_disabled_event, events.Events.mirror_mode_disabled)
         robot.events.subscribe(self._handle_vision_modes_auto_disabled_event, events.Events.vision_modes_auto_disabled)
+
+    def close(self):
+        """Close all the running vision modes and wait for a response."""
+        vision_mode = self.disable_all_vision_modes()  # pylint: disable=assignment-from-no-return
+        if isinstance(vision_mode, futures.Future):
+            vision_mode.result()
 
     def _handle_mirror_mode_disabled_event(self, _, _msg):
         self._display_camera_feed_on_face = False

@@ -38,7 +38,7 @@ Vector connects to his Light Cubes with BLE.
 
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ['LIGHT_CUBE_1_TYPE', 'OBJECT_VISIBILITY_TIMEOUT',
-           'EvtObjectAppeared', 'EvtObjectDisappeared', 'EvtObjectFinishedMove', 'EvtObjectObserved', 
+           'EvtObjectAppeared', 'EvtObjectDisappeared', 'EvtObjectFinishedMove', 'EvtObjectObserved',
            'Charger', 'CustomObjectArchetype', 'CustomObject', 'CustomObjectMarkers', 'CustomObjectTypes',
            'FixedCustomObject', 'LightCube', 'ObservableObject']
 
@@ -54,6 +54,10 @@ from . import connection, lights, util
 from .events import Events
 
 from .messaging import protocol
+
+#: Length of time in seconds to go without receiving an observed event before
+#: assuming that Vector can no longer see an object.
+OBJECT_VISIBILITY_TIMEOUT = 0.8
 
 
 class EvtObjectObserved():  # pylint: disable=too-few-public-methods
@@ -119,11 +123,6 @@ class EvtObjectFinishedMove():  # pylint: disable=too-few-public-methods
     def __init__(self, obj, move_duration: float):
         self.obj = obj
         self.move_duration = move_duration
-
-
-#: Length of time in seconds to go without receiving an observed event before
-#: assuming that Vector can no longer see an object.
-OBJECT_VISIBILITY_TIMEOUT = 0.4
 
 
 class ObservableObject(util.Component):

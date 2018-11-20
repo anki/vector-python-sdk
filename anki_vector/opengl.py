@@ -142,7 +142,7 @@ class ResourceManager():
         the resource manager. The context that these resources are files on disk is similarly encapsulated.
         All client classes only need match keys with returned data.
 
-        :param *args: string keys for identifying the asset.
+        :param args: string keys for identifying the asset.
         """
         resource_path = '/'.join(map(str, args))  # Note: Deliberately not os.path.join, for use with pkg_resources
         return resource_stream(self._context_id, resource_path)
@@ -569,7 +569,7 @@ class PrecomputedView():
 
         :param name: the key this pre-computed geometry can be draw from.
         :param f: the function used to create the 3d geometry.
-        :param *args: any parameters the supplied function is expecting.
+        :param args: any parameters the supplied function is expecting.
         """
         new_gl_list = glGenLists(1)  # pylint: disable=assignment-from-no-return
         glNewList(new_gl_list, GL_COMPILE)

@@ -35,7 +35,7 @@ Prerequisites
 Starting Up the SDK
 -------------------
 
-On the computer, open Terminal (macOS/Linux) or Command Prompt (Windows) and navigate into your ``vector_python_sdk_0.4.0`` folder by typing ``cd vector_python_sdk_0.4.0``, and press **Enter**.
+On the computer, open Terminal (macOS/Linux) or Command Prompt (Windows) and navigate into your ``vector_python_sdk_0.5.0`` folder by typing ``cd vector_python_sdk_0.5.0``, and press **Enter**.
 
 ----------------
 Example Program

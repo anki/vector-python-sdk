@@ -403,4 +403,5 @@ service ExternalInterface {
       post: "/v1/nav_map_feed",
       body: "*"
     };
-  }}
+  }
+}

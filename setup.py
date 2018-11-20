@@ -3,8 +3,39 @@
 """
 Vector SDK, by Anki.
 
+Vector is the home robot who hangs out and helps out.
+
+This library lets you take command of Vector and write programs for him.
+
+Vector features:
+
+    * A camera with advanced vision system
+    * A robotic lifter
+    * Independent tank treads
+    * Pivotable head
+    * An accelerometer
+    * A gyroscope
+    * Cliff detection
+    * Face recognition
+    * Path planning
+    * Animation and behavior systems
+    * Light cube, with LEDs, an accelerometer and tap detection
+    * Single point time-of-flight NIR Laser
+    * Capactive casing
+
+This SDK provides users with access to take control of Vector and write simple
+or advanced programs with him.
+
 Requirements:
     * Python 3.6.1 or later
+
+Optional requirements for camera image processing/display:
+    * Pillow
+    * NumPy
+
+Optional requirements for 3D viewer/visualization:
+    * PyOpenGL
+    * Pillow
 """
 
 import os.path
@@ -37,7 +68,7 @@ def get_requirements():
 setup(
     name='anki_vector',
     version=VERSION,
-    description="SDK for Anki's Vector robot",
+    description="SDK for Anki's Vector robot, the home robot who hangs out and helps out",
     long_description=__doc__,
     url='https://developer.anki.com',
     author='Anki, Inc',
@@ -45,7 +76,7 @@ setup(
     license='Apache License, Version 2.0',
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Libraries',
         'License :: OSI Approved :: Apache Software License',
@@ -54,6 +85,10 @@ setup(
     zip_safe=True,
     keywords='anki vector robot robotics sdk'.split(),
     packages=['anki_vector', 'anki_vector.messaging'],
+    package_data={
+        'anki_vector': ['LICENSE.txt', 'assets/*.obj', 'assets/*.mtl', 'assets/*.jpg',
+                  'assets/LICENSE.txt']
+    },
     install_requires=get_requirements(),
     extras_require={
         '3dviewer': ['PyOpenGL>=3.1'],

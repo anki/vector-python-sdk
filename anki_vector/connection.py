@@ -164,26 +164,30 @@ class Connection:
     This class may be used to bypass the structures of the python sdk handled by
     :class:`~anki_vector.robot.Robot`, and instead talk to aiogrpc more directly.
 
+    The values for the cert_file location and the guid can be found in your home directory in
+    the sdk_config.ini file.
+
     .. code-block:: python
 
         import anki_vector
 
         # Connect to your Vector
-        conn = anki_vector.connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/to/file.cert", "<secret_key>")
+        conn = anki_vector.connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/to/file.cert", "<guid>")
         conn.connect()
         # Run your commands
         async def play_animation():
             # Run your commands
-            anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_turn_left_01")
-            await conn.grpc_interface.PlayAnimation(anim) # This needs to be run in an asyncio loop
-        conn.run_coroutine(play_animation())
+            anim = anki_vector.messaging.protocol.Animation(name="anim_pounce_success_02")
+            anim_request = anki_vector.messaging.protocol.PlayAnimationRequest(animation=anim)
+            return await conn.grpc_interface.PlayAnimation(anim_request) # This needs to be run in an asyncio loop
+        conn.run_coroutine(play_animation()).result()
         # Close the connection
         conn.close()
 
     :param name: Vector's name in the format of "Vector-XXXX".
     :param host: The IP address and port of Vector in the format "XX.XX.XX.XX:443".
     :param cert_file: The location of the certificate file on disk.
-    :param loop: The asyncio loop for the control events to run inside.
+    :param guid: Your robot's unique secret key.
     :param requires_behavior_control: True if the connection requires behavior control.
     """
 
@@ -262,10 +266,19 @@ class Connection:
 
             import anki_vector
 
-            anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_turn_left_01")
-            await conn.grpc_interface.PlayAnimation(anim) # This needs to be run in an asyncio loop
+            # Connect to your Vector
+            conn = anki_vector.connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/to/file.cert", "<guid>")
+            conn.connect()
+            # Run your commands
+            async def play_animation():
+                # Run your commands
+                anim = anki_vector.messaging.protocol.Animation(name="anim_pounce_success_02")
+                anim_request = anki_vector.messaging.protocol.PlayAnimationRequest(animation=anim)
+                return await conn.grpc_interface.PlayAnimation(anim_request) # This needs to be run in an asyncio loop
+            conn.run_coroutine(play_animation()).result()
+            # Close the connection
+            conn.close()
         """
-        # TODO When sample code is ready, convert `.. code-block:: python` to `.. testcode::`
         return self._interface
 
     @property
@@ -277,13 +290,15 @@ class Connection:
         the :class:`Connection` will try to maintain control of Vector's behavior system even after losing
         control to higher priority robot behaviors such as returning home to charge a low battery.
 
-        For more information about behavior control, see :ref:`behavior <behavior>`
+        For more information about behavior control, see :ref:`behavior <behavior>`.
 
-        .. testcode::
+        .. code-block:: python
+
+            import time
 
             import anki_vector
 
-            with anki_vector.Robot(args.serial, requires_behavior_control=False) as robot:
+            with anki_vector.Robot(requires_behavior_control=False) as robot:
                 async def callback(event_type, event):
                     await robot.conn.request_control()
                     print(robot.conn.requires_behavior_control) # Will print True
@@ -292,6 +307,9 @@ class Connection:
 
                 print(robot.conn.requires_behavior_control) # Will print False
                 robot.events.subscribe(callback, anki_vector.events.Events.robot_observed_face)
+
+                # Waits 10 seconds. Show Vector your face.
+                time.sleep(10)
         """
         return self._requires_behavior_control
 
@@ -397,14 +415,15 @@ class Connection:
             import anki_vector
 
             # Connect to your Vector
-            conn = anki_vector.connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/to/file.cert", "<secret_key>")
-            # Add a 5 second timeout to reduce the amount of time allowed for a connection
-            conn.connect(timeout=5.0)
+            conn = anki_vector.connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/to/file.cert", "<guid>")
+            conn.connect()
+            # Run your commands
             async def play_animation():
                 # Run your commands
-                anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_turn_left_01")
-                await conn.grpc_interface.PlayAnimation(anim) # This needs to be run in an asyncio loop
-            conn.run_coroutine(play_animation())
+                anim = anki_vector.messaging.protocol.Animation(name="anim_pounce_success_02")
+                anim_request = anki_vector.messaging.protocol.PlayAnimationRequest(animation=anim)
+                return await conn.grpc_interface.PlayAnimation(anim_request) # This needs to be run in an asyncio loop
+            conn.run_coroutine(play_animation()).result()
             # Close the connection
             conn.close()
 
@@ -542,15 +561,18 @@ class Connection:
             import anki_vector
 
             # Connect to your Vector
-            conn = connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/to/file.cert", "<secret_key>")
+            conn = anki_vector.connection.Connection("Vector-XXXX", "XX.XX.XX.XX:443", "/path/to/file.cert", "<guid>")
             conn.connect()
             # Run your commands
-            anim = anki_vector.messaging.protocol.PlayAnimationRequest(name="anim_turn_left_01")
-            await conn.grpc_interface.PlayAnimation(anim) # This needs to be run in an asyncio loop
+            async def play_animation():
+                # Run your commands
+                anim = anki_vector.messaging.protocol.Animation(name="anim_pounce_success_02")
+                anim_request = anki_vector.messaging.protocol.PlayAnimationRequest(animation=anim)
+                return await conn.grpc_interface.PlayAnimation(anim_request) # This needs to be run in an asyncio loop
+            conn.run_coroutine(play_animation()).result()
             # Close the connection
             conn.close()
         """
-        # TODO When sample code is ready, convert `.. code-block:: python` to `.. testcode::`
         if self._control_events:
             self._control_events.shutdown()
         if self._control_stream_task:
@@ -576,7 +598,6 @@ class Connection:
             with anki_vector.Robot() as robot:
                 robot.conn.run_soon(my_coroutine())
                 time.sleep(1)
-
 
         :param coro: The coroutine, task or any awaitable to schedule for execution on the connection thread.
         """
