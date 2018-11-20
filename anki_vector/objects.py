@@ -217,7 +217,9 @@ class ObservableObject(util.Component):
 
             import anki_vector
 
-            last_seen_time = obj.time_since_last_seen
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                for face in robot.world.visible_faces:
+                    print(f"time_since_last_seen: {face.time_since_last_seen}")
         """
         if self._last_observed_time is None:
             return math.inf
@@ -428,7 +430,6 @@ class LightCube(ObservableObject):
             import time
 
             with anki_vector.Robot() as robot:
-                # ensure we are connected to a cube
                 robot.world.connect_cube()
 
                 if robot.world.connected_light_cube:
@@ -439,6 +440,8 @@ class LightCube(ObservableObject):
                                            anki_vector.lights.red_light,
                                            anki_vector.lights.white_light)
                     time.sleep(3)
+
+                    cube.set_lights_off()
 
         :param light1: The settings for the first light.
         :param light2: The settings for the second light.
@@ -472,7 +475,6 @@ class LightCube(ObservableObject):
             import time
 
             with anki_vector.Robot() as robot:
-                # ensure we are connected to a cube
                 robot.world.connect_cube()
 
                 if robot.world.connected_light_cube:
@@ -481,6 +483,8 @@ class LightCube(ObservableObject):
                     # Set cube lights to yellow
                     cube.set_lights(anki_vector.lights.yellow_light)
                     time.sleep(3)
+
+                    cube.set_lights_off()
 
         :param light: The settings for the lights
         :param color_profile: The profile to be used for the cube lights
@@ -497,7 +501,6 @@ class LightCube(ObservableObject):
             import time
 
             with anki_vector.Robot() as robot:
-                # ensure we are connected to a cube
                 robot.world.connect_cube()
 
                 if robot.world.connected_light_cube:
@@ -531,7 +534,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                last_tapped_time = robot.world.connected_light_cube.last_tapped_time
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.last_tapped_time}")
         """
         return self._last_tapped_time
 
@@ -544,7 +550,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                last_tapped_robot_timestamp = robot.world.connected_light_cube.last_tapped_robot_timestamp
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.last_tapped_robot_timestamp}")
         """
         return self._last_tapped_robot_timestamp
 
@@ -557,7 +566,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                last_moved_time = robot.world.connected_light_cube.last_moved_time
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.last_moved_time}")
         """
         return self._last_moved_time
 
@@ -570,7 +582,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                last_moved_robot_timestamp = robot.world.connected_light_cube.last_moved_robot_timestamp
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.last_moved_robot_timestamp}")
         """
         return self._last_moved_robot_timestamp
 
@@ -583,7 +598,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                last_moved_start_time = robot.world.connected_light_cube.last_moved_start_time
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.last_moved_start_time}")
         """
         return self._last_moved_start_time
 
@@ -596,7 +614,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                last_moved_start_robot_timestamp = robot.world.connected_light_cube.last_moved_start_robot_timestamp
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.last_moved_start_robot_timestamp}")
         """
         return self._last_moved_start_robot_timestamp
 
@@ -609,7 +630,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                last_up_axis_changed_time = robot.world.connected_light_cube.last_up_axis_changed_time
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.last_up_axis_changed_time}")
         """
         return self._last_up_axis_changed_time
 
@@ -622,7 +646,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                last_up_axis_changed_robot_timestamp = robot.world.connected_light_cube.last_up_axis_changed_robot_timestamp
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.last_up_axis_changed_robot_timestamp}")
         """
         return self._last_up_axis_changed_robot_timestamp
 
@@ -635,7 +662,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                up_axis = robot.world.connected_light_cube.up_axis
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.up_axis}")
         """
         return self._up_axis
 
@@ -648,7 +678,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                is_moving = robot.world.connected_light_cube.is_moving
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.is_moving}")
         """
         return self._is_moving
 
@@ -661,7 +694,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                is_connected = robot.world.connected_light_cube.is_connected
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.is_connected}")
         """
         return self._is_connected
 
@@ -674,7 +710,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                top_face_orientation_rad = robot.world.connected_light_cube.top_face_orientation_rad
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.top_face_orientation_rad}")
         """
         return self._top_face_orientation_rad
 
@@ -687,7 +726,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                factory_id = robot.world.connected_light_cube.factory_id
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.factory_id}")
         """
         return self._factory_id
 
@@ -707,7 +749,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                descriptive_name = robot.world.connected_light_cube.descriptive_name
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.descriptive_name}")
         """
         return "{0} id={1} factory_id={2} is_connected={3}".format(self.__class__.__name__, self._object_id, self._factory_id, self._is_connected)
 
@@ -722,7 +767,10 @@ class LightCube(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                object_id = robot.world.connected_light_cube.object_id
+                robot.world.connect_cube()
+                if robot.world.connected_light_cube:
+                    cube = robot.world.connected_light_cube
+                    print(f"{cube.object_id}")
         """
         return self._object_id
 
@@ -837,6 +885,8 @@ class Charger(ObservableObject):
     .. testcode::
 
         import anki_vector
+
+        # Position Vector so he can see his charger
         with anki_vector.Robot() as robot:
             if robot.world.charger:
                 print('Robot is aware of charger: {0}'.format(robot.world.charger))
@@ -868,9 +918,12 @@ class Charger(ObservableObject):
         .. testcode::
 
             import anki_vector
+
+            # Position Vector so he can see his charger
             with anki_vector.Robot() as robot:
                 if robot.world.charger:
                     charger_object_id = robot.world.charger.object_id
+                    print(f"charger_object_id: {charger_object_id}")
 
         This value can only be assigned once as it is static on the robot.
         """

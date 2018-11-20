@@ -311,7 +311,7 @@ class NavMapGrid:
                 time.sleep(1)
                 latest_nav_map = robot.nav_map.latest_nav_map
                 content = latest_nav_map.get_content(0.0, 100.0)
-                print('Sampling point at 0.0, 100.0 and found content '.format(content))
+                print(f"Sampling point at 0.0, 100.0 and found content: {content}")
 
         Returns:
             The content included at that point. Will be :attr:`NavNodeContentTypes.Unknown`

@@ -112,7 +112,7 @@ class TouchComponent(util.Component):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-            touch_data = robot.touch.last_sensor_reading
+                touch_data = robot.touch.last_sensor_reading
         """
         return self._last_sensor_reading
 

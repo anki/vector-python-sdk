@@ -32,12 +32,15 @@ class PhotographComponent(util.Component):
     .. testcode::
 
         import anki_vector
+        import io
         from PIL import Image
 
         with anki_vector.Robot() as robot:
-            if len(robot.photos.photo_info) > 0:
-                first_photo = robot.photos.photo_info[0]
-                photo = robot.photos.get_photo(first_photo)
+            if len(robot.photos.photo_info) == 0:
+                return
+            for photo_info in robot.photos.photo_info:
+                print(f"Opening photo {photo_info.photo_id}")
+                photo = robot.photos.get_photo(photo_info.photo_id)
                 image = Image.open(io.BytesIO(photo.image))
                 image.show()
 
@@ -58,11 +61,10 @@ class PhotographComponent(util.Component):
 
             import anki_vector
 
-            photos = robot.photos.photo_info
-            if len(photos) > 0:
-                photo = photos[0]
-                photo.photo_id # the id to use to grab a photo from the robot
-                photo.timestamp_utc # utc timestamp of when the photo was taken (according to the robot)
+            with anki_vector.Robot() as robot:
+                for photo_info in robot.photos.photo_info:
+                    print(f"photo_info.photo_id: {photo_info.photo_id}") # the id to use to grab a photo from the robot
+                    print(f"photo_info.timestamp_utc: {photo_info.timestamp_utc}") # utc timestamp of when the photo was taken (according to the robot)
         """
         if not self._photo_info:
             self.logger.debug("Photo list was empty. Lazy-loading photo list now.")
@@ -80,9 +82,10 @@ class PhotographComponent(util.Component):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.photos.load_photo_info()
+                photo_info = robot.photos.load_photo_info()
+                print(f"photo_info: {photo_info}")
 
-        :return: The response from the PhotosInfo rpc call
+        :return: UTC timestamp of the photo and additional data.
         """
         req = protocol.PhotosInfoRequest()
         result = await self.grpc_interface.PhotosInfo(req)
@@ -96,12 +99,15 @@ class PhotographComponent(util.Component):
         .. testcode::
 
             import anki_vector
+            import io
             from PIL import Image
 
             with anki_vector.Robot() as robot:
-                if len(robot.photos.photo_info) > 0:
-                    first_photo = robot.photos.photo_info[0]
-                    photo = robot.photos.get_photo(first_photo)
+                if len(robot.photos.photo_info) == 0:
+                    return
+                for photo_info in robot.photos.photo_info:
+                    print(f"Opening photo {photo_info.photo_id}")
+                    photo = robot.photos.get_photo(photo_info.photo_id)
                     image = Image.open(io.BytesIO(photo.image))
                     image.show()
 
@@ -125,10 +131,11 @@ class PhotographComponent(util.Component):
 
             import anki_vector
             from PIL import Image
+            import io
 
             with anki_vector.Robot() as robot:
-                for photo in robot.photos.photo_info:
-                    photo = robot.photos.get_thumbnail(photo)
+                for photo_info in robot.photos.photo_info:
+                    photo = robot.photos.get_thumbnail(photo_info.photo_id)
                     image = Image.open(io.BytesIO(photo.image))
                     image.show()
 

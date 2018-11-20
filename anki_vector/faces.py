@@ -134,9 +134,10 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            # Print the visible face ids
-            for face in robot.world.visible_faces:
-                print(f"Visible id: {face.face_id}")
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                # Print the visible face ids
+                for face in robot.world.visible_faces:
+                    print(f"Visible id: {face.face_id}")
         """
         return self._face_id if self._updated_face_id is None else self._updated_face_id
 
@@ -154,9 +155,9 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot() as robot:
-                face = robot.world.get_face(1)
-                was_face_originally_unrecognized_but_is_now_recognized = face.has_updated_face_id
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                for face in robot.world.visible_faces:
+                    was_face_originally_unrecognized_but_is_now_recognized = face.has_updated_face_id
         """
         return self._updated_face_id is not None
 
@@ -168,9 +169,9 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot() as robot:
-                face = robot.world.get_face(1)
-                updated_id = face.updated_face_id
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                for face in robot.world.visible_faces:
+                    print(f"updated_face_id: {face.updated_face_id}")
         """
         if self._updated_face_id:
             return self._updated_face_id
@@ -186,9 +187,9 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot() as robot:
-                face = robot.world.get_face(1)
-                name = face.name
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                for face in robot.world.visible_faces:
+                    print(f"Face name: {face.name}")
         """
         return self._name
 
@@ -207,9 +208,9 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot() as robot:
-                face = robot.world.get_face(1)
-                expression = face.expression
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                for face in robot.world.visible_faces:
+                  print(f"expression: {face.expression}")
         """
         return self._expression
 
@@ -225,9 +226,9 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot() as robot:
-                face = robot.world.get_face(1)
-                expression_score = face.expression_score
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                for face in robot.world.visible_faces:
+                    print(f"expression_score: {face.expression_score}")
         """
         return self._expression_score
 
@@ -239,9 +240,9 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot() as robot:
-                face = robot.world.get_face(1)
-                left_eye = face.left_eye
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                for face in robot.world.visible_faces:
+                    print(f"left_eye: {face.left_eye}")
         """
         return self._left_eye
 
@@ -253,9 +254,9 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot() as robot:
-                face = robot.world.get_face(1)
-                right_eye = face.right_eye
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                for face in robot.world.visible_faces:
+                    print(f"right_eye: {face.right_eye}")
         """
         return self._right_eye
 
@@ -267,9 +268,9 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot() as robot:
-                face = robot.world.get_face(1)
-                nose = face.nose
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                for face in robot.world.visible_faces:
+                    print(f"nose: {face.nose}")
         """
         return self._nose
 
@@ -281,9 +282,9 @@ class Face(objects.ObservableObject):
 
             import anki_vector
 
-            with anki_vector.Robot() as robot:
-                face = robot.world.get_face(1)
-                mouth = face.mouth
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                for face in robot.world.visible_faces:
+                    print(f"mouth: {face.mouth}")
         """
         return self._mouth
 
@@ -332,6 +333,7 @@ class FaceComponent(util.Component):
 
             with anki_vector.Robot() as robot:
                 name_data_list = robot.faces.request_enrolled_names()
+                print(f"{name_data_list}")
         """
         req = protocol.RequestEnrolledNamesRequest()
         return await self.grpc_interface.RequestEnrolledNames(req)

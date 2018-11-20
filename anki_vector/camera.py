@@ -96,7 +96,6 @@ class CameraComponent(util.Component):
 
         return self._latest_image
 
-    # TODO Needs sample code
     @property
     def latest_image_id(self) -> int:
         """The most recently processed image's id received from the robot.
@@ -104,6 +103,17 @@ class CameraComponent(util.Component):
         Used only to track chunks of the same image.
 
         :getter: Returns the id for the latest image
+
+        .. testcode::
+
+            import anki_vector
+            import time
+
+            with anki_vector.Robot(enable_camera_feed=True) as robot:
+                time.sleep(1)
+                image = robot.camera.latest_image
+                image.show()
+                print(f"latest_image_id: {robot.camera.latest_image_id}")
         """
         return self._latest_image_id
 

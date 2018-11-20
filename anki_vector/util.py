@@ -96,7 +96,7 @@ def setup_basic_logging(custom_handler: logging.Handler = None,
     :param target: The stream to send the log data to; defaults to stderr
     """
     if general_log_level is None:
-        general_log_level = os.environ.get('VECTOR_LOG_LEVEL', logging.DEBUG)
+        general_log_level = os.environ.get('VECTOR_LOG_LEVEL', logging.INFO)
 
     handler = custom_handler
     if handler is None:

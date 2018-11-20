@@ -41,9 +41,11 @@ class MotorComponent(util.Component):
         .. testcode::
 
             import anki_vector
+            import time
 
             with anki_vector.Robot() as robot:
                 robot.motors.set_wheel_motors(25, 50)
+                time.sleep(3.0)
 
         :param left_wheel_speed: Speed of the left tread (in millimeters per second).
         :param right_wheel_speed: Speed of the right tread (in millimeters per second).
@@ -91,9 +93,13 @@ class MotorComponent(util.Component):
         .. testcode::
 
             import anki_vector
+            import time
 
             with anki_vector.Robot() as robot:
                 robot.motors.set_lift_motor(-5.0)
+                time.sleep(3.0)
+                robot.motors.set_lift_motor(5.0)
+                time.sleep(3.0)
 
         :param speed: Motor speed for Vector's lift, measured in radians per second.
         """
