@@ -1,0 +1,898 @@
+// Copyright (c) 2018 Anki, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License in the file LICENSE.txt or at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// External interface for robot <-> app and robot <-> sdk communication
+
+syntax = "proto3";
+
+package Anki.Vector.external_interface;
+
+import "anki_vector/messaging/response_status.proto";
+import "anki_vector/messaging/extensions.proto";
+import "anki_vector/messaging/onboardingSteps.proto";
+
+// A null message used by streams to verify that the client is
+// still connected.
+message KeepAlivePing {}
+
+message Animation {
+  string name = 1;
+}
+
+message DriveWheelsRequest {
+  float left_wheel_mmps   = 1;
+  float right_wheel_mmps  = 2;
+  float left_wheel_mmps2  = 3;
+  float right_wheel_mmps2 = 4;
+}
+
+message DriveWheelsResponse {
+  ResponseStatus status = 1;
+}
+
+message MoveHeadRequest {
+  float speed_rad_per_sec = 1;
+}
+
+message MoveHeadResponse {
+  ResponseStatus status = 1;
+}
+
+message MoveLiftRequest {
+  float speed_rad_per_sec = 1;
+}
+
+message MoveLiftResponse {
+  ResponseStatus status = 1;
+}
+
+message PlayAnimationRequest {
+  Animation animation = 1;
+  uint32 loops = 2;
+  bool ignore_body_track = 3;
+  bool ignore_head_track = 4;
+  bool ignore_lift_track = 5;
+}
+
+message PlayAnimationResponse {
+  ResponseStatus status = 1;
+  BehaviorResults result = 2;
+}
+
+message ListAnimationsRequest {}
+
+message ListAnimationsResponse {
+  ResponseStatus status = 1;
+  repeated Animation animation_names = 2;
+}
+
+message DisplayFaceImageRGBRequest {
+  bytes face_data = 1;
+  uint32 duration_ms = 2;
+  bool interrupt_running = 3;
+}
+
+message DisplayFaceImageRGBResponse {
+  ResponseStatus status = 1;
+}
+
+message MeetVictorFaceScanStarted
+{
+}
+
+message MeetVictorFaceScanComplete
+{
+}
+
+message Status {
+  oneof status_type {
+    MeetVictorFaceScanStarted       meet_victor_face_scan_started    = 2;
+    MeetVictorFaceScanComplete      meet_victor_face_scan_complete   = 3;
+    FaceEnrollmentCompleted         face_enrollment_completed        = 4;
+  }
+}
+
+message WakeWord {
+  oneof wake_word_type {
+    WakeWordBegin     wake_word_begin    = 1;
+    WakeWordEnd       wake_word_end      = 2;
+  }
+}
+
+message TimeStampedStatus {
+  Status status = 1;
+  uint32 timestamp_utc = 2;
+}
+
+message PoseStruct {
+  // Translation
+  float x = 1;
+  float y = 2;
+  float z = 3;
+  
+  // Rotation quaternion
+  float q0 = 4;
+  float q1 = 5;
+  float q2 = 6;
+  float q3 = 7;
+
+  uint32 origin_id = 8; // Which coordinate frame this pose is in (0 for none or unknown)
+}
+
+message AccelData {
+  float x = 1;  // mm/s^2
+  float y = 2;
+  float z = 3;
+}
+
+message GyroData {
+  float x = 1;  // rad/s
+  float y = 2;
+  float z = 3;
+}
+
+message ProxData {
+  uint32 distance_mm             = 1;
+  float  signal_quality          = 2;
+  bool   is_in_valid_range       = 3; // Distance is within valid range
+  bool   is_valid_signal_quality = 4; // Signal quality is sufficiently strong to trust that something was detected
+  bool   is_lift_in_fov          = 5; // Lift (or object on lift) is occluding the sensor
+  bool   is_too_pitched          = 6; // Robot is too far pitched up or down
+}
+
+message TouchData {
+  uint32 raw_touch_value  = 1; // Raw input from the touch sensor
+  bool   is_being_touched = 2; // Robot's context aware evaluation of whether it currently is or isn't being touched
+}
+
+message RobotState {
+  PoseStruct pose = 1;
+  float pose_angle_rad = 2;
+  float pose_pitch_rad = 3;
+  float left_wheel_speed_mmps = 4;
+  float right_wheel_speed_mmps = 5;
+  float head_angle_rad = 6;
+  float lift_height_mm = 7;
+  AccelData accel = 8;
+  GyroData gyro = 9;
+  int32 carrying_object_id = 10;
+  int32 carrying_object_on_top_id = 11; // Not supported by engine
+  int32 head_tracking_object_id = 12;
+  int32 localized_to_object_id = 13;
+  uint32 last_image_time_stamp = 14;
+  uint32 status = 15;
+  ProxData prox_data = 16;
+  TouchData touch_data = 17;
+}
+
+message CladPoint
+{
+  float x = 1;
+  float y = 2;
+}
+
+message CladRect
+{
+  float x_top_left = 1;
+  float y_top_left = 2;
+  float width = 3;
+  float height = 4;
+}
+
+// This is an int8 on the clad side.
+// Proto field names are prefixed with "EXPRESSION_"
+enum FacialExpression
+{
+  option allow_alias = true;
+  EXPRESSION_UNKNOWN = 0;    // e.g. expression estimation disabled.
+
+  EXPRESSION_NEUTRAL = 1;
+  EXPRESSION_HAPPINESS = 2;
+  EXPRESSION_SURPRISE = 3;
+  EXPRESSION_ANGER = 4;
+  EXPRESSION_SADNESS = 5;
+
+  // Clad does not account for "Unknown" in the count.
+  EXPRESSION_COUNT = 5;
+}
+
+message RobotObservedFace {
+  int32 face_id = 1;         // negative: tracked but not recognized; positive: recognized face
+  uint32 timestamp = 2;
+  PoseStruct pose = 3;
+  CladRect img_rect = 4;       // position in image coords
+  string name = 5;           // Empty if none assigned yet
+
+  FacialExpression expression = 6;
+
+  // Individual expression values histogram, sums to 100 (Exception: all zero if expression=Unknown)
+  repeated uint32 expression_values = 7;
+
+  // Face landmarks
+  repeated CladPoint left_eye = 8;
+  repeated CladPoint right_eye = 9;
+  repeated CladPoint nose = 10;
+  repeated CladPoint mouth = 11;
+}
+
+// RobotChangedObservedFaceID
+//  This generally happens when a tracked face (negative ID) is recognized and
+//  receives a positive ID or when face records get merged
+message RobotChangedObservedFaceID {
+  int32   old_id = 1;
+  int32   new_id = 2;
+}
+
+message AppIntentRequest {
+  string intent = 1;
+  string param = 2;
+}
+
+enum FaceEnrollmentResult
+{
+  SUCCESS = 0;
+
+  // Failures:
+  SAW_WRONG_FACE = 1;
+  SAW_MULTIPLE_FACES = 2;
+  TIMED_OUT = 3;
+  SAVE_FAILED = 4;
+  INCOMPLETE = 5;
+  CANCELLED = 6;
+  NAME_IN_USE = 7;
+  NAMED_STORAGE_FULL = 8;
+  UNKNOWN_FAILURE = 9;
+}
+
+message AppDisconnected{}
+
+message AppIntentResponse {
+  ResponseStatus status = 1;
+}
+
+message FaceEnrollmentCompleted {
+  FaceEnrollmentResult result = 1;
+  int32                face_id = 2;
+  string               name = 3;
+}
+
+message CancelFaceEnrollmentRequest {
+}
+
+message CancelFaceEnrollmentResponse {
+  ResponseStatus status = 1;
+}
+
+message RequestEnrolledNamesRequest {
+}
+
+message LoadedKnownFace {
+  int64  seconds_since_first_enrolled = 1;
+  int64  seconds_since_last_updated = 2;
+  int64  seconds_since_last_seen = 3;
+  int64  last_seen_seconds_since_epoch = 4;
+  int32  face_id = 5;
+  string name = 6;
+}
+
+message RobotRenamedEnrolledFace {
+    int32   face_id = 1;
+    string   name = 2;
+}
+
+message RequestEnrolledNamesResponse {
+  ResponseStatus status = 1;
+  repeated LoadedKnownFace faces = 2;
+}
+
+message UpdateEnrolledFaceByIDRequest {
+  int32 face_id = 1;
+  string old_name = 2;
+  string new_name = 3;
+}
+
+message UpdateEnrolledFaceByIDResponse {
+  ResponseStatus status = 1;
+}
+
+message EraseEnrolledFaceByIDRequest {
+  int32 face_id = 1;
+}
+
+message EraseEnrolledFaceByIDResponse {
+  ResponseStatus status = 1;
+}
+
+message EraseAllEnrolledFacesRequest {
+}
+
+message EraseAllEnrolledFacesResponse {
+  ResponseStatus status = 1;
+}
+
+message SetFaceToEnrollRequest {
+  string  name = 1;
+
+  int32   observed_id = 2;  // The ID of a specific observed face to enroll (0 for next one we see)
+  int32   save_id = 3;      // The ID of an existing face to merge final enrollment into (0 for none,
+                            // i.e. use observedID)
+
+  bool    save_to_robot = 4;  // Save to robot's NVStorage when done (NOTE: will (re)save everyone enrolled!)
+  bool    say_name = 5;       // Play say-name/celebration animations on success before completing
+  bool    use_music = 6;      // Starts special music during say-name animations (will leave music playing!)
+}
+message SetFaceToEnrollResponse {
+  ResponseStatus status = 1;
+}
+
+enum BehaviorResults
+{
+  BEHAVIOR_INVALID_STATE = 0;
+  BEHAVIOR_COMPLETE_STATE = 1;
+  BEHAVIOR_WONT_ACTIVATE_STATE = 2;
+}
+
+message DriveOffChargerRequest {
+}
+
+message DriveOffChargerResponse {
+  ResponseStatus status = 1;
+  BehaviorResults result = 2;
+}
+
+message DriveOnChargerRequest {
+}
+
+message DriveOnChargerResponse {
+  ResponseStatus status = 1;
+  BehaviorResults result = 2;
+}
+
+
+message WakeWordBegin {
+}
+
+message WakeWordEnd {
+  bool intent_heard = 1;
+  string intent_json = 2;
+}
+
+message PhotoInfo {
+  uint32 photo_id = 1;
+  uint32 timestamp_utc = 2;
+  bool photo_copied_to_app = 3;
+  bool thumb_copied_to_app = 4;
+}
+
+message PhotosInfoRequest {
+}
+
+message PhotosInfoResponse {
+  ResponseStatus status = 1;
+  repeated PhotoInfo photo_infos = 2;
+}
+
+message PhotoRequest {
+  uint32 photo_id = 1;
+}
+
+message PhotoPathMessage {
+  bool success = 1;
+  string full_path = 2;
+}
+
+message PhotoResponse {
+  ResponseStatus status = 1;
+  bool success = 2;
+  bytes image = 3;
+}
+
+message ThumbnailRequest {
+  uint32 photo_id = 1;
+}
+
+message ThumbnailPathMessage {
+  bool success = 1;
+  string full_path = 2;
+}
+
+message ThumbnailResponse {
+  ResponseStatus status = 1;
+  bool success = 2;
+  bytes image = 3;
+}
+
+message DeletePhotoRequest {
+  uint32 photo_id = 1;
+}
+
+message DeletePhotoResponse {
+  ResponseStatus status = 1;
+  bool success = 2;
+}
+
+message PhotoTaken {
+  uint32 photo_id = 1;
+}
+
+// Struct containing all the information relevant to how a 
+// path should be modified or traversed.
+message PathMotionProfile {
+  float speed_mmps = 1;
+  float accel_mmps2 = 2;
+  float decel_mmps2 = 3;
+  float point_turn_speed_rad_per_sec = 4;
+  float point_turn_accel_rad_per_sec2 = 5;
+  float point_turn_decel_rad_per_sec2 = 6;
+  float dock_speed_mmps = 7;
+  float dock_accel_mmps2 = 8;
+  float dock_decel_mmps2 = 9;
+  float reverse_speed_mmps = 10;
+  bool  is_custom = 11;
+}
+
+// These codes are duplicated from actionResults.clad file and need to be kept in sync
+message ActionResult {
+  enum ActionResultCode {
+    ACTION_RESULT_SUCCESS                 = 0;
+    ACTION_RESULT_RUNNING                 = 16777216;
+
+    ACTION_RESULT_CANCELLED_WHILE_RUNNING = 33554432;
+    NOT_STARTED                           = 33554433;
+
+    ABORT                                 = 50331648;
+    ANIM_ABORTED                          = 50331649;
+    BAD_MARKER                            = 50331650;
+    BAD_MESSAGE_TAG                       = 50331651;
+    BAD_OBJECT                            = 50331652;
+    BAD_POSE                              = 50331653;
+    BAD_TAG                               = 50331654;
+    CHARGER_UNPLUGGED_ABORT               = 50331655;
+    CLIFF_ALIGN_FAILED_TIMEOUT            = 50331656;
+    CLIFF_ALIGN_FAILED_NO_TURNING         = 50331657;
+    CLIFF_ALIGN_FAILED_OVER_TURNING       = 50331658;
+    CLIFF_ALIGN_FAILED_NO_WHITE           = 50331659;
+    CLIFF_ALIGN_FAILED_STOPPED            = 50331660;
+    FAILED_SETTING_CALIBRATION            = 50331661;
+    FOLLOWING_PATH_BUT_NOT_TRAVERSING     = 50331662;
+    INTERRUPTED                           = 50331663;
+    INVALID_OFF_TREADS_STATE              = 50331664;
+    MISMATCHED_UP_AXIS                    = 50331665;
+    NO_ANIM_NAME                          = 50331666;
+    NO_DISTANCE_SET                       = 50331667;
+    NO_FACE                               = 50331668;
+    NO_GOAL_SET                           = 50331669;
+    NO_PREACTION_POSES                    = 50331670;
+    NOT_CARRYING_OBJECT_ABORT             = 50331671;
+    NOT_ON_CHARGER_ABORT                  = 50331672;
+    NULL_SUBACTION                        = 50331673;
+    PATH_PLANNING_FAILED_ABORT            = 50331674;
+    PICKUP_OBJECT_UNEXPECTEDLY_MOVING     = 50331675;
+    SEND_MESSAGE_TO_ROBOT_FAILED          = 50331676;
+    STILL_CARRYING_OBJECT                 = 50331677;
+    TIMEOUT                               = 50331678;
+    TRACKS_LOCKED                         = 50331679;
+    UNEXPECTED_DOCK_ACTION                = 50331680;
+    UNKNOWN_TOOL_CODE                     = 50331681;
+    UPDATE_DERIVED_FAILED                 = 50331682;
+    VISUAL_OBSERVATION_FAILED             = 50331683;
+    SHOULDNT_DRIVE_ON_CHARGER             = 50331684;
+
+    RETRY                                 = 67108864;
+    DID_NOT_REACH_PREACTION_POSE          = 67108865;
+    FAILED_TRAVERSING_PATH                = 67108866;
+    LAST_PICK_AND_PLACE_FAILED            = 67108867;
+    MOTOR_STOPPED_MAKING_PROGRESS         = 67108868;
+    NOT_CARRYING_OBJECT_RETRY             = 67108869;
+    NOT_ON_CHARGER_RETRY                  = 67108870;
+    PATH_PLANNING_FAILED_RETRY            = 67108871;
+    PLACEMENT_GOAL_NOT_FREE               = 67108872;
+    PICKUP_OBJECT_UNEXPECTEDLY_NOT_MOVING = 67108873;
+    STILL_ON_CHARGER                      = 67108874;
+    UNEXPECTED_PITCH_ANGLE                = 67108875;
+  }
+  ActionResultCode code = 1;
+}
+
+enum ActionTagConstants {
+  INVALID_SDK_TAG = 0;
+  FIRST_SDK_TAG   = 2000001;
+  LAST_SDK_TAG    = 3000000;
+}
+
+// GotoPose
+message GoToPoseRequest {
+  float x_mm                    = 1;
+  float y_mm                    = 2;
+  float rad                     = 3;
+  PathMotionProfile motion_prof = 4;
+  int32 id_tag                  = 5;
+  int32 num_retries             = 6;
+}
+
+message GoToPoseResponse {
+  ResponseStatus status = 1;
+  ActionResult   result = 2;
+}
+
+// This is a uint8 in CLAD
+enum AlignmentType {
+  ALIGNMENT_TYPE_UNKNOWN     = 0;
+  ALIGNMENT_TYPE_LIFT_FINGER = 1; // Fingers aligned with object
+  ALIGNMENT_TYPE_LIFT_PLATE  = 2; // Lift plate aligned with object
+  ALIGNMENT_TYPE_BODY        = 3; // Front of body aligned with object
+  ALIGNMENT_TYPE_CUSTOM      = 4;
+}
+
+message DockWithCubeRequest {
+  int32             object_id               = 1;
+  float             distance_from_marker_mm = 2;
+  float             approach_angle_rad      = 3;
+  AlignmentType     alignment_type          = 4;
+  bool              use_approach_angle      = 5;
+  bool              use_pre_dock_pose       = 6;
+  PathMotionProfile motion_prof             = 7;
+  int32             id_tag                  = 8;
+  int32             num_retries             = 9;
+}
+
+message DockWithCubeResponse {
+  ResponseStatus status = 1;
+  ActionResult   result = 2;
+}
+
+message DriveStraightRequest {
+  float speed_mmps            = 1; // Speed should be positive
+  float dist_mm               = 2; // Use +ve for forward, -ve for backward
+  bool  should_play_animation = 3;
+  int32 id_tag                = 4;
+  int32 num_retries           = 5;
+}
+
+message DriveStraightResponse {
+  ResponseStatus status = 1;
+  ActionResult   result = 2;
+}
+
+// TurnInPlace
+// If isAbsolute == 0, turns the specified number of radians, relative to the robot's current heading*
+// If isAbsolute != 0, turns to the specified absolute orientation.
+message TurnInPlaceRequest {
+  float  angle_rad          = 1; // relative mode: positive turns left negative turns right
+  float  speed_rad_per_sec  = 2;
+  float  accel_rad_per_sec2 = 3;
+  float  tol_rad            = 4; // This should be no smaller than POINT_TURN_ANGLE_TOL (DEG_TO_RAD(2.f)).
+                                 // Smaller values are ignored except 0 which is interpreted to mean
+                                 // default tolerance of POINT_TURN_ANGLE_TOL.
+  uint32 is_absolute        = 5; // 0: angle_rad is relative to current orientation, 1: angle_rad is absolute angle to turn to
+  int32  id_tag             = 6;
+  int32  num_retries        = 7;
+}
+
+message TurnInPlaceResponse {
+  ResponseStatus status = 1;
+  ActionResult   result = 2;
+}
+
+// SetHeadAngle
+message SetHeadAngleRequest {
+  float angle_rad             = 1;
+  float max_speed_rad_per_sec = 2;
+  float accel_rad_per_sec2    = 3;
+  float duration_sec          = 4;
+  int32 id_tag                = 5;
+  int32 num_retries           = 6;
+}
+
+message SetHeadAngleResponse {
+  ResponseStatus status = 1;
+  ActionResult   result = 2;
+}
+
+// SetLiftHeight
+message SetLiftHeightRequest {
+  float height_mm             = 1;
+  float max_speed_rad_per_sec = 2;
+  float accel_rad_per_sec2    = 3;
+  float duration_sec          = 4;
+  int32 id_tag                = 5;
+  int32 num_retries           = 6;
+}
+
+message SetLiftHeightResponse {
+  ResponseStatus status = 1;
+  ActionResult   result = 2;
+}
+
+enum BatteryLevel {
+  BATTERY_LEVEL_UNKNOWN = 0;
+  BATTERY_LEVEL_LOW     = 1;
+  BATTERY_LEVEL_NOMINAL = 2;
+  BATTERY_LEVEL_FULL    = 3;
+}
+
+message NetworkStats {
+  int32 g_net_stat1_num_connections   = 1;
+  float g_net_stat2_latency_avg       = 2;
+  float g_net_stat3_latency_sd        = 3;
+  float g_net_stat4_latency_min       = 4;
+  float g_net_stat5_latency_max       = 5;
+  float g_net_stat6_ping_arrived_pc   = 6;
+  float g_net_stat7_ext_queued_avg_ms = 7;
+  float g_net_stat8_ext_queued_min_ms = 8;
+  float g_net_stat9_ext_queued_max_ms = 9;
+  float g_net_stata_queued_avg_ms     = 10;
+  float g_net_statb_queued_min_ms     = 11;
+  float g_net_statc_queued_max_ms     = 12;
+}
+
+message BatteryStateRequest {}
+
+message BatteryStateResponse {
+  ResponseStatus status = 1;
+  BatteryLevel battery_level = 2;
+  float battery_volts = 3;
+  bool is_charging = 4;
+  bool is_on_charger_platform = 5;
+  float suggested_charger_sec = 6;
+  CubeBattery cube_battery = 7;
+}
+
+message CubeBattery {
+  enum CubeBatteryLevel {
+    Low    = 0;
+    Normal = 1;
+  }
+  CubeBatteryLevel level = 1;
+  string           factory_id = 2;
+  float            battery_volts = 3;
+  float            time_since_last_reading_sec = 4;
+}
+
+message VersionStateRequest {}
+
+message VersionStateResponse {
+  ResponseStatus status = 1;
+  string os_version = 2;
+  string engine_build_id = 3;
+}
+
+message NetworkStateRequest {}
+
+message NetworkStateResponse {
+  ResponseStatus status = 1;
+  NetworkStats network_stats = 2;
+}
+
+message SayTextRequest {
+  string text = 1;
+  bool use_vector_voice = 2;
+  float duration_scalar = 3;
+}
+
+message SayTextResponse {
+  enum UtteranceState
+  {
+    INVALID = 0;
+    GENERATING = 1;
+    READY = 2;
+    PLAYING = 3;
+    FINISHED = 4;
+  }
+  ResponseStatus status = 1;
+  UtteranceState state = 2;
+}
+
+message StimulationInfo {
+  repeated string emotion_events  = 1; // may be empty
+  float  value                    = 2;
+  float  velocity                 = 3; // value per second
+  float  accel                    = 4; // value per sec per sec
+  float  value_before_event       = 5; // matches value if there were no emotion events
+  float  min_value                = 6;
+  float  max_value                = 7;
+}
+
+// Constants associated with the audio feed
+enum AudioConstants {
+  AUDIO_CONSTANTS_NULL             = 0; // error value
+  MIC_DETECTION_DIRECTIONS         = 12; // The number of audio directions the four microphones can isolate
+  SAMPLE_COUNTS_PER_ENGINE_MESSAGE = 160; // The number of audio samples in each internal audio chunk
+  SAMPLE_COUNTS_PER_SDK_MESSAGE    = 1600; // The number of audio samples delivered in each audio feed response
+  MICROPHONE_SAMPLE_RATE           = 15625; // The sampling rate victor's microphones record at
+  PROCESSED_SAMPLE_RATE            = 16000; // The sampling rate the robot processes audio at
+}
+
+// The robot can process audio in a variety of ways
+enum AudioProcessingMode {
+  AUDIO_UNKNOWN           = 0; // error value
+  AUDIO_OFF               = 1; // deactivates audio SDK mode
+  AUDIO_FAST_MODE         = 2; // unprocessed single microphone data - most performant on robot
+  AUDIO_DIRECTIONAL_MODE  = 3; // beamforming support for focusing on specific direction - sounds cleanest
+  AUDIO_VOICE_DETECT_MODE = 4; // multi-microphone non-beamforming - best for voice detection programs
+}
+
+// Request how the robot should process and send audio
+message AudioSendModeRequest {
+  AudioProcessingMode mode = 1;
+}
+
+// Event sent when the robot changes the mode it's processing and sending audio
+message AudioSendModeChanged {
+  AudioProcessingMode mode = 1;
+}
+
+// One frame of audio data and associated metadata
+message AudioChunk {
+  uint32 robot_time_stamp    = 1; // robot time at the final chunk of this audio sample group transmission
+  uint32 group_id            = 2; // the id of this sample transmission group
+  uint32 chunk_id            = 3; // the current batched chunk id within in this group id
+  uint32 audio_chunk_count   = 4; // number of chunks batched within this group id
+  bytes  signal_power        = 5; // mono audio amplitude samples
+  bytes  direction_strengths = 6; // histogram data of which directions this audio chunk came from
+  uint32 source_direction    = 7; // 0-11, with 12 representing "invalid"
+  uint32 source_confidence   = 8; // accuracy of the calculated source_direction
+  uint32 noise_floor_power   = 9; // power value, convert to db with log_10(value)
+}
+
+// Request the robot to send audio data
+message AudioFeedRequest {}
+
+// Streamed audio data from the robot
+message AudioFeedResponse {
+  option (streamed) = true;
+
+  uint32 robot_time_stamp    = 1; // robot time at the transmission of this audio sample group
+  uint32 group_id            = 2; // the index of this audio feed response
+  bytes  signal_power        = 3; // mono audio amplitude samples
+  bytes  direction_strengths = 4; // histogram data of which directions this audio chunk came from
+  uint32 source_direction    = 5; // 0-11, with 12 representing "invalid"
+  uint32 source_confidence   = 6; // accuracy of the calculated source_direction
+  uint32 noise_floor_power   = 7; // power value, convert to db with log_10(value)
+}
+
+
+// When enabled, RobotObservedObject messages will be produced
+message EnableMarkerDetectionRequest
+{
+  bool enable = 1;
+}
+
+message EnableMarkerDetectionResponse
+{
+  ResponseStatus status = 1;
+}
+
+// When enabled, RobotObservedFace messages will be produced
+message EnableFaceDetectionRequest
+{
+  bool enable = 1;
+
+  bool enable_smile_detection = 2;
+  bool enable_expression_estimation = 3;
+  bool enable_blink_detection = 4;
+  bool enable_gaze_detection = 5;
+}
+
+message EnableFaceDetectionResponse
+{
+  ResponseStatus status = 1;
+}
+
+// When enabled, RobotObservedMotion messages will be produced
+message EnableMotionDetectionRequest
+{
+  bool enable = 1;
+}
+
+message EnableMotionDetectionResponse
+{
+  ResponseStatus status = 1;
+}
+
+// When enabled, camera feed will appear on the robot's face, along with any 
+// detections that are enabled from above messages
+message EnableMirrorModeRequest
+{
+  bool enable = 1;
+}
+
+message EnableMirrorModeResponse
+{
+  ResponseStatus status = 1;
+}
+
+// Sent if MirrorMode (camera feed displayed on face) is currently enabled but is automatically
+// being disabled
+message MirrorModeDisabled
+{
+
+}
+
+// Toggle image streaming at the given resolution
+message EnableImageStreamingRequest
+{
+  bool enable = 1;
+}
+
+message EnableImageStreamingResponse
+{
+  ResponseStatus status = 1;
+}
+
+// Sent when vision modes are automatically disabled due to the SDK no longer having control
+// of the robot
+message VisionModesAutoDisabled
+{
+
+}
+
+// One frame of image data and associated metadata
+message ImageChunk {
+  enum ImageEncoding
+  {
+    NONE_IMAGE_ENCODING = 0;
+    RAW_GRAY = 1; // no compression
+    RAW_RGB = 2;  // no compression, just [RGBRGBRG...]
+    YUYV = 3;
+    YUV420SP = 4;
+    BAYER = 5;
+    JPEG_GRAY = 6;
+    JPEG_COLOR = 7;
+    JPEG_COLOR_HALF_WIDTH = 8;
+    JPEG_MINIMIZED_GRAY = 9; // Minimized grayscale JPEG - no header, no footer, no byte stuffing
+    JPEG_MINIMIZED_COLOR = 10; // Minimized grayscale JPEG - no header, no footer, no byte stuffing, with added color data
+  }
+  uint32        frame_time_stamp = 1;
+  uint32        image_id = 2;
+  uint32        width = 3;
+  uint32        height = 4;
+  ImageEncoding image_encoding = 5;
+  uint32        display_index = 6;
+  uint32        image_chunk_count = 7;
+  uint32        chunk_id = 8;
+  bytes         data = 9;
+}
+
+message CameraFeedRequest {}
+
+message CameraFeedResponse {
+  option (streamed) = true;
+
+  uint32                   frame_time_stamp = 1;
+  uint32                   image_id = 2;
+  ImageChunk.ImageEncoding image_encoding = 3;
+  bytes                    data = 4;
+}
+
+message SetEyeColorRequest {
+  float hue = 1;
+  float saturation = 2;
+}
+
+message SetEyeColorResponse {
+  ResponseStatus status = 1;
+}
+
+message SDKInitializationRequest {
+  string sdk_module_version = 1;
+  string python_version = 2;
+  string python_implementation = 3;
+  string os_version = 4;
+  string cpu_version = 5;
+}
+
+message SDKInitializationResponse {
+  ResponseStatus status = 1;
+}

@@ -1,0 +1,407 @@
+// Copyright (c) 2018 Anki, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License in the file LICENSE.txt or at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// External interface for robot <-> app and robot <-> sdk communication
+
+syntax = "proto3";
+
+package Anki.Vector.external_interface;
+
+import "google/api/annotations.proto";
+import "anki_vector/messaging/behavior.proto";
+import "anki_vector/messaging/cube.proto";
+import "anki_vector/messaging/messages.proto";
+import "anki_vector/messaging/nav_map.proto";
+import "anki_vector/messaging/shared.proto";
+
+// The grpc-defined connection between the SDK and Anki's Vector robot.
+service ExternalInterface {
+  // Checks the supported protocol version by passing in the client version and
+  // minimum host version and receiving a response to see whether the versions are supported.
+  rpc ProtocolVersion(ProtocolVersionRequest) returns (ProtocolVersionResponse) {
+    option (google.api.http) = {
+      post: "/v1/protocol_version",
+      body: "*"
+    };
+  }
+
+  // SDK-only message to pass version info for device OS, Python version, etc.
+  rpc SDKInitialization(SDKInitializationRequest) returns (SDKInitializationResponse) {
+    option (google.api.http) = {
+      post: "/v1/sdk_initialization",
+      body: "*"
+    };
+  }
+
+  // Sets the speed and acceleration for Vector's wheel motors.
+  rpc DriveWheels(DriveWheelsRequest) returns (DriveWheelsResponse) {}
+
+  // Requests that Vector play an animation.
+  rpc PlayAnimation(PlayAnimationRequest) returns (PlayAnimationResponse) {}
+
+  // Constructs and returns a list of animations.
+  rpc ListAnimations(ListAnimationsRequest) returns (ListAnimationsResponse) {
+    option (google.api.http) = {
+      post: "/v1/list_animations",
+      body: "*"
+    };
+  }
+
+  // Moves Vector's head.
+  rpc MoveHead(MoveHeadRequest) returns (MoveHeadResponse) {}
+
+  // Moves Vector's lift.
+  rpc MoveLift(MoveLiftRequest) returns (MoveLiftResponse) {}
+  
+  // Sets screen (Vector's face) to a solid color.
+  rpc DisplayFaceImageRGB(DisplayFaceImageRGBRequest) returns (DisplayFaceImageRGBResponse) {
+    option (google.api.http) = {
+      post: "/v1/display_face_image_rgb",
+      body: "*"
+    };
+  }
+
+  // Streaming events endpoint
+  rpc EventStream(EventRequest) returns (stream EventResponse) {
+    option (google.api.http) = {
+      post: "/v1/event_stream",
+      additional_bindings {
+        get: "/v1/event_stream"
+      },
+      body: "*"
+    };
+  }
+
+  // Integrate with and acquire control of Vector's AI system.
+  rpc BehaviorControl(stream BehaviorControlRequest) returns (stream BehaviorControlResponse) {
+  }
+
+  // Acquire control of Vector's AI system.
+  rpc AssumeBehaviorControl(BehaviorControlRequest) returns (stream BehaviorControlResponse) {
+    option (google.api.http) = {
+      post: "/v1/assume_behavior_control",
+      body: "*"
+    };
+  }
+
+  rpc CancelFaceEnrollment(CancelFaceEnrollmentRequest) returns (CancelFaceEnrollmentResponse) {
+    option (google.api.http) = {
+      post: "/v1/cancel_face_enrollment",
+      body: "*"
+    };
+  }
+
+  // Get a list of names and their IDs.
+  rpc RequestEnrolledNames(RequestEnrolledNamesRequest) returns (RequestEnrolledNamesResponse) {
+    option (google.api.http) = {
+      post: "/v1/request_enrolled_names",
+      body: "*"
+    };
+  }
+
+  // Update the name enrolled for a given face.
+  rpc UpdateEnrolledFaceByID(UpdateEnrolledFaceByIDRequest) returns (UpdateEnrolledFaceByIDResponse) {
+    option (google.api.http) = {
+      post: "/v1/update_enrolled_face_by_id",
+      body: "*"
+    };
+  }
+
+  // Erase the enrollment (name) record for the face with this ID.
+  rpc EraseEnrolledFaceByID(EraseEnrolledFaceByIDRequest) returns (EraseEnrolledFaceByIDResponse) {
+    option (google.api.http) = {
+      post: "/v1/erase_enrolled_face_by_id",
+      body: "*"
+    };
+  }
+
+  // Erase the enrollment (name) records for all faces.
+  rpc EraseAllEnrolledFaces(EraseAllEnrolledFacesRequest) returns (EraseAllEnrolledFacesResponse) {
+    option (google.api.http) = {
+      post: "/v1/erase_all_enrolled_faces",
+      body: "*"
+    };
+  }
+
+  rpc SetFaceToEnroll(SetFaceToEnrollRequest) returns (SetFaceToEnrollResponse) {
+    option (google.api.http) = {
+      post: "/v1/set_face_to_enroll",
+      body: "*"
+    };
+  }
+
+  rpc EnableMarkerDetection(EnableMarkerDetectionRequest) returns (EnableMarkerDetectionResponse) {
+    option (google.api.http) = {
+      post: "/v1/enable_marker_detection",
+      body: "*"
+    };
+  }
+
+  rpc EnableFaceDetection(EnableFaceDetectionRequest) returns (EnableFaceDetectionResponse) {
+    option (google.api.http) = {
+      post: "/v1/enable_face_detection",
+      body: "*"
+    };
+  }
+  
+  rpc EnableMotionDetection(EnableMotionDetectionRequest) returns (EnableMotionDetectionResponse) {
+    option (google.api.http) = {
+      post: "/v1/enable_motion_detection",
+      body: "*"
+    };
+  }
+  
+  rpc EnableMirrorMode(EnableMirrorModeRequest) returns (EnableMirrorModeResponse) {
+    option (google.api.http) = {
+      post: "/v1/enable_mirror_mode",
+      body: "*"
+    };
+  }
+  
+  rpc EnableImageStreaming(EnableImageStreamingRequest) returns (EnableImageStreamingResponse) {
+    option (google.api.http) = {
+      post: "/v1/enable_image_streaming",
+      body: "*"
+    };
+  }
+  
+  // Tells Vector to drive to the specified pose and orientation.
+  rpc GoToPose(GoToPoseRequest) returns (GoToPoseResponse) {
+    option (google.api.http) = {
+      post: "/v1/go_to_pose",
+      body: "*"
+    };
+  }
+
+  // Tells Vector to dock with a light cube with a given approach angle and distance.
+  rpc DockWithCube(DockWithCubeRequest) returns (DockWithCubeResponse) {
+    option (google.api.http) = {
+      post: "/v1/dock_with_cube",
+      body: "*"
+    };
+  }
+
+  // Drive Vector off the charger.
+  rpc DriveOffCharger(DriveOffChargerRequest) returns (DriveOffChargerResponse) {
+    option (google.api.http) = {
+      post: "/v1/drive_off_charger",
+      body: "*"
+    };
+  }
+
+  // Drive Vector onto the charger.
+  rpc DriveOnCharger(DriveOnChargerRequest) returns (DriveOnChargerResponse) {
+    option (google.api.http) = {
+      post: "/v1/drive_on_charger",
+      body: "*"
+    };
+  }
+
+  // Get the photos info.
+  rpc PhotosInfo(PhotosInfoRequest) returns (PhotosInfoResponse) {
+    option (google.api.http) = {
+      post: "/v1/photos_info",
+      body: "*"
+    };
+  }
+
+  // Get a photo by ID.
+  rpc Photo(PhotoRequest) returns (PhotoResponse) {
+    option (google.api.http) = {
+      post: "/v1/photo",
+      body: "*"
+    };
+  }
+
+  // Get a thumbnail by ID.
+  rpc Thumbnail(ThumbnailRequest) returns (ThumbnailResponse) {
+    option (google.api.http) = {
+      post: "/v1/thumbnail",
+      body: "*"
+    };
+  }
+
+  // Delete a photo by ID.
+  rpc DeletePhoto(DeletePhotoRequest) returns (DeletePhotoResponse) {
+    option (google.api.http) = {
+      post: "/v1/delete_photo",
+      body: "*"
+    };
+  }
+
+  // Tells Vector to drive in a straight line.
+  rpc DriveStraight(DriveStraightRequest) returns (DriveStraightResponse) {}
+
+  // Turn the robot around its current position.
+  rpc TurnInPlace(TurnInPlaceRequest) returns (TurnInPlaceResponse) {}
+
+  // Tell Vector's head to move to a given angle.
+  rpc SetHeadAngle(SetHeadAngleRequest) returns (SetHeadAngleResponse) {}
+
+  // Tell Vector's lift to move to a given height.
+  rpc SetLiftHeight(SetLiftHeightRequest) returns (SetLiftHeightResponse) {}
+
+  rpc UserAuthentication(UserAuthenticationRequest) returns (UserAuthenticationResponse) {
+    option (google.api.http) = {
+      post: "/v1/user_authentication",
+      body: "*"
+    };
+  }
+
+  // Check the current state of the battery.
+  rpc BatteryState(BatteryStateRequest) returns (BatteryStateResponse) {
+    option (google.api.http) = {
+      post: "/v1/battery_state",
+      body: "*"
+    };
+  }
+
+  // Get the versioning information for Vector.
+  rpc VersionState(VersionStateRequest) returns (VersionStateResponse) {
+    option (google.api.http) = {
+      post: "/v1/version_state",
+      body: "*"
+    };
+  }
+
+  // Get the network information for Vector.
+  rpc NetworkState(NetworkStateRequest) returns (NetworkStateResponse) {
+    option (google.api.http) = {
+      post: "/v1/network_state",
+      body: "*"
+    };
+  }
+
+  // Make Vector speak text.
+  rpc SayText(SayTextRequest) returns (SayTextResponse) {
+    option (google.api.http) = {
+      post: "/v1/say_text",
+      body: "*"
+    };
+  }
+
+  // Attempt to connect to a cube. If a cube is currently connected,
+  // this will do nothing.
+  rpc ConnectCube(ConnectCubeRequest) returns (ConnectCubeResponse) {
+    option (google.api.http) = {
+      post: "/v1/connect_cube",
+      body: "*"
+    };
+  }
+
+  // Requests a disconnection from the currently connected cube.
+  rpc DisconnectCube(DisconnectCubeRequest) returns (DisconnectCubeResponse) {
+    option (google.api.http) = {
+      post: "/v1/disconnect_cube",
+      body: "*"
+    };
+  }
+  
+  rpc CubesAvailable(CubesAvailableRequest) returns (CubesAvailableResponse) {
+    option (google.api.http) = {
+      post: "/v1/cubes_available",
+      body: "*"
+    };
+  }
+
+  // Signal a connected cube to flash its lights using the default cube
+  // flash animation.
+  rpc FlashCubeLights(FlashCubeLightsRequest) returns (FlashCubeLightsResponse) {
+    option (google.api.http) = {
+      post: "/v1/flash_cube_lights",
+      body: "*"
+    };
+  }
+
+  // Forget the robot's preferred cube. This will cause the robot to
+  // connect to the cube with the highest RSSI (signal strength) next
+  // time a connection is requested. Saves this preference to disk.
+  // The next cube that the robot connects to will become its
+  // preferred cube.
+  rpc ForgetPreferredCube(ForgetPreferredCubeRequest) returns (ForgetPreferredCubeResponse) {
+    option (google.api.http) = {
+      post: "/v1/forget_preferred_cube",
+      body: "*"
+    };
+  }
+
+  // Set the robot's preferred cube and save it to disk. The robot
+  // will always attempt to connect to this cube if it is available.
+  // This is only used in simulation for now.
+  rpc SetPreferredCube(SetPreferredCubeRequest) returns (SetPreferredCubeResponse) {
+    option (google.api.http) = {
+      post: "/v1/set_preferred_cube",
+      body: "*"
+    };
+  }
+
+  // Causes the robot to forget about custom objects it currently knows about.
+  rpc DeleteCustomObjects(DeleteCustomObjectsRequest) returns (DeleteCustomObjectsResponse) {
+    option (google.api.http) = {
+      post: "/v1/delete_custom_objects",
+      body: "*"
+    };
+  }
+
+  // Creates a permanent custom object instance in the robot's world, with no connection to the vision system.
+  rpc CreateFixedCustomObject(CreateFixedCustomObjectRequest) returns (CreateFixedCustomObjectResponse) {
+    option (google.api.http) = {
+      post: "/v1/create_fixed_custom_object",
+      body: "*"
+    };
+  }
+
+  // Creates a custom object with distinct custom marker(s).
+  rpc DefineCustomObject(DefineCustomObjectRequest) returns (DefineCustomObjectResponse) {
+    option (google.api.http) = {
+      post: "/v1/define_custom_object",
+      body: "*"
+    };
+  }
+
+  // Set each of the lights on the currently connected cube based on two
+  // rgb values each and timing data for how to transition between them.
+  rpc SetCubeLights(SetCubeLightsRequest) returns (SetCubeLightsResponse) {}
+
+  // Request an audio feed from the robot.
+  rpc AudioFeed(AudioFeedRequest) returns (stream AudioFeedResponse) {
+    option (google.api.http) = {
+      post: "/v1/audio_feed",
+      body: "*"
+    };
+  }
+
+  // Request a camera feed from the robot.
+  rpc CameraFeed(CameraFeedRequest) returns (stream CameraFeedResponse) {
+    option (google.api.http) = {
+      post: "/v1/camera_feed",
+      body: "*"
+    };
+  }
+
+  // Set Vector's eye color.
+  rpc SetEyeColor(SetEyeColorRequest) returns (SetEyeColorResponse) {
+    option (google.api.http) = {
+      post: "/v1/set_eye_color",
+      body: "*"
+    };
+  }
+
+  rpc NavMapFeed(NavMapFeedRequest) returns (stream NavMapFeedResponse) {
+    option (google.api.http) = {
+      post: "/v1/nav_map_feed",
+      body: "*"
+    };
+  }
+}

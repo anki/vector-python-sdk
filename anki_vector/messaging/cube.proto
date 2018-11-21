@@ -1,0 +1,366 @@
+// Copyright (c) 2018 Anki, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License in the file LICENSE.txt or at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// External interface for robot <-> app and robot <-> sdk communication
+
+syntax = "proto3";
+
+package Anki.Vector.external_interface;
+
+import "anki_vector/messaging/messages.proto";
+import "anki_vector/messaging/response_status.proto";
+
+// Attempt to connect to a cube. If a cube is currently connected,
+// this will do nothing.
+message ConnectCubeRequest {
+}
+
+message ConnectCubeResponse {
+  ResponseStatus status     = 1;
+  bool         success    = 2;
+  uint32       object_id  = 3;
+  string       factory_id = 4;
+}
+
+message CubesAvailableRequest {
+}
+
+message CubesAvailableResponse {
+  ResponseStatus status = 1;
+  repeated string factory_ids = 2;
+}
+
+// Requests a disconnection from the currently connected cube.
+message DisconnectCubeRequest {
+}
+
+message DisconnectCubeResponse {
+  ResponseStatus status = 1;
+}
+
+// Plays the default cube connection animation on the currently
+// connected cube's lights.  This is intended for app level user
+// surfacing of cube connectivity, not for sdk cube light control.
+message FlashCubeLightsRequest {
+}
+
+message FlashCubeLightsResponse {
+  ResponseStatus status = 1;
+}
+
+// Forget the robot's preferred cube. This will cause the robot to
+// connect to the cube with the highest RSSI (signal strength) next
+// time a connection is requested. Saves this preference to disk.
+// The next cube that the robot connects to will become its
+// preferred cube.
+message ForgetPreferredCubeRequest {
+}
+
+message ForgetPreferredCubeResponse {
+  ResponseStatus status = 1;
+}
+
+// Set the robot's preferred cube and save it to disk. The robot
+// will always attempt to connect to this cube if it is available.
+// This is only used in simulation for now.
+message SetPreferredCubeRequest {
+  string factory_id = 1;
+}
+
+message SetPreferredCubeResponse {
+  ResponseStatus status = 1;
+}
+
+// Sets each LED on victor's cube.  Two states are specified
+// designated 'on' and 'off', each with a color, duration,
+// and state transition time
+message SetCubeLightsRequest {
+  // This is a uint_8 internally.
+  enum MakeRelativeMode
+  {
+    UNKNOWN   = 0;
+    OFF       = 1;
+    BY_CORNER = 2;
+    BY_SIDE   = 3;
+  }
+
+  uint32           object_id                = 1;
+  repeated uint32  on_color                 = 2;
+  repeated uint32  off_color                = 3;
+  repeated uint32  on_period_ms             = 4;
+  repeated uint32  off_period_ms            = 5;
+  repeated uint32  transition_on_period_ms  = 6;
+  repeated uint32  transition_off_period_ms = 7;
+  repeated int32   offset                   = 8;
+  float            relative_to_x            = 9;
+  float            relative_to_y            = 10;
+  bool             rotate                   = 11;
+  MakeRelativeMode make_relative            = 12;
+}
+message SetCubeLightsResponse {
+  ResponseStatus status = 1;
+}
+
+enum ObjectType
+{
+  INVALID_OBJECT = 0;
+  UNKNOWN_OBJECT = 1;
+
+  //////////////////////////////////////////////////////////////////////////
+  // Light Cube (a.k.a. Active Block)
+  //
+  BLOCK_LIGHTCUBE1 = 2;
+
+  FIRST_CUSTOM_OBJECT_TYPE = 15;
+
+  OBJECT_TYPE_COUNT = 38;
+}
+
+enum CustomType
+{
+  option allow_alias = true;
+
+  INVALID_CUSTOM_TYPE = 0;
+
+  CUSTOM_TYPE_00 = 1;
+  CUSTOM_TYPE_01 = 2;
+  CUSTOM_TYPE_02 = 3;
+  CUSTOM_TYPE_03 = 4;
+  CUSTOM_TYPE_04 = 5;
+  CUSTOM_TYPE_05 = 6;
+  CUSTOM_TYPE_06 = 7;
+  CUSTOM_TYPE_07 = 8;
+  CUSTOM_TYPE_08 = 9;
+  CUSTOM_TYPE_09 = 10;
+  CUSTOM_TYPE_10 = 11;
+  CUSTOM_TYPE_11 = 12;
+  CUSTOM_TYPE_12 = 13;
+  CUSTOM_TYPE_13 = 14;
+  CUSTOM_TYPE_14 = 15;
+  CUSTOM_TYPE_15 = 16;
+  CUSTOM_TYPE_16 = 17;
+  CUSTOM_TYPE_17 = 18;
+  CUSTOM_TYPE_18 = 19;
+  CUSTOM_TYPE_19 = 20;
+
+  CUSTOM_TYPE_COUNT = 20;
+}
+
+enum ObjectFamily {
+  option allow_alias = true;
+
+  INVALID_FAMILY    = 0;
+  UNKNOWN_FAMILY    = 1;
+  BLOCK             = 2;
+  LIGHT_CUBE        = 3;
+  CHARGER           = 4;
+  CUSTOM_OBJECT     = 7;
+
+  OBJECT_FAMILY_COUNT = 7;
+}
+
+message ObjectAvailable {
+  string factory_id = 1;
+}
+
+// Indicates that a cube has connected or disconnected to the robot.
+// This message will be sent for any connects or disconnects regardless
+// of whether it originated from us or underlying robot behavior.
+message ObjectConnectionState {
+  uint32     object_id   = 1;
+  string     factory_id  = 2;
+  ObjectType object_type = 3;
+  bool       connected   = 4;
+}
+
+message ObjectMoved {
+  uint32 timestamp = 1;
+  uint32 object_id = 2;
+}
+
+message ObjectStoppedMoving {
+  uint32 timestamp = 1;
+  uint32 object_id = 2;
+}
+
+enum UpAxis {
+  INVALID_AXIS = 0;
+  X_NEGATIVE   = 1;
+  X_POSITIVE   = 2;
+  Y_NEGATIVE   = 3;
+  Y_POSITIVE   = 4;
+  Z_NEGATIVE   = 5;
+  Z_POSITIVE   = 6;
+  NUM_AXES     = 7;
+}
+
+message ObjectUpAxisChanged {
+  uint32 timestamp = 1;
+  uint32 object_id = 2;
+  UpAxis up_axis   = 3;
+}
+
+message ObjectTapped {
+  uint32 timestamp = 1;
+  uint32 object_id = 2;
+}
+
+// RobotObservedObject for signaling that an object
+//  with specified ID/Type/Family was seen at a particular location in the image
+//  and the world
+message RobotObservedObject {
+    uint32       timestamp                = 1;
+    ObjectFamily object_family            = 2;
+    ObjectType   object_type              = 3;
+    int32        object_id                = 4; // signed to match U2G::PickAndPlaceObject which has the option to have objectID<0
+    CladRect     img_rect                 = 5; // position in image coords
+    PoseStruct   pose                     = 6;
+    float        top_face_orientation_rad = 7; // absolute orienation of top face, iff isActive==true
+    uint32       is_active                = 8;
+}
+
+// Indicates that a the connection subscribed through ConnectCube has
+// been lost.
+message CubeConnectionLost {
+}
+
+// Constants associated with the audio feed
+enum ObjectConstants {
+  OBJECT_CONSTANTS_NULL             = 0; // error value
+  FIXED_CUSTOM_WALL_THICKNESS_MM    = 10; // The depth of custom walls used in the engine
+}
+
+enum CustomObjectMarker {
+  option allow_alias = true;
+
+  CUSTOM_MARKER_UNKNOWN     = 0;
+
+  CUSTOM_MARKER_CIRCLES_2   = 1;
+  CUSTOM_MARKER_CIRCLES_3   = 2;
+  CUSTOM_MARKER_CIRCLES_4   = 3;
+  CUSTOM_MARKER_CIRCLES_5   = 4;
+
+  CUSTOM_MARKER_DIAMONDS_2  = 5;
+  CUSTOM_MARKER_DIAMONDS_3  = 6;
+  CUSTOM_MARKER_DIAMONDS_4  = 7;
+  CUSTOM_MARKER_DIAMONDS_5  = 8;
+
+  CUSTOM_MARKER_HEXAGONS_2  = 9;
+  CUSTOM_MARKER_HEXAGONS_3  = 10;
+  CUSTOM_MARKER_HEXAGONS_4  = 11;
+  CUSTOM_MARKER_HEXAGONS_5  = 12;
+
+  CUSTOM_MARKER_TRIANGLES_2 = 13;
+  CUSTOM_MARKER_TRIANGLES_3 = 14;
+  CUSTOM_MARKER_TRIANGLES_4 = 15;
+  CUSTOM_MARKER_TRIANGLES_5 = 16;
+
+  CUSTOM_MARKER_COUNT       = 16;
+}
+
+enum CustomObjectDeletionMode {
+  DELETION_MASK_UNKNOWN               = 0;
+  DELETION_MASK_FIXED_CUSTOM_OBJECTS  = 1;
+  DELETION_MASK_CUSTOM_MARKER_OBJECTS = 2;
+  DELETION_MASK_ARCHETYPES            = 3;
+}
+
+// Deletes all custom objects matching a given deletion mode.
+message DeleteCustomObjectsRequest {
+  CustomObjectDeletionMode mode = 1;
+}
+
+message DeleteCustomObjectsResponse {
+  ResponseStatus status = 1;
+}
+
+// Creates a CustomObject at the specific pose with no markers associated with it
+// Since this object has no markers with which to be observed, it will remain in the
+// specified pose as an obstacle forever (or until deleted with a deletion message above)
+message CreateFixedCustomObjectRequest {
+  PoseStruct  pose      = 1;
+  float       x_size_mm = 2;
+  float       y_size_mm = 3;
+  float       z_size_mm = 4;
+}
+
+message CreateFixedCustomObjectResponse {
+  ResponseStatus  status    = 1;
+  uint32          object_id = 2;
+}
+
+// Defines a custom object of the given size with the given markers centered on each side
+// If isUnique=true, there is guaranteed to be no more than one object of this type present in the world
+message CustomBoxDefinition {
+  CustomObjectMarker marker_front     = 1;
+  CustomObjectMarker marker_back      = 2;
+  CustomObjectMarker marker_top       = 3;
+  CustomObjectMarker marker_bottom    = 4;
+  CustomObjectMarker marker_left      = 5;
+  CustomObjectMarker marker_right     = 6;
+  float              x_size_mm        = 7;
+  float              y_size_mm        = 8;
+  float              z_size_mm        = 9;
+  float              marker_width_mm  = 10;
+  float              marker_height_mm = 11;
+}
+
+// Defines a custom cube of the given size. The cube will have the same marker centered on all faces.
+// If isUnique=true, there is guaranteed to be no more than one cube of this type present in the world at a time.
+message CustomCubeDefinition {
+  CustomObjectMarker marker           = 1;
+  float              size_mm          = 2;
+  float              marker_width_mm  = 3;
+  float              marker_height_mm = 4;
+}
+
+// Defines a custom wall of the given height and width, with the same marker centered on both sides (front and back).
+// The wall's thickness is assumed to be 1cm (and thus there are no markers on its left, right, top, or bottom)
+// If isUnique=true, there is guaranteed to be no more than one wall of this type present in the world at a time.
+message CustomWallDefinition {
+  CustomObjectMarker marker           = 1;
+  float              width_mm         = 2;
+  float              height_mm        = 3;
+  float              marker_width_mm  = 4;
+  float              marker_height_mm = 5;
+}
+
+message DefineCustomObjectRequest {
+  CustomType             custom_type = 1;
+  bool                   is_unique   = 2;
+
+  oneof custom_object_definition {
+    CustomBoxDefinition  custom_box  = 3;
+    CustomCubeDefinition custom_cube = 4;
+    CustomWallDefinition custom_wall = 5;
+  }
+}
+
+message DefineCustomObjectResponse {
+  ResponseStatus  status  = 1;
+  bool            success = 2;
+}
+
+message ObjectEvent {
+  oneof object_event_type {
+    ObjectAvailable       object_available        = 1;
+    ObjectConnectionState object_connection_state = 2;
+    ObjectMoved           object_moved            = 3;
+    ObjectStoppedMoving   object_stopped_moving   = 4;
+    ObjectUpAxisChanged   object_up_axis_changed  = 5;
+    ObjectTapped          object_tapped           = 6;
+    RobotObservedObject   robot_observed_object   = 7;
+    CubeConnectionLost    cube_connection_lost    = 8;
+  }
+}

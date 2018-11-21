@@ -1,0 +1,32 @@
+// Copyright (c) 2018 Anki, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License in the file LICENSE.txt or at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// Response status
+
+syntax = "proto3";
+
+package Anki.Vector.external_interface;
+
+message ResponseStatus {
+  enum StatusCode {
+    UNKNOWN = 0;
+    RESPONSE_RECEIVED = 1; // The message has completed as expected
+    REQUEST_PROCESSING = 2; // The message has been sent to the robot
+    OK = 3;
+    FORBIDDEN = 100; // The user was not authorizied
+    NOT_FOUND = 101; // The requested attribute was not found
+    ERROR_UPDATE_IN_PROGRESS = 102; // Currently updating values from another call
+  }
+  StatusCode code = 1;
+}
