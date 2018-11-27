@@ -36,8 +36,6 @@ class PhotographComponent(util.Component):
         from PIL import Image
 
         with anki_vector.Robot() as robot:
-            if len(robot.photos.photo_info) == 0:
-                return
             for photo_info in robot.photos.photo_info:
                 print(f"Opening photo {photo_info.photo_id}")
                 photo = robot.photos.get_photo(photo_info.photo_id)
@@ -103,8 +101,6 @@ class PhotographComponent(util.Component):
             from PIL import Image
 
             with anki_vector.Robot() as robot:
-                if len(robot.photos.photo_info) == 0:
-                    return
                 for photo_info in robot.photos.photo_info:
                     print(f"Opening photo {photo_info.photo_id}")
                     photo = robot.photos.get_photo(photo_info.photo_id)

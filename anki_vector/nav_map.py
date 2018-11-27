@@ -305,10 +305,8 @@ class NavMapGrid:
         .. testcode::
 
             import anki_vector
-            import time
 
             with anki_vector.Robot(enable_nav_map_feed=True) as robot:
-                time.sleep(1)
                 latest_nav_map = robot.nav_map.latest_nav_map
                 content = latest_nav_map.get_content(0.0, 100.0)
                 print(f"Sampling point at 0.0, 100.0 and found content: {content}")
@@ -338,10 +336,8 @@ class NavMapComponent(util.Component):
     .. testcode::
 
         import anki_vector
-        import time
 
         with anki_vector.Robot(enable_nav_map_feed=True) as robot:
-            time.sleep(1)
             latest_nav_map = robot.nav_map.latest_nav_map
 
     :param robot: A reference to the owner Robot object.
@@ -354,19 +350,19 @@ class NavMapComponent(util.Component):
         self._nav_map_feed_task: asyncio.Task = None
 
     @property
+    @util.block_while_none()
     def latest_nav_map(self) -> NavMapGrid:
         """:class:`NavMapGrid`: The most recently processed image received from the robot.
 
         .. testcode::
 
             import anki_vector
-            import time
 
             with anki_vector.Robot(enable_nav_map_feed=True) as robot:
-                time.sleep(1)
                 latest_nav_map = robot.nav_map.latest_nav_map
         """
-
+        if not self._nav_map_feed_task or self._nav_map_feed_task.done():
+            raise Exception("Nav map not initialized")
         return self._latest_nav_map
 
     def init_nav_map_feed(self, frequency: float = 0.5) -> None:
@@ -383,6 +379,7 @@ class NavMapComponent(util.Component):
             self._nav_map_feed_task.cancel()
             future = self.conn.run_coroutine(self._nav_map_feed_task)
             future.result()
+            self._nav_map_feed_task = None
 
     async def _request_and_handle_nav_maps(self, frequency: float) -> None:
         """Queries and listens for nav map feed events from the robot.

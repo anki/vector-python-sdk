@@ -17,3 +17,4 @@
 syntax = "proto3";
 
 package Anki.Vector.external_interface;
+

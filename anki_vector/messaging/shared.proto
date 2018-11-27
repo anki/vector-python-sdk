@@ -94,3 +94,4 @@ message UserAuthenticationResponse {
   Code code = 2;
   bytes client_token_guid = 3;
 }
+

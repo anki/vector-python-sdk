@@ -242,9 +242,10 @@ class Robot:
 
         .. testcode::
 
-            with anki_vector.Robot() as robot:
-                time.sleep(1)
-                image = Image.fromarray(robot.camera.latest_image)
+            import anki_vector
+
+            with anki_vector.Robot(enable_camera_feed=True) as robot:
+                image = robot.camera.latest_image
                 image.show()
         """
         if self._camera is None:
@@ -290,7 +291,7 @@ class Robot:
     def proximity(self) -> proximity.ProximityComponent:
         """Component containing state related to object proximity detection.
 
-        .. testcode::
+        ..code-block ::
 
             import anki_vector
             with anki_vector.Robot() as robot:
@@ -344,7 +345,7 @@ class Robot:
 
             import anki_vector
             with anki_vector.Robot() as robot:
-                robot.vision.set_vision_mode(detect_faces=True)
+                robot.vision.enable_custom_object_detection()
         """
         return self._vision
 
@@ -356,6 +357,7 @@ class Robot:
         return self._world
 
     @property
+    @util.block_while_none()
     def pose(self) -> util.Pose:
         """:class:`anki_vector.util.Pose`: The current pose (position and orientation) of Vector.
 
@@ -368,6 +370,7 @@ class Robot:
         return self._pose
 
     @property
+    @util.block_while_none()
     def pose_angle_rad(self) -> float:
         """Vector's pose angle (heading in X-Y plane).
 
@@ -380,6 +383,7 @@ class Robot:
         return self._pose_angle_rad
 
     @property
+    @util.block_while_none()
     def pose_pitch_rad(self) -> float:
         """Vector's pose pitch (angle up/down).
 
@@ -392,6 +396,7 @@ class Robot:
         return self._pose_pitch_rad
 
     @property
+    @util.block_while_none()
     def left_wheel_speed_mmps(self) -> float:
         """Vector's left wheel speed in mm/sec
 
@@ -404,6 +409,7 @@ class Robot:
         return self._left_wheel_speed_mmps
 
     @property
+    @util.block_while_none()
     def right_wheel_speed_mmps(self) -> float:
         """Vector's right wheel speed in mm/sec
 
@@ -416,6 +422,7 @@ class Robot:
         return self._right_wheel_speed_mmps
 
     @property
+    @util.block_while_none()
     def head_angle_rad(self) -> float:
         """Vector's head angle (up/down).
 
@@ -428,6 +435,7 @@ class Robot:
         return self._head_angle_rad
 
     @property
+    @util.block_while_none()
     def lift_height_mm(self) -> float:
         """Height of Vector's lift from the ground.
 
@@ -440,6 +448,7 @@ class Robot:
         return self._lift_height_mm
 
     @property
+    @util.block_while_none()
     def accel(self) -> util.Vector3:
         """:class:`anki_vector.util.Vector3`: The current accelerometer reading (x, y, z)
 
@@ -452,6 +461,7 @@ class Robot:
         return self._accel
 
     @property
+    @util.block_while_none()
     def gyro(self) -> util.Vector3:
         """The current gyroscope reading (x, y, z)
 
@@ -464,6 +474,7 @@ class Robot:
         return self._gyro
 
     @property
+    @util.block_while_none()
     def carrying_object_id(self) -> int:
         """The ID of the object currently being carried (-1 if none)
 
@@ -476,6 +487,7 @@ class Robot:
         return self._carrying_object_id
 
     @property
+    @util.block_while_none()
     def head_tracking_object_id(self) -> int:
         """The ID of the object the head is tracking to (-1 if none)
 
@@ -488,6 +500,7 @@ class Robot:
         return self._head_tracking_object_id
 
     @property
+    @util.block_while_none()
     def localized_to_object_id(self) -> int:
         """The ID of the object that the robot is localized to (-1 if none)
 
@@ -501,6 +514,7 @@ class Robot:
 
     # TODO Move to photos or somewhere else
     @property
+    @util.block_while_none()
     def last_image_time_stamp(self) -> int:
         """The robot's timestamp for the last image seen.
 
@@ -513,6 +527,7 @@ class Robot:
         return self._last_image_time_stamp
 
     @property
+    @util.block_while_none()
     def status(self) -> float:
         """Describes Vector's status.
 
@@ -708,6 +723,7 @@ class Robot:
         self.viewer.stop_video()
         # Shutdown camera feed
         self.camera.close_camera_feed()
+        self._enable_camera_feed = False
         # Shutdown audio feed
         if self._audio is not None:
             self._audio.close_audio_feed()

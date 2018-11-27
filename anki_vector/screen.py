@@ -61,15 +61,12 @@ def convert_pixels_to_screen_data(pixel_data: list, image_width: int, image_heig
     .. testcode::
 
         import anki_vector
-
-        try:
-            from PIL import Image
-        except ImportError:
-            sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
+        from anki_vector.screen import convert_pixels_to_screen_data
+        from PIL import Image
 
         image_file = Image.open('../examples/face_images/cozmo_image.jpg')
         image_data = image_file.getdata()
-        pixel_bytes = convert_pixels_to_screen_data(image_data, pil_image.width, pil_image.height)
+        pixel_bytes = convert_pixels_to_screen_data(image_data, image_file.width, image_file.height)
 
     Returns:
         A :class:`bytes` object representing all of the pixels (16bit color in rgb565 format)

@@ -1129,6 +1129,8 @@ class CustomObject(ObservableObject):
         .. testcode::
 
             import anki_vector
+            from anki_vector.objects import CustomObjectMarkers, CustomObjectTypes
+
             with anki_vector.Robot(enable_custom_object_detection=True) as robot:
                 robot.world.define_custom_cube(custom_object_type=CustomObjectTypes.CustomType00,
                                                marker=CustomObjectMarkers.Circles2,
@@ -1160,6 +1162,8 @@ class CustomObject(ObservableObject):
         .. testcode::
 
             import anki_vector
+            from anki_vector.objects import CustomObjectMarkers, CustomObjectTypes
+
             with anki_vector.Robot(enable_custom_object_detection=True) as robot:
                 robot.world.define_custom_cube(custom_object_type=CustomObjectTypes.CustomType00,
                                                marker=CustomObjectMarkers.Circles2,
@@ -1180,6 +1184,8 @@ class CustomObject(ObservableObject):
         .. testcode::
 
             import anki_vector
+            from anki_vector.objects import CustomObjectMarkers, CustomObjectTypes
+
             with anki_vector.Robot(enable_custom_object_detection=True) as robot:
                 robot.world.define_custom_cube(custom_object_type=CustomObjectTypes.CustomType00,
                                                marker=CustomObjectMarkers.Circles2,
@@ -1240,6 +1246,8 @@ class CustomObjectTypes():  # pylint: disable=too-few-public-methods
     .. testcode::
 
         import anki_vector
+        from anki_vector.objects import CustomObjectMarkers, CustomObjectTypes
+
         with anki_vector.Robot(enable_custom_object_detection=True) as robot:
             robot.world.define_custom_cube(custom_object_type=CustomObjectTypes.CustomType00,
                                            marker=CustomObjectMarkers.Circles2,
@@ -1330,6 +1338,8 @@ class CustomObjectMarkers():  # pylint: disable=too-few-public-methods
     .. testcode::
 
         import anki_vector
+        from anki_vector.objects import CustomObjectMarkers, CustomObjectTypes
+
         with anki_vector.Robot(enable_custom_object_detection=True) as robot:
             robot.world.define_custom_cube(custom_object_type=CustomObjectTypes.CustomType00,
                                            marker=CustomObjectMarkers.Circles2,
@@ -1399,7 +1409,8 @@ class FixedCustomObject(util.Component):
     .. testcode::
 
         import anki_vector
-        from anki_vector.util import degrees
+        from anki_vector.util import degrees, Pose
+        import time
 
         with anki_vector.Robot(enable_custom_object_detection=True) as robot:
             robot.world.create_custom_fixed_object(Pose(100, 0, 0, angle_z=degrees(0)),
@@ -1440,7 +1451,8 @@ class FixedCustomObject(util.Component):
         .. testcode::
 
             import anki_vector
-            from anki_vector.util import degrees
+            from anki_vector.util import degrees, Pose
+            import time
 
             with anki_vector.Robot(enable_custom_object_detection=True) as robot:
                 obj = robot.world.create_custom_fixed_object(Pose(100, 0, 0, angle_z=degrees(0)),
@@ -1463,7 +1475,8 @@ class FixedCustomObject(util.Component):
         .. testcode::
 
             import anki_vector
-            from anki_vector.util import degrees
+            from anki_vector.util import degrees, Pose
+            import time
 
             with anki_vector.Robot(enable_custom_object_detection=True) as robot:
                 obj = robot.world.create_custom_fixed_object(Pose(100, 0, 0, angle_z=degrees(0)),
@@ -1479,7 +1492,8 @@ class FixedCustomObject(util.Component):
         .. testcode::
 
             import anki_vector
-            from anki_vector.util import degrees
+            from anki_vector.util import degrees, Pose
+            import time
 
             with anki_vector.Robot(enable_custom_object_detection=True) as robot:
                 obj = robot.world.create_custom_fixed_object(Pose(100, 0, 0, angle_z=degrees(0)),
@@ -1495,7 +1509,8 @@ class FixedCustomObject(util.Component):
         .. testcode::
 
             import anki_vector
-            from anki_vector.util import degrees
+            from anki_vector.util import degrees, Pose
+            import time
 
             with anki_vector.Robot(enable_custom_object_detection=True) as robot:
                 obj = robot.world.create_custom_fixed_object(Pose(100, 0, 0, angle_z=degrees(0)),
@@ -1511,7 +1526,8 @@ class FixedCustomObject(util.Component):
         .. testcode::
 
             import anki_vector
-            from anki_vector.util import degrees
+            from anki_vector.util import degrees, Pose
+            import time
 
             with anki_vector.Robot(enable_custom_object_detection=True) as robot:
                 obj = robot.world.create_custom_fixed_object(Pose(100, 0, 0, angle_z=degrees(0)),

@@ -314,8 +314,6 @@ if __name__ == '__main__':
     # Connect to the robot
     args = parse_command_args()
     with anki_vector.Robot(args.serial, enable_camera_feed=True, show_viewer=True) as robotInstance:
-        import time
-        time.sleep(1)
         # Creates the 3D Viewer for the connected robot.
         viewerInstance = OpenGLViewer(robot=robotInstance, show_viewer_controls=False)
 

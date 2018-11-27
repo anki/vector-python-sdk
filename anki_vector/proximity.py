@@ -50,6 +50,7 @@ class ProximitySensorData:
         self._is_too_pitched = proto_data.is_too_pitched
 
     @property
+    @util.block_while_none()
     def distance(self) -> float:
         """The distance between the sensor and a detected object
 
@@ -63,6 +64,7 @@ class ProximitySensorData:
         return self._distance
 
     @property
+    @util.block_while_none()
     def signal_quality(self) -> float:
         """The quality of the detected object.
 
@@ -80,6 +82,7 @@ class ProximitySensorData:
         return self._signal_quality
 
     @property
+    @util.block_while_none()
     def is_in_valid_range(self) -> bool:
         """Whether or not the engine considers the detected signal is close enough
         to be considered useful. Past a certain threshold, distance readings
@@ -95,6 +98,7 @@ class ProximitySensorData:
         return self._is_in_valid_range
 
     @property
+    @util.block_while_none()
     def is_valid_signal_quality(self) -> bool:
         """Whether the engine considers the detected signal to be reliable enough
         to be considered an object in proximity.
@@ -109,6 +113,7 @@ class ProximitySensorData:
         return self._is_valid_signal_quality
 
     @property
+    @util.block_while_none()
     def is_lift_in_fov(self) -> bool:
         """Whether Vector's lift is blocking the time-of-flight sensor. While
         the lift will send clear proximity signals, it's not useful for object
@@ -124,6 +129,7 @@ class ProximitySensorData:
         return self._is_lift_in_fov
 
     @property
+    @util.block_while_none()
     def is_too_pitched(self) -> bool:
         """Whether the engine considers the robot to be tilted too much up or down
         for the time-of-flight data to usefully describe obstacles in the driving
@@ -139,6 +145,7 @@ class ProximitySensorData:
         return self._is_too_pitched
 
     @property
+    @util.block_while_none()
     def is_valid(self) -> bool:
         """Comprehensive judgment of whether the reported distance is useful for
         object proximity detection.
@@ -187,6 +194,7 @@ class ProximityComponent(util.Component):
                                        Events.robot_state)
 
     @property
+    @util.block_while_none()
     def last_sensor_reading(self) -> ProximitySensorData:
         """:class:`anki_vector.proximity.ProximitySensorData`: The last reported sensor data.
 
@@ -200,11 +208,12 @@ class ProximityComponent(util.Component):
         return self._last_sensor_reading
 
     @property
+    @util.block_while_none()
     def last_valid_sensor_reading(self) -> ProximitySensorData:
         """:class:`anki_vector.proximity.ProximitySensorData`: The last reported sensor data
         which is considered useful for object detection.
 
-        .. testcode::
+        ..code-block ::
 
             import anki_vector
 

@@ -41,10 +41,13 @@ __all__ = ['Angle',
            'speed_mmps']
 
 import argparse
+from functools import wraps
 import logging
 import math
 import os
 import sys
+import time
+from typing import Callable
 
 from .messaging import protocol
 
@@ -64,7 +67,7 @@ def parse_command_args(parser: argparse.ArgumentParser = None):
     is specified, we next attempt to read the robot serial number from environment variable ANKI_ROBOT_SERIAL.
     If ANKI_ROBOT_SERIAL is specified, the value will be used as the robot's serial number.
 
-    .. testcode::
+    ..code-block ::
 
         import anki_vector
 
@@ -82,6 +85,36 @@ def parse_command_args(parser: argparse.ArgumentParser = None):
         parser = argparse.ArgumentParser()
     parser.add_argument("-s", "--serial", nargs='?', default=os.environ.get('ANKI_ROBOT_SERIAL', None))
     return parser.parse_args()
+
+
+def block_while_none(interval: float = 0.1, max_iterations: int = 50):
+    """Use this to denote a property that may need some delay before it appears.
+
+    ..code-block ::
+
+        class TestClass:
+            def __init__(self):
+                self._thing = None
+
+            @property
+            @block_while_none(interval=0.5, max_iterations=10)
+            def thing(self):
+                return self._thing
+    """
+    def blocker(func: Callable):
+        @wraps(func)
+        def wrapped(*args, **kwargs):
+            iterations = 0
+            result = func(*args, **kwargs)
+            while result is None:
+                time.sleep(interval)
+                iterations += 1
+                if iterations > max_iterations:
+                    raise Exception("Value not ready")
+                result = func(*args, **kwargs)
+            return result
+        return wrapped
+    return blocker
 
 
 def setup_basic_logging(custom_handler: logging.Handler = None,
@@ -645,9 +678,10 @@ class Pose:
     .. testcode::
 
         import anki_vector
+        from anki_vector.util import degrees, Pose
 
         with anki_vector.Robot() as robot:
-            pose = anki_vector.util.Pose(x=50, y=0, z=0, angle_z=anki_vector.util.Angle(degrees=0))
+            pose = Pose(x=50, y=0, z=0, angle_z=anki_vector.util.Angle(degrees=0))
             robot.behavior.go_to_pose(pose)
     """
     __slots__ = ('_position', '_rotation', '_origin_id')

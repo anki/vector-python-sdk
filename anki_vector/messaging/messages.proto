@@ -20,7 +20,7 @@ package Anki.Vector.external_interface;
 
 import "anki_vector/messaging/response_status.proto";
 import "anki_vector/messaging/extensions.proto";
-import "anki_vector/messaging/onboardingSteps.proto";
+import "anki_vector/messaging/onboarding_steps.proto";
 
 // A null message used by streams to verify that the client is
 // still connected.
@@ -896,3 +896,4 @@ message SDKInitializationRequest {
 message SDKInitializationResponse {
   ResponseStatus status = 1;
 }
+

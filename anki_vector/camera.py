@@ -60,10 +60,8 @@ class CameraComponent(util.Component):
     .. testcode::
 
         import anki_vector
-        import time
 
         with anki_vector.Robot(enable_camera_feed=True) as robot:
-            time.sleep(1)
             image = robot.camera.latest_image
             image.show()
 
@@ -76,8 +74,10 @@ class CameraComponent(util.Component):
         self._latest_image: Image.Image = None
         self._latest_image_id: int = None
         self._camera_feed_task: asyncio.Task = None
+        self._enabled = False
 
     @property
+    @util.block_while_none()
     def latest_image(self) -> Image.Image:
         """:class:`Image.Image`: The most recently processed image received from the robot.
 
@@ -86,17 +86,17 @@ class CameraComponent(util.Component):
         .. testcode::
 
             import anki_vector
-            import time
 
             with anki_vector.Robot(enable_camera_feed=True) as robot:
-                time.sleep(1)
                 image = robot.camera.latest_image
                 image.show()
         """
-
+        if not self._camera_feed_task:
+            raise Exception("Camera feed not open!")  # TODO: Use a VectorException
         return self._latest_image
 
     @property
+    @util.block_while_none()
     def latest_image_id(self) -> int:
         """The most recently processed image's id received from the robot.
 
@@ -107,27 +107,30 @@ class CameraComponent(util.Component):
         .. testcode::
 
             import anki_vector
-            import time
 
             with anki_vector.Robot(enable_camera_feed=True) as robot:
-                time.sleep(1)
                 image = robot.camera.latest_image
                 image.show()
                 print(f"latest_image_id: {robot.camera.latest_image_id}")
         """
+        if not self._camera_feed_task:
+            raise Exception("Camera feed not open!")  # TODO: Use a VectorException
         return self._latest_image_id
 
     def init_camera_feed(self) -> None:
         """Begin camera feed task."""
         if not self._camera_feed_task or self._camera_feed_task.done():
+            self._enabled = True
             self._camera_feed_task = self.conn.loop.create_task(self._request_and_handle_images())
 
     def close_camera_feed(self) -> None:
         """Cancel camera feed task."""
         if self._camera_feed_task:
+            self._enabled = False
             self._camera_feed_task.cancel()
             future = self.conn.run_coroutine(self._camera_feed_task)
             future.result()
+            self._camera_feed_task = None
 
     def _unpack_image(self, msg: protocol.CameraFeedResponse) -> None:
         """Processes raw data from the robot into a more more useful image structure."""
@@ -154,7 +157,7 @@ class CameraComponent(util.Component):
             async for evt in self.grpc_interface.CameraFeed(req):
                 # If the camera feed is disabled after stream is setup, exit the stream
                 # (the camera feed on the robot is disabled internally on stream exit)
-                if not self.robot.enable_camera_feed:
+                if not self._enabled:
                     self.logger.warning('Camera feed has been disabled. Enable the feed to start/continue receiving camera feed data')
                     return
                 self._unpack_image(evt)

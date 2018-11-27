@@ -22,6 +22,7 @@ see with its camera.
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ['World']
 
+from concurrent import futures
 from typing import Iterable
 
 from . import faces
@@ -221,13 +222,12 @@ class World(util.Component):
         .. testcode::
 
             import anki_vector
+
+            # First, place Vector directly in front of his charger so he can observe it.
+
             with anki_vector.Robot() as robot:
                 print('most recently observed charger: {0}.'.format(robot.world.charger))
-
-        Raises:
-            :class:`ValueError` if the cube_id is invalid.
         """
-        # Only return the cube if it has an object_id
         if self._charger is not None:
             return self._charger
         return None
@@ -261,6 +261,10 @@ class World(util.Component):
             import anki_vector
 
             with anki_vector.Robot() as robot:
+                # First get an existing object id, for instance:
+                valid_object_id = 1
+
+                # Then use the object_id to retrieve the object instance:
                 my_obj = robot.world.get_object(valid_object_id)
         """
         return self._objects.get(object_id)
@@ -271,6 +275,10 @@ class World(util.Component):
         .. testcode::
 
             with anki_vector.Robot() as robot:
+                # First get an existing face_id, for instance:
+                previously_observed_face_id = 1
+
+                # Then use the face_id to retrieve the Face instance
                 my_face = robot.world.get_face(previously_observed_face_id)
         """
         return self._faces.get(face_id)
@@ -646,14 +654,13 @@ class World(util.Component):
         self.logger.error("Failed to define Custom Object %s", custom_object_archetype)
         return None
 
-    @connection.on_connection_thread(requires_control=False)
-    async def create_custom_fixed_object(self,
-                                         pose: util.Pose,
-                                         x_size_mm: float,
-                                         y_size_mm: float,
-                                         z_size_mm: float,
-                                         relative_to_robot: bool = False,
-                                         use_robot_origin: bool = True) -> objects.FixedCustomObject:
+    def create_custom_fixed_object(self,
+                                   pose: util.Pose,
+                                   x_size_mm: float,
+                                   y_size_mm: float,
+                                   z_size_mm: float,
+                                   relative_to_robot: bool = False,
+                                   use_robot_origin: bool = True) -> objects.FixedCustomObject:
         """Defines a cuboid of custom size and places it in the world. It cannot be observed.
 
         :param pose: The pose of the object we are creating.
@@ -667,7 +674,7 @@ class World(util.Component):
         .. testcode::
 
             import anki_vector
-            from anki_vector.util import degrees
+            from anki_vector.util import degrees, Pose
 
             with anki_vector.Robot() as robot:
                 robot.world.create_custom_fixed_object(Pose(100, 0, 0, angle_z=degrees(0)),
@@ -689,13 +696,9 @@ class World(util.Component):
         if relative_to_robot:
             pose = self._robot.pose.define_pose_relative_this(pose)
 
-        req = protocol.CreateFixedCustomObjectRequest(
-            pose=pose.to_proto_pose_struct(),
-            x_size_mm=x_size_mm,
-            y_size_mm=y_size_mm,
-            z_size_mm=z_size_mm)
-
-        response = await self.grpc_interface.CreateFixedCustomObject(req)
+        response = self._create_custom_fixed_object(pose, x_size_mm, y_size_mm, z_size_mm)
+        if isinstance(response, futures.Future):
+            response = response.result()
 
         fixed_custom_object = self.fixed_custom_object_factory(
             self._robot,
@@ -708,6 +711,21 @@ class World(util.Component):
         if fixed_custom_object:
             self._objects[fixed_custom_object.object_id] = fixed_custom_object
         return fixed_custom_object
+
+    @connection.on_connection_thread(requires_control=False)
+    async def _create_custom_fixed_object(self,
+                                          pose: util.Pose,
+                                          x_size_mm: float,
+                                          y_size_mm: float,
+                                          z_size_mm: float):
+        """Send the CreateFixedCustomObject rpc call on the connection thread."""
+        req = protocol.CreateFixedCustomObjectRequest(
+            pose=pose.to_proto_pose_struct(),
+            x_size_mm=x_size_mm,
+            y_size_mm=y_size_mm,
+            z_size_mm=z_size_mm)
+
+        return await self.grpc_interface.CreateFixedCustomObject(req)
 
     #### Private Methods ####
 

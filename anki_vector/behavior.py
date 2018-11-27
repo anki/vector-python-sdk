@@ -64,6 +64,7 @@ MAX_LIFT_HEIGHT_MM = 92.0
 MAX_LIFT_HEIGHT = util.distance_mm(MAX_LIFT_HEIGHT_MM)
 
 
+# TODO: Expose is_active and priority states of the SDK behavior control from this class.
 class BehaviorComponent(util.Component):
     """Run behaviors on Vector"""
 
@@ -71,9 +72,6 @@ class BehaviorComponent(util.Component):
 
     def __init__(self, robot):
         super().__init__(robot)
-        self._current_priority = None
-        self._is_active = False
-
         self._motion_profile_map = {}
 
     # TODO Make the motion_profile_map into a class.
@@ -130,17 +128,6 @@ class BehaviorComponent(util.Component):
         default_motion_profile.update(self._motion_profile_map)
 
         return protocol.PathMotionProfile(**default_motion_profile)
-
-    # @property
-    # def current_priority(self):
-    #    # TODO implement
-    #    return self._current_priority
-
-    # @property
-    # def is_active(self) -> bool:
-    #    # TODO implement
-    #    """True if the behavior is currently active and may run on the robot."""
-    #    return self._is_active
 
     @classmethod
     def _get_next_action_id(cls):
@@ -237,9 +224,10 @@ class BehaviorComponent(util.Component):
         .. testcode::
 
             import anki_vector
+            from anki_vector.util import degrees, Pose
 
             with anki_vector.Robot() as robot:
-                pose = anki_vector.util.Pose(x=50, y=0, z=0, angle_z=anki_vector.util.Angle(degrees=0))
+                pose = Pose(x=50, y=0, z=0, angle_z=anki_vector.util.Angle(degrees=0))
                 robot.behavior.go_to_pose(pose)
         """
         if relative_to_robot and self.robot.pose:
