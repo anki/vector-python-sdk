@@ -34,8 +34,9 @@ The :class:`BehaviorComponent` class in this module contains
 functions for all the behaviors.
 """
 
-__all__ = ["BehaviorComponent", "MAX_HEAD_ANGLE", "MAX_LIFT_HEIGHT", "MAX_LIFT_HEIGHT_MM",
-           "MIN_HEAD_ANGLE", "MIN_LIFT_HEIGHT", "MIN_LIFT_HEIGHT_MM"]
+__all__ = ["MAX_HEAD_ANGLE", "MIN_HEAD_ANGLE",
+           "MAX_LIFT_HEIGHT", "MAX_LIFT_HEIGHT_MM", "MIN_LIFT_HEIGHT", "MIN_LIFT_HEIGHT_MM",
+           "BehaviorComponent"]
 
 
 from . import connection, objects, util
@@ -43,13 +44,11 @@ from .messaging import protocol
 
 # Constants
 
-#: The minimum angle the robot's head can be set to
-# TODO Clamp to this value.
-MIN_HEAD_ANGLE = util.degrees(-22)
+#: The minimum angle the robot's head can be set to.
+MIN_HEAD_ANGLE = util.degrees(-22.0)
 
 #: The maximum angle the robot's head can be set to
-# TODO Clamp to this value.
-MAX_HEAD_ANGLE = util.degrees(45)
+MAX_HEAD_ANGLE = util.degrees(45.0)
 
 # The lowest height-above-ground that lift can be moved to in millimeters.
 MIN_LIFT_HEIGHT_MM = 32.0
@@ -390,7 +389,6 @@ class BehaviorComponent(util.Component):
 
         return await self.grpc_interface.TurnInPlace(turn_in_place_request)
 
-    # TODO Clamp angle to MIN_HEAD_ANGLE and MAX_HEAD_ANGLE.
     @connection.on_connection_thread()
     async def set_head_angle(self,
                              angle: util.Angle,
@@ -402,6 +400,7 @@ class BehaviorComponent(util.Component):
 
         :param angle: Desired angle for Vector's head.
             (:const:`MIN_HEAD_ANGLE` to :const:`MAX_HEAD_ANGLE`).
+            (we clamp it to this range internally).
         :param accel: Acceleration of Vector's head in radians per second squared.
         :param max_speed: Maximum speed of Vector's head in radians per second.
         :param duration: Time for Vector's head to move in seconds. A value
@@ -415,11 +414,24 @@ class BehaviorComponent(util.Component):
 
             import anki_vector
             from anki_vector.util import degrees
+            from anki_vector.behavior import MIN_HEAD_ANGLE, MAX_HEAD_ANGLE
 
             with anki_vector.Robot() as robot:
-                robot.behavior.set_head_angle(degrees(-22.0))
-                robot.behavior.set_head_angle(degrees(45.0))
+                # move head from minimum to maximum angle
+                robot.behavior.set_head_angle(MIN_HEAD_ANGLE)
+                robot.behavior.set_head_angle(MAX_HEAD_ANGLE)
+                # move head to middle
+                robot.behavior.set_head_angle(degrees(35.0))
         """
+        if angle < MIN_HEAD_ANGLE:
+            self.logger.warning("head angle %s too small, should be in %f..%f range - clamping",
+                                angle.degrees, MIN_HEAD_ANGLE.degrees, MAX_HEAD_ANGLE.degrees)
+            angle = MIN_HEAD_ANGLE
+        elif angle > MAX_HEAD_ANGLE:
+            self.logger.warning("head angle %s too large, should be in %f..%f range - clamping",
+                                angle.degrees, MIN_HEAD_ANGLE.degrees, MAX_HEAD_ANGLE.degrees)
+            angle = MAX_HEAD_ANGLE
+
         set_head_angle_request = protocol.SetHeadAngleRequest(angle_rad=angle.radians,
                                                               max_speed_rad_per_sec=max_speed,
                                                               accel_rad_per_sec2=accel,

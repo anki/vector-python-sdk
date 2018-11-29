@@ -374,6 +374,42 @@ class Angle:
             raise TypeError("Unsupported type for * expected number")
         return Angle(radians=(self.radians * other))
 
+    def __truediv__(self, other):
+        if not isinstance(other, (int, float)):
+            raise TypeError("Unsupported type for / expected number")
+        return radians(self.radians / other)
+
+    def _cmp_int(self, other):
+        if not isinstance(other, Angle):
+            raise TypeError("Unsupported type for comparison expected Angle")
+        return self.radians - other.radians
+
+    def __eq__(self, other):
+        return self._cmp_int(other) == 0
+
+    def __ne__(self, other):
+        return self._cmp_int(other) != 0
+
+    def __gt__(self, other):
+        return self._cmp_int(other) > 0
+
+    def __lt__(self, other):
+        return self._cmp_int(other) < 0
+
+    def __ge__(self, other):
+        return self._cmp_int(other) >= 0
+
+    def __le__(self, other):
+        return self._cmp_int(other) <= 0
+
+    @property
+    def abs_value(self):
+        """:class:`anki_vector.util.Angle`: The absolute value of the angle.
+        
+        If the Angle is positive then it returns a copy of this Angle, otherwise it returns -Angle.
+        """
+        return Angle(radians = abs(self._radians))
+
 
 def angle_z_to_quaternion(angle_z: Angle):
     """This function converts an angle in the z axis (Euler angle z component) to a quaternion.
