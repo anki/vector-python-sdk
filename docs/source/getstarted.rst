@@ -26,7 +26,6 @@ Prerequisites
 -------------
 
 * You have completed the Installation steps, found here: :ref:`initial`
-* You have updated Vector to OS 1.0.1 or later. Check the OS version by putting Vector on the charger, double-tapping his backpack button, and raising and lowering his arms once.
 * The Vector companion app is *not* currently connected to Vector.
 * Vector is connected to the same network as your computer.
 * You can see Vector's eyes on his screen.
@@ -65,17 +64,22 @@ First, change to the ``tutorials`` sub-directory of the ``examples`` directory.
 
 Then, run the program.
 
-    a. For macOS and Linux systems, type the following and press **Enter**::
+    a. For macOS and Ubuntu 18.04 systems, type the following and press **Enter**::
 
         ./01_hello_world.py
 
-    The same can also be achieved on macOS/Linux with::
+    The same can also be achieved with::
 	
         python3 01_hello_world.py
 
     b. For Windows systems, type the following and press **Enter**::
 
         py 01_hello_world.py
+
+    c. For Ubuntu 16.04 systems, type the following and press **Enter**::
+
+        python3.6 01_hello_world.py
+
 
 2. If done correctly, Vector will say "Hello, World!"
 

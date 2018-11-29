@@ -48,7 +48,6 @@ The prerequisites to run ``configure.py`` are:
 * Vector is powered on.
 * You have successfully created an Anki account.
 * Vector has been set up with the Vector companion app.
-* You have updated Vector to OS 1.0.1 or later. Check the OS version by putting Vector on the charger, double-tapping his backpack button, and raising and lowering his arms once.
 * The Vector companion app is *not* currently connected to Vector.
 * Vector is connected to the same network as your computer.
 * You can see Vector's eyes on his screen.
