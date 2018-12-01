@@ -18,7 +18,6 @@ syntax = "proto3";
 
 package Anki.Vector.external_interface;
 
-import "anki_vector/messaging/response_status.proto";
 
 enum ApiVersion {
   INVALID = 0;

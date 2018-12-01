@@ -20,7 +20,6 @@ package Anki.Vector.external_interface;
 
 import "anki_vector/messaging/response_status.proto";
 import "anki_vector/messaging/extensions.proto";
-import "anki_vector/messaging/onboarding_steps.proto";
 
 // A null message used by streams to verify that the client is
 // still connected.
@@ -174,6 +173,28 @@ message RobotState {
   uint32 status = 15;
   ProxData prox_data = 16;
   TouchData touch_data = 17;
+}
+
+enum RobotStatus
+{
+  ROBOT_STATUS_NONE                    = 0x0;
+  ROBOT_STATUS_IS_MOVING               = 0x1;
+  ROBOT_STATUS_IS_CARRYING_BLOCK       = 0x2;
+  ROBOT_STATUS_IS_PICKING_OR_PLACING   = 0x4;
+  ROBOT_STATUS_IS_PICKED_UP            = 0x8;
+  ROBOT_STATUS_IS_BUTTON_PRESSED       = 0x10;
+  ROBOT_STATUS_IS_FALLING              = 0x20;
+  ROBOT_STATUS_IS_ANIMATING            = 0x40;
+  ROBOT_STATUS_IS_PATHING              = 0x80;
+  ROBOT_STATUS_LIFT_IN_POS             = 0x100;
+  ROBOT_STATUS_HEAD_IN_POS             = 0x200;
+  ROBOT_STATUS_CALM_POWER_MODE         = 0x400;
+  ROBOT_STATUS_IS_ON_CHARGER           = 0x1000;
+  ROBOT_STATUS_IS_CHARGING             = 0x2000;
+  ROBOT_STATUS_CLIFF_DETECTED          = 0x4000;
+  ROBOT_STATUS_ARE_WHEELS_MOVING       = 0x8000;
+  ROBOT_STATUS_IS_BEING_HELD           = 0x10000;
+  ROBOT_STATUS_IS_MOTION_DETECTED      = 0x20000;
 }
 
 message CladPoint
