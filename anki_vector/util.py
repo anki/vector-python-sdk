@@ -405,10 +405,10 @@ class Angle:
     @property
     def abs_value(self):
         """:class:`anki_vector.util.Angle`: The absolute value of the angle.
-        
+
         If the Angle is positive then it returns a copy of this Angle, otherwise it returns -Angle.
         """
-        return Angle(radians = abs(self._radians))
+        return Angle(radians=abs(self._radians))
 
 
 def angle_z_to_quaternion(angle_z: Angle):

@@ -27,7 +27,7 @@ from pathlib import Path
 from . import (animation, audio, behavior, camera,
                connection, events, exceptions, faces,
                motors, nav_map, screen, photos, proximity,
-               touch, util, viewer, vision, world)
+               status, touch, util, viewer, vision, world)
 from .messaging import protocol
 
 
@@ -161,7 +161,7 @@ class Robot:
         self._head_tracking_object_id: float = None
         self._localized_to_object_id: float = None
         self._last_image_time_stamp: float = None
-        self._status: float = None
+        self._status: status.RobotStatus = status.RobotStatus()
         self.pending = []
 
         self._enable_camera_feed = enable_camera_feed
@@ -527,37 +527,22 @@ class Robot:
         return self._last_image_time_stamp
 
     @property
-    @util.block_while_none()
-    def status(self) -> float:
-        """Describes Vector's status.
+    def status(self) -> status.RobotStatus:
+        """A property that exposes various status properties of the robot.
 
-        Possible values include:
-         |  NoneRobotStatusFlag     = 0
-         |  IS_MOVING               = 0x1
-         |  IS_CARRYING_BLOCK       = 0x2
-         |  IS_PICKING_OR_PLACING   = 0x4
-         |  IS_PICKED_UP            = 0x8
-         |  IS_BUTTON_PRESSED       = 0x10
-         |  IS_FALLING              = 0x20
-         |  IS_ANIMATING            = 0x40
-         |  IS_PATHING              = 0x80
-         |  LIFT_IN_POS             = 0x100
-         |  HEAD_IN_POS             = 0x200
-         |  CALM_POWER_MODE         = 0x400
-         |  IS_BATTERY_DISCONNECTED = 0x800
-         |  IS_ON_CHARGER           = 0x1000
-         |  IS_CHARGING             = 0x2000
-         |  CLIFF_DETECTED          = 0x4000
-         |  ARE_WHEELS_MOVING       = 0x8000
-         |  IS_BEING_HELD           = 0x10000
-         |  IS_MOTION_DETECTED      = 0x20000
-         |  IS_BATTERY_OVERHEATED   = 0x40000
+        This status provides a simple mechanism to, for example, detect if any
+        of Vector's motors are moving, determine if Vector is being held, or if
+        he is on the charger.  The full list is available in the
+        :class:`RobotStatus <anki_vector.status.RobotStatus>` class documentation.
 
         .. testcode::
 
             import anki_vector
             with anki_vector.Robot() as robot:
-                current_status = robot.status
+                if robot.status.is_being_held:
+                    print("Vector is being held!")
+                else:
+                    print("Vector is not being held.")
         """
         return self._status
 
@@ -636,7 +621,7 @@ class Robot:
         self._head_tracking_object_id = msg.head_tracking_object_id
         self._localized_to_object_id = msg.localized_to_object_id
         self._last_image_time_stamp = msg.last_image_time_stamp
-        self._status = msg.status
+        self._status.set(msg.status)
 
     def connect(self, timeout: int = 10) -> None:
         """Start the connection to Vector.
