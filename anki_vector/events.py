@@ -21,6 +21,7 @@ __all__ = ['EventHandler', 'Events']
 import asyncio
 from concurrent.futures import CancelledError
 from enum import Enum
+import threading
 from typing import Callable
 import uuid
 
@@ -63,6 +64,29 @@ class Events(Enum):
     nav_map_update = "nav_map_update"               #: Python event containing nav map data.
 
 
+class _EventCallback:
+    def __init__(self, callback, on_connection_thread: bool = False):
+        self._callback = callback
+        self._on_connection_thread = on_connection_thread
+
+    @property
+    def on_connection_thread(self):
+        return self._on_connection_thread
+
+    @property
+    def callback(self):
+        return self._callback
+
+    def __eq__(self, other):
+        other_cb = other
+        if hasattr(other, "callback"):
+            other_cb = other.callback
+        return other_cb == self.callback
+
+    def __hash__(self):
+        return self._callback.__hash__()
+
+
 class EventHandler:
     """Listen for Vector events."""
 
@@ -72,7 +96,10 @@ class EventHandler:
         self._conn_id = None
         self.listening_for_events = False
         self.event_future = None
+        self._thread: threading.Thread = None
+        self._loop: asyncio.BaseEventLoop = None
         self.subscribers = {}
+        self._done_signal: asyncio.Event = None
 
     def start(self, connection: Connection):
         """Start listening for events. Automatically called by the :class:`anki_vector.robot.Robot` class.
@@ -82,7 +109,16 @@ class EventHandler:
         """
         self._conn = connection
         self.listening_for_events = True
-        self.event_future = asyncio.run_coroutine_threadsafe(self._handle_events(), self._conn.loop)
+        self._thread = threading.Thread(target=self._run_thread, daemon=True, name="Event Stream Handler Thread")
+        self._thread.start()
+
+    def _run_thread(self):
+        self._loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self._loop)
+        self._done_signal = asyncio.Event(loop=self._loop)
+        # create an event stream handler on the connection thread
+        self.event_future = asyncio.run_coroutine_threadsafe(self._handle_event_stream(), self._conn.loop)
+        self._loop.run_until_complete(self._done_signal.wait())
 
     def close(self):
         """Stop listening for events. Automatically called by the :class:`anki_vector.robot.Robot` class.
@@ -93,6 +129,32 @@ class EventHandler:
             self.event_future.result()
         except CancelledError:
             pass
+        self._loop.call_soon_threadsafe(self._done_signal.set)
+
+    def _notify(self, event_callback, event_name, event_data):
+        loop = self._loop
+        thread = self._thread
+        # For high priority events that shouldn't be blocked by user callbacks
+        # they will run directly on the connection thread. This should typically
+        # be used when setting robot properties from events.
+        if event_callback.on_connection_thread:
+            loop = self._conn.loop
+            thread = self._conn.thread
+        callback = event_callback.callback
+        if threading.current_thread() is thread:
+            if asyncio.iscoroutinefunction(callback):
+                asyncio.ensure_future(callback(event_name, event_data), loop=loop)
+            elif asyncio.iscoroutine(callback):
+                asyncio.ensure_future(callback, loop=loop)
+            else:
+                loop.call_soon(callback, event_name, event_data)
+        else:
+            if asyncio.iscoroutinefunction(callback):
+                asyncio.run_coroutine_threadsafe(callback(event_name, event_data), loop=loop)
+            elif asyncio.iscoroutine(callback):
+                asyncio.run_coroutine_threadsafe(callback, loop=loop)
+            else:
+                loop.call_soon_threadsafe(callback, event_name, event_data)
 
     async def dispatch_event_by_name(self, event_data, event_name: str = None):
         """Dispatches event to event listeners by name.
@@ -101,8 +163,9 @@ class EventHandler:
 
             import anki_vector
 
-            def event_listener(_, msg):
-                print(msg)
+            def event_listener(name, msg):
+                print(name) # will print 'my_event'
+                print(msg) # will print 'my_event dispatched'
 
             with anki_vector.Robot() as robot:
                 robot.events.subscribe_by_name(event_listener, event_name='my_event')
@@ -116,13 +179,8 @@ class EventHandler:
 
         if event_name in self.subscribers.keys():
             subscribers = self.subscribers[event_name].copy()
-            for func in subscribers:
-                if asyncio.iscoroutinefunction(func):
-                    self._conn.run_soon(func(event_name, event_data))
-                elif asyncio.iscoroutine(func):
-                    self._conn.run_soon(func)
-                else:
-                    func(event_name, event_data)
+            for callback in subscribers:
+                self._notify(callback, event_name, event_data)
 
     async def dispatch_event(self, event_data, event_type: Events):
         """Dispatches event to event listeners."""
@@ -147,7 +205,7 @@ class EventHandler:
 
         return event_key, event_data
 
-    async def _handle_events(self):
+    async def _handle_event_stream(self):
         self._conn_id = bytes(uuid.uuid4().hex, "utf-8")
         try:
             req = protocol.EventRequest(connection_id=self._conn_id)
@@ -162,14 +220,16 @@ class EventHandler:
         except CancelledError:
             self.logger.debug('Event handler task was cancelled. This is expected during disconnection.')
 
-    def subscribe_by_name(self, func: Callable, event_name: str = None):
+    def subscribe_by_name(self, func: Callable, event_name: str = None, **kwargs):
         """Receive a method call when the specified event occurs.
 
         .. testcode::
 
-            def event_listener(robot, msg):
-                print(msg)
-                robot.events.unsubscribe_by_name(event_listener, event_name='my_event')
+            import anki_vector
+
+            def event_listener(name, msg):
+                print(name) # will print 'my_event'
+                print(msg) # will print 'my_event dispatched'
 
             with anki_vector.Robot() as robot:
                 robot.events.subscribe_by_name(event_listener, event_name='my_event')
@@ -180,12 +240,13 @@ class EventHandler:
         """
         if not event_name:
             self.logger.error('Bad event_name in subscribe.')
+        on_connection_thread = kwargs["on_connection_thread"] if "on_connection_thread" in kwargs else False
 
         if event_name not in self.subscribers.keys():
             self.subscribers[event_name] = set()
-        self.subscribers[event_name].add(func)
+        self.subscribers[event_name].add(_EventCallback(func, on_connection_thread))
 
-    def subscribe(self, func: Callable, event_type: Events = None):
+    def subscribe(self, func: Callable, event_type: Events = None, **kwargs):
         """Receive a method call when the specified event occurs.
 
         .. testcode::
@@ -193,26 +254,28 @@ class EventHandler:
             import anki_vector
             from anki_vector.events import Events
             from anki_vector.util import degrees
+            import functools
             import threading
 
             said_text = False
+            evt = threading.Event()
+
+            def on_robot_observed_face(robot, event_type, event):
+                print("Vector sees a face")
+                global said_text
+                if not said_text:
+                    said_text = True
+                    robot.say_text("I see a face!")
+                    evt.set()
 
             args = anki_vector.util.parse_command_args()
             with anki_vector.Robot(enable_face_detection=True) as robot:
-                evt = threading.Event()
-
-                async def on_robot_observed_face(event_type, event):
-                    print("Vector sees a face")
-                    global said_text
-                    if not said_text:
-                        said_text = True
-                        await robot.say_text("I see a face!")
-                        evt.set()
 
                 # If necessary, move Vector's Head and Lift to make it easy to see his face
                 robot.behavior.set_head_angle(degrees(50.0))
                 robot.behavior.set_lift_height(0.0)
 
+                on_robot_observed_face = functools.partial(on_robot_observed_face, robot)
                 robot.events.subscribe(on_robot_observed_face, Events.robot_observed_face)
 
                 print("------ waiting for face events, press ctrl+c to exit early ------")
@@ -233,16 +296,18 @@ class EventHandler:
 
         event_name = event_type.value
 
-        self.subscribe_by_name(func, event_name)
+        self.subscribe_by_name(func, event_name, **kwargs)
 
     def unsubscribe_by_name(self, func: Callable, event_name: str = None):
         """Unregister a previously subscribed method from an event.
 
         .. testcode::
 
-            def event_listener(robot, msg):
-                print(msg)
-                robot.events.unsubscribe_by_name(event_listener, event_name='my_event')
+            import anki_vector
+
+            def event_listener(name, msg):
+                print(name) # will print 'my_event'
+                print(msg) # will print 'my_event dispatched'
 
             with anki_vector.Robot() as robot:
                 robot.events.subscribe_by_name(event_listener, event_name='my_event')
@@ -274,27 +339,28 @@ class EventHandler:
             import anki_vector
             from anki_vector.events import Events
             from anki_vector.util import degrees
+            import functools
             import threading
 
             said_text = False
+            evt = threading.Event()
+
+            def on_robot_observed_face(robot, event_type, event):
+                print("Vector sees a face")
+                global said_text
+                if not said_text:
+                    said_text = True
+                    robot.say_text("I see a face!")
+                    evt.set()
 
             args = anki_vector.util.parse_command_args()
             with anki_vector.Robot(enable_face_detection=True) as robot:
-                evt = threading.Event()
-
-                async def on_robot_observed_face(event_type, event):
-                    print("Vector sees a face")
-                    global said_text
-                    if not said_text:
-                        said_text = True
-                        await robot.say_text("I see a face!")
-                        evt.set()
 
                 # If necessary, move Vector's Head and Lift to make it easy to see his face
                 robot.behavior.set_head_angle(degrees(50.0))
                 robot.behavior.set_lift_height(0.0)
 
-
+                on_robot_observed_face = functools.partial(on_robot_observed_face, robot)
                 robot.events.subscribe(on_robot_observed_face, Events.robot_observed_face)
 
                 print("------ waiting for face events, press ctrl+c to exit early ------")

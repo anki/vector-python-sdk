@@ -137,7 +137,7 @@ class VectorNotReadyException(_VectorGenericException):
 class VectorControlTimeoutException(_VectorGenericException):
     """Failed to get control of Vector.
 
-Please verify that Vector is connected to the internet, and consider trying to request a higher control level.
+Please verify that Vector is connected to the internet, is on a flat surface, and is fully charged.
 """
 
 

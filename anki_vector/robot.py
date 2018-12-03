@@ -688,7 +688,9 @@ class Robot:
                 object_detection.result()
 
         # Subscribe to a callback that updates the robot's local properties
-        self.events.subscribe(self._unpack_robot_state, events.Events.robot_state)
+        self.events.subscribe(self._unpack_robot_state,
+                              events.Events.robot_state,
+                              on_connection_thread=True)
 
     def disconnect(self) -> None:
         """Close the connection with Vector.

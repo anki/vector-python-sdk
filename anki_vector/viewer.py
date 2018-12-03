@@ -18,7 +18,6 @@
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ['ViewerComponent']
 
-import asyncio
 import multiprocessing as mp
 import sys
 
@@ -62,8 +61,8 @@ class ViewerComponent(util.Component):
     def __init__(self, robot):
         super().__init__(robot)
         self.overlays: list = []
+        self._close_event: mp.Event = None
         self._frame_queue: mp.Queue = None
-        self._loop: asyncio.BaseEventLoop = None
         self._process = None
 
     def show_video(self, timeout: float = 10.0) -> None:
@@ -85,8 +84,9 @@ class ViewerComponent(util.Component):
         :param timeout: Render video for the given time. (Renders forever, if timeout not given)
         """
         ctx = mp.get_context('spawn')
+        self._close_event = ctx.Event()
         self._frame_queue = ctx.Queue(maxsize=4)
-        self._process = ctx.Process(target=ViewerComponent._render_frames, args=(self._frame_queue, self.overlays, timeout), daemon=True)
+        self._process = ctx.Process(target=ViewerComponent._render_frames, args=(self._frame_queue, self._close_event, self.overlays, timeout), daemon=True)
         self._process.start()
 
     def stop_video(self) -> None:
@@ -101,8 +101,14 @@ class ViewerComponent(util.Component):
                 time.sleep(10)
                 robot.viewer.stop_video()
         """
+        if self._close_event:
+            self._close_event.set()
+            self._close_event = None
         if self._frame_queue:
-            self._frame_queue.put(None, False)
+            try:
+                self._frame_queue.put(None, False)
+            except mp.queues.Full:
+                pass
             self._frame_queue = None
         if self._process:
             self._process.join(timeout=5)
@@ -128,7 +134,8 @@ class ViewerComponent(util.Component):
 
         :param image: A frame from Vector's camera.
         """
-        if self._frame_queue is not None:
+        close_event = self._close_event
+        if self._frame_queue is not None and close_event is not None and not close_event.is_set():
             try:
                 self._frame_queue.put(image, False)
             except mp.queues.Full:
@@ -141,7 +148,7 @@ class ViewerComponent(util.Component):
         return image
 
     @staticmethod
-    def _render_frames(queue: mp.Queue, overlays: list = None, timeout: float = 10.0) -> None:
+    def _render_frames(queue: mp.Queue, event: mp.Event, overlays: list = None, timeout: float = 10.0) -> None:
         """Rendering the frames in another process. This allows the UI to have the
         main thread of its process while the user code continues to execute.
 
@@ -154,6 +161,8 @@ class ViewerComponent(util.Component):
         try:
             image = queue.get(True, timeout=timeout)
             while image:
+                if event.is_set():
+                    break
                 if overlays:
                     for overlay in overlays:
                         overlay.apply_overlay(image)
@@ -167,6 +176,7 @@ class ViewerComponent(util.Component):
             pass
         except KeyboardInterrupt:
             pass
-
-        cv2.destroyWindow(window_name)
-        cv2.waitKey(1)
+        finally:
+            event.set()
+            cv2.destroyWindow(window_name)
+            cv2.waitKey(1)

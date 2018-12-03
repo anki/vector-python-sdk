@@ -23,7 +23,7 @@ and control the robot. See the 'requires_behavior_control' method in
 connection.py for more information.
 """
 
-
+import functools
 import threading
 
 import anki_vector
@@ -33,19 +33,20 @@ wake_word_heard = False
 
 
 def main():
+    evt = threading.Event()
+
+    def on_wake_word(robot, event_type, event):
+        robot.conn.request_control()
+
+        global wake_word_heard
+        if not wake_word_heard:
+            wake_word_heard = True
+            robot.say_text("Hello")
+            evt.set()
+
     args = anki_vector.util.parse_command_args()
     with anki_vector.Robot(args.serial, requires_behavior_control=False, cache_animation_list=False) as robot:
-        evt = threading.Event()
-
-        async def on_wake_word(event_type, event):
-            await robot.conn.request_control()
-
-            global wake_word_heard
-            if not wake_word_heard:
-                wake_word_heard = True
-                await robot.say_text("Hello")
-                evt.set()
-
+        on_wake_word = functools.partial(on_wake_word, robot)
         robot.events.subscribe(on_wake_word, Events.wake_word)
 
         print('------ Vector is waiting to hear "Hey Vector!" Press ctrl+c to exit early ------')

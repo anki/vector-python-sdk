@@ -31,6 +31,7 @@ __all__ = ['Angle',
            'Vector2',
            'Vector3',
            'angle_z_to_quaternion',
+           'block_while_none',
            'degrees',
            'distance_mm',
            'distance_inches',
@@ -67,7 +68,7 @@ def parse_command_args(parser: argparse.ArgumentParser = None):
     is specified, we next attempt to read the robot serial number from environment variable ANKI_ROBOT_SERIAL.
     If ANKI_ROBOT_SERIAL is specified, the value will be used as the robot's serial number.
 
-    ..code-block ::
+    .. code-block:: python
 
         import anki_vector
 
@@ -90,16 +91,8 @@ def parse_command_args(parser: argparse.ArgumentParser = None):
 def block_while_none(interval: float = 0.1, max_iterations: int = 50):
     """Use this to denote a property that may need some delay before it appears.
 
-    ..code-block ::
-
-        class TestClass:
-            def __init__(self):
-                self._thing = None
-
-            @property
-            @block_while_none(interval=0.5, max_iterations=10)
-            def thing(self):
-                return self._thing
+    :param interval: how often to check if the property is no longer None
+    :param max_iterations: how many times to check the property before raising an error
     """
     def blocker(func: Callable):
         @wraps(func)
