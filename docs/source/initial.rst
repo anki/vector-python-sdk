@@ -18,11 +18,11 @@ To install the SDK on your system, select the instructions for your computer's o
 
 .. _trouble:
 
-^^^^^^^^^^^^^^^^^
-Anki SDK Forums
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
+Anki Developer Forums
+^^^^^^^^^^^^^^^^^^^^^
 
-Please visit the `Anki SDK Forums <https://forums.anki.com/>`_ to ask questions, find solutions and for general discussion.
+Please visit the `Anki Developer Forums <https://forums.anki.com/>`_ to ask questions, find solutions and for general discussion.
 
 ----
 

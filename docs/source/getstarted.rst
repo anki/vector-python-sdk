@@ -4,11 +4,11 @@ Getting Started With the Vector SDK
 
 To make sure you get the best experience possible out of the SDK, please ensure you have followed the steps in the :doc:`Initial Setup </initial>`.
 
------------------
-Anki SDK Forums
------------------
+---------------------
+Anki Developer Forums
+---------------------
 
-Please visit our `Anki SDK Forums <https://forums.anki.com/>`_ where you can:
+Please visit our `Anki Developer Forums <https://forums.anki.com/>`_ where you can:
 
 * Get assistance with your code
 

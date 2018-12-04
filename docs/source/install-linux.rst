@@ -120,7 +120,7 @@ You will see "SUCCESS!" when this script successfully completes.
 Troubleshooting
 ^^^^^^^^^^^^^^^
 
-Please see the :doc:`Troubleshooting </troubleshooting>` page for tips, or visit the `Anki SDK Forums <https://forums.anki.com/>`_ to ask questions, find solutions, or for general discussion.
+Please see the :doc:`Troubleshooting </troubleshooting>` page for tips, or visit the `Anki Developer Forums <https://forums.anki.com/>`_ to ask questions, find solutions, or for general discussion.
 
 ----
 

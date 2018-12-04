@@ -81,11 +81,11 @@ Can't find Vector's IP address
 Your Vector IP address looks like "192.168.40.134". Find the IP address from Vector's debug screen: double-click his backpack, move his arms up and down, then look for "IP" on his screen.
 
 
-^^^^^^^^^^^^^^^
-Anki SDK Forums
-^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
+Anki Developer Forums
+^^^^^^^^^^^^^^^^^^^^^
 
-Please visit the `Anki SDK Forums <https://forums.anki.com/>`_ to ask questions, find solutions and for general discussion.
+Please visit the `Anki Developer Forums <https://forums.anki.com/>`_ to ask questions, find solutions and for general discussion.
 
 ----
 
