@@ -118,7 +118,7 @@ class Robot:
             self._port = config["port"]
 
         if self._name is None or self._ip is None or self._cert_file is None or self._guid is None:
-            raise ValueError("The Robot object requires a serial and for Vector to be logged in (using the app then configure.py).\n"
+            raise ValueError("The Robot object requires a serial and for Vector to be logged in (using the app then running the anki_vector.configure executable submodule).\n"
                              "You may also provide the values necessary for connection through the config parameter. ex: "
                              '{"name":"Vector-XXXX", "ip":"XX.XX.XX.XX", "cert":"/path/to/cert_file", "guid":"<secret_key>"}')
 
@@ -181,7 +181,7 @@ class Robot:
 
         sections = parser.sections()
         if not sections:
-            raise Exception('\n\nCould not find the sdk configuration file. Please run ./configure.py to set up your Vector for SDK usage.')
+            raise Exception('\n\nCould not find the sdk configuration file. Please run `python3 -m anki_vector.configure` to set up your Vector for SDK usage.')
         elif serial is None and len(sections) == 1:
             serial = sections[0]
             self.logger.warning("No serial number provided. Automatically selecting {}".format(serial))

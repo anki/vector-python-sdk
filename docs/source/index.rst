@@ -19,6 +19,12 @@ Welcome to the Vector SDK!
 
 .. toctree::
     :maxdepth: 2
+    :caption: Downloads
+
+    downloads.rst
+
+.. toctree::
+    :maxdepth: 2
     :caption: Get Started
 
     getstarted.rst

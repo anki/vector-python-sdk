@@ -36,20 +36,20 @@ Tutorial program does not run
 
 Before running a Python program, be sure you can see Vector's eyes. If instead you see an image of a mobile device, the Customer Care Info screen, a missing Wifi icon, or something else, please complete setup of your Vector first and then you will be ready set up the SDK.
 
-Also, check whether Vector's IP address has changed since the last time you ran ``configure.py``. If so, see :ref:`moving_between_wifi` to set up the robot with the new IP address.
+Also, check whether Vector's IP address has changed since the last time you ran ``anki_vector.configure``. If so, see :ref:`moving_between_wifi` to set up the robot with the new IP address.
 
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Failure to run configure.py
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Failure to run anki_vector.configure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The prerequisites to run ``configure.py`` are:
+The prerequisites to run the ``anki_vector.configure`` executable submodule successfully are:
 
-* Vector is powered on.
 * You have successfully created an Anki account.
 * Vector has been set up with the Vector companion app.
 * The Vector companion app is *not* currently connected to Vector.
 * Vector is connected to the same network as your computer.
+* The ``anki_vector`` Python package must be installed.
 * You can see Vector's eyes on his screen.
 
 

@@ -15,8 +15,6 @@
 """This module provides Vector-specific 3D support classes for OpenGL, used by opengl_viewer.py.
 """
 
-# TODO Update install line above to: ``pip3 install --user "anki_vector[3dviewer]"``
-
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ['CubeRenderFrame', 'FaceRenderFrame', 'LightCubeView', 'RobotRenderFrame', 'RobotView',
            'UnitCubeView', 'VectorViewManifest', 'WorldRenderFrame']

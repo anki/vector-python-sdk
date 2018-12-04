@@ -48,8 +48,7 @@ SDK Installation
 
 To install the SDK, type the following into the Terminal window::
 
-    cd vector_python_sdk_0.5.0
-    python3 -m pip install .
+    python3 -m pip install --user anki_vector
 
 ^^^^^^^^^^^^^^^^^^^^^
 Vector Authentication
@@ -57,14 +56,13 @@ Vector Authentication
 
 To authenticate with the robot, type the following into the Terminal window::
 
-    cd vector_python_sdk_0.5.0
-    ./configure.py
+    python3 -m anki_vector.configure
 
 You will be prompted for your robot's name, ip address and serial number. You will also be asked for your Anki login and password. Make sure to use the same account that was used to set up your Vector.
 
 You will see "SUCCESS!" when this script successfully completes.
 
-.. note:: Running ``configure.py`` will automatically download the Vector robot certificate to your computer and store credentials to allow you to connect to Vector. These credentials will be stored under your home directory in folder ``.anki_vector``.
+.. note:: Running ``anki_vector.configure`` executable submodule will automatically download the Vector robot certificate to your computer and store credentials to allow you to connect to Vector. These credentials will be stored under your home directory in folder ``.anki_vector``.
 
 .. warning:: These credentials give full access to your robot, including camera stream, audio stream and data. Do not share these credentials.
 
@@ -99,8 +97,7 @@ SDK Installation
 
 To install the SDK, type the following into the Terminal window::
 
-    cd vector_python_sdk_0.5.0
-    python3.6 -m pip install .
+    python3.6 -m pip install --user anki_vector
 
 ^^^^^^^^^^^^^^^^^^^^^
 Vector Authentication
@@ -108,14 +105,13 @@ Vector Authentication
 
 To authenticate with the robot, type the following into the Terminal window::
 
-    cd vector_python_sdk_0.5.0
-    python3.6 configure.py
+    python3.6 -m anki_vector.configure
 
 You will be prompted for your robot's name, ip address and serial number. You will also be asked for your Anki login and password. Make sure to use the same account that was used to set up your Vector.
 
 You will see "SUCCESS!" when this script successfully completes.
 
-.. note:: Running ``configure.py`` will automatically download the Vector robot certificate to your computer and store credentials to allow you to connect to Vector. These credentials will be stored under your home directory in folder ``.anki_vector``.
+.. note:: Running ``anki_vector.configure`` executable submodule will automatically download the Vector robot certificate to your computer and store credentials to allow you to connect to Vector. These credentials will be stored under your home directory in folder ``.anki_vector``.
 
 .. warning:: These credentials give full access to your robot, including camera stream, audio stream and data. Do not share these credentials.
 
