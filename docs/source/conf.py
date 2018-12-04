@@ -382,7 +382,7 @@ man_pages = [
 texinfo_documents = [
     (master_doc, 'VectorSDK', 'Vector SDK Documentation',
      author, 'VectorSDK', 'The SDK for directly controlling your Vector',
-     'Miscellaneous'), # TODO: clean this up
+     'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.
