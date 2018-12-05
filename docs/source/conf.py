@@ -77,7 +77,7 @@ extensions = [
     #'sphinx.ext.napoleon'
 ]
 
-verlink_base_url = 'http://vectorsdk.anki.com/%s/' % sdk_version
+verlink_base_url = 'http://developer.anki.com/vector/%s/' % sdk_version
 verlink_version = sdk_version
 
 intersphinx_mapping = {
