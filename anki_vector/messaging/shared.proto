@@ -83,6 +83,7 @@ message EventResponse {
 
 message UserAuthenticationRequest {
   bytes user_session_id = 1;
+  bytes client_name = 2;
 }
 
 message UserAuthenticationResponse {

@@ -34,6 +34,7 @@ import os
 from pathlib import Path
 import re
 import requests
+import socket
 import sys
 
 from google.protobuf.json_format import MessageToJson
@@ -122,7 +123,9 @@ def user_authentication(session_id: bytes, cert: bytes, ip: str, name: str) -> s
 
     try:
         interface = messaging.client.ExternalInterfaceStub(channel)
-        request = messaging.protocol.UserAuthenticationRequest(user_session_id=session_id.encode('utf-8'))
+        request = messaging.protocol.UserAuthenticationRequest(
+                user_session_id=session_id.encode('utf-8'),
+                client_name=socket.gethostname().encode('utf-8'))
         response = interface.UserAuthentication(request)
         if response.code != messaging.protocol.UserAuthenticationResponse.AUTHORIZED:
             print(colored(" ERROR", "red"))
