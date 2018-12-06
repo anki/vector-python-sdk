@@ -21,8 +21,9 @@ The API
     anki_vector.nav_map
     anki_vector.objects
     anki_vector.opengl
-    anki_vector.opengl_vector
-    anki_vector.opengl_viewer
+    anki_vector.opengl.opengl
+    anki_vector.opengl.opengl_vector
+    anki_vector.opengl.opengl_viewer
     anki_vector.photos
     anki_vector.proximity
     anki_vector.robot
@@ -33,6 +34,7 @@ The API
     anki_vector.viewer
     anki_vector.vision
     anki_vector.world
+
     anki_vector.messaging.client
 
 ..

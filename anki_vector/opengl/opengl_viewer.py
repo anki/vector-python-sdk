@@ -17,27 +17,20 @@
 It uses PyOpenGL, a Python OpenGL 3D graphics library which is available on most
 platforms. It also depends on the Pillow library for image processing.
 
-The easiest way to make use of this viewer is to create an OpenGLViewer object
-for a valid robot and call run with a control function injected into it.
-
 Example:
     .. testcode::
 
-        import anki_vector
-        from anki_vector import opengl_viewer
-        import asyncio
+        import time
 
-        async def my_function(robot):
-            await asyncio.sleep(20)
-            print("done")
+        import anki_vector
 
         with anki_vector.Robot(show_viewer=True,
-                                enable_camera_feed=True,
-                                enable_face_detection=True,
-                                enable_custom_object_detection=True,
-                                enable_nav_map_feed=True) as robot:
-            viewer = anki_vector.opengl_viewer.OpenGLViewer(robot=robot)
-            viewer.run(my_function)
+                               show_3d_viewer=True,
+                               enable_camera_feed=True,
+                               enable_face_detection=True,
+                               enable_custom_object_detection=True,
+                               enable_nav_map_feed=True) as robot:
+            time.sleep(10)
 
 Warning:
     This package requires Python to have the PyOpenGL package installed, along
@@ -61,16 +54,14 @@ Warning:
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ['OpenGLViewer']
 
-import collections
-import concurrent
-import inspect
 import math
+import multiprocessing as mp
 import sys
 from typing import List
 
-from .events import Events
-from .robot import Robot
-from . import util, opengl, opengl_vector
+from anki_vector import nav_map, util
+from . import opengl, opengl_vector
+
 
 try:
     from OpenGL.GL import (GL_FILL,
@@ -83,7 +74,7 @@ try:
     from OpenGL.GLUT import (ctypes,
                              GLUT_ACTIVE_ALT, GLUT_ACTIVE_CTRL, GLUT_ACTIVE_SHIFT, GLUT_BITMAP_9_BY_15,
                              GLUT_DOWN, GLUT_LEFT_BUTTON, GLUT_RIGHT_BUTTON, GLUT_VISIBLE,
-                             glutBitmapCharacter, glutCheckLoop, glutLeaveMainLoop, glutGetModifiers, glutIdleFunc,
+                             glutBitmapCharacter, glutCheckLoop, glutGetModifiers, glutIdleFunc,
                              glutKeyboardFunc, glutKeyboardUpFunc, glutMainLoop, glutMouseFunc, glutMotionFunc, glutPassiveMotionFunc,
                              glutPostRedisplay, glutSpecialFunc, glutSpecialUpFunc, glutVisibilityFunc)
     from OpenGL.error import NullFunctionError
@@ -91,17 +82,14 @@ try:
 except ImportError as import_exc:
     opengl.raise_opengl_or_pillow_import_error(import_exc)
 
+
 # Constants
-
-
-class VectorException(BaseException):
-    """Raised by a failure in the owned Vector thread while the OpenGL viewer is running."""
 
 
 class _RobotControlIntents():  # pylint: disable=too-few-public-methods
     """Input intents for controlling the robot.
 
-    These are sent from the OpenGL thread, and consumed by the SDK thread for
+    These are sent from the OpenGL process, and consumed by the main process for
     issuing movement commands on Vector (to provide a remote-control interface).
     """
 
@@ -145,12 +133,16 @@ class _OpenGLViewController():
 
     :param shutdown_delegate: Function to call when we want to exit the host OpenGLViewer.
     :param camera: The camera object for the controller to mutate.
+    :param input_intent_queue: Sends key commands from the 3D viewer process to the main process.
+    :type input_intent_queue: multiprocessing.Queue
+    :param viewer: A reference to the owning OpenGLViewer.
+    :type viewer: OpenGLViewer
     """
 
-    def __init__(self, shutdown_delegate: callable, camera: opengl.Camera):
+    def __init__(self, shutdown_delegate: callable, camera: opengl.Camera, input_intent_queue: mp.Queue, viewer):
 
         self._logger = util.get_class_logger(__name__, self)
-        self._input_intent_queue = collections.deque(maxlen=1)
+        self._input_intent_queue = input_intent_queue
         self._last_robot_control_intents = _RobotControlIntents()
         self._is_keyboard_control_enabled = False
 
@@ -169,6 +161,8 @@ class _OpenGLViewController():
         self._last_robot_position = None
 
         self._camera = camera
+
+        self._opengl_viewer = viewer
 
     #### Public Properties ####
 
@@ -223,42 +217,6 @@ class _OpenGLViewController():
         glutIdleFunc(self._idle)
         glutVisibilityFunc(self._visible)
 
-    def update(self, robot: Robot):
-        """Reads most recently stored user-triggered intents, and sends
-        motor messages to the robot if the intents should effect the robot's
-        current motion.
-
-        Called on SDK thread, for controlling robot from input intents
-        pushed from the OpenGL thread.
-
-        :param robot: the robot being updated by this View Controller
-        """
-
-        try:
-            input_intents = self._input_intent_queue.popleft()  # type: RobotControlIntents
-        except IndexError:
-            # no new input intents - do nothing
-            return
-
-        # Track last-used intents so that we only issue motor controls
-        # if different from the last frame (to minimize it fighting with an SDK
-        # program controlling the robot):
-        old_intents = self._last_robot_control_intents
-        self._last_robot_control_intents = input_intents
-
-        if (old_intents.left_wheel_speed != input_intents.left_wheel_speed or
-                old_intents.right_wheel_speed != input_intents.right_wheel_speed):
-            robot.motors.set_wheel_motors(input_intents.left_wheel_speed,
-                                          input_intents.right_wheel_speed,
-                                          input_intents.left_wheel_speed * 4,
-                                          input_intents.right_wheel_speed * 4)
-
-        if old_intents.lift_speed != input_intents.lift_speed:
-            robot.motors.set_lift_motor(input_intents.lift_speed)
-
-        if old_intents.head_speed != input_intents.head_speed:
-            robot.motors.set_head_motor(input_intents.head_speed)
-
     #### Private Methods ####
 
     def _update_modifier_keys(self):
@@ -307,7 +265,7 @@ class _OpenGLViewController():
         elif ord(key) == 27:  # Escape key
             self._shutdown_delegate()
         elif ord(key) == 72 or ord(key) == 104:  # H key
-            opengl_viewer.show_controls = not opengl_viewer.show_controls
+            self._opengl_viewer.show_controls = not self._opengl_viewer.show_controls
 
     def _on_special_key_up(self, key, x, y):  # pylint: disable=unused-argument
         """Called by GLUT when a special key is released.
@@ -358,8 +316,8 @@ class _OpenGLViewController():
 
         left_button = self._is_mouse_down.get(GLUT_LEFT_BUTTON, False)
         # For laptop and other 1-button mouse users, treat 'x' key as a right mouse button too
-        right_button = (self._is_mouse_down.get(GLUT_RIGHT_BUTTON, False) or
-                        self._is_key_pressed.get(b'x', False))
+        right_button = (self._is_mouse_down.get(GLUT_RIGHT_BUTTON, False)
+                        or self._is_key_pressed.get(b'x', False))
 
         MOUSE_SPEED_SCALAR = 1.0  # general scalar for all mouse movement sensitivity
         MOUSE_ROTATE_SCALAR = 0.025  # additional scalar for rotation sensitivity
@@ -413,7 +371,7 @@ class _OpenGLViewController():
 
         control_intents = _RobotControlIntents(left_wheel_speed, right_wheel_speed,
                                                lift_speed, head_speed)
-        self._input_intent_queue.append(control_intents)
+        self._input_intent_queue.put(control_intents, True)
 
     def _idle(self):
         if self._is_keyboard_control_enabled:
@@ -428,23 +386,6 @@ class _OpenGLViewController():
         else:
             glutIdleFunc(None)
 
-
-class _ExternalRenderCallFunctor():  # pylint: disable=too-few-public-methods
-    """Externally specified OpenGL render function.
-
-    Allows extra geometry to be rendered into OpenGLViewer.
-
-    :param f: function to call inside the rendering loop
-    :param f_args: a list of arguments to supply to the callable function
-    """
-
-    def __init__(self, f: callable, f_args: list):
-        self._f = f
-        self._f_args = f_args
-
-    def invoke(self):
-        """Calls the internal function"""
-        self._f(*self._f_args)
 
 
 #: A default window resolution provided for OpenGL Vector programs
@@ -486,32 +427,35 @@ opengl_viewer = None  # type: OpenGLViewer
 class OpenGLViewer():
     """OpenGL-based 3D Viewer.
 
-    Handles rendering of both a 3D world view and a 2D camera window.
+    Handles rendering of a 3D world view including navigation map.
 
-    .. testcode::
-
-        import anki_vector
-        from anki_vector import opengl_viewer
-        import asyncio
-
-        async def my_function(robot):
-            await asyncio.sleep(20)
-            print("done")
-
-        with anki_vector.Robot(show_viewer=True,
-                                enable_camera_feed=True,
-                                enable_face_detection=True,
-                                enable_custom_object_detection=True,
-                                enable_nav_map_feed=True) as robot:
-            viewer = anki_vector.opengl_viewer.OpenGLViewer(robot=robot)
-            viewer.run(my_function)
-
-    :param robot: The robot object being used by the OpenGL viewer
+    :param close_event: Used to notify each process when done rendering.
+    :type close_event: multiprocessing.Event
+    :param input_intent_queue: Sends key commands from the 3D viewer process to the main process.
+    :type input_intent_queue: multiprocessing.Queue
+    :param nav_map_queue: Updates the 3D viewer process with the latest navigation map.
+    :type nav_map_queue: multiprocessing.Queue
+    :param world_frame_queue: Provides the 3D viewer with details about the world.
+    :type world_frame_queue: multiprocessing.Queue
+    :param extra_render_function_queue: Functions to be executed in the 3D viewer process.
+    :type extra_render_function_queue: multiprocessing.Queue
+    :param user_data_queue: A queue that may be used outside the SDK to pass information to the viewer process.
+        May be used by ``extra_render_function_queue`` functions.
+    :type user_data_queue: multiprocessing.Queue
+    :param resolution: Specifies whether to draw controls on the view.
+    :param projector: Specifies whether to draw controls on the view.
+    :param camera: Specifies whether to draw controls on the view.
+    :param lights: Specifies whether to draw controls on the view.
     :param show_viewer_controls: Specifies whether to draw controls on the view.
     """
 
     def __init__(self,
-                 robot: Robot,
+                 close_event: mp.Event,
+                 input_intent_queue: mp.Queue,
+                 nav_map_queue: mp.Queue,
+                 world_frame_queue: mp.Queue,
+                 extra_render_function_queue: mp.Queue,
+                 user_data_queue: mp.Queue,
                  resolution: List[int] = None,
                  projector: opengl.Projector = None,
                  camera: opengl.Camera = None,
@@ -526,16 +470,17 @@ class OpenGLViewer():
         if lights is None:
             lights = default_lights
 
-        # Queues from SDK thread to OpenGL thread
-        self._nav_map_queue = collections.deque(maxlen=1)
-        self._world_frame_queue = collections.deque(maxlen=1)
+        self._close_event = close_event
+        self._input_intent_queue = input_intent_queue
+        self._nav_map_queue = nav_map_queue
+        self._world_frame_queue = world_frame_queue
+        self._extra_render_function_queue = extra_render_function_queue
+        self._user_data_queue = user_data_queue
 
         self._logger = util.get_class_logger(__name__, self)
-        self._robot = robot
         self._extra_render_calls = []
 
         self._internal_function_finished = False
-        self._exit_requested = False
 
         # Controls
         self.show_controls = show_viewer_controls
@@ -553,12 +498,6 @@ class OpenGLViewer():
                                         '',
                                         'H: Toggle help'])
 
-        global opengl_viewer  # pylint: disable=global-statement
-        if opengl_viewer is not None:
-            self._logger.error("Multiple OpenGLViewer instances not expected: "
-                               "OpenGL / GLUT only supports running 1 blocking instance on the main thread.")
-        opengl_viewer = self
-
         self._vector_view_manifest = opengl_vector.VectorViewManifest()
         self._main_window = opengl.OpenGLWindow(0, 0, resolution[0], resolution[1], b"Vector 3D Visualizer")
 
@@ -567,37 +506,9 @@ class OpenGLViewer():
         self._camera = camera
         self._lights = lights
 
-        self._view_controller = _OpenGLViewController(self.close, self._camera)
+        self._view_controller = _OpenGLViewController(self.close, self._camera, self._input_intent_queue, self)
 
         self._latest_world_frame: opengl_vector.WorldRenderFrame = None
-
-    def add_render_call(self, render_function: callable, *args):
-        """Allows external functions to be injected into the viewer which
-        will be called at the appropriate time in the rendering pipeline.
-
-        Exmaple usage to draw a dot at the world origin:
-
-        .. code-block:: python
-
-            def my_render_function():
-                glBegin(GL_POINTS)
-                glVertex3f(0, 0, 0)
-                glEnd()
-
-            my_opengl_viewer.add_render_call(my_render_function)
-
-        :param render_function: The delegated function to be invoked in the pipeline
-        :param args: An optional list of arguments to send to the render_function
-            the arguments list must match the parameters accepted by the
-            supplied function.
-        """
-        self._extra_render_calls.append(_ExternalRenderCallFunctor(render_function, args))
-
-    def _request_exit(self):
-        """Begins the viewer shutdown process"""
-        self._exit_requested = True
-        if bool(glutLeaveMainLoop):
-            glutLeaveMainLoop()
 
     def _render_world_frame(self, world_frame: opengl_vector.WorldRenderFrame):
         """Render the world to the current OpenGL context
@@ -694,20 +605,27 @@ class OpenGLViewer():
         """
         window.prepare_for_rendering(self._projector, self._camera, self._lights)
 
+        try:
+            extra_render_call = self._extra_render_function_queue.get(False)
+            self._extra_render_calls.append(extra_render_call)
+        except mp.queues.Empty:
+            pass
+
         # Update the latest world frame if there is a new one available
         try:
-            world_frame = self._world_frame_queue.popleft()  # type: WorldRenderFrame
+            world_frame = self._world_frame_queue.get(False)  # type: WorldRenderFrame
             if world_frame is not None:
                 self._view_controller.last_robot_position = world_frame.robot_frame.pose.position
             self._latest_world_frame = world_frame
-        except IndexError:
+        except mp.queues.Empty:
             world_frame = self._latest_world_frame
 
         try:
-            new_nav_map = self._nav_map_queue.popleft()
+            new_nav_map = self._nav_map_queue.get(False)
             if new_nav_map is not None:
+                new_nav_map = nav_map.NavMapGrid(new_nav_map, self._logger)
                 self._vector_view_manifest.nav_map_view.build_from_nav_map(new_nav_map)
-        except IndexError:
+        except mp.queues.Empty:
             # no new nav map - queue is empty
             pass
 
@@ -719,7 +637,7 @@ class OpenGLViewer():
             # state changes will not alter other calls
             glPushMatrix()
             try:
-                render_call.invoke()
+                render_call.invoke(self._user_data_queue)
             finally:
                 glPopMatrix()
 
@@ -733,99 +651,30 @@ class OpenGLViewer():
 
         except KeyboardInterrupt:
             self._logger.info("_display caught KeyboardInterrupt - exitting")
-            self._request_exit()
+            self._close_event.set()
 
-    def run(self, delegate_function: callable):
-        """Turns control of the main thread over to the OpenGL viewer
-
-        .. testcode::
-
-            import anki_vector
-            from anki_vector import opengl_viewer
-            import asyncio
-
-            async def my_function(robot):
-                await asyncio.sleep(20)
-                print("done")
-
-            with anki_vector.Robot(show_viewer=True,
-                                    enable_camera_feed=True,
-                                    enable_face_detection=True,
-                                    enable_custom_object_detection=True,
-                                    enable_nav_map_feed=True) as robot:
-                viewer = anki_vector.opengl_viewer.OpenGLViewer(robot=robot)
-                viewer.run(my_function)
-
-        :param delegate_function: external function to spin up on a seperate thread
-            to allow for sdk code to run while the main thread is owned by the viewer.
+    def run(self):
+        """Turns control of the current thread over to the OpenGL viewer
         """
-        abort_future = concurrent.futures.Future()
+        self._main_window.initialize(self._on_window_update)
+        self._view_controller.initialize()
 
-        # Register for robot state events
-        robot = self._robot
-        robot.events.subscribe(self._on_robot_state_update, Events.robot_state)
-        robot.events.subscribe(self._on_nav_map_update, Events.nav_map_update)
+        self._vector_view_manifest.load_assets()
 
-        # Determine how many arguments the function accepts
-        function_args = []
-        for param in inspect.signature(delegate_function).parameters:
-            if param == 'robot':
-                function_args.append(robot)
-            elif param == 'viewer':
-                function_args.append(self)
-            else:
-                raise ValueError("the delegate_function injected into OpenGLViewer.run requires an unrecognized parameter, only 'robot' and 'viewer' are supported")
+        # use a non-blocking update loop if possible to make exit conditions
+        # easier (not supported on all GLUT versions).
+        if bool(glutCheckLoop):
+            while not self._close_event.is_set():
+                glutCheckLoop()
+        else:
+            # This blocks until quit
+            glutMainLoop()
 
-        try:
-            robot.conn.run_coroutine(delegate_function(*function_args))
-
-            # @TODO: Unsubscribe and shut down when the delegate function finishes
-            #  This became an issue when the concurrent.future changes were added.
-
-            self._main_window.initialize(self._on_window_update)
-            self._view_controller.initialize()
-
-            self._vector_view_manifest.load_assets()
-
-            # use a non-blocking update loop if possible to make exit conditions
-            # easier (not supported on all GLUT versions).
-            if bool(glutCheckLoop):
-                while not self._exit_requested:
-                    glutCheckLoop()
-            else:
-                # This blocks until quit
-                glutMainLoop()
-
-            if self._exit_requested and not self._internal_function_finished:
-                # Pass the keyboard interrupt on to SDK so that it can close cleanly
-                raise KeyboardInterrupt
-
-        except BaseException as e:
-            abort_future.set_exception(VectorException(repr(e)))
-            raise
-
-        global opengl_viewer  # pylint: disable=global-statement
-        opengl_viewer = None
+        if not self._close_event.is_set():
+            # Pass the keyboard interrupt on to SDK so that it can close cleanly
+            raise KeyboardInterrupt
 
     def close(self):
         """Called from the SDK when the program is complete and it's time to exit."""
-        if not self._exit_requested:
-            self._request_exit()
-
-    def _on_robot_state_update(self, _, msg):  # pylint: disable=unused-argument
-        """Called from SDK whenever the robot state is updated (so i.e. every engine tick).
-        Note: This is called from the SDK thread, so only access safe things
-        We can safely capture any robot and world state here, and push to OpenGL
-        (main) thread via a thread-safe queue.
-        """
-        world_frame = opengl_vector.WorldRenderFrame(self._robot)
-        self._world_frame_queue.append(world_frame)
-        self._view_controller.update(self._robot)
-
-    def _on_nav_map_update(self, _, msg):  # pylint: disable=unused-argument
-        """Called from SDK whenever the nav map is updated.
-        Note: This is called from the SDK thread, so only access safe things
-        We can safely capture any robot and world state here, and push to OpenGL
-        (main) thread via a thread-safe queue.
-        """
-        self._nav_map_queue.append(msg.nav_map)
+        if not self._close_event.is_set():
+            self._close_event.set()

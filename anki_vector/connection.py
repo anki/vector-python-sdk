@@ -717,6 +717,8 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
         def result(*args: List[Any], **kwargs: Dict[str, Any]) -> Any:
             """The function that is the result of the decorator. Provides a wrapped function.
 
+            :param _return_future: A hidden parameter which allows the wrapped function to explicitly
+                return a future (default for AsyncRobot) or not (default for Robot).
             :returns: Based on context this can return the result of the decorated function,
                 the :class:`concurrent.futures.Future` which points to the decorated function, or the
                 :class:`asyncio.Future` which points to the decorated function.
@@ -724,6 +726,8 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
                 when the robot is an :class:`anki_vector.robot.AsyncRobot`, and when
                 called from the connection thread respectively."""
             self = args[0]  # Get the self reference from the function call
+            # if the call supplies a _return_future parameter then override force_async with that.
+            _return_future = kwargs.pop('_return_future', self.force_async)
             wrapped_coroutine = log_handler(self.conn, func, self.logger, *args, **kwargs)
             if threading.current_thread() == self.conn.thread:
                 if self.conn.loop.is_running():
@@ -738,7 +742,7 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
                     if fut in self.conn.active_commands:
                         self.conn.active_commands.remove(fut)
                 future.add_done_callback(clear_when_done)
-            if self.force_async:
+            if _return_future:
                 return future
             try:
                 return future.result()

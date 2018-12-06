@@ -391,6 +391,6 @@ class NavMapComponent(util.Component):
             req = protocol.NavMapFeedRequest(frequency=frequency)
             async for evt in self.grpc_interface.NavMapFeed(req):
                 self._latest_nav_map = NavMapGrid(evt, self.logger)
-                await self._robot.events.dispatch_event(EvtNavMapUpdate(self._latest_nav_map), Events.nav_map_update)
+                await self._robot.events.dispatch_event(evt, Events.nav_map_update)
         except CancelledError:
             self.logger.debug('Nav Map feed task was cancelled. This is expected during disconnection.')

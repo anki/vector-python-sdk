@@ -13,6 +13,24 @@
 # limitations under the License.
 
 """This module provides Vector-specific 3D support classes for OpenGL, used by opengl_viewer.py.
+
+Warning:
+    This package requires Python to have the PyOpenGL package installed, along
+    with an implementation of GLUT (OpenGL Utility Toolkit).
+
+    To install the Python packages on Mac and Linux do ``python3 -m pip install --user "anki_vector[3dviewer]"``
+
+    To install the Python packages on Windows do ``py -3 -m pip install --user "anki_vector[3dviewer]"``
+
+    On Windows and Linux you must also install freeglut (macOS / OSX has one
+    preinstalled).
+
+    On Linux: ``sudo apt-get install freeglut3``
+
+    On Windows: Go to http://freeglut.sourceforge.net/ to get a ``freeglut.dll``
+    file. It's included in any of the `Windows binaries` downloads. Place the DLL
+    next to your Python script, or install it somewhere in your PATH to allow any
+    script to use it."
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
@@ -23,10 +41,10 @@ import math
 import time
 from typing import List
 
-from .faces import Face
-from .objects import CustomObject, FixedCustomObject, LightCube, ObservableObject
-from .robot import Robot
-from . import nav_map, opengl, util
+from anki_vector.faces import Face
+from anki_vector.objects import CustomObject, FixedCustomObject, LightCube, ObservableObject
+from anki_vector import nav_map, util
+from . import opengl
 
 try:
     from OpenGL.GL import (GL_AMBIENT, GL_BLEND, GL_COMPILE, GL_DIFFUSE, GL_FILL, GL_FRONT, GL_FRONT_AND_BACK, GL_LIGHTING, GL_LINE, GL_LINE_STRIP,
@@ -543,7 +561,7 @@ class RobotRenderFrame():  # pylint: disable=too-few-public-methods
     :param robot: the robot object to be rendered.
     """
 
-    def __init__(self, robot: Robot):
+    def __init__(self, robot):
         self.pose = robot.pose
         if robot.head_angle_rad is None:
             self.head_angle = util.radians(0.0)
@@ -562,7 +580,7 @@ class WorldRenderFrame():  # pylint: disable=too-few-public-methods
         defined in it's world class.
     """
 
-    def __init__(self, robot: Robot):
+    def __init__(self, robot):
 
         self.robot_frame = RobotRenderFrame(robot)
 

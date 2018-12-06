@@ -74,10 +74,10 @@ setup(
     ],
     zip_safe=True,
     keywords='anki vector robot robotics sdk'.split(),
-    packages=['anki_vector', 'anki_vector.configure', 'anki_vector.messaging'],
+    packages=['anki_vector', 'anki_vector.configure', 'anki_vector.messaging', 'anki_vector.opengl'],
     package_data={
-        'anki_vector': ['LICENSE.txt', 'assets/*.obj', 'assets/*.mtl', 'assets/*.jpg',
-                  'assets/LICENSE.txt']
+        'anki_vector': ['LICENSE.txt', 'opengl/assets/*.obj', 'opengl/assets/*.mtl', 'opengl/assets/*.jpg',
+                  'opengl/assets/LICENSE.txt']
     },
     install_requires=get_requirements(),
     extras_require={

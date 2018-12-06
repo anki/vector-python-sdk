@@ -32,7 +32,6 @@ import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'lib'))
 from proximity_mapper_state import ClearedTerritory, MapState, Wall, WallSegment   # pylint: disable=wrong-import-position
-from anki_vector.opengl_viewer import OpenGLViewer   # pylint: disable=wrong-import-position
 
 import anki_vector   # pylint: disable=wrong-import-position
 from anki_vector.util import parse_command_args, radians, degrees, distance_mm, speed_mmps, Vector3  # pylint: disable=wrong-import-position
@@ -203,6 +202,7 @@ async def collect_proximity_data_loop(robot: anki_vector.robot.Robot, future: co
             reading = robot.proximity.last_sensor_reading
             if reading is not None:
                 await analyze_proximity_sample(reading, robot, state)
+            robot.viewer_3d.user_data_queue.put(state)
             await asyncio.sleep(scan_interval)
 
     # Exceptions raised in this process are ignored, unless we set them on the future, and then run future.result() at a later time
@@ -219,30 +219,28 @@ async def scan_area(robot: anki_vector.robot.Robot, state: MapState):
     # The collect_proximity_data task relies on this external trigger to know when its finished.
     state.collection_active = True
 
-    # Turn around in place.
-    turn_call = robot.behavior.turn_in_place(angle=degrees(360.0), speed=degrees(360.0 / PROXIMITY_SCAN_TURN_DURATION_S))
     # Activate the collection task while the robot turns in place.
     collect_task = robot.conn.loop.create_task(collect_proximity_data_loop(robot, collect_future, state))
 
-    # Wait for the turning to finish, then send the signal to kill the collection task.
-    await turn_call
+    # Turn around in place, then send the signal to kill the collection task.
+    robot.behavior.turn_in_place(angle=degrees(360.0), speed=degrees(360.0 / PROXIMITY_SCAN_TURN_DURATION_S))
     state.collection_active = False
 
     # Wait for the collection task to finish.
-    await collect_task
+    robot.conn.run_coroutine(collect_task)
     # While the result of the task is not used, this call will propagate any exceptions that
     # occured in the task, allowing for debug visibility.
     collect_future.result()
 
 
 #: Top level call to perform exploration and environment mapping
-async def map_explorer(robot: anki_vector.robot.Robot, viewer: OpenGLViewer):
+async def map_explorer(robot: anki_vector.robot.Robot):
     # Drop the lift, so that it does not block the proximity sensor
-    await robot.behavior.set_lift_height(0.0)
+    robot.behavior.set_lift_height(0.0)
 
     # Create the map state, and add it's rendering function to the viewer's render pipeline
     state = MapState()
-    viewer.add_render_call(state.render)
+    robot.viewer_3d.add_render_call(state.render)
 
     # Comparison function used for sorting which open nodes are the furthest from all existing
     # walls and loose contacts.
@@ -292,15 +290,8 @@ async def map_explorer(robot: anki_vector.robot.Robot, viewer: OpenGLViewer):
                     turn_angle = -turn_angle
 
                 # Turn toward the nav point, and drive to it.
-                await robot.behavior.turn_in_place(angle=radians(turn_angle), speed=degrees(EXPLORE_TURN_SPEED_DPS))
-                try:
-                    # if more than 125% of the expected drive time elapses without the drive_straight concluding, it
-                    # likely means the robot encountered a cliff or obstacle.
-                    expected_drive_time = nav_distance / EXPLORE_DRIVE_SPEED_MMPS
-                    await asyncio.wait_for(robot.behavior.drive_straight(distance=distance_mm(nav_distance), speed=speed_mmps(EXPLORE_DRIVE_SPEED_MMPS)),
-                                           1.25 * expected_drive_time)
-                except asyncio.TimeoutError:
-                    print('obstacle encountered while moving, continuing exploration from current position')
+                robot.behavior.turn_in_place(angle=radians(turn_angle), speed=degrees(EXPLORE_TURN_SPEED_DPS))
+                robot.behavior.drive_straight(distance=distance_mm(nav_distance), speed=speed_mmps(EXPLORE_DRIVE_SPEED_MMPS))
 
     if PROXIMITY_EXPLORATION_SHUTDOWN_DELAY_S == 0.0:
         while True:
@@ -313,15 +304,7 @@ async def map_explorer(robot: anki_vector.robot.Robot, viewer: OpenGLViewer):
 if __name__ == '__main__':
     # Connect to the robot
     args = parse_command_args()
-    with anki_vector.Robot(args.serial, enable_camera_feed=True, show_viewer=True) as robotInstance:
-        # Creates the 3D Viewer for the connected robot.
-        viewerInstance = OpenGLViewer(robot=robotInstance, show_viewer_controls=False)
-
+    with anki_vector.Robot(args.serial, enable_camera_feed=True, show_viewer=True, show_3d_viewer=True) as robotInstance:
         robotInstance.behavior.drive_off_charger()
-
-        # The OpenGLViewer has to run on the main thread, so control is given to
-        # it via the blocking 'run' call.  The core loop of our program is injected into
-        # this call to run in parallel on a secondary thread.  When the injected function
-        # finishes, the viewer will automatically shut down and relinquish control of the
-        # main thread.
-        viewerInstance.run(map_explorer)
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(map_explorer(robotInstance))

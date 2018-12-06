@@ -24,9 +24,10 @@ Includes a utility for rendering the state in OpenGL.
 __all__ = ['ClearedTerritory', 'MapState', 'Wall', 'WallSegment']
 
 from math import cos, sin, pi
+import multiprocessing as mp
 from typing import List
 
-from anki_vector import opengl
+from anki_vector.opengl import opengl
 from anki_vector.util import Vector3
 
 try:
@@ -307,15 +308,30 @@ class MapState:
     def collection_active(self, collection_active: bool):
         self._collection_active = collection_active
 
-    def render(self):
-        """Low level OpenGL calls to render the current state in an opengl_viewer.
+    def render(self, user_data_queue: mp.Queue = None):
+        """Low level OpenGL calls to render the current state in an opengl_viewer. This
+        code will be executed inside the viewer's process.
 
         Can be added to a viewer with the following code, telling the viewer to call this
         whenever it redraws its geometry.
+
         .. code-block:: python
 
-            my_opengl_viewer.add_render_call(my_map_state.render)
+            robot.viewer_3d.add_render_call(my_map_state.render)
+
+        :param user_data_queue: The queue to read MapState messages from the main process.
+        :type user_data_queue: mulitprocessing.Queue
         """
+        try:
+            latest: MapState = user_data_queue.get(False)
+
+            self._open_nodes = latest._open_nodes  # pylint: disable=protected-access
+            self._contact_nodes = latest._contact_nodes  # pylint: disable=protected-access
+            self._walls = latest._walls  # pylint: disable=protected-access
+            self._cleared_territories = latest._cleared_territories  # pylint: disable=protected-access
+            self._collection_active = latest._collection_active  # pylint: disable=protected-access
+        except mp.queues.Empty:
+            pass
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
         glEnable(GL_BLEND)
 

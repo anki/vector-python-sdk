@@ -47,7 +47,7 @@ from typing import List, Dict
 
 from pkg_resources import resource_stream
 
-from . import util
+from anki_vector import util
 
 
 class InvalidOpenGLGlutImplementation(ImportError):

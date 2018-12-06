@@ -39,6 +39,7 @@ try:
 except ImportError:
     sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
 
+
 def create_default_image(image_width, image_height, do_gradient=False):
     """Create a place-holder PIL image to use until we have a live feed from Vector"""
     image_bytes = bytearray([0x70, 0x70, 0x70]) * image_width * image_height
