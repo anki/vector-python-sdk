@@ -22,7 +22,7 @@ Prerequisites
 Python Installation
 ^^^^^^^^^^^^^^^^^^^
 
-1. Install `Homebrew <http://brew.sh>`_ on your system according to the latest instructions. If you already had brew installed then update it by opening a Terminal window and typing in the following::
+1. Install `Homebrew <https://brew.sh>`_ on your system according to the latest instructions. If you already had brew installed then update it by opening a Terminal window and typing in the following::
 
     brew update
 
@@ -67,4 +67,4 @@ Please see the :doc:`Troubleshooting </troubleshooting>` page for tips, or visit
 
 `Terms and Conditions <https://www.anki.com/en-us/company/terms-and-conditions>`_ and `Privacy Policy <https://www.anki.com/en-us/company/privacy>`_
 
-`Click here to return to the Anki Developer website. <http://developer.anki.com>`_
+`Click here to return to the Anki Developer website. <https://developer.anki.com>`_

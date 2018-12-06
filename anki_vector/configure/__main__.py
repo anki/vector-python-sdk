@@ -39,7 +39,7 @@ from cryptography.hazmat.backends import default_backend
 import grpc
 import requests
 try:
-    from termcolor import colored
+    from termcolor import colored  # pylint: disable=import-error
 except:  # pylint: disable=bare-except
     def colored(text, color=None, on_color=None, attrs=None):  # pylint: disable=unused-argument
         return text

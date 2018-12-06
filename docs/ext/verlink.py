@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License in the file LICENSE.txt or at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,14 +24,14 @@ Roles can optionally include text to use for the link, else it defaults
 to the supplied filename.  the URL is prefixed with the
 "verlink_base_url" value to make a complete URL.
 
-For example, if verlink_base_url="http://example.com/files/0.0.0/"
+For example, if verlink_base_url="https://example.com/files/0.0.0/"
 and verlink_version="1.2.3" then
 
 :verlink:`examples-0.0.0.zip` will display "examples-1.2.3.zip" and link
-to http:/example.com/files/1.2.3/examples-1.2.3.zip
+to https:/example.com/files/1.2.3/examples-1.2.3.zip
 
 :verlink:`Examples for 0.0.0 <examples-0.0.0.zip>` will display
-"Examples for 1.2.3" and link to http:/example.com/files/1.2.3/examples-1.2.3.zip
+"Examples for 1.2.3" and link to https:/example.com/files/1.2.3/examples-1.2.3.zip
 """
 
 

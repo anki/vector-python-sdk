@@ -97,4 +97,4 @@ Now that you have run your own Vector program, take a look at the rest of the Ve
 
 `Terms and Conditions <https://www.anki.com/en-us/company/terms-and-conditions>`_ and `Privacy Policy <https://www.anki.com/en-us/company/privacy>`_
 
-`Click here to return to the Anki Developer website. <http://developer.anki.com>`_
+`Click here to return to the Anki Developer website. <https://developer.anki.com>`_

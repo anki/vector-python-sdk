@@ -77,12 +77,12 @@ extensions = [
     #'sphinx.ext.napoleon'
 ]
 
-verlink_base_url = 'http://developer.anki.com/vector/%s/' % sdk_version
+verlink_base_url = 'https://developer.anki.com/vector/%s/' % sdk_version
 verlink_version = sdk_version
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3.6', None),
-    'numpy': ('http://docs.scipy.org/doc/numpy/', None),
+    'numpy': ('https://docs.scipy.org/doc/numpy/', None),
     'PIL': ('https://pillow.readthedocs.io/en/latest/', None)
     }
 
