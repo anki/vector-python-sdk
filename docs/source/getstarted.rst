@@ -4,11 +4,11 @@ Getting Started With the Vector SDK
 
 To make sure you get the best experience possible out of the SDK, please ensure you have followed the steps in the :doc:`Initial Setup </initial>`.
 
------------------
-Anki SDK Forums
------------------
+---------------------
+Anki Developer Forums
+---------------------
 
-Please visit our `Anki SDK Forums <https://forums.anki.com/>`_ where you can:
+Please visit our `Anki Developer Forums <https://forums.anki.com/>`_ where you can:
 
 * Get assistance with your code
 
@@ -26,7 +26,6 @@ Prerequisites
 -------------
 
 * You have completed the Installation steps, found here: :ref:`initial`
-* You have updated Vector to OS 1.0.1 or later. Check the OS version by putting Vector on the charger, double-tapping his backpack button, and raising and lowering his arms once.
 * The Vector companion app is *not* currently connected to Vector.
 * Vector is connected to the same network as your computer.
 * You can see Vector's eyes on his screen.
@@ -35,7 +34,7 @@ Prerequisites
 Starting Up the SDK
 -------------------
 
-On the computer, open Terminal (macOS/Linux) or Command Prompt (Windows) and navigate into your ``vector_python_sdk_0.5.0`` folder by typing ``cd vector_python_sdk_0.5.0``, and press **Enter**.
+On the computer, open Terminal (macOS/Linux) or Command Prompt (Windows) and type ``cd anki_vector_sdk_examples``, where *anki_vector_sdk_examples* is the directory you extracted the examples into, and press **Enter**.
 
 ----------------
 Example Program
@@ -65,17 +64,22 @@ First, change to the ``tutorials`` sub-directory of the ``examples`` directory.
 
 Then, run the program.
 
-    a. For macOS and Linux systems, type the following and press **Enter**::
+    a. For macOS and Ubuntu 18.04 systems, type the following and press **Enter**::
 
         ./01_hello_world.py
 
-    The same can also be achieved on macOS/Linux with::
+    The same can also be achieved with::
 	
         python3 01_hello_world.py
 
     b. For Windows systems, type the following and press **Enter**::
 
         py 01_hello_world.py
+
+    c. For Ubuntu 16.04 systems, type the following and press **Enter**::
+
+        python3.6 01_hello_world.py
+
 
 2. If done correctly, Vector will say "Hello, World!"
 

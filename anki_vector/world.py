@@ -75,13 +75,13 @@ class World(util.Component):
         self._objects = {}
 
         # Subscribe to callbacks that updates the world view
-        self._robot.events.subscribe(
-            self._on_face_observed,
-            Events.robot_observed_face)
+        self._robot.events.subscribe(self._on_face_observed,
+                                     Events.robot_observed_face,
+                                     on_connection_thread=True)
 
-        self._robot.events.subscribe(
-            self._on_object_observed,
-            Events.robot_observed_object)
+        self._robot.events.subscribe(self._on_object_observed,
+                                     Events.robot_observed_object,
+                                     on_connection_thread=True)
 
     #### Public Properties ####
 
@@ -245,13 +245,11 @@ class World(util.Component):
         for obj in self._objects.values():
             obj.teardown()
 
-        self._robot.events.unsubscribe(
-            self._on_face_observed,
-            Events.robot_observed_face)
+        self._robot.events.unsubscribe(self._on_face_observed,
+                                       Events.robot_observed_face)
 
-        self._robot.events.unsubscribe(
-            self._on_object_observed,
-            Events.robot_observed_object)
+        self._robot.events.unsubscribe(self._on_object_observed,
+                                       Events.robot_observed_object)
 
     def get_object(self, object_id: int):
         """Fetches an object instance with the given id.

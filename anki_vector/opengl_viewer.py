@@ -43,7 +43,9 @@ Warning:
     This package requires Python to have the PyOpenGL package installed, along
     with an implementation of GLUT (OpenGL Utility Toolkit).
 
-    To install the Python packages do ``pip install .[3dviewer]``
+    To install the Python packages on Mac and Linux do ``python3 -m pip install --user "anki_vector[3dviewer]"``
+
+    To install the Python packages on Windows do ``py -3 -m pip install --user "anki_vector[3dviewer]"``
 
     On Windows and Linux you must also install freeglut (macOS / OSX has one
     preinstalled).
@@ -55,8 +57,6 @@ Warning:
     next to your Python script, or install it somewhere in your PATH to allow any
     script to use it."
 """
-
-# TODO Update install line above to: ``pip3 install --user "anki_vector[3dviewer]"``
 
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ['OpenGLViewer']
@@ -248,16 +248,16 @@ class _OpenGLViewController():
 
         if (old_intents.left_wheel_speed != input_intents.left_wheel_speed or
                 old_intents.right_wheel_speed != input_intents.right_wheel_speed):
-            robot.conn.run_soon(robot.motors.set_wheel_motors(input_intents.left_wheel_speed,
-                                                              input_intents.right_wheel_speed,
-                                                              input_intents.left_wheel_speed * 4,
-                                                              input_intents.right_wheel_speed * 4))
+            robot.motors.set_wheel_motors(input_intents.left_wheel_speed,
+                                          input_intents.right_wheel_speed,
+                                          input_intents.left_wheel_speed * 4,
+                                          input_intents.right_wheel_speed * 4)
 
         if old_intents.lift_speed != input_intents.lift_speed:
-            robot.conn.run_soon(robot.motors.set_lift_motor(input_intents.lift_speed))
+            robot.motors.set_lift_motor(input_intents.lift_speed)
 
         if old_intents.head_speed != input_intents.head_speed:
-            robot.conn.run_soon(robot.motors.set_head_motor(input_intents.head_speed))
+            robot.motors.set_head_motor(input_intents.head_speed)
 
     #### Private Methods ####
 
@@ -778,6 +778,7 @@ class OpenGLViewer():
 
         try:
             robot.conn.run_coroutine(delegate_function(*function_args))
+
             # @TODO: Unsubscribe and shut down when the delegate function finishes
             #  This became an issue when the concurrent.future changes were added.
 
@@ -817,7 +818,6 @@ class OpenGLViewer():
         We can safely capture any robot and world state here, and push to OpenGL
         (main) thread via a thread-safe queue.
         """
-
         world_frame = opengl_vector.WorldRenderFrame(self._robot)
         self._world_frame_queue.append(world_frame)
         self._view_controller.update(self._robot)

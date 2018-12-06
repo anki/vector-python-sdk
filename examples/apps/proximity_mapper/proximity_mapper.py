@@ -317,6 +317,8 @@ if __name__ == '__main__':
         # Creates the 3D Viewer for the connected robot.
         viewerInstance = OpenGLViewer(robot=robotInstance, show_viewer_controls=False)
 
+        robotInstance.behavior.drive_off_charger()
+
         # The OpenGLViewer has to run on the main thread, so control is given to
         # it via the blocking 'run' call.  The core loop of our program is injected into
         # this call to run in parallel on a secondary thread.  When the injected function

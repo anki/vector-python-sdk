@@ -38,6 +38,7 @@ def main():
         robot.behavior.set_head_angle(degrees(-5.0))
         robot.behavior.set_lift_height(0.0)
 
+        print("Connecting to a cube...")
         robot.world.connect_cube()
 
         if robot.world.connected_light_cube:

@@ -36,21 +36,20 @@ Tutorial program does not run
 
 Before running a Python program, be sure you can see Vector's eyes. If instead you see an image of a mobile device, the Customer Care Info screen, a missing Wifi icon, or something else, please complete setup of your Vector first and then you will be ready set up the SDK.
 
-Also, check whether Vector's IP address has changed since the last time you ran ``configure.py``. If so, see :ref:`moving_between_wifi` to set up the robot with the new IP address.
+Also, check whether Vector's IP address has changed since the last time you ran ``anki_vector.configure``. If so, see :ref:`moving_between_wifi` to set up the robot with the new IP address.
 
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Failure to run configure.py
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Failure to run anki_vector.configure
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The prerequisites to run ``configure.py`` are:
+The prerequisites to run the ``anki_vector.configure`` executable submodule successfully are:
 
-* Vector is powered on.
 * You have successfully created an Anki account.
 * Vector has been set up with the Vector companion app.
-* You have updated Vector to OS 1.0.1 or later. Check the OS version by putting Vector on the charger, double-tapping his backpack button, and raising and lowering his arms once.
 * The Vector companion app is *not* currently connected to Vector.
 * Vector is connected to the same network as your computer.
+* The ``anki_vector`` Python package must be installed.
 * You can see Vector's eyes on his screen.
 
 
@@ -82,11 +81,11 @@ Can't find Vector's IP address
 Your Vector IP address looks like "192.168.40.134". Find the IP address from Vector's debug screen: double-click his backpack, move his arms up and down, then look for "IP" on his screen.
 
 
-^^^^^^^^^^^^^^^
-Anki SDK Forums
-^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
+Anki Developer Forums
+^^^^^^^^^^^^^^^^^^^^^
 
-Please visit the `Anki SDK Forums <https://forums.anki.com/>`_ to ask questions, find solutions and for general discussion.
+Please visit the `Anki Developer Forums <https://forums.anki.com/>`_ to ask questions, find solutions and for general discussion.
 
 ----
 

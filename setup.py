@@ -1,41 +1,31 @@
 # Copyright (c) 2018 Anki, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License in the file LICENSE.txt or at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 """
 Vector SDK, by Anki.
 
-Vector is the home robot who hangs out and helps out.
+The Vector SDK is a connected vision- and character-based robotics platform for everyone.
 
-This library lets you take command of Vector and write programs for him.
+The Vector SDK gives you direct access to Vector's unprecedented set of advanced sensors, AI capabilities, and robotics technologies including computer vision, intelligent mapping and navigation, and a groundbreaking collection of expressive animations.
 
-Vector features:
+It's powerful but easy to use, complex but not complicated, and versatile enough to be used across a wide range of domains including enterprise, research, and entertainment. Find out more at https://developer.anki.com
 
-    * A camera with advanced vision system
-    * A robotic lifter
-    * Independent tank treads
-    * Pivotable head
-    * An accelerometer
-    * A gyroscope
-    * Cliff detection
-    * Face recognition
-    * Path planning
-    * Animation and behavior systems
-    * Light cube, with LEDs, an accelerometer and tap detection
-    * Single point time-of-flight NIR Laser
-    * Capactive casing
-
-This SDK provides users with access to take control of Vector and write simple
-or advanced programs with him.
+Vector SDK documentation: https://developer.anki.com/vector/docs/
+Official developer forum: https://forums.anki.com/
 
 Requirements:
     * Python 3.6.1 or later
-
-Optional requirements for camera image processing/display:
-    * Pillow
-    * NumPy
-
-Optional requirements for 3D viewer/visualization:
-    * PyOpenGL
-    * Pillow
 """
 
 import os.path
@@ -43,7 +33,7 @@ import sys
 from setuptools import setup
 
 if sys.version_info < (3, 6, 1):
-    sys.exit('The Anki Vector SDK requires Python 3.6.1 or later')
+    sys.exit('The Vector SDK requires Python 3.6.1 or later')
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
@@ -68,7 +58,7 @@ def get_requirements():
 setup(
     name='anki_vector',
     version=VERSION,
-    description="SDK for Anki's Vector robot, the home robot who hangs out and helps out",
+    description="The Vector SDK is a connected vision- and character-based robotics platform for everyone.",
     long_description=__doc__,
     url='https://developer.anki.com',
     author='Anki, Inc',
@@ -84,7 +74,7 @@ setup(
     ],
     zip_safe=True,
     keywords='anki vector robot robotics sdk'.split(),
-    packages=['anki_vector', 'anki_vector.messaging'],
+    packages=['anki_vector', 'anki_vector.configure', 'anki_vector.messaging'],
     package_data={
         'anki_vector': ['LICENSE.txt', 'assets/*.obj', 'assets/*.mtl', 'assets/*.jpg',
                   'assets/LICENSE.txt']

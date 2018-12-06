@@ -704,7 +704,7 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
                 if not conn.requires_behavior_control:
                     raise VectorControlException(func.__name__)
                 logger.info(f"Delaying {func.__name__} until behavior control is granted")
-                await conn.control_granted_event.wait()
+                await asyncio.wait([conn.control_granted_event.wait()], timeout=10)
             logger.debug(f'Outgoing {func.__name__}: {args[1:] if log_messaging else "size = {} bytes".format(sys.getsizeof(args[1:]))}')
             try:
                 result = await func(*args, **kwargs)
@@ -735,7 +735,8 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
                 self.conn.active_commands.append(future)
 
                 def clear_when_done(fut):
-                    self.conn.active_commands.remove(fut)
+                    if fut in self.conn.active_commands:
+                        self.conn.active_commands.remove(fut)
                 future.add_done_callback(clear_when_done)
             if self.force_async:
                 return future

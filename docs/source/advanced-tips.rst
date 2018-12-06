@@ -12,14 +12,14 @@ Moving Vector between WiFi networks
 
 When you move Vector from one WiFi network to another (using the Vector App),
 or if your Vector's IP changes,  you will also need to make some changes to
-your SDK setup. To assist in this migration, ``configure.py`` provides a ``-u``
-parameter to quickly reconnect to Vector.
+your SDK setup. To assist in this migration, the ``anki_vector.configure``
+executable submodule provides a ``-u`` parameter to quickly reconnect to Vector.
 
 To update your connection, you will need to find the IP address on
 Vector's face, and the serial number of the robot you are updating.
 Then from your terminal run::
 
-    python3 configure.py -u "<your_new_ip>" -s "<your_robot_serial_number>"
+    python3 -m anki_vector.configure -u "<your_new_ip>" -s "<your_robot_serial_number>"
 
 
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -57,9 +57,9 @@ and set it to Vector's serial number::
 Set ANKI_ROBOT_HOST and VECTOR_ROBOT_NAME
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When running ``configure.py``, you must provide Vector's ip and name.
+When running the ``anki_vector.configure`` executable submodule, you must provide Vector's ip and name.
 To avoid typing these in, you can instead create environment variables
-ANKI_ROBOT_HOST and VECTOR_ROBOT_NAME. Then ``configure.py`` will automatically pick
+ANKI_ROBOT_HOST and VECTOR_ROBOT_NAME. Then ``anki_vector.configure`` will automatically pick
 up those settings::
 
     export ANKI_ROBOT_HOST="192.168.42.42"

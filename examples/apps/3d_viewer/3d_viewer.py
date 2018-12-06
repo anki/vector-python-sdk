@@ -27,8 +27,7 @@ from anki_vector import opengl_viewer
 
 
 async def my_function():
-    await asyncio.sleep(20)
-    print("done")
+    pass
 
 
 def main():

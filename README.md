@@ -8,7 +8,7 @@ Before connecting, you will need:
 * Vector's IP Address: The ip address can be found by first placing Vector on the charger, then double-clicking the button on his back, and finally raising and lowering his arms. It is possible for your ip to change based on your network settings, so it must be updated accordingly. Example: `192.168.43.48`
 * Vector's Serial Number: You may find this number on the underside of your robot. Example: `00e20115`
 
-These will be needed to run the configure.py script and set up authentication from your device to your Vector.
+These will be needed to run the `anki_vector.configure` executable submodule and set up authentication from your device to your Vector.
 
 Your device must have Python 3.6.1 or later installed. Please see the documentation pages mentioned below for instructions to install Python.
 
@@ -19,7 +19,7 @@ Check out the documentation for setup instructions by opening docs/build/html/in
 
 ---
 
-During setup, you will configure your `anki_vector` SDK authentication from a terminal using `configure.py`.
+During setup, you will configure your `anki_vector` SDK authentication from a terminal using `'python3 -m anki_vector.configure`.
 
 By running this script, you will be asked to provide your Anki account credentials, and the script will download an authentication token and cert that will grant you access to the robot and his capabilities (such as camera and audio) as well as data stored on the robot (such as faces and photos).
 

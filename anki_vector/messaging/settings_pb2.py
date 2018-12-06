@@ -14,16 +14,14 @@ from google.protobuf import descriptor_pb2
 _sym_db = _symbol_database.Default()
 
 
-from anki_vector.messaging import response_status_pb2 as anki__vector_dot_messaging_dot_response__status__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='anki_vector/messaging/settings.proto',
   package='Anki.Vector.external_interface',
   syntax='proto3',
-  serialized_pb=_b('\n$anki_vector/messaging/settings.proto\x12\x1e\x41nki.Vector.external_interface\x1a+anki_vector/messaging/response_status.proto*%\n\nApiVersion\x12\x0b\n\x07INVALID\x10\x00\x12\n\n\x06LATEST\x10\x01*R\n\x06Volume\x12\x08\n\x04MUTE\x10\x00\x12\x07\n\x03LOW\x10\x01\x12\x0e\n\nMEDIUM_LOW\x10\x02\x12\n\n\x06MEDIUM\x10\x03\x12\x0f\n\x0bMEDIUM_HIGH\x10\x04\x12\x08\n\x04HIGH\x10\x05\x62\x06proto3')
-  ,
-  dependencies=[anki__vector_dot_messaging_dot_response__status__pb2.DESCRIPTOR,])
+  serialized_pb=_b('\n$anki_vector/messaging/settings.proto\x12\x1e\x41nki.Vector.external_interface*%\n\nApiVersion\x12\x0b\n\x07INVALID\x10\x00\x12\n\n\x06LATEST\x10\x01*R\n\x06Volume\x12\x08\n\x04MUTE\x10\x00\x12\x07\n\x03LOW\x10\x01\x12\x0e\n\nMEDIUM_LOW\x10\x02\x12\n\n\x06MEDIUM\x10\x03\x12\x0f\n\x0bMEDIUM_HIGH\x10\x04\x12\x08\n\x04HIGH\x10\x05\x62\x06proto3')
+)
 
 _APIVERSION = _descriptor.EnumDescriptor(
   name='ApiVersion',
@@ -42,8 +40,8 @@ _APIVERSION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=117,
-  serialized_end=154,
+  serialized_start=72,
+  serialized_end=109,
 )
 _sym_db.RegisterEnumDescriptor(_APIVERSION)
 
@@ -81,8 +79,8 @@ _VOLUME = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=156,
-  serialized_end=238,
+  serialized_start=111,
+  serialized_end=193,
 )
 _sym_db.RegisterEnumDescriptor(_VOLUME)
 

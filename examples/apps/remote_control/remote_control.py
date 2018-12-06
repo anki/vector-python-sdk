@@ -25,6 +25,10 @@ import sys
 import time
 from lib import flask_helpers
 
+import anki_vector
+from anki_vector import util
+
+
 try:
     from flask import Flask, request
 except ImportError:
@@ -34,13 +38,6 @@ try:
     from PIL import Image
 except ImportError:
     sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
-
-try:
-    import anki_vector
-    from anki_vector import util
-except ImportError:
-    sys.exit("Cannot import anki_vector: Do `pip3 install -e .` in the vector home folder to install")
-
 
 def create_default_image(image_width, image_height, do_gradient=False):
     """Create a place-holder PIL image to use until we have a live feed from Vector"""

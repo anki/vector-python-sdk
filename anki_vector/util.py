@@ -31,6 +31,7 @@ __all__ = ['Angle',
            'Vector2',
            'Vector3',
            'angle_z_to_quaternion',
+           'block_while_none',
            'degrees',
            'distance_mm',
            'distance_inches',
@@ -67,7 +68,7 @@ def parse_command_args(parser: argparse.ArgumentParser = None):
     is specified, we next attempt to read the robot serial number from environment variable ANKI_ROBOT_SERIAL.
     If ANKI_ROBOT_SERIAL is specified, the value will be used as the robot's serial number.
 
-    ..code-block ::
+    .. code-block:: python
 
         import anki_vector
 
@@ -90,16 +91,8 @@ def parse_command_args(parser: argparse.ArgumentParser = None):
 def block_while_none(interval: float = 0.1, max_iterations: int = 50):
     """Use this to denote a property that may need some delay before it appears.
 
-    ..code-block ::
-
-        class TestClass:
-            def __init__(self):
-                self._thing = None
-
-            @property
-            @block_while_none(interval=0.5, max_iterations=10)
-            def thing(self):
-                return self._thing
+    :param interval: how often to check if the property is no longer None
+    :param max_iterations: how many times to check the property before raising an error
     """
     def blocker(func: Callable):
         @wraps(func)
@@ -373,6 +366,42 @@ class Angle:
         if not isinstance(other, (int, float)):
             raise TypeError("Unsupported type for * expected number")
         return Angle(radians=(self.radians * other))
+
+    def __truediv__(self, other):
+        if not isinstance(other, (int, float)):
+            raise TypeError("Unsupported type for / expected number")
+        return radians(self.radians / other)
+
+    def _cmp_int(self, other):
+        if not isinstance(other, Angle):
+            raise TypeError("Unsupported type for comparison expected Angle")
+        return self.radians - other.radians
+
+    def __eq__(self, other):
+        return self._cmp_int(other) == 0
+
+    def __ne__(self, other):
+        return self._cmp_int(other) != 0
+
+    def __gt__(self, other):
+        return self._cmp_int(other) > 0
+
+    def __lt__(self, other):
+        return self._cmp_int(other) < 0
+
+    def __ge__(self, other):
+        return self._cmp_int(other) >= 0
+
+    def __le__(self, other):
+        return self._cmp_int(other) <= 0
+
+    @property
+    def abs_value(self):
+        """:class:`anki_vector.util.Angle`: The absolute value of the angle.
+
+        If the Angle is positive then it returns a copy of this Angle, otherwise it returns -Angle.
+        """
+        return Angle(radians=abs(self._radians))
 
 
 def angle_z_to_quaternion(angle_z: Angle):

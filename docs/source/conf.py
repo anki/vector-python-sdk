@@ -77,7 +77,7 @@ extensions = [
     #'sphinx.ext.napoleon'
 ]
 
-verlink_base_url = 'http://vectorsdk.anki.com/%s/' % sdk_version
+verlink_base_url = 'http://developer.anki.com/vector/%s/' % sdk_version
 verlink_version = sdk_version
 
 intersphinx_mapping = {
@@ -382,7 +382,7 @@ man_pages = [
 texinfo_documents = [
     (master_doc, 'VectorSDK', 'Vector SDK Documentation',
      author, 'VectorSDK', 'The SDK for directly controlling your Vector',
-     'Miscellaneous'), # TODO: clean this up
+     'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.
