@@ -62,7 +62,9 @@ You will be prompted for your robot's name, ip address and serial number. You wi
 
 You will see "SUCCESS!" when this script successfully completes.
 
-.. note:: Running ``anki_vector.configure`` executable submodule will automatically download the Vector robot certificate to your computer and store credentials to allow you to connect to Vector. These credentials will be stored under your home directory in folder ``.anki_vector``.
+.. note:: By running the ``anki_vector.configure`` executable submodule, you will be asked to provide your Anki account credentials, and the script will automatically download an authentication token and certificate to your computer that will grant you access to the robot and his capabilities (such as camera and audio) as well as data stored on the robot (such as faces and photos).
+
+  The downloaded access token is equivalent to your account credentials. It will be stored in your user directory (~/.anki_vector) along with a robot identity certificate and other useful data for establishing a connection. Do not share your access token.
 
 .. warning:: These credentials give full access to your robot, including camera stream, audio stream and data. Do not share these credentials.
 
@@ -111,7 +113,9 @@ You will be prompted for your robot's name, ip address and serial number. You wi
 
 You will see "SUCCESS!" when this script successfully completes.
 
-.. note:: Running ``anki_vector.configure`` executable submodule will automatically download the Vector robot certificate to your computer and store credentials to allow you to connect to Vector. These credentials will be stored under your home directory in folder ``.anki_vector``.
+.. note:: By running the ``anki_vector.configure`` executable submodule, you will be asked to provide your Anki account credentials, and the script will automatically download an authentication token and certificate to your computer that will grant you access to the robot and his capabilities (such as camera and audio) as well as data stored on the robot (such as faces and photos).
+
+  The downloaded access token is equivalent to your account credentials. It will be stored in your user directory (~/.anki_vector) along with a robot identity certificate and other useful data for establishing a connection. Do not share your access token.
 
 .. warning:: These credentials give full access to your robot, including camera stream, audio stream and data. Do not share these credentials.
 
