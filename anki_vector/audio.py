@@ -38,7 +38,7 @@ from .messaging import protocol
 
 try:
     import numpy as np
-except ImportError as exc:
+except ImportError:
     sys.exit("Cannot import numpy: Do `pip3 install numpy` to install")
 
 

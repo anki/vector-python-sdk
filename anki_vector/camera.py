@@ -32,7 +32,7 @@ import sys
 
 try:
     import cv2
-except ImportError as exc:
+except ImportError:
     sys.exit("Cannot import opencv-python: Do `pip3 install opencv-python` to install")
 
 from . import util
@@ -40,7 +40,7 @@ from .messaging import protocol
 
 try:
     import numpy as np
-except ImportError as exc:
+except ImportError:
     sys.exit("Cannot import numpy: Do `pip3 install numpy` to install")
 
 try:

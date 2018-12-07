@@ -28,4 +28,4 @@ logger = logging.getLogger('vector')  # pylint: disable=invalid-name
 if sys.version_info < (3, 6, 1):
     sys.exit('anki_vector requires Python 3.6.1 or later')
 
-__all__ = ['Robot', 'AsyncRobot', 'logger', 'messaging']
+__all__ = ['Robot', 'AsyncRobot', 'logger', 'messaging', '__version__']

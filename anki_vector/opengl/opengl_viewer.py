@@ -316,8 +316,8 @@ class _OpenGLViewController():
 
         left_button = self._is_mouse_down.get(GLUT_LEFT_BUTTON, False)
         # For laptop and other 1-button mouse users, treat 'x' key as a right mouse button too
-        right_button = (self._is_mouse_down.get(GLUT_RIGHT_BUTTON, False)
-                        or self._is_key_pressed.get(b'x', False))
+        right_button = (self._is_mouse_down.get(GLUT_RIGHT_BUTTON, False) or
+                        self._is_key_pressed.get(b'x', False))
 
         MOUSE_SPEED_SCALAR = 1.0  # general scalar for all mouse movement sensitivity
         MOUSE_ROTATE_SCALAR = 0.025  # additional scalar for rotation sensitivity
@@ -385,7 +385,6 @@ class _OpenGLViewController():
             glutIdleFunc(self._idle)
         else:
             glutIdleFunc(None)
-
 
 
 #: A default window resolution provided for OpenGL Vector programs

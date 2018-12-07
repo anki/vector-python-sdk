@@ -722,6 +722,10 @@ class Robot:
                               events.Events.robot_state,
                               on_connection_thread=True)
 
+        # access the pose to prove it has gotten back from the event stream once.
+        while not self.pose:
+            pass
+
     def disconnect(self) -> None:
         """Close the connection with Vector.
 
