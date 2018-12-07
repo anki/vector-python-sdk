@@ -41,27 +41,7 @@ Warning:
 
 import multiprocessing as mp
 
-from . import opengl, opengl_vector, opengl_viewer
-
-
-try:
-    from OpenGL.GL import (GL_FILL,
-                           GL_FRONT_AND_BACK,
-                           GL_LIGHTING, GL_NORMALIZE,
-                           GL_TEXTURE_2D,
-                           glBindTexture, glColor3f, glDisable, glEnable,
-                           glMultMatrixf, glPolygonMode, glPopMatrix, glPushMatrix,
-                           glScalef, glWindowPos2f)
-    from OpenGL.GLUT import (ctypes,
-                             GLUT_ACTIVE_ALT, GLUT_ACTIVE_CTRL, GLUT_ACTIVE_SHIFT, GLUT_BITMAP_9_BY_15,
-                             GLUT_DOWN, GLUT_LEFT_BUTTON, GLUT_RIGHT_BUTTON, GLUT_VISIBLE,
-                             glutBitmapCharacter, glutCheckLoop, glutLeaveMainLoop, glutGetModifiers, glutIdleFunc,
-                             glutKeyboardFunc, glutKeyboardUpFunc, glutMainLoop, glutMouseFunc, glutMotionFunc, glutPassiveMotionFunc,
-                             glutPostRedisplay, glutSpecialFunc, glutSpecialUpFunc, glutVisibilityFunc)
-    from OpenGL.error import NullFunctionError
-
-except ImportError as import_exc:
-    opengl.raise_opengl_or_pillow_import_error(import_exc)
+from . import opengl_viewer
 
 
 def main(close_event: mp.Event,

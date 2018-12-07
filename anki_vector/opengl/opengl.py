@@ -458,7 +458,7 @@ class MeshData():
                 # material library (a filename)
                 self._material_library = MaterialLibrary(self._resource_manager, values[1])
             elif values[0] == 'f':
-                if not active_group_name in self._groups:
+                if active_group_name not in self._groups:
                     self._groups[active_group_name] = MeshGroup(active_group_name)
 
                 group = self._groups[active_group_name]
