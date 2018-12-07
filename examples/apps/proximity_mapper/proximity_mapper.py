@@ -304,7 +304,11 @@ async def map_explorer(robot: anki_vector.robot.Robot):
 if __name__ == '__main__':
     # Connect to the robot
     args = parse_command_args()
-    with anki_vector.Robot(args.serial, enable_camera_feed=True, show_viewer=True, show_3d_viewer=True) as robotInstance:
+    with anki_vector.Robot(args.serial,
+                           enable_camera_feed=True,
+                           show_viewer=True,
+                           enable_nav_map_feed=False,
+                           show_3d_viewer=True) as robotInstance:
         robotInstance.behavior.drive_off_charger()
         loop = asyncio.get_event_loop()
         loop.run_until_complete(map_explorer(robotInstance))

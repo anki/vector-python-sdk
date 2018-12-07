@@ -99,7 +99,7 @@ class Robot:
                  enable_camera_feed: bool = False,
                  enable_audio_feed: bool = False,
                  enable_custom_object_detection: bool = False,
-                 enable_nav_map_feed: bool = False,
+                 enable_nav_map_feed: bool = None,
                  show_viewer: bool = False,
                  show_3d_viewer: bool = False,
                  requires_behavior_control: bool = True):
@@ -169,13 +169,16 @@ class Robot:
 
         self._enable_camera_feed = enable_camera_feed
         self._enable_audio_feed = enable_audio_feed
-        self._enable_nav_map_feed = enable_nav_map_feed
+        if enable_nav_map_feed is not None:
+            self._enable_nav_map_feed = enable_nav_map_feed
+        else:
+            self._enable_nav_map_feed = False
         self._show_viewer = show_viewer
         if show_viewer and not enable_camera_feed:
             self.logger.warning("enable_camera_feed should be True for viewer to render correctly.")
             self._enable_camera_feed = True
         self._show_3d_viewer = show_3d_viewer
-        if show_3d_viewer and not enable_nav_map_feed:
+        if show_3d_viewer and enable_nav_map_feed is None:
             self.logger.warning("enable_nav_map_feed should be True for 3d viewer to render correctly.")
             self._enable_nav_map_feed = True
 

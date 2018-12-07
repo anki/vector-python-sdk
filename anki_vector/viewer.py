@@ -358,7 +358,8 @@ class Viewer3DComponent(util.Component):
 
         :param robot: the robot being updated by this View Controller
         """
-        while not self._close_event.is_set():
+        close_event = self._close_event
+        while close_event and not close_event.is_set():
             try:
                 input_intents = self._input_intent_queue.get(True, timeout=2)  # type: RobotControlIntents
 
@@ -383,6 +384,7 @@ class Viewer3DComponent(util.Component):
                     self.robot.motors.set_head_motor(input_intents.head_speed, _return_future=True)
             except mp.queues.Empty:
                 pass
+            close_event = self._close_event
 
     def _on_robot_state_update(self, *_):
         """Called from SDK process whenever the robot state is updated (so i.e. every engine tick).
@@ -397,10 +399,12 @@ class Viewer3DComponent(util.Component):
         """
         from .opengl import opengl_vector
         world_frame = opengl_vector.WorldRenderFrame(self.robot)
-        try:
-            self._world_frame_queue.put(world_frame, False)
-        except mp.queues.Full:
-            pass
+        queue = self._world_frame_queue
+        if queue:
+            try:
+                queue.put(world_frame, False)
+            except mp.queues.Full:
+                pass
         # self._view_controller.update(self.robot) # TODO: <- sounds like this has something to do with keyboard input...
 
     def _on_nav_map_update(self, _, msg):
@@ -414,7 +418,9 @@ class Viewer3DComponent(util.Component):
             We can safely capture any robot and world state here, and push to OpenGL
             (main) process via a multiprocessing queue.
         """
-        try:
-            self._nav_map_queue.put(msg, False)
-        except mp.queues.Full:
-            pass
+        queue = self._nav_map_queue
+        if queue:
+            try:
+                queue.put(msg, False)
+            except mp.queues.Full:
+                pass
