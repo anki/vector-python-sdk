@@ -13,15 +13,12 @@
 # limitations under the License.
 
 """
-Vector SDK, by Anki.
-
-The Vector SDK is a connected vision- and character-based robotics platform for everyone.
-
 The Vector SDK gives you direct access to Vector's unprecedented set of advanced sensors, AI capabilities, and robotics technologies including computer vision, intelligent mapping and navigation, and a groundbreaking collection of expressive animations.
 
 It's powerful but easy to use, complex but not complicated, and versatile enough to be used across a wide range of domains including enterprise, research, and entertainment. Find out more at https://developer.anki.com
 
 Vector SDK documentation: https://developer.anki.com/vector/docs/
+
 Official developer forum: https://forums.anki.com/
 
 Requirements:
@@ -73,7 +70,7 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     zip_safe=True,
-    keywords='anki vector robot robotics sdk'.split(),
+    keywords='anki vector robot robotics sdk ai vision'.split(),
     packages=['anki_vector', 'anki_vector.configure', 'anki_vector.messaging', 'anki_vector.opengl'],
     package_data={
         'anki_vector': ['LICENSE.txt', 'opengl/assets/*.obj', 'opengl/assets/*.mtl', 'opengl/assets/*.jpg',
