@@ -59,7 +59,7 @@ def main():
         robot.conn.request_control()
 
         print("Drive Vector backward away from the cliff...")
-        robot.behavior.drive_straight(distance_mm(-100), speed_mmps(100))
+        robot.behavior.drive_straight(distance_mm(-300), speed_mmps(100))
 
 
 if __name__ == "__main__":
