@@ -35,7 +35,7 @@ def main():
 
     with anki_vector.Robot(args.serial) as robot:
         # If necessary, move Vector's Head and Lift to make it easy to see his face
-        robot.behavior.set_head_angle(degrees(50.0))
+        robot.behavior.set_head_angle(degrees(45.0))
         robot.behavior.set_lift_height(0.0)
 
         current_directory = os.path.dirname(os.path.realpath(__file__))

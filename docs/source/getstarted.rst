@@ -50,17 +50,9 @@ Let's test your new setup by running a very simple program. This program instruc
 The Program
 """""""""""
 
-1. Run the program using the same Terminal (macOS/Linux) / Command Prompt (Windows) window mentioned above: 
+1. Run the program using the same Terminal (macOS/Linux) / Command Prompt (Windows) window mentioned above. First, change to the ``tutorials`` sub-directory::
 
-First, change to the ``tutorials`` sub-directory of the ``examples`` directory.
-
-    a. For macOS and Linux systems, type the following and press **Enter**::
-
-        cd examples/tutorials
-
-    b. For Windows systems, type the following and press **Enter**::
-
-        cd examples\tutorials
+        cd tutorials
 
 Then, run the program.
 
