@@ -43,15 +43,19 @@ def main():
 
         if robot.world.connected_light_cube:
             print("Begin cube docking...")
-            # TODO Try with num_retries of 3
-            dock_response = robot.behavior.dock_with_cube(robot.world.connected_light_cube)
-            docking_result = dock_response.result
+            dock_response = robot.behavior.dock_with_cube(
+                robot.world.connected_light_cube,
+                num_retries=3)
+            if dock_response:
+                docking_result = dock_response.result
 
             robot.world.disconnect_cube()
 
     if docking_result:
         if docking_result.code != anki_vector.messaging.protocol.ActionResult.ACTION_RESULT_SUCCESS:
             print("Cube docking failed with code {0} ({1})".format(str(docking_result).rstrip('\n\r'), docking_result.code))
+    else:
+        print("Cube docking failed.")
 
 
 if __name__ == "__main__":
