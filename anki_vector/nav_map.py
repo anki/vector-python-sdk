@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License in the file LICENSE.txt or at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -391,6 +391,6 @@ class NavMapComponent(util.Component):
             req = protocol.NavMapFeedRequest(frequency=frequency)
             async for evt in self.grpc_interface.NavMapFeed(req):
                 self._latest_nav_map = NavMapGrid(evt, self.logger)
-                await self._robot.events.dispatch_event(EvtNavMapUpdate(self._latest_nav_map), Events.nav_map_update)
+                await self._robot.events.dispatch_event(evt, Events.nav_map_update)
         except CancelledError:
             self.logger.debug('Nav Map feed task was cancelled. This is expected during disconnection.')

@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License in the file LICENSE.txt or at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -47,7 +47,7 @@ from typing import List, Dict
 
 from pkg_resources import resource_stream
 
-from . import util
+from anki_vector import util
 
 
 class InvalidOpenGLGlutImplementation(ImportError):

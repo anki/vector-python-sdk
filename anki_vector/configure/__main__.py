@@ -26,27 +26,27 @@ https://www.anki.com/en-us/company/terms-and-conditions
 
 import argparse
 import configparser
-from cryptography import x509
-from cryptography.hazmat.backends import default_backend
 from getpass import getpass
 import json
 import os
 from pathlib import Path
 import re
-import requests
 import socket
 import sys
 
-from google.protobuf.json_format import MessageToJson
+from cryptography import x509
+from cryptography.hazmat.backends import default_backend
 import grpc
+import requests
 try:
-    from termcolor import colored
-except:
-    def colored(text, color=None, on_color=None, attrs=None):
+    from termcolor import colored  # pylint: disable=import-error
+except:  # pylint: disable=bare-except
+    def colored(text, color=None, on_color=None, attrs=None):  # pylint: disable=unused-argument
         return text
 
 import anki_vector
 from anki_vector import messaging
+
 
 class ApiHandler:
     def __init__(self, headers: dict, url: str):
@@ -60,6 +60,7 @@ class ApiHandler:
     @property
     def url(self):
         return self._url
+
 
 class Api:
     def __init__(self):
@@ -79,10 +80,11 @@ class Api:
     def handler(self):
         return self._handler
 
+
 def get_serial(serial=None):
     if not serial:
         serial = os.environ.get('ANKI_ROBOT_SERIAL')
-        if not serial or len(serial) == 0:
+        if not serial:
             print("\n\nPlease find your robot serial number (ex. 00e20100) located on the underside of Vector, or accessible from Vector's debug screen.")
             serial = input('Enter robot serial number: ')
         else:
@@ -90,6 +92,7 @@ def get_serial(serial=None):
     serial = serial.lower()
     print("Using robot serial number: {}".format(colored(serial, "cyan")))
     return serial
+
 
 def get_cert(serial=None):
     serial = get_serial(serial)
@@ -103,6 +106,7 @@ def get_cert(serial=None):
     cert = r.content
     return cert, serial
 
+
 def user_authentication(session_id: bytes, cert: bytes, ip: str, name: str) -> str:
     # Pin the robot certificate for opening the channel
     creds = grpc.ssl_channel_credentials(root_certificates=cert)
@@ -110,7 +114,7 @@ def user_authentication(session_id: bytes, cert: bytes, ip: str, name: str) -> s
     print("Attempting to download guid from {} at {}:443...".format(colored(name, "cyan"), colored(ip, "cyan")), end="")
     sys.stdout.flush()
     channel = grpc.secure_channel("{}:443".format(ip), creds,
-                                        options=(("grpc.ssl_target_name_override", name,),))
+                                  options=(("grpc.ssl_target_name_override", name,),))
 
     # Verify the connection to Vector is able to be established (client-side)
     try:
@@ -124,13 +128,13 @@ def user_authentication(session_id: bytes, cert: bytes, ip: str, name: str) -> s
     try:
         interface = messaging.client.ExternalInterfaceStub(channel)
         request = messaging.protocol.UserAuthenticationRequest(
-                user_session_id=session_id.encode('utf-8'),
-                client_name=socket.gethostname().encode('utf-8'))
+            user_session_id=session_id.encode('utf-8'),
+            client_name=socket.gethostname().encode('utf-8'))
         response = interface.UserAuthentication(request)
-        if response.code != messaging.protocol.UserAuthenticationResponse.AUTHORIZED:
+        if response.code != messaging.protocol.UserAuthenticationResponse.AUTHORIZED:  # pylint: disable=no-member
             print(colored(" ERROR", "red"))
             sys.exit("\nFailed to authorize request:\n"
-                    "Please be sure to first set up Vector using the companion app.")
+                     "Please be sure to first set up Vector using the companion app.")
     except grpc.RpcError as e:
         print(colored(" ERROR", "red"))
         sys.exit("\nFailed to authorize request:\n"
@@ -138,6 +142,7 @@ def user_authentication(session_id: bytes, cert: bytes, ip: str, name: str) -> s
 
     print(colored(" DONE\n", "green"))
     return response.client_token_guid
+
 
 def get_session_token(api, username=None):
     print("Enter your email and password. Make sure to use the same account that was used to set up your Vector.")
@@ -157,6 +162,7 @@ def get_session_token(api, username=None):
     print(colored(" DONE\n", "green"))
     return json.loads(r.content)
 
+
 def standardize_name(robot_name):
     # Extend the name if not enough is provided
     if len(robot_name) == 4:
@@ -169,12 +175,12 @@ def standardize_name(robot_name):
         return robot_name
     print(colored(" ERROR", "red"))
     sys.exit("Invalid robot name. Please match the format exactly. Example: Vector-A1B2")
-    return
+
 
 def get_name_and_ip(robot_name=None, ip=None):
     if not robot_name:
         robot_name = os.environ.get('VECTOR_ROBOT_NAME')
-        if not robot_name or len(robot_name) == 0:
+        if not robot_name:
             print("\n\nFind your robot name (ex. Vector-A1B2) by placing Vector on the charger and double-clicking Vector's backpack button.")
             robot_name = input("Enter robot name: ")
         else:
@@ -183,14 +189,15 @@ def get_name_and_ip(robot_name=None, ip=None):
     print("Using robot name: {}".format(colored(robot_name, "cyan")))
     if not ip:
         ip = os.environ.get('ANKI_ROBOT_HOST')
-        if not ip or len(ip) == 0:
+        if not ip:
             print("\n\nFind your robot ip address (ex. 192.168.42.42) by placing Vector on the charger, double-clicking Vector's backpack button,\n"
-                "then raising and lowering his arms. If you see {} on his face, reconnect Vector to your WiFi using the Vector Companion App.".format(colored("XX.XX.XX.XX", "red")))
+                  "then raising and lowering his arms. If you see {} on his face, reconnect Vector to your WiFi using the Vector Companion App.".format(colored("XX.XX.XX.XX", "red")))
             ip = input("Enter robot ip: ")
         else:
             print("Found robot ip address in environment variable '{}'".format(colored("ANKI_ROBOT_HOST", "green")))
     print("Using IP: {}".format(colored(ip, "cyan")))
     return robot_name, ip
+
 
 def save_cert(cert, name, serial, anki_dir):
     """Write Vector's certificate to a file located in the user's home directory"""
@@ -200,6 +207,7 @@ def save_cert(cert, name, serial, anki_dir):
     with os.fdopen(os.open(cert_file, os.O_WRONLY | os.O_CREAT, 0o600), 'wb') as f:
         f.write(cert)
     return cert_file
+
 
 def validate_cert_name(cert_file, robot_name):
     """Validate the name on Vector's certificate against the user-provided name"""
@@ -216,6 +224,7 @@ def validate_cert_name(cert_file, robot_name):
                              "Please verify the name, and try again.".format(common_name, robot_name))
                 else:
                     return
+
 
 def write_config(serial, cert_file=None, ip=None, name=None, guid=None, clear=True):
     home = Path.home()
@@ -252,6 +261,7 @@ def write_config(serial, cert_file=None, ip=None, name=None, guid=None, clear=Tr
     else:
         if os.path.exists(temp_file):
             os.remove(temp_file)
+
 
 def main(api):
     parser = argparse.ArgumentParser(description=("Vector requires all requests be authorized by an authenticated Anki user. "
@@ -306,6 +316,7 @@ def main(api):
     # Store credentials in the .anki_vector directory's sdk_config.ini file
     write_config(serial, cert_file, ip, name, guid)
     print(colored("\nSUCCESS!", "green"))
+
 
 if __name__ == "__main__":
     main(Api())

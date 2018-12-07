@@ -1,15 +1,61 @@
 {% extends "!layout.html" %}
 {% block extrahead %}
-    <!-- Google Analytics -->
-    <!--TODO: enable google analytics-->
-    <!-- <script>
-        if (window.location.hostname.toLowerCase() == 'cozmosdk.anki.com') {
-            window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-            ga('create', 'UA-40941061-1', 'auto');
-            ga('send', 'pageview');
+  <script>
+    /**
+     * Developer.anki.com Iframe Integration
+     */
+    (function(window) {
+      // Only apply if we're embedded
+      var parent = window.top;
+      if (parent === window || !parent || !parent.postMessage) {
+        return;
+      }
+
+      // Change document base to that of Developer.anki.com so that navigation happens at the top level.
+      function updateDocumentBase() {
+        var base = document.createElement('base');
+        base.target='_parent';
+        base.href= document.referrer;
+        var head = document.getElementsByTagName('head')[0];
+        var firstChild = head.firstChild;
+        head.insertBefore(base, firstChild);
+      }
+
+      if (document.readyState === 'loading') {
+        window.addEventListener('load', function(){
+          updateDocumentBase();
+        });
+      } else {
+        updateDocumentBase();
+      }
+
+      // Handle messages from Developer.anki.com.
+      function receiveMessage(event) {
+        var eventName = event.data.event;
+        if(eventName === 'hashchange') {
+          window.location.hash = event.data.hash;
         }
-    </script>
-    <script async src='https://www.google-analytics.com/analytics.js'></script> -->
-    <!-- End Google Analytics -->
-    {{ super() }}
+      }
+      window.addEventListener("message", receiveMessage, false);
+
+      // Send page title to Developer.anki.com so that the browser displays it.
+      parent.postMessage({
+        event: 'load',
+        docTitle: document.title
+      }, '*');
+    })(window);
+
+    /**
+     * Google Analytics
+     * @TODO: enable google analytics
+     */
+    // if (window.location.hostname.toLowerCase() == 'cozmosdk.anki.com') {
+    //     window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    //     ga('create', 'UA-40941061-1', 'auto');
+    //     ga('send', 'pageview');
+    // }
+
+  </script>
+  <!-- <script async src='https://www.google-analytics.com/analytics.js'></script> -->
+  {{ super() }}
 {% endblock %}

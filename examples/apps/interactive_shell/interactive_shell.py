@@ -6,7 +6,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License in the file LICENSE.txt or at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -50,6 +50,10 @@ ipyshell = InteractiveShellEmbed(banner1='\nWelcome to the Vector Interactive Sh
                                  exit_msg='Goodbye\n')
 
 if __name__ == "__main__":
-    with anki_vector.Robot(args.serial, enable_camera_feed=True, show_viewer=True) as robot:
+    with anki_vector.Robot(args.serial,
+                           enable_camera_feed=True,
+                           show_viewer=True,
+                           enable_nav_map_feed=True,
+                           show_3d_viewer=True) as robot:
         # Invoke the ipython shell while connected to Vector
         ipyshell(usage)

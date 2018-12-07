@@ -1,4 +1,4 @@
-.PHONY: dist examples license wheel installer
+.PHONY: clean dist examples license wheel installer
 
 version = $(shell perl -ne '/__version__ = "([^"]+)/ && print $$1;' anki_vector/version.py)
 
@@ -17,10 +17,10 @@ $(license_targets): LICENSE.txt
 		cp LICENSE.txt $$fn; \
 	done
 
-$(sdist_filename): anki_vector/LICENSE.txt anki_vector/assets/LICENSE.txt $(shell find anki_vector -name '*.py' -o -name '*.mtl' -o -name '*.obj' -o -name '*.jpg')
+$(sdist_filename): anki_vector/LICENSE.txt anki_vector/opengl/assets/LICENSE.txt $(shell find anki_vector -name '*.py' -o -name '*.mtl' -o -name '*.obj' -o -name '*.jpg')
 	python3 setup.py sdist
 
-$(wheel_filename): anki_vector/LICENSE.txt anki_vector/assets/LICENSE.txt $(shell find anki_vector -name '*.py' -o -name '*.mtl' -o -name '*.obj' -o -name '*.jpg')
+$(wheel_filename): anki_vector/LICENSE.txt anki_vector/opengl/assets/LICENSE.txt $(shell find anki_vector -name '*.py' -o -name '*.mtl' -o -name '*.obj' -o -name '*.jpg')
 	python3 setup.py bdist_wheel
 
 dist/anki_vector_sdk_examples.zip: examples/LICENSE.txt $(example_pathnames)
@@ -42,3 +42,6 @@ dist/anki_vector_sdk_examples.tar.gz: examples/LICENSE.txt $(example_pathnames)
 examples: dist/anki_vector_sdk_examples.tar.gz dist/anki_vector_sdk_examples.zip
 
 dist: $(sdist_filename) $(wheel_filename) examples
+
+clean:
+	rm -rf dist

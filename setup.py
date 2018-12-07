@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License in the file LICENSE.txt or at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,15 +13,12 @@
 # limitations under the License.
 
 """
-Vector SDK, by Anki.
-
-The Vector SDK is a connected vision- and character-based robotics platform for everyone.
-
 The Vector SDK gives you direct access to Vector's unprecedented set of advanced sensors, AI capabilities, and robotics technologies including computer vision, intelligent mapping and navigation, and a groundbreaking collection of expressive animations.
 
 It's powerful but easy to use, complex but not complicated, and versatile enough to be used across a wide range of domains including enterprise, research, and entertainment. Find out more at https://developer.anki.com
 
 Vector SDK documentation: https://developer.anki.com/vector/docs/
+
 Official developer forum: https://forums.anki.com/
 
 Requirements:
@@ -73,11 +70,11 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     zip_safe=True,
-    keywords='anki vector robot robotics sdk'.split(),
-    packages=['anki_vector', 'anki_vector.configure', 'anki_vector.messaging'],
+    keywords='anki vector robot robotics sdk ai vision'.split(),
+    packages=['anki_vector', 'anki_vector.configure', 'anki_vector.messaging', 'anki_vector.opengl'],
     package_data={
-        'anki_vector': ['LICENSE.txt', 'assets/*.obj', 'assets/*.mtl', 'assets/*.jpg',
-                  'assets/LICENSE.txt']
+        'anki_vector': ['LICENSE.txt', 'opengl/assets/*.obj', 'opengl/assets/*.mtl', 'opengl/assets/*.jpg',
+                  'opengl/assets/LICENSE.txt']
     },
     install_requires=get_requirements(),
     extras_require={

@@ -4,8 +4,8 @@ The code should generally follow [PEP8](https://www.python.org/dev/peps/pep-0008
 
 Code documentation should be written using Google style, which can be extracted
 using Sphinx:
-* http://google.github.io/styleguide/pyguide.html
-* http://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html
+* https://google.github.io/styleguide/pyguide.html
+* https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html
 
 
 Main style points to consider:
@@ -76,7 +76,7 @@ leading underscore to indicate that they're "private"
 
 ## Documentation
 
-See http://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html
+See https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html
 for documentation examples.
 
 * Module-level documentation should appear first in the file, before imports

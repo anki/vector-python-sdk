@@ -21,8 +21,9 @@ The API
     anki_vector.nav_map
     anki_vector.objects
     anki_vector.opengl
-    anki_vector.opengl_vector
-    anki_vector.opengl_viewer
+    anki_vector.opengl.opengl
+    anki_vector.opengl.opengl_vector
+    anki_vector.opengl.opengl_viewer
     anki_vector.photos
     anki_vector.proximity
     anki_vector.robot
@@ -33,6 +34,7 @@ The API
     anki_vector.viewer
     anki_vector.vision
     anki_vector.world
+
     anki_vector.messaging.client
 
 ..
@@ -41,4 +43,4 @@ The API
 
 `Terms and Conditions <https://www.anki.com/en-us/company/terms-and-conditions>`_ and `Privacy Policy <https://www.anki.com/en-us/company/privacy>`_
 
-`Click here to return to the Anki Developer website. <http://developer.anki.com>`_
+`Click here to return to the Anki Developer website. <https://developer.anki.com>`_

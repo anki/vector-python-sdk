@@ -6,7 +6,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License in the file LICENSE.txt or at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,8 +24,9 @@ You can adjust the markers, marker sizes, and object sizes to fit whatever
 object you have and the exact size of the markers that you print out.
 """
 
+import time
+
 import anki_vector
-from anki_vector import opengl_viewer
 from anki_vector.objects import CustomObjectMarkers, CustomObjectTypes
 
 
@@ -41,15 +42,12 @@ def handle_object_disappeared(event_type, event):
     print(f"--------- Vector stopped seeing an object --------- \n{event.obj}")
 
 
-async def custom_objects():
-    pass
-
-
 def main():
     args = anki_vector.util.parse_command_args()
     with anki_vector.Robot(args.serial,
                            default_logging=False,
                            show_viewer=True,
+                           show_3d_viewer=True,
                            enable_camera_feed=True,
                            enable_custom_object_detection=True,
                            enable_nav_map_feed=True) as robot:
@@ -113,8 +111,11 @@ def main():
               "display in Vector's 3d_viewer window. You will also see messages print every time a custom object\n"
               "enters or exits Vector's view. Markers can be found from the docs under CustomObjectMarkers.\n\n")
 
-        viewer = opengl_viewer.OpenGLViewer(robot=robot)
-        viewer.run(custom_objects)
+        try:
+            while True:
+                time.sleep(0.5)
+        except KeyboardInterrupt:
+            pass
 
 
 if __name__ == "__main__":

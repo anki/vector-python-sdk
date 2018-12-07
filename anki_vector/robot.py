@@ -4,7 +4,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License in the file LICENSE.txt or at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#     https://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,6 +28,7 @@ from . import (animation, audio, behavior, camera,
                connection, events, exceptions, faces,
                motors, nav_map, screen, photos, proximity,
                status, touch, util, viewer, vision, world)
+from .viewer import (ViewerComponent, Viewer3DComponent)
 from .messaging import protocol
 
 
@@ -77,14 +78,15 @@ class Robot:
                    that identifies the SDK user. Note: Never share your authentication credentials with anyone.
     :param default_logging: Toggle default logging.
     :param behavior_activation_timeout: The time to wait for control of the robot before failing.
+    :param cache_animation_list: Get the list of animations available at startup.
     :param enable_face_detection: Turn on face detection.
     :param enable_camera_feed: Turn camera feed on/off.
     :param enable_audio_feed: Turn audio feed on/off.
-    :param enable_nav_map_feed: Turn nav map feed on/off.
+    :param enable_custom_object_detection: Turn custom object detection on/off.
+    :param enable_nav_map_feed: Turn navigation map feed on/off.
     :param show_viewer: Render camera feed on/off.
+    :param show_3d_viewer: Render camera feed on/off.
     :param requires_behavior_control: Request control of Vector's behavior system."""
-
-    # TODO For both Robot and AsyncRobot, consider adding equivalent of use_3d_viewer param so OpenGLViewer starts automatically.
 
     def __init__(self,
                  serial: str = None,
@@ -96,11 +98,11 @@ class Robot:
                  enable_face_detection: bool = False,
                  enable_camera_feed: bool = False,
                  enable_audio_feed: bool = False,
-                 show_viewer: bool = False,
                  enable_custom_object_detection: bool = False,
                  enable_nav_map_feed: bool = False,
+                 show_viewer: bool = False,
+                 show_3d_viewer: bool = False,
                  requires_behavior_control: bool = True):
-
         if default_logging:
             util.setup_basic_logging()
         self.logger = util.get_class_logger(__name__, self)
@@ -139,6 +141,7 @@ class Robot:
         self._proximity: proximity.ProximityComponent = None
         self._touch: touch.TouchComponent = None
         self._viewer: viewer.ViewerComponent = None
+        self._viewer_3d: viewer.Viewer3DComponent = None
         self._vision: vision.VisionComponent = None
         self._world: world.World = None
 
@@ -168,6 +171,13 @@ class Robot:
         self._enable_audio_feed = enable_audio_feed
         self._enable_nav_map_feed = enable_nav_map_feed
         self._show_viewer = show_viewer
+        if show_viewer and not enable_camera_feed:
+            self.logger.warning("enable_camera_feed should be True for viewer to render correctly.")
+            self._enable_camera_feed = True
+        self._show_3d_viewer = show_3d_viewer
+        if show_3d_viewer and not enable_nav_map_feed:
+            self.logger.warning("enable_nav_map_feed should be True for 3d viewer to render correctly.")
+            self._enable_nav_map_feed = True
 
     def _read_configuration(self, serial: str) -> dict:
         """Open the default conf file, and read it into a :class:`configparser.ConfigParser`
@@ -314,19 +324,17 @@ class Robot:
         return self._touch
 
     @property
-    def viewer(self) -> viewer.ViewerComponent:
-        """:class:`anki_vector.viewer.ViewerComponent`: The viewer instance used to render
-        Vector's camera feed.
+    def viewer(self) -> ViewerComponent:
+        """The viewer instance used to render Vector's camera feed.
 
         .. testcode::
 
-            import asyncio
             import time
 
             import anki_vector
 
             with anki_vector.Robot(show_viewer=True) as robot:
-                # Render video for 10 seconds
+                # Render video for 5 seconds
                 robot.viewer.show_video()
                 time.sleep(5)
 
@@ -336,6 +344,24 @@ class Robot:
         if self._viewer is None:
             raise exceptions.VectorNotReadyException("ViewerComponent is not yet initialized")
         return self._viewer
+
+    @property
+    def viewer_3d(self) -> Viewer3DComponent:
+        """The 3D viewer instance used to render Vector's navigation map.
+
+        .. testcode::
+
+            import time
+
+            import anki_vector
+
+            with anki_vector.Robot(show_3d_viewer=True, enable_nav_map_feed=True) as robot:
+                # Render 3D view of navigation map for 5 seconds
+                time.sleep(5)
+        """
+        if self._viewer_3d is None:
+            raise exceptions.VectorNotReadyException("Viewer3DComponent is not yet initialized")
+        return self._viewer_3d
 
     @property
     def vision(self) -> vision.VisionComponent:
@@ -654,6 +680,7 @@ class Robot:
         self._proximity = proximity.ProximityComponent(self)
         self._touch = touch.TouchComponent(self)
         self._viewer = viewer.ViewerComponent(self)
+        self._viewer_3d = viewer.Viewer3DComponent(self)
         self._vision = vision.VisionComponent(self)
         self._world = world.World(self)
 
@@ -674,6 +701,9 @@ class Robot:
         # Start rendering camera feed
         if self._show_viewer:
             self.viewer.show_video()
+
+        if self._show_3d_viewer:
+            self.viewer_3d.show()
 
         if self._enable_nav_map_feed:
             self.nav_map.init_nav_map_feed()
@@ -708,6 +738,8 @@ class Robot:
 
         # Stop rendering video
         self.viewer.stop_video()
+        # Stop rendering 3d video
+        self.viewer_3d.close()
         # Shutdown camera feed
         self.camera.close_camera_feed()
         self._enable_camera_feed = False
