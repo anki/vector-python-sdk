@@ -52,8 +52,6 @@ ipyshell = InteractiveShellEmbed(banner1='\nWelcome to the Vector Interactive Sh
 if __name__ == "__main__":
     with anki_vector.Robot(args.serial,
                            enable_camera_feed=True,
-                           show_viewer=True,
-                           enable_nav_map_feed=True,
-                           show_3d_viewer=True) as robot:
+                           show_viewer=True) as robot:
         # Invoke the ipython shell while connected to Vector
         ipyshell(usage)
