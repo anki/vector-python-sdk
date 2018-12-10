@@ -113,12 +113,18 @@ class EventHandler:
         self._thread.start()
 
     def _run_thread(self):
-        self._loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(self._loop)
-        self._done_signal = asyncio.Event(loop=self._loop)
-        # create an event stream handler on the connection thread
-        self.event_future = asyncio.run_coroutine_threadsafe(self._handle_event_stream(), self._conn.loop)
-        self._loop.run_until_complete(self._done_signal.wait())
+        try:
+            self._loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(self._loop)
+            self._done_signal = asyncio.Event(loop=self._loop)
+            # create an event stream handler on the connection thread
+            self.event_future = asyncio.run_coroutine_threadsafe(self._handle_event_stream(), self._conn.loop)
+
+            async def wait_until_done():
+                return await self._done_signal.wait()
+            self._loop.run_until_complete(wait_until_done())
+        finally:
+            self._loop.close()
 
     def close(self):
         """Stop listening for events. Automatically called by the :class:`anki_vector.robot.Robot` class.
@@ -130,6 +136,8 @@ class EventHandler:
         except CancelledError:
             pass
         self._loop.call_soon_threadsafe(self._done_signal.set)
+        self._thread.join(timeout=5)
+        self._thread = None
 
     def _notify(self, event_callback, event_name, event_data):
         loop = self._loop
