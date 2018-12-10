@@ -506,13 +506,17 @@ class Connection:
         except Exception as e:  # pylint: disable=broad-except
             # Propagate the errors to the calling thread
             setattr(self._ready_signal, "exception", e)
+            self._loop.close()
             return
         finally:
             self._ready_signal.set()
 
-        async def wait_until_done():
-            return await self._done_signal.wait()
-        self._loop.run_until_complete(wait_until_done())
+        try:
+            async def wait_until_done():
+                return await self._done_signal.wait()
+            self._loop.run_until_complete(wait_until_done())
+        finally:
+            self._loop.close()
 
     async def _request_handler(self):
         """Handles generating messages for the BehaviorControl stream."""
