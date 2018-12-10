@@ -19,6 +19,7 @@
 __all__ = ['ViewerComponent', 'Viewer3DComponent']
 
 import multiprocessing as mp
+import os
 import sys
 import threading
 
@@ -166,6 +167,7 @@ class ViewerComponent(util.Component):
         :param overlays: overlays to be drawn on the images of the renderer.
         :param timeout: The time without a new frame before the process will exit.
         """
+        is_windows = os.name == 'nt'
         window_name = "Vector Camera Feed"
         cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
         try:
@@ -179,7 +181,7 @@ class ViewerComponent(util.Component):
                 image = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
                 cv2.imshow(window_name, image)
                 cv2.waitKey(1)
-                if cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE) < 1:
+                if not is_windows and cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE) < 1:
                     break
                 image = queue.get(True, timeout=timeout)
         except TimeoutError:
