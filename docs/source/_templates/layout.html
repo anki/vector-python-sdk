@@ -11,6 +11,11 @@
         return;
       }
 
+      // For styling necessary only when embedded in an iframe.
+      function addEmbededClass() {
+        document.body.classList.add("embedded");
+      }
+
       // Change document base to that of Developer.anki.com so that navigation happens at the top level.
       function updateDocumentBase() {
         var base = document.createElement('base');
@@ -21,12 +26,27 @@
         head.insertBefore(base, firstChild);
       }
 
-      if (document.readyState === 'loading') {
+      // Signal to Developer.anki.com that we're done loading and ready to receive messages.
+      // We send page title to Developer.anki.com so that the browser displays it.
+      function notifyParentWindowOnLoad() {
+        parent.postMessage({
+          event: 'load',
+          docTitle: document.title
+        }, '*');
+      }
+
+      function initEmbeddedMode() {
+        addEmbededClass();
+        updateDocumentBase();
+        notifyParentWindowOnLoad();
+      }
+
+      if (document.readyState !== 'complete') {
         window.addEventListener('load', function(){
-          updateDocumentBase();
+          initEmbeddedMode();
         });
       } else {
-        updateDocumentBase();
+        initEmbeddedMode();
       }
 
       // Handle messages from Developer.anki.com.
@@ -34,15 +54,15 @@
         var eventName = event.data.event;
         if(eventName === 'hashchange') {
           window.location.hash = event.data.hash;
+          // Workaround for IOS Safari lack of support for window.location.hash scrolling.
+          var linkedElement = document.getElementById(event.data.hash.replace('#', ''))
+          if (linkedElement && linkedElement.scrollIntoView) {
+            linkedElement.scrollIntoView();
+          }
         }
       }
       window.addEventListener("message", receiveMessage, false);
 
-      // Send page title to Developer.anki.com so that the browser displays it.
-      parent.postMessage({
-        event: 'load',
-        docTitle: document.title
-      }, '*');
     })(window);
 
     /**
@@ -56,6 +76,19 @@
     // }
 
   </script>
+  <style>
+    /* Allows scrolling to anchor links on IOS Safari */
+    .embedded .wy-grid-for-nav {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
+      z-index: 1;
+    }
+  </style>
   <!-- <script async src='https://www.google-analytics.com/analytics.js'></script> -->
   {{ super() }}
 {% endblock %}
