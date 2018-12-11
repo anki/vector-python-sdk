@@ -1,0 +1,4 @@
+# https://help.github.com/articles/about-codeowners/
+
+# These owners will be the default owners for everything in the repo.
+*       @anki/cozmo-sdk-admins
