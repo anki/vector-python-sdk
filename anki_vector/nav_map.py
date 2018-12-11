@@ -307,6 +307,9 @@ class NavMapGrid:
             import anki_vector
 
             with anki_vector.Robot(enable_nav_map_feed=True) as robot:
+                # Make sure Vector drives around so the nav map will update
+                robot.behavior.drive_off_charger()
+                robot.motors.set_wheel_motors(-100, 100)
                 latest_nav_map = robot.nav_map.latest_nav_map
                 content = latest_nav_map.get_content(0.0, 100.0)
                 print(f"Sampling point at 0.0, 100.0 and found content: {content}")
@@ -338,6 +341,9 @@ class NavMapComponent(util.Component):
         import anki_vector
 
         with anki_vector.Robot(enable_nav_map_feed=True) as robot:
+                # Make sure Vector drives around so the nav map will update
+                robot.behavior.drive_off_charger()
+                robot.motors.set_wheel_motors(-100, 100)
             latest_nav_map = robot.nav_map.latest_nav_map
 
     :param robot: A reference to the owner Robot object.
@@ -359,6 +365,9 @@ class NavMapComponent(util.Component):
             import anki_vector
 
             with anki_vector.Robot(enable_nav_map_feed=True) as robot:
+                # Make sure Vector drives around so the nav map will update
+                robot.behavior.drive_off_charger()
+                robot.motors.set_wheel_motors(-100, 100)
                 latest_nav_map = robot.nav_map.latest_nav_map
         """
         if not self._nav_map_feed_task or self._nav_map_feed_task.done():
