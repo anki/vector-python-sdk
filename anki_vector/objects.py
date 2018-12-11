@@ -531,13 +531,24 @@ class LightCube(ObservableObject):
 
         .. testcode::
 
+            import time
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.world.connect_cube()
-                if robot.world.connected_light_cube:
-                    cube = robot.world.connected_light_cube
-                    print(f"{cube.last_tapped_time}")
+                print("disconnecting from any connected cube...")
+                robot.world.disconnect_cube()
+
+                time.sleep(2)
+
+                print("connect to a cube...")
+                connectionResult = robot.world.connect_cube()
+
+                print("For the next 8 seconds, please tap and move the cube. Cube properties will be logged to console.")
+                for _ in range(16):
+                    connected_cube = robot.world.connected_light_cube
+                    if connected_cube:
+                        print(f'last_tapped_time: {connected_cube.last_tapped_time}')
+                    time.sleep(0.5)
         """
         return self._last_tapped_time
 
@@ -547,13 +558,24 @@ class LightCube(ObservableObject):
 
         .. testcode::
 
+            import time
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.world.connect_cube()
-                if robot.world.connected_light_cube:
-                    cube = robot.world.connected_light_cube
-                    print(f"{cube.last_tapped_robot_timestamp}")
+                print("disconnecting from any connected cube...")
+                robot.world.disconnect_cube()
+
+                time.sleep(2)
+
+                print("connect to a cube...")
+                connectionResult = robot.world.connect_cube()
+
+                print("For the next 8 seconds, please tap and move the cube. Cube properties will be logged to console.")
+                for _ in range(16):
+                    connected_cube = robot.world.connected_light_cube
+                    if connected_cube:
+                        print(f'last_tapped_robot_timestamp: {connected_cube.last_tapped_robot_timestamp}')
+                    time.sleep(0.5)
         """
         return self._last_tapped_robot_timestamp
 
@@ -563,13 +585,24 @@ class LightCube(ObservableObject):
 
         .. testcode::
 
+            import time
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.world.connect_cube()
-                if robot.world.connected_light_cube:
-                    cube = robot.world.connected_light_cube
-                    print(f"{cube.last_moved_time}")
+                print("disconnecting from any connected cube...")
+                robot.world.disconnect_cube()
+
+                time.sleep(2)
+
+                print("connect to a cube...")
+                connectionResult = robot.world.connect_cube()
+
+                print("For the next 8 seconds, please tap and move the cube. Cube properties will be logged to console.")
+                for _ in range(16):
+                    connected_cube = robot.world.connected_light_cube
+                    if connected_cube:
+                        print(f'last_moved_time: {connected_cube.last_moved_time}')
+                    time.sleep(0.5)
         """
         return self._last_moved_time
 
@@ -579,13 +612,24 @@ class LightCube(ObservableObject):
 
         .. testcode::
 
+            import time
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.world.connect_cube()
-                if robot.world.connected_light_cube:
-                    cube = robot.world.connected_light_cube
-                    print(f"{cube.last_moved_robot_timestamp}")
+                print("disconnecting from any connected cube...")
+                robot.world.disconnect_cube()
+
+                time.sleep(2)
+
+                print("connect to a cube...")
+                connectionResult = robot.world.connect_cube()
+
+                print("For the next 8 seconds, please tap and move the cube. Cube properties will be logged to console.")
+                for _ in range(16):
+                    connected_cube = robot.world.connected_light_cube
+                    if connected_cube:
+                        print(f'last_moved_robot_timestamp: {connected_cube.last_moved_robot_timestamp}')
+                    time.sleep(0.5)
         """
         return self._last_moved_robot_timestamp
 
@@ -595,13 +639,24 @@ class LightCube(ObservableObject):
 
         .. testcode::
 
+            import time
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.world.connect_cube()
-                if robot.world.connected_light_cube:
-                    cube = robot.world.connected_light_cube
-                    print(f"{cube.last_moved_start_time}")
+                print("disconnecting from any connected cube...")
+                robot.world.disconnect_cube()
+
+                time.sleep(2)
+
+                print("connect to a cube...")
+                connectionResult = robot.world.connect_cube()
+
+                print("For the next 8 seconds, please tap and move the cube. Cube properties will be logged to console.")
+                for _ in range(16):
+                    connected_cube = robot.world.connected_light_cube
+                    if connected_cube:
+                        print(f'last_moved_start_time: {connected_cube.last_moved_start_time}')
+                    time.sleep(0.5)
         """
         return self._last_moved_start_time
 
@@ -611,13 +666,24 @@ class LightCube(ObservableObject):
 
         .. testcode::
 
+            import time
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.world.connect_cube()
-                if robot.world.connected_light_cube:
-                    cube = robot.world.connected_light_cube
-                    print(f"{cube.last_moved_start_robot_timestamp}")
+                print("disconnecting from any connected cube...")
+                robot.world.disconnect_cube()
+
+                time.sleep(2)
+
+                print("connect to a cube...")
+                connectionResult = robot.world.connect_cube()
+
+                print("For the next 8 seconds, please tap and move the cube. Cube properties will be logged to console.")
+                for _ in range(16):
+                    connected_cube = robot.world.connected_light_cube
+                    if connected_cube:
+                        print(f'last_moved_start_robot_timestamp: {connected_cube.last_moved_start_robot_timestamp}')
+                    time.sleep(0.5)
         """
         return self._last_moved_start_robot_timestamp
 
@@ -627,13 +693,24 @@ class LightCube(ObservableObject):
 
         .. testcode::
 
+            import time
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.world.connect_cube()
-                if robot.world.connected_light_cube:
-                    cube = robot.world.connected_light_cube
-                    print(f"{cube.last_up_axis_changed_time}")
+                print("disconnecting from any connected cube...")
+                robot.world.disconnect_cube()
+
+                time.sleep(2)
+
+                print("connect to a cube...")
+                connectionResult = robot.world.connect_cube()
+
+                print("For the next 8 seconds, please tap and move the cube. Cube properties will be logged to console.")
+                for _ in range(16):
+                    connected_cube = robot.world.connected_light_cube
+                    if connected_cube:
+                        print(f'last_up_axis_changed_time: {connected_cube.last_up_axis_changed_time}')
+                    time.sleep(0.5)
         """
         return self._last_up_axis_changed_time
 
@@ -643,13 +720,24 @@ class LightCube(ObservableObject):
 
         .. testcode::
 
+            import time
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.world.connect_cube()
-                if robot.world.connected_light_cube:
-                    cube = robot.world.connected_light_cube
-                    print(f"{cube.last_up_axis_changed_robot_timestamp}")
+                print("disconnecting from any connected cube...")
+                robot.world.disconnect_cube()
+
+                time.sleep(2)
+
+                print("connect to a cube...")
+                connectionResult = robot.world.connect_cube()
+
+                print("For the next 8 seconds, please tap and move the cube. Cube properties will be logged to console.")
+                for _ in range(16):
+                    connected_cube = robot.world.connected_light_cube
+                    if connected_cube:
+                        print(f'last_up_axis_changed_robot_timestamp: {connected_cube.last_up_axis_changed_robot_timestamp}')
+                    time.sleep(0.5)
         """
         return self._last_up_axis_changed_robot_timestamp
 
@@ -659,13 +747,24 @@ class LightCube(ObservableObject):
 
         .. testcode::
 
+            import time
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.world.connect_cube()
-                if robot.world.connected_light_cube:
-                    cube = robot.world.connected_light_cube
-                    print(f"{cube.up_axis}")
+                print("disconnecting from any connected cube...")
+                robot.world.disconnect_cube()
+
+                time.sleep(2)
+
+                print("connect to a cube...")
+                connectionResult = robot.world.connect_cube()
+
+                print("For the next 8 seconds, please tap and move the cube. Cube properties will be logged to console.")
+                for _ in range(16):
+                    connected_cube = robot.world.connected_light_cube
+                    if connected_cube:
+                        print(f'up_axis: {connected_cube.up_axis}')
+                    time.sleep(0.5)
         """
         return self._up_axis
 
@@ -675,13 +774,24 @@ class LightCube(ObservableObject):
 
         .. testcode::
 
+            import time
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.world.connect_cube()
-                if robot.world.connected_light_cube:
-                    cube = robot.world.connected_light_cube
-                    print(f"{cube.is_moving}")
+                print("disconnecting from any connected cube...")
+                robot.world.disconnect_cube()
+
+                time.sleep(2)
+
+                print("connect to a cube...")
+                connectionResult = robot.world.connect_cube()
+
+                print("For the next 8 seconds, please tap and move the cube. Cube properties will be logged to console.")
+                for _ in range(16):
+                    connected_cube = robot.world.connected_light_cube
+                    if connected_cube:
+                        print(f'is_moving: {connected_cube.is_moving}')
+                    time.sleep(0.5)
         """
         return self._is_moving
 
@@ -707,13 +817,24 @@ class LightCube(ObservableObject):
 
         .. testcode::
 
+            import time
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.world.connect_cube()
-                if robot.world.connected_light_cube:
-                    cube = robot.world.connected_light_cube
-                    print(f"{cube.top_face_orientation_rad}")
+                print("disconnecting from any connected cube...")
+                robot.world.disconnect_cube()
+
+                time.sleep(2)
+
+                print("connect to a cube...")
+                connectionResult = robot.world.connect_cube()
+
+                print("For the next 8 seconds, please tap and move the cube. Cube properties will be logged to console.")
+                for _ in range(16):
+                    connected_cube = robot.world.connected_light_cube
+                    if connected_cube:
+                        print(f'top_face_orientation_rad: {connected_cube.top_face_orientation_rad}')
+                    time.sleep(0.5)
         """
         return self._top_face_orientation_rad
 
