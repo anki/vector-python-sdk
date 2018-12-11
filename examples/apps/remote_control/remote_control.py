@@ -373,7 +373,7 @@ def handle_index_page():
                         <h3>Play Animations</h3>
                         <b>0 .. 9</b> : Play Animation mapped to that key<br>
                         <h3>Talk</h3>
-                        <b>Space</b> : Say <input type="text" name="sayText" id="sayTextId" value="""" + flask_app.remote_control_vector.text_to_say + """" onchange=handleTextInput(this)>
+                        <b>Space</b> : Say <input type="text" name="sayText" id="sayTextId" value=\"""" + flask_app.remote_control_vector.text_to_say + """\" onchange=handleTextInput(this)>
                     </td>
                     <td width=30></td>
                     <td valign=top>
