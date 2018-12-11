@@ -244,7 +244,7 @@ class Viewer3DComponent(util.Component):
         self._update_thread: threading.Thread = None
         self._last_robot_control_intents = None
 
-    def show(self):
+    def show(self, show_viewer_controls: bool = True):
         """Spawns a background process that shows the navigation map in a 3D view.
 
         .. testcode::
@@ -257,6 +257,8 @@ class Viewer3DComponent(util.Component):
                 robot.viewer_3d.show()
                 time.sleep(5)
                 robot.viewer_3d.close()
+
+        :param show_viewer_controls: Specifies whether to draw controls on the view.
         """
         from . import opengl
         ctx = mp.get_context('spawn')
@@ -277,7 +279,8 @@ class Viewer3DComponent(util.Component):
                                           self._nav_map_queue,
                                           self._world_frame_queue,
                                           self._extra_render_function_queue,
-                                          self._user_data_queue),
+                                          self._user_data_queue,
+                                          show_viewer_controls),
                                     daemon=True,
                                     name="3D Viewer Process")
         self._process.start()
@@ -371,8 +374,8 @@ class Viewer3DComponent(util.Component):
                 old_intents = self._last_robot_control_intents
                 self._last_robot_control_intents = input_intents
 
-                if not old_intents or (old_intents.left_wheel_speed != input_intents.left_wheel_speed
-                                       or old_intents.right_wheel_speed != input_intents.right_wheel_speed):
+                if not old_intents or (old_intents.left_wheel_speed != input_intents.left_wheel_speed or
+                                       old_intents.right_wheel_speed != input_intents.right_wheel_speed):
                     self.robot.motors.set_wheel_motors(input_intents.left_wheel_speed,
                                                        input_intents.right_wheel_speed,
                                                        input_intents.left_wheel_speed * 4,
