@@ -37,7 +37,7 @@ The Vector SDK supports Python 3.6.1 or later.
 SDK Installation
 ^^^^^^^^^^^^^^^^
 
-To install the SDK, navigate into the SDK folder and type the following into a Terminal window::
+To install the SDK, type the following into the Terminal window::
 
     python3 -m pip install --user anki_vector
 
@@ -45,7 +45,7 @@ To install the SDK, navigate into the SDK folder and type the following into a T
 Vector Authentication
 ^^^^^^^^^^^^^^^^^^^^^
 
-To authenticate with the robot, type the following into the Terminal window::
+To authenticate with the robot, type the following into the Terminal window. Note that during this configure step, your password will not show by design as a security precaution::
 
     python3 -m anki_vector.configure
 

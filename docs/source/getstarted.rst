@@ -26,6 +26,7 @@ Prerequisites
 -------------
 
 * You have completed the Installation steps, found here: :ref:`initial`
+* You have downloaded and extracted the example programs, found here: :doc:`Downloads </downloads>`
 * The Vector companion app is *not* currently connected to Vector.
 * Vector is connected to the same network as your computer.
 * You can see Vector's eyes on his screen.

@@ -54,7 +54,7 @@ To install the SDK, type the following into the Terminal window::
 Vector Authentication
 ^^^^^^^^^^^^^^^^^^^^^
 
-To authenticate with the robot, type the following into the Terminal window::
+To authenticate with the robot, type the following into the Terminal window. Note that during this configure step, your password will not show by design as a security precaution::
 
     python3 -m anki_vector.configure
 
@@ -105,7 +105,7 @@ To install the SDK, type the following into the Terminal window::
 Vector Authentication
 ^^^^^^^^^^^^^^^^^^^^^
 
-To authenticate with the robot, type the following into the Terminal window::
+To authenticate with the robot, type the following into the Terminal window. Note that during this configure step, your password will not show by design as a security precaution::
 
     python3.6 -m anki_vector.configure
 
