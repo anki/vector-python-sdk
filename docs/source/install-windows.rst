@@ -31,7 +31,7 @@ run it on your computer.
 SDK Installation
 ^^^^^^^^^^^^^^^^
 
-To install the SDK, navigate into the SDK folder and type the following into a Command Prompt window::
+To install the SDK, type the following into the Command Prompt window::
 
     py -3 -m pip install --user anki_vector
 
@@ -43,7 +43,7 @@ To install the SDK, navigate into the SDK folder and type the following into a C
 Vector Authentication
 ^^^^^^^^^^^^^^^^^^^^^
 
-To authenticate with the robot, type the following into the Terminal window::
+To authenticate with the robot, type the following into the Command Prompt window. Note that during this configure step, your password will not show by design as a security precaution::
 
     py -m anki_vector.configure
 
