@@ -41,6 +41,14 @@ To install the SDK, type the following into the Terminal window::
 
     python3 -m pip install --user anki_vector
 
+"""""""""""
+SDK Upgrade
+"""""""""""
+
+To upgrade the SDK from a previous install, enter this command::
+
+    python3 -m pip install --user --upgrade anki_vector
+
 ^^^^^^^^^^^^^^^^^^^^^
 Vector Authentication
 ^^^^^^^^^^^^^^^^^^^^^
