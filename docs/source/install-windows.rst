@@ -39,6 +39,14 @@ To install the SDK, type the following into the Command Prompt window::
 
 .. note:: If you encounter an error during SDK installation, you may need to upgrade your Python Setuptools. Try ``py -3 -m pip install --upgrade setuptools``
 
+"""""""""""
+SDK Upgrade
+"""""""""""
+
+To upgrade the SDK from a previous install, enter this command::
+
+    py -3 -m pip install --user --upgrade anki_vector
+
 ^^^^^^^^^^^^^^^^^^^^^
 Vector Authentication
 ^^^^^^^^^^^^^^^^^^^^^
