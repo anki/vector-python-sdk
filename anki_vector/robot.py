@@ -858,10 +858,19 @@ class AsyncRobot(Robot):
     .. testcode::
 
         import anki_vector
+        from anki_vector.util import degrees
         # Create the robot connection
         with anki_vector.AsyncRobot() as robot:
-            # Run your commands
-            robot.anim.play_animation("anim_turn_left_01").result()
+            # Start saying text asynchronously
+            say_future = robot.say_text("Now is the time")
+            # Turn robot, wait for completion
+            turn_future = robot.behavior.turn_in_place(degrees(3*360))
+            turn_future.result()
+            # Play pounce animation, wait for completion
+            pounce_future = robot.anim.play_animation("anim_pounce_03")
+            pounce_future.result()
+            # Make sure text has been spoken
+            say_future.result()
 
     2. Using :func:`connect` and :func:`disconnect` to explicitly open and close the connection:
     it allows the robot's connection to continue in the context in which it started.
@@ -869,12 +878,21 @@ class AsyncRobot(Robot):
     .. testcode::
 
         import anki_vector
+        from anki_vector.util import degrees
         # Create a Robot object
         robot = anki_vector.AsyncRobot()
         # Connect to Vector
         robot.connect()
-        # Run your commands
-        robot.anim.play_animation("anim_turn_left_01").result()
+        # Start saying text asynchronously
+        say_future = robot.say_text("Now is the time")
+        # Turn robot, wait for completion
+        turn_future = robot.behavior.turn_in_place(degrees(3 * 360))
+        turn_future.result()
+        # Play pounce animation, wait for completion
+        pounce_future = robot.anim.play_animation("anim_pounce_03")
+        pounce_future.result()
+        # Make sure text has been spoken
+        say_future.result()
         # Disconnect from Vector
         robot.disconnect()
 
