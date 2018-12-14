@@ -74,7 +74,7 @@ LIFT_ARM_LENGTH_MM = 66.0
 LIFT_PIVOT_HEIGHT_MM = 45.0
 
 #: Angle of the lift in the object's initial default pose.
-LIFT_ANGLE_IN_DEFAULT_POSE = -11.36
+LIFT_ANGLE_IN_DEFAULT_POSE = -0.1136
 
 #: Pivot offset for where the fork rotates around itself
 FORK_PIVOT_X = 3.0
@@ -321,6 +321,7 @@ class RobotView(opengl.PrecomputedView):
         angle_radians = math.asin(sin_angle)
 
         lift_angle = -(angle_radians - LIFT_ANGLE_IN_DEFAULT_POSE)
+        lift_angle_degrees = math.degrees(lift_angle)
 
         glPushMatrix()
         glEnable(GL_LIGHTING)
@@ -334,7 +335,7 @@ class RobotView(opengl.PrecomputedView):
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
 
         self._display_vector_body()
-        self._display_vector_lift(lift_angle)
+        self._display_vector_lift(lift_angle_degrees)
         self._display_vector_head(head_angle_degrees)
 
         glDisable(GL_LIGHTING)
