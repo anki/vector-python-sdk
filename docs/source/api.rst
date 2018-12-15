@@ -17,6 +17,7 @@ The API
     anki_vector.exceptions
     anki_vector.faces
     anki_vector.lights
+    anki_vector.messaging
     anki_vector.motors
     anki_vector.nav_map
     anki_vector.objects
@@ -35,9 +36,9 @@ The API
     anki_vector.vision
     anki_vector.world
 
-    anki_vector.messaging.client
-
 ..
+
+For documentation about protobuf objects, please see :doc:`the protobuf documentation </proto>`.
 
 ----
 

@@ -20,17 +20,22 @@ package Anki.Vector.external_interface;
 
 import "anki_vector/messaging/messages.proto";
 
+// Tell the behavior stream to release control from the SDK.
+// The stream may stay alive, but Vector will be allowed to run
+// his normal behaviors.
 message ControlRelease {}
 
-// Request control of the behavior system at a given priority
+// Request control of the behavior system at a given priority.
+// Currently there is only one priority level.
 message ControlRequest {
+  // Where in the behavior tree the SDK code should be executed.
   enum Priority {
+    // Unknown priority. Used for versions that don't understand old priority levels.
     UNKNOWN = 0;
-    // Request control above mandatory physical reactions. Not recommended.
-    OVERRIDE_ALL = 10;
     // Highest priority level. Directly under mandatory physical reactions.
     TOP_PRIORITY_AI = 20;
   }
+  // Where in the behavior tree the SDK code should be executed.
   Priority priority = 1;
 }
 
@@ -38,7 +43,9 @@ message ControlRequest {
 // requesting or releasing control.
 message BehaviorControlRequest {
   oneof request_type {
+    // Release control of the behavior system back to Vector.
     ControlRelease control_release = 1;
+    // Request control of the behavior system for the SDK.
     ControlRequest control_request = 2;
   }
 }
@@ -57,8 +64,11 @@ message ControlLostResponse {}
 // Responses from the behavior stream.
 message BehaviorControlResponse {
   oneof response_type {
+    // The SDK user is now free to directly control Vector.
     ControlGrantedResponse control_granted_response = 1;
+    // Control of the behavior system has been lost to a higher priority behavior.
     ControlLostResponse control_lost_event = 2;
+    // Used by Vector to verify the connection is still alive.
     KeepAlivePing keep_alive = 3;
   }
 }

@@ -664,8 +664,8 @@ class ExternalInterfaceServicer(object):
     raise NotImplementedError('Method not implemented!')
 
   def NavMapFeed(self, request, context):
-    # missing associated documentation comment in .proto file
-    pass
+    """Stream navigation map data.
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')

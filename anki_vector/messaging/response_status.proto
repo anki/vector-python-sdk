@@ -18,15 +18,24 @@ syntax = "proto3";
 
 package Anki.Vector.external_interface;
 
+// A shared response message sent back as part of most requests.
+// This will indicate the generic state of the request.
 message ResponseStatus {
   enum StatusCode {
     UNKNOWN = 0;
-    RESPONSE_RECEIVED = 1; // The message has completed as expected
-    REQUEST_PROCESSING = 2; // The message has been sent to the robot
+    // The message has completed as expected.
+    RESPONSE_RECEIVED = 1;
+    // The message has been sent to the robot.
+    REQUEST_PROCESSING = 2;
+    // The message has been handled successfully at the interface level.
     OK = 3;
-    FORBIDDEN = 100; // The user was not authorizied
-    NOT_FOUND = 101; // The requested attribute was not found
-    ERROR_UPDATE_IN_PROGRESS = 102; // Currently updating values from another call
+    // The user was not authorizied.
+    FORBIDDEN = 100;
+    // The requested attribute was not found.
+    NOT_FOUND = 101;
+    // Currently updating values from another call.
+    ERROR_UPDATE_IN_PROGRESS = 102;
   }
+  // The generic status code to give high-level insight into the progress of a given message.
   StatusCode code = 1;
 }
