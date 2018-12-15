@@ -398,6 +398,7 @@ service ExternalInterface {
     };
   }
 
+  // Stream navigation map data.
   rpc NavMapFeed(NavMapFeedRequest) returns (stream NavMapFeedResponse) {
     option (google.api.http) = {
       post: "/v1/nav_map_feed",

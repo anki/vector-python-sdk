@@ -25,10 +25,13 @@ import "anki_vector/messaging/extensions.proto";
 // still connected.
 message KeepAlivePing {}
 
+// An animation object.
 message Animation {
+  // The name of a given animation.
   string name = 1;
 }
 
+// See the DriveWheels rpc for more details.
 message DriveWheelsRequest {
   float left_wheel_mmps   = 1;
   float right_wheel_mmps  = 2;
@@ -36,53 +39,80 @@ message DriveWheelsRequest {
   float right_wheel_mmps2 = 4;
 }
 
+// See the DriveWheels rpc for more details.
 message DriveWheelsResponse {
+  // A generic status.
   ResponseStatus status = 1;
 }
 
+// See the MoveHead rpc for more details.
 message MoveHeadRequest {
   float speed_rad_per_sec = 1;
 }
 
+// See the MoveHead rpc for more details.
 message MoveHeadResponse {
+  // A generic status.
   ResponseStatus status = 1;
 }
 
+// See the MoveLift rpc for more details.
 message MoveLiftRequest {
   float speed_rad_per_sec = 1;
 }
 
+// See the MoveLift rpc for more details.
 message MoveLiftResponse {
+  // A generic status.
   ResponseStatus status = 1;
 }
 
+// See PlayAnimation rpc for more details.
 message PlayAnimationRequest {
+  // The animation to play.
   Animation animation = 1;
+  // The number of times to play the animation in a row.
   uint32 loops = 2;
+  // Ignore any movement of Vector's body in the given animation.
   bool ignore_body_track = 3;
+  // Ignore any movement of Vector's head in the given animation.
   bool ignore_head_track = 4;
+  // Ignore any movement of Vector's lift in the given animation.
   bool ignore_lift_track = 5;
 }
 
+// See PlayAnimation rpc for more details.
 message PlayAnimationResponse {
+  // A generic status.
   ResponseStatus status = 1;
+  // Information on whether the animation played successfully.
   BehaviorResults result = 2;
 }
 
+// See ListAnimations rpc for more details.
 message ListAnimationsRequest {}
 
+// See ListAnimations rpc for more details.
 message ListAnimationsResponse {
+  // A generic status.
   ResponseStatus status = 1;
+  // The animations that Vector knows.
   repeated Animation animation_names = 2;
 }
 
+// See DisplayFaceImageRGB rpc for more details.
 message DisplayFaceImageRGBRequest {
+  // The image to render.
   bytes face_data = 1;
+  // How long to display the image on the face.
   uint32 duration_ms = 2;
+  // If this image should overwrite any current images on the face.
   bool interrupt_running = 3;
 }
 
+// See DisplayFaceImageRGB rpc for more details.
 message DisplayFaceImageRGBResponse {
+  // A generic status.
   ResponseStatus status = 1;
 }
 
@@ -129,14 +159,16 @@ message PoseStruct {
   uint32 origin_id = 8; // Which coordinate frame this pose is in (0 for none or unknown)
 }
 
+// All values are in mm/s^2.
 message AccelData {
-  float x = 1;  // mm/s^2
+  float x = 1;
   float y = 2;
   float z = 3;
 }
 
+// All values are in rad/s.
 message GyroData {
-  float x = 1;  // rad/s
+  float x = 1;
   float y = 2;
   float z = 3;
 }
@@ -255,11 +287,6 @@ message RobotChangedObservedFaceID {
   int32   new_id = 2;
 }
 
-message AppIntentRequest {
-  string intent = 1;
-  string param = 2;
-}
-
 enum FaceEnrollmentResult
 {
   SUCCESS = 0;
@@ -274,12 +301,6 @@ enum FaceEnrollmentResult
   NAME_IN_USE = 7;
   NAMED_STORAGE_FULL = 8;
   UNKNOWN_FAILURE = 9;
-}
-
-message AppDisconnected{}
-
-message AppIntentResponse {
-  ResponseStatus status = 1;
 }
 
 message FaceEnrollmentCompleted {
@@ -463,8 +484,9 @@ message PathMotionProfile {
   bool  is_custom = 11;
 }
 
-// These codes are duplicated from actionResults.clad file and need to be kept in sync
-message ActionResult {
+// The possible results of running an action.
+  message ActionResult {
+  // The possible results of running an action.
   enum ActionResultCode {
     ACTION_RESULT_SUCCESS                 = 0;
     ACTION_RESULT_RUNNING                 = 16777216;

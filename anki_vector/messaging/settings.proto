@@ -19,17 +19,3 @@ syntax = "proto3";
 package Anki.Vector.external_interface;
 
 
-enum ApiVersion {
-  INVALID = 0;
-  LATEST  = 1;
-}
-
-enum Volume {
-  MUTE        = 0;
-  LOW         = 1;
-  MEDIUM_LOW  = 2;
-  MEDIUM      = 3;
-  MEDIUM_HIGH = 4;
-  HIGH        = 5;
-}
-
