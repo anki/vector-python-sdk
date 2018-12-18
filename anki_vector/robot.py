@@ -896,7 +896,8 @@ class AsyncRobot(Robot):
         # Disconnect from Vector
         robot.disconnect()
 
-    :param serial: Vector's serial number. Used to identify which Vector configuration to load.
+    :param serial: Vector's serial number. The robot's serial number (ex. 00e20100) is located on the underside of Vector,
+                   or accessible from Vector's debug screen. Used to identify which Vector configuration to load.
     :param ip: Vector's IP Address. (optional)
     :param config: A custom :class:`dict` to override values in Vector's configuration. (optional)
                    Example: :code:`{"cert": "/path/to/file.cert", "name": "Vector-XXXX", "guid": "<secret_key>"}`
@@ -905,10 +906,14 @@ class AsyncRobot(Robot):
                    that identifies the SDK user. Note: Never share your authentication credentials with anyone.
     :param default_logging: Toggle default logging.
     :param behavior_activation_timeout: The time to wait for control of the robot before failing.
+    :param cache_animation_list: Get the list of animations available at startup.
     :param enable_face_detection: Turn on face detection.
     :param enable_camera_feed: Turn camera feed on/off.
     :param enable_audio_feed: Turn audio feed on/off.
+    :param enable_custom_object_detection: Turn custom object detection on/off.
+    :param enable_nav_map_feed: Turn navigation map feed on/off.
     :param show_viewer: Render camera feed on/off.
+    :param show_3d_viewer: Render camera feed on/off.
     :param requires_behavior_control: Request control of Vector's behavior system."""
 
     @functools.wraps(Robot.__init__)
