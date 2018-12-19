@@ -50,6 +50,7 @@ import sys
 import time
 from typing import Callable
 
+from .exceptions import VectorPropertyValueNotReadyException
 from .messaging import protocol
 
 try:
@@ -93,6 +94,9 @@ def block_while_none(interval: float = 0.1, max_iterations: int = 50):
 
     :param interval: how often to check if the property is no longer None
     :param max_iterations: how many times to check the property before raising an error
+
+    This will raise a :class:`VectorControlTimeoutException` if the property cannot be retrieved
+    before :attr:`max_iterations`.
     """
     def blocker(func: Callable):
         @wraps(func)
@@ -103,7 +107,7 @@ def block_while_none(interval: float = 0.1, max_iterations: int = 50):
                 time.sleep(interval)
                 iterations += 1
                 if iterations > max_iterations:
-                    raise Exception("Value not ready")
+                    raise VectorPropertyValueNotReadyException()
                 result = func(*args, **kwargs)
             return result
         return wrapped
