@@ -128,6 +128,11 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnableImageStreamingRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnableImageStreamingResponse.FromString,
         )
+    self.IsImageStreamingEnabled = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/IsImageStreamingEnabled',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.IsImageStreamingEnabledRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.IsImageStreamingEnabledResponse.FromString,
+        )
     self.GoToPose = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/GoToPose',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.GoToPoseRequest.SerializeToString,
@@ -438,6 +443,13 @@ class ExternalInterfaceServicer(object):
     raise NotImplementedError('Method not implemented!')
 
   def EnableImageStreaming(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def IsImageStreamingEnabled(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -782,6 +794,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.EnableImageStreaming,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnableImageStreamingRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnableImageStreamingResponse.SerializeToString,
+      ),
+      'IsImageStreamingEnabled': grpc.unary_unary_rpc_method_handler(
+          servicer.IsImageStreamingEnabled,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.IsImageStreamingEnabledRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.IsImageStreamingEnabledResponse.SerializeToString,
       ),
       'GoToPose': grpc.unary_unary_rpc_method_handler(
           servicer.GoToPose,
