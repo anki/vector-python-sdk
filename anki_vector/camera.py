@@ -130,7 +130,10 @@ class CameraComponent(util.Component):
             self._enabled = False
             self._camera_feed_task.cancel()
             future = self.conn.run_coroutine(self._camera_feed_task)
-            future.result()
+            try:
+                future.result()
+            except CancelledError:
+                self.logger.debug('Camera feed task was cancelled. This is expected during disconnection.')
             # wait for streaming to end, up to 10 seconds
             iterations = 0
             max_iterations = 100
