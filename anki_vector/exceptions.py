@@ -27,6 +27,7 @@ __all__ = ['VectorCameraFeedDisabledException',
            'VectorInvalidVersionException',
            'VectorNotFoundException',
            'VectorNotReadyException',
+           'VectorPropertyValueNotReadyException',
            'VectorTimeoutException',
            'VectorUnauthenticatedException',
            'VectorUnavailableException',
@@ -143,3 +144,7 @@ Please verify that Vector is connected to the internet, is on a flat surface, an
 
 class VectorCameraFeedDisabledException(VectorException):
     """Failed to render video because camera feed was disabled."""
+
+
+class VectorPropertyValueNotReadyException(_VectorGenericException):
+    """Failed to retrieve the value for this property."""

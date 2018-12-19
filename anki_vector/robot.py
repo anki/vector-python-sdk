@@ -28,6 +28,7 @@ from . import (animation, audio, behavior, camera,
                connection, events, exceptions, faces,
                motors, nav_map, screen, photos, proximity,
                status, touch, util, viewer, vision, world)
+from .exceptions import VectorPropertyValueNotReadyException
 from .viewer import (ViewerComponent, Viewer3DComponent)
 from .messaging import protocol
 
@@ -725,9 +726,14 @@ class Robot:
                               events.Events.robot_state,
                               on_connection_thread=True)
 
-        # access the pose to prove it has gotten back from the event stream once.
-        while not self.pose:
-            pass
+        # access the pose to prove it has gotten back from the event stream once
+        #
+        # TODO Fix intermittent robot event stream failure
+        try:
+            while not self.pose:
+                pass
+        except VectorPropertyValueNotReadyException:
+            print("The robot event stream is currently unreliable. Please reboot Vector and retry.")
 
     def disconnect(self) -> None:
         """Close the connection with Vector.
