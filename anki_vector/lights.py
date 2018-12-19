@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Helper routines for dealing with Vector's lights and colors."""
+"""Helper routines for dealing with Vector's Cube lights and colors."""
 
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ['MAX_COLOR_PROFILE', 'WHITE_BALANCED_CUBE_PROFILE',
@@ -24,7 +24,7 @@ from .color import Color, green, red, blue, cyan, magenta, yellow, white, off
 
 
 class ColorProfile:
-    """Applies transforms to make Vector's lights and colors appear as
+    """Applies transforms to make Vector's Cube lights and colors appear as
     intended, by limiting maximum channel intensity.
 
     :param red_multiplier: Scaling value for the brightness of red Lights
