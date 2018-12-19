@@ -874,6 +874,15 @@ message EnableImageStreamingResponse
   ResponseStatus status = 1;
 }
 
+// Request whether or not image streaming is enabled on the robot
+message IsImageStreamingEnabledRequest {
+}
+
+// Indicates whether or not image streaming is enabled on the robot
+message IsImageStreamingEnabledResponse {
+  bool is_image_streaming_enabled = 1;
+}
+
 // Sent when vision modes are automatically disabled due to the SDK no longer having control
 // of the robot
 message VisionModesAutoDisabled

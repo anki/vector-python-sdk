@@ -28,6 +28,7 @@ __all__ = ['CameraComponent']
 
 import asyncio
 from concurrent.futures import CancelledError
+import time
 import sys
 
 try:
@@ -130,7 +131,46 @@ class CameraComponent(util.Component):
             self._camera_feed_task.cancel()
             future = self.conn.run_coroutine(self._camera_feed_task)
             future.result()
+            # wait for streaming to end, up to 10 seconds
+            iterations = 0
+            max_iterations = 100
+            while self.image_streaming_enabled():
+                time.sleep(0.1)
+                iterations += 1
+                if iterations > max_iterations:
+                    # leave loop, even if streaming is still enabled
+                    # because other SDK functions will still work and
+                    # the RPC should have had enough time to finish
+                    # which means we _should_ be in a good state.
+                    self.logger.info('Camera Feed closed, but streaming on'
+                            ' robot remained enabled.  This is unexpected.')
+                    break;
             self._camera_feed_task = None
+
+    async def _image_streaming_enabled(self) -> bool:
+        """request streaming enabled status from the robot"""
+        request = protocol.IsImageStreamingEnabledRequest()
+        response = await self.conn.grpc_interface.IsImageStreamingEnabled(request)
+        enabled = False
+        if response:
+            enabled = response.is_image_streaming_enabled
+        return enabled
+
+    def image_streaming_enabled(self) -> bool:
+        """True if image streaming is enabled on the robot
+
+        .. testcode::
+
+            import anki_vector
+            with anki_vector.Robot() as robot:
+                image_streaming_enabled = robot.camera.image_streaming_enabled()
+                if image_streaming_enabled:
+                    print("Robot is streaming video")
+                else:
+                    print("Robot is not streaming video")
+        """
+        future = self.conn.run_coroutine(self._image_streaming_enabled())
+        return future.result()
 
     def _unpack_image(self, msg: protocol.CameraFeedResponse) -> None:
         """Processes raw data from the robot into a more more useful image structure."""
