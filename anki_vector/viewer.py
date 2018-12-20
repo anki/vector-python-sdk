@@ -243,6 +243,7 @@ class Viewer3DComponent(util.Component):
         self._process: mp.process.BaseProcess = None
         self._update_thread: threading.Thread = None
         self._last_robot_control_intents = None
+        self.connecting_to_cube = False
 
     def show(self, show_viewer_controls: bool = True):
         """Spawns a background process that shows the navigation map in a 3D view.
@@ -353,6 +354,16 @@ class Viewer3DComponent(util.Component):
                 self._process.terminate()
             self._process = None
 
+    def connect_to_cube(self):
+        '''Connect to light cube'''
+        if self.connecting_to_cube:
+            return
+
+        self.connecting_to_cube = True
+        self.robot.world.connect_cube()
+        self.connecting_to_cube = False
+        return
+
     def _update(self):
         """Reads most recently stored user-triggered intents, and sends
         motor messages to the robot if the intents should effect the robot's
@@ -387,6 +398,10 @@ class Viewer3DComponent(util.Component):
 
                 if not old_intents or old_intents.head_speed != input_intents.head_speed:
                     self.robot.motors.set_head_motor(input_intents.head_speed, _return_future=True)
+
+                if input_intents.connect_to_light_block and (old_intents is None or not old_intents.connect_to_light_block):
+                    threading.Thread(target=self.connect_to_cube).start()
+
             except mp.queues.Empty:
                 pass
             close_event = self._close_event
@@ -403,7 +418,7 @@ class Viewer3DComponent(util.Component):
             (main) process via a multiprocessing queue.
         """
         from .opengl import opengl_vector
-        world_frame = opengl_vector.WorldRenderFrame(self.robot)
+        world_frame = opengl_vector.WorldRenderFrame(self.robot, self.connecting_to_cube)
         queue = self._world_frame_queue
         if queue:
             try:

@@ -587,8 +587,10 @@ class WorldRenderFrame():  # pylint: disable=too-few-public-methods
         defined in it's world class.
     """
 
-    def __init__(self, robot):
+    def __init__(self, robot, connecting_to_cube):
 
+        self.connected_cube = robot.world.connected_light_cube is not None
+        self.connecting_to_cube = connecting_to_cube
         self.robot_frame = RobotRenderFrame(robot)
 
         self.cube_frames: List[CubeRenderFrame] = []
@@ -608,3 +610,11 @@ class WorldRenderFrame():  # pylint: disable=too-few-public-methods
             is_fixed = isinstance(obj, FixedCustomObject)
             if is_custom or is_fixed:
                 self.custom_object_frames.append(CustomObjectRenderFrame(obj, is_fixed))
+
+    def cube_connected(self):
+        '''Is there a light cube connected to Vector'''
+        return self.connected_cube
+
+    def cube_connecting(self):
+        '''Is there a current attempt to connect to a light cube'''
+        return self.connecting_to_cube

@@ -94,11 +94,12 @@ class _RobotControlIntents():  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, left_wheel_speed=0.0, right_wheel_speed=0.0,
-                 lift_speed=0.0, head_speed=0.0):
+                 lift_speed=0.0, head_speed=0.0, connect_to_light_block=False):
         self.left_wheel_speed = left_wheel_speed
         self.right_wheel_speed = right_wheel_speed
         self.lift_speed = lift_speed
         self.head_speed = head_speed
+        self.connect_to_light_block = connect_to_light_block
 
 
 def _draw_text(font, input_str, x, y, line_height=16, r=1.0, g=1.0, b=1.0):
@@ -369,8 +370,10 @@ class _OpenGLViewController():
         lift_speed = 4.0 * lift_dir * speed_scalar
         head_speed = head_dir * speed_scalar
 
+        connect_block = self._is_key_pressed.get(b'c', False)
+
         control_intents = _RobotControlIntents(left_wheel_speed, right_wheel_speed,
-                                               lift_speed, head_speed)
+                                               lift_speed, head_speed, connect_block)
         self._input_intent_queue.put(control_intents, True)
 
     def _idle(self):
@@ -488,6 +491,8 @@ class OpenGLViewer():
                                         'R, F: Lift up, down',
                                         'T, G: Head up, down',
                                         '',
+                                        'C: Connect to LightCube',
+                                        '',
                                         'LMB: Rotate camera',
                                         'RMB: Move camera',
                                         'LMB + RMB: Move camera up/down',
@@ -587,15 +592,21 @@ class OpenGLViewer():
         robot_view.display(robot_frame.pose, robot_frame.head_angle, robot_frame.lift_position)
 
         if self.show_controls:
-            self._draw_controls()
+            self._draw_controls(world_frame.cube_connected(),world_frame.cube_connecting())
 
-    def _draw_controls(self):
+    def _draw_controls(self, cube_connected, cube_connecting):
         try:
             GLUT_BITMAP_9_BY_15
         except NameError:
             pass
         else:
             _draw_text(GLUT_BITMAP_9_BY_15, self._instructions, x=10, y=10)
+            if cube_connecting:
+                _draw_text(GLUT_BITMAP_9_BY_15, "<connecting...>", x=600, y=10, r=0.75, g=0.5, b=0.0)
+            elif cube_connected:
+                _draw_text(GLUT_BITMAP_9_BY_15, "<cube connected>", x=600, y=10, r=0.0, g=0.85, b=0.0)
+            else:
+                _draw_text(GLUT_BITMAP_9_BY_15, "<no cube connected>", x=600, y=10, r=0.75, g=0.75, b=0.75)
 
     def _render_3d_view(self, window: opengl.OpenGLWindow):
         """Renders 3d objects to an openGL window
