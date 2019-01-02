@@ -41,7 +41,7 @@ def main():
         global wake_word_heard
         if not wake_word_heard:
             wake_word_heard = True
-            robot.say_text("Hello")
+            robot.behavior.say_text("Hello")
             evt.set()
 
     args = anki_vector.util.parse_command_args()

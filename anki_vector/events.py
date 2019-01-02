@@ -273,7 +273,7 @@ class EventHandler:
                 global said_text
                 if not said_text:
                     said_text = True
-                    robot.say_text("I see a face!")
+                    robot.behavior.say_text("I see a face!")
                     evt.set()
 
             args = anki_vector.util.parse_command_args()
@@ -358,7 +358,7 @@ class EventHandler:
                 global said_text
                 if not said_text:
                     said_text = True
-                    robot.say_text("I see a face!")
+                    robot.behavior.say_text("I see a face!")
                     evt.set()
 
             args = anki_vector.util.parse_command_args()

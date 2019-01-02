@@ -829,29 +829,6 @@ class Robot:
         get_network_state_request = protocol.NetworkStateRequest()
         return await self.conn.grpc_interface.NetworkState(get_network_state_request)
 
-    @connection.on_connection_thread()
-    async def say_text(self, text: str, use_vector_voice: bool = True, duration_scalar: float = 1.0) -> protocol.SayTextResponse:
-        """Make Vector speak text.
-
-        .. testcode::
-
-            import anki_vector
-            with anki_vector.Robot() as robot:
-                robot.say_text("Hello World")
-
-        :param text: The words for Vector to say.
-        :param use_vector_voice: Whether to use Vector's robot voice
-                (otherwise, he uses a generic human male voice).
-        :param duration_scalar: Adjust the relative duration of the
-                generated text to speech audio.
-
-        :return: object that provides the status and utterance state
-        """
-        say_text_request = protocol.SayTextRequest(text=text,
-                                                   use_vector_voice=use_vector_voice,
-                                                   duration_scalar=duration_scalar)
-        return await self.conn.grpc_interface.SayText(say_text_request)
-
 
 class AsyncRobot(Robot):
     """The AsyncRobot object is just like the Robot object, but allows multiple commands
@@ -868,7 +845,7 @@ class AsyncRobot(Robot):
         # Create the robot connection
         with anki_vector.AsyncRobot() as robot:
             # Start saying text asynchronously
-            say_future = robot.say_text("Now is the time")
+            say_future = robot.behavior.say_text("Now is the time")
             # Turn robot, wait for completion
             turn_future = robot.behavior.turn_in_place(degrees(3*360))
             turn_future.result()
@@ -890,7 +867,7 @@ class AsyncRobot(Robot):
         # Connect to Vector
         robot.connect()
         # Start saying text asynchronously
-        say_future = robot.say_text("Now is the time")
+        say_future = robot.behavior.say_text("Now is the time")
         # Turn robot, wait for completion
         turn_future = robot.behavior.turn_in_place(degrees(3 * 360))
         turn_future.result()

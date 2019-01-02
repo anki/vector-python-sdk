@@ -231,7 +231,7 @@ class RemoteControlVector:
                 anim_name = self.key_code_to_anim_name(key_code)
                 self.queue_action((self.vector.anim.play_animation, anim_name))
             elif key_code == ord(' '):
-                self.queue_action((self.vector.say_text, self.text_to_say))
+                self.queue_action((self.vector.behavior.say_text, self.text_to_say))
 
     def key_code_to_anim_name(self, key_code):
         key_num = key_code - ord('0')
@@ -240,7 +240,7 @@ class RemoteControlVector:
         return anim_name
 
     def func_to_name(self, func):
-        if func == self.vector.say_text:
+        if func == self.vector.behavior.say_text:
             return "say_text"
         if func == self.vector.anim.play_animation:
             return "play_anim"
