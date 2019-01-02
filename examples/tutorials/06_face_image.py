@@ -47,8 +47,10 @@ def main():
         # Convert the image to the format used by the Screen
         print("Display image on Vector's face...")
         screen_data = anki_vector.screen.convert_image_to_screen_data(image_file)
-        robot.screen.set_screen_with_image_data(screen_data, 4.0)
-        time.sleep(5)
+
+        duration_s = 4.0
+        robot.screen.set_screen_with_image_data(screen_data, duration_s)
+        time.sleep(duration_s)
 
 
 if __name__ == "__main__":

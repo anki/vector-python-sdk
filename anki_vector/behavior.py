@@ -202,6 +202,15 @@ class BehaviorComponent(util.Component):
     async def set_eye_color(self, hue: float, saturation: float) -> protocol.SetEyeColorResponse:
         """Set Vector's eye color.
 
+        Eye color settings examples:
+         |  Teal: Set hue to 0.42 and saturation to 1.00.
+         |  Orange: Set hue to 0.05 and saturation to 0.95.
+         |  Yellow: Set hue to 0.11 and saturation to 1.00.
+         |  Lime: Set hue to 0.21 and saturation to 1.00.
+         |  Sapphire: Set hue to 0.57 and saturation to 1.00.
+         |  Purple: Set hue to 0.83 and saturation to 0.76.
+         |  Green: Set hue to 0.30 and saturation to 1.00.
+
         .. testcode::
 
             import anki_vector
