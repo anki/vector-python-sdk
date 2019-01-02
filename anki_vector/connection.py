@@ -376,10 +376,10 @@ class Connection:
             raise VectorControlTimeoutException(f"Surpassed timeout of {timeout}s") from e
 
     def release_control(self, timeout: float = 10.0):
-        """Explicitly request control. Typically used after detecting :func:`control_lost_event`.
+        """Explicitly release control. Typically used after detecting :func:`control_lost_event`.
 
         To be able to directly control Vector's motors, override his screen, play an animation, etc.,
-        the :class:`Connection` will need behavior control. This function will acquire control
+        the :class:`Connection` will need behavior control. This function will release control
         of Vector's behavior system. This will raise a :class:`VectorControlTimeoutException` if it fails
         to receive a control_lost event before the timeout.
 

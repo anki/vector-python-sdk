@@ -371,7 +371,7 @@ class NavMapComponent(util.Component):
                 latest_nav_map = robot.nav_map.latest_nav_map
         """
         if not self._nav_map_feed_task or self._nav_map_feed_task.done():
-            raise Exception("Nav map not initialized")
+            raise Exception("Nav map not initialized. Check that Robot parameter enable_nav_map_feed is set to True.")
         return self._latest_nav_map
 
     def init_nav_map_feed(self, frequency: float = 0.5) -> None:

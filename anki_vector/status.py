@@ -116,6 +116,11 @@ class RobotStatus():
     def is_picked_up(self) -> bool:
         """True if Vector is currently picked up (in the air).
 
+        If :py:attr:`is_being_held` is true, then :py:attr:`is_picked_up` is always True.
+
+        :py:attr:`is_picked_up` uses the IMU data to determine if the robot is not on a stable surface with his treads down.
+        If the robot is on its side, :py:attr:`is_picked_up` is True.
+
         .. testcode::
 
             import anki_vector
@@ -286,6 +291,9 @@ class RobotStatus():
     @property
     def is_being_held(self) -> bool:
         """True if Vector is being held.
+
+        :py:attr:`is_being_held` uses the IMU to look for tiny motions
+        that suggest the robot is actively being held in someone's hand.
 
         .. testcode::
 

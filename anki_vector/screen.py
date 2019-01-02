@@ -155,7 +155,10 @@ class ScreenComponent(util.Component):
 
                 # Convert the image to the format used by the Screen
                 screen_data = anki_vector.screen.convert_image_to_screen_data(image_file)
-                robot.screen.set_screen_with_image_data(screen_data, 4.0)
+
+                duration_s = 4.0
+                robot.screen.set_screen_with_image_data(screen_data, duration_s)
+                time.sleep(duration_s)
 
         :param image_data: A :class:`bytes` object representing all of the pixels (16bit color in rgb565 format)
         :param duration_sec: The number of seconds the image should remain on Vector's face.
@@ -184,7 +187,9 @@ class ScreenComponent(util.Component):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.screen.set_screen_to_color(anki_vector.color.Color(rgb=[255, 128, 0]), duration_sec=1.0)
+                duration_s = 4.0
+                robot.screen.set_screen_to_color(anki_vector.color.Color(rgb=[255, 128, 0]), duration_sec=duration_s)
+                time.sleep(duration_s)
 
         :param solid_color: Desired color to set Vector's Screen.
         :param duration_sec: The number of seconds the color should remain on Vector's face.
