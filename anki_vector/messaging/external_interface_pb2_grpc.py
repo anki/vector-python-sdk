@@ -208,11 +208,6 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.VersionStateRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.VersionStateResponse.FromString,
         )
-    self.NetworkState = channel.unary_unary(
-        '/Anki.Vector.external_interface.ExternalInterface/NetworkState',
-        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.NetworkStateRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.NetworkStateResponse.FromString,
-        )
     self.SayText = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/SayText',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.SayTextRequest.SerializeToString,
@@ -561,13 +556,6 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def NetworkState(self, request, context):
-    """Get the network information for Vector.
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
   def SayText(self, request, context):
     """Make Vector speak text.
     """
@@ -874,11 +862,6 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.VersionState,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.VersionStateRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.VersionStateResponse.SerializeToString,
-      ),
-      'NetworkState': grpc.unary_unary_rpc_method_handler(
-          servicer.NetworkState,
-          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.NetworkStateRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.NetworkStateResponse.SerializeToString,
       ),
       'SayText': grpc.unary_unary_rpc_method_handler(
           servicer.SayText,

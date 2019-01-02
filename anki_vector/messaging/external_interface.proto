@@ -282,14 +282,6 @@ service ExternalInterface {
     };
   }
 
-  // Get the network information for Vector.
-  rpc NetworkState(NetworkStateRequest) returns (NetworkStateResponse) {
-    option (google.api.http) = {
-      post: "/v1/network_state",
-      body: "*"
-    };
-  }
-
   // Make Vector speak text.
   rpc SayText(SayTextRequest) returns (SayTextResponse) {
     option (google.api.http) = {
