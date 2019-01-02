@@ -665,21 +665,6 @@ enum BatteryLevel {
   BATTERY_LEVEL_FULL    = 3;
 }
 
-message NetworkStats {
-  int32 g_net_stat1_num_connections   = 1;
-  float g_net_stat2_latency_avg       = 2;
-  float g_net_stat3_latency_sd        = 3;
-  float g_net_stat4_latency_min       = 4;
-  float g_net_stat5_latency_max       = 5;
-  float g_net_stat6_ping_arrived_pc   = 6;
-  float g_net_stat7_ext_queued_avg_ms = 7;
-  float g_net_stat8_ext_queued_min_ms = 8;
-  float g_net_stat9_ext_queued_max_ms = 9;
-  float g_net_stata_queued_avg_ms     = 10;
-  float g_net_statb_queued_min_ms     = 11;
-  float g_net_statc_queued_max_ms     = 12;
-}
-
 message BatteryStateRequest {}
 
 message BatteryStateResponse {
@@ -709,13 +694,6 @@ message VersionStateResponse {
   ResponseStatus status = 1;
   string os_version = 2;
   string engine_build_id = 3;
-}
-
-message NetworkStateRequest {}
-
-message NetworkStateResponse {
-  ResponseStatus status = 1;
-  NetworkStats network_stats = 2;
 }
 
 message SayTextRequest {
