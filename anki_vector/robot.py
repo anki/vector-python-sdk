@@ -819,20 +819,6 @@ class Robot:
         get_version_state_request = protocol.VersionStateRequest()
         return await self.conn.grpc_interface.VersionState(get_version_state_request)
 
-    @connection.on_connection_thread(requires_control=False)
-    async def get_network_state(self) -> protocol.NetworkStateResponse:
-        """Get the network information for Vector.
-
-        .. testcode::
-
-            import anki_vector
-            with anki_vector.Robot() as robot:
-                network_state = robot.get_network_state()
-        """
-        get_network_state_request = protocol.NetworkStateRequest()
-        return await self.conn.grpc_interface.NetworkState(get_network_state_request)
-
-
 class AsyncRobot(Robot):
     """The AsyncRobot object is just like the Robot object, but allows multiple commands
     to be executed at the same time. To achieve this, all grpc function calls also
