@@ -305,7 +305,6 @@ if __name__ == '__main__':
     # Connect to the robot
     args = parse_command_args()
     with anki_vector.Robot(args.serial,
-                           enable_camera_feed=True,
                            show_viewer=True,
                            enable_nav_map_feed=False) as robotInstance:
         robotInstance.viewer_3d.show(False)

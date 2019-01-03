@@ -81,12 +81,11 @@ class Robot:
     :param behavior_activation_timeout: The time to wait for control of the robot before failing.
     :param cache_animation_list: Get the list of animations available at startup.
     :param enable_face_detection: Turn on face detection.
-    :param enable_camera_feed: Turn camera feed on/off.
     :param enable_audio_feed: Turn audio feed on/off.
     :param enable_custom_object_detection: Turn custom object detection on/off.
     :param enable_nav_map_feed: Turn navigation map feed on/off.
-    :param show_viewer: Render camera feed on/off.
-    :param show_3d_viewer: Render camera feed on/off.
+    :param show_viewer: Specifies whether to display a view of Vector's camera in a window.
+    :param show_3d_viewer: Specifies whether to display a 3D view of Vector's understanding of the world in a window.
     :param requires_behavior_control: Request control of Vector's behavior system."""
 
     def __init__(self,
@@ -97,7 +96,6 @@ class Robot:
                  behavior_activation_timeout: int = 10,
                  cache_animation_list: bool = True,
                  enable_face_detection: bool = False,
-                 enable_camera_feed: bool = False,
                  enable_audio_feed: bool = False,
                  enable_custom_object_detection: bool = False,
                  enable_nav_map_feed: bool = None,
@@ -168,16 +166,12 @@ class Robot:
         self._status: status.RobotStatus = status.RobotStatus()
         self.pending = []
 
-        self._enable_camera_feed = enable_camera_feed
         self._enable_audio_feed = enable_audio_feed
         if enable_nav_map_feed is not None:
             self._enable_nav_map_feed = enable_nav_map_feed
         else:
             self._enable_nav_map_feed = False
         self._show_viewer = show_viewer
-        if show_viewer and not enable_camera_feed:
-            self.logger.warning("enable_camera_feed should be True for viewer to render correctly.")
-            self._enable_camera_feed = True
         self._show_3d_viewer = show_3d_viewer
         if show_3d_viewer and enable_nav_map_feed is None:
             self.logger.warning("enable_nav_map_feed should be True for 3d viewer to render correctly.")
@@ -258,7 +252,8 @@ class Robot:
 
             import anki_vector
 
-            with anki_vector.Robot(enable_camera_feed=True) as robot:
+            with anki_vector.Robot() as robot:
+                robot.camera.init_camera_feed()
                 image = robot.camera.latest_image
                 image.show()
         """
@@ -337,7 +332,7 @@ class Robot:
 
             import anki_vector
 
-            with anki_vector.Robot(show_viewer=True) as robot:
+            with anki_vector.Robot() as robot:
                 # Render video for 5 seconds
                 robot.viewer.show_video()
                 time.sleep(5)
@@ -604,35 +599,6 @@ class Robot:
         if self.enable_audio_feed:
             self.audio.init_audio_feed()
 
-    @property
-    def enable_camera_feed(self) -> bool:
-        """The camera feed enabled/disabled
-
-        :getter: Returns whether the camera feed is enabled
-        :setter: Enable/disable the camera feed
-
-        .. testcode::
-
-            import asyncio
-            import time
-
-            import anki_vector
-
-            with anki_vector.Robot(enable_camera_feed=True) as robot:
-                time.sleep(5)
-                robot.enable_camera_feed = False
-                time.sleep(5)
-        """
-        return self._enable_camera_feed
-
-    @enable_camera_feed.setter
-    def enable_camera_feed(self, enable) -> None:
-        self._enable_camera_feed = enable
-        if self.enable_camera_feed:
-            self.camera.init_camera_feed()
-        else:
-            self.camera.close_camera_feed()
-
     # Unpack streamed data to robot's internal properties
     def _unpack_robot_state(self, _, msg):
         self._pose = util.Pose(x=msg.pose.x, y=msg.pose.y, z=msg.pose.z,
@@ -698,12 +664,9 @@ class Robot:
         if self.enable_audio_feed:
             self.audio.init_audio_feed()
 
-        # Start camera feed
-        if self.enable_camera_feed:
-            self.camera.init_camera_feed()
-
         # Start rendering camera feed
         if self._show_viewer:
+            self.camera.init_camera_feed()
             self.viewer.show_video()
 
         if self._show_3d_viewer:
@@ -751,16 +714,20 @@ class Robot:
 
         # Stop rendering video
         self.viewer.stop_video()
+
         # Stop rendering 3d video
         self.viewer_3d.close()
+
         # Shutdown camera feed
         self.camera.close_camera_feed()
-        self._enable_camera_feed = False
+
         # Shutdown audio feed
         if self._audio is not None:
             self._audio.close_audio_feed()
+
         # Shutdown nav map feed
         self.nav_map.close_nav_map_feed()
+
         # Close the world and cleanup its objects
         self.world.close()
 
@@ -880,12 +847,11 @@ class AsyncRobot(Robot):
     :param behavior_activation_timeout: The time to wait for control of the robot before failing.
     :param cache_animation_list: Get the list of animations available at startup.
     :param enable_face_detection: Turn on face detection.
-    :param enable_camera_feed: Turn camera feed on/off.
     :param enable_audio_feed: Turn audio feed on/off.
     :param enable_custom_object_detection: Turn custom object detection on/off.
     :param enable_nav_map_feed: Turn navigation map feed on/off.
-    :param show_viewer: Render camera feed on/off.
-    :param show_3d_viewer: Render camera feed on/off.
+    :param show_viewer: Specifies whether to display a view of Vector's camera in a window.
+    :param show_3d_viewer: Specifies whether to display a 3D view of Vector's understanding of the world in a window.
     :param requires_behavior_control: Request control of Vector's behavior system."""
 
     @functools.wraps(Robot.__init__)

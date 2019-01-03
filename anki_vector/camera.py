@@ -62,7 +62,8 @@ class CameraComponent(util.Component):
 
         import anki_vector
 
-        with anki_vector.Robot(enable_camera_feed=True) as robot:
+        with anki_vector.Robot() as robot:
+            robot.camera.init_camera_feed()
             image = robot.camera.latest_image
             image.show()
 
@@ -88,7 +89,8 @@ class CameraComponent(util.Component):
 
             import anki_vector
 
-            with anki_vector.Robot(enable_camera_feed=True) as robot:
+            with anki_vector.Robot() as robot:
+                robot.camera.init_camera_feed()
                 image = robot.camera.latest_image
                 image.show()
         """
@@ -109,7 +111,8 @@ class CameraComponent(util.Component):
 
             import anki_vector
 
-            with anki_vector.Robot(enable_camera_feed=True) as robot:
+            with anki_vector.Robot() as robot:
+                robot.camera.init_camera_feed()
                 image = robot.camera.latest_image
                 image.show()
                 print(f"latest_image_id: {robot.camera.latest_image_id}")
@@ -118,8 +121,18 @@ class CameraComponent(util.Component):
             raise Exception("Camera feed not open!")  # TODO: Use a VectorException
         return self._latest_image_id
 
-    def init_camera_feed(self) -> None:
-        """Begin camera feed task."""
+    def init_camera_feed(self) -> None: 
+        """Begin camera feed task.
+
+        .. testcode::
+
+            import anki_vector
+
+            with anki_vector.Robot() as robot:
+                robot.camera.init_camera_feed()
+                image = robot.camera.latest_image
+                image.show()
+        """
         if not self._camera_feed_task or self._camera_feed_task.done():
             self._enabled = True
             self._camera_feed_task = self.conn.loop.create_task(self._request_and_handle_images())
