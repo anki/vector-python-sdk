@@ -55,7 +55,7 @@ class ViewerComponent(util.Component):
 
         import time
 
-        with anki_vector.Robot(enable_camera_feed=True, show_viewer=True) as robot:
+        with anki_vector.Robot(show_viewer=True) as robot:
             time.sleep(5)
 
     :param robot: A reference to the owner Robot object. (May be :class:`None`)
@@ -72,20 +72,20 @@ class ViewerComponent(util.Component):
         """Render a video stream using the images obtained from
         Vector's camera feed.
 
-        Be sure to create your Robot object with the camera feed enabled
-        by using "show_viewer=True" and "enable_camera_feed=True".
-
         .. testcode::
 
             import anki_vector
             import time
 
-            with anki_vector.Robot(enable_camera_feed=True) as robot:
+            with anki_vector.Robot() as robot:
                 robot.viewer.show_video()
                 time.sleep(10)
 
-        :param timeout: Render video for the given time. (Renders forever, if timeout not given)
+        :param timeout: Render video for the given time. (Renders forever, if timeout not given.)
         """
+
+        self.robot.camera.init_camera_feed()
+
         ctx = mp.get_context('spawn')
         self._close_event = ctx.Event()
         self._frame_queue = ctx.Queue(maxsize=4)
@@ -132,7 +132,8 @@ class ViewerComponent(util.Component):
         .. note::
 
             This function will be called automatically from the camera feed when the
-            :class:`~anki_vector.robot.Robot` object is created with ``enable_camera_feed=True``.
+            :class:`~anki_vector.robot.Robot` or :class:`~anki_vector.robot.AsyncRobot`
+            object is created with ``show_viewer=True``.
 
         .. code-block:: python
 

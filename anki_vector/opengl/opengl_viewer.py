@@ -26,7 +26,6 @@ Example:
 
         with anki_vector.Robot(show_viewer=True,
                                show_3d_viewer=True,
-                               enable_camera_feed=True,
                                enable_face_detection=True,
                                enable_custom_object_detection=True,
                                enable_nav_map_feed=True) as robot:

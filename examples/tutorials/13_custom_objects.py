@@ -48,7 +48,6 @@ def main():
                            default_logging=False,
                            show_viewer=True,
                            show_3d_viewer=True,
-                           enable_camera_feed=True,
                            enable_custom_object_detection=True,
                            enable_nav_map_feed=True) as robot:
         # Add event handlers for whenever Vector sees a new object
