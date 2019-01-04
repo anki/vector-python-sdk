@@ -556,7 +556,7 @@ class CustomObjectRenderFrame(ObservableObjectRenderFrame):  # pylint: disable=t
             self.x_size_mm = custom_object.x_size_mm
             self.y_size_mm = custom_object.y_size_mm
             self.z_size_mm = custom_object.z_size_mm
-        else: 
+        else:
             self.x_size_mm = custom_object.archetype.x_size_mm
             self.y_size_mm = custom_object.archetype.y_size_mm
             self.z_size_mm = custom_object.archetype.z_size_mm

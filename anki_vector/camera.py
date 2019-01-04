@@ -121,7 +121,7 @@ class CameraComponent(util.Component):
             raise Exception("Camera feed not open!")  # TODO: Use a VectorException
         return self._latest_image_id
 
-    def init_camera_feed(self) -> None: 
+    def init_camera_feed(self) -> None:
         """Begin camera feed task.
 
         .. testcode::
@@ -159,8 +159,8 @@ class CameraComponent(util.Component):
                     # the RPC should have had enough time to finish
                     # which means we _should_ be in a good state.
                     self.logger.info('Camera Feed closed, but streaming on'
-                            ' robot remained enabled.  This is unexpected.')
-                    break;
+                                     ' robot remained enabled.  This is unexpected.')
+                    break
             self._camera_feed_task = None
 
     async def _image_streaming_enabled(self) -> bool:
