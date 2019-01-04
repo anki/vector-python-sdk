@@ -45,5 +45,6 @@ def main():
         robot.behavior.go_to_pose(Pose(200, 0, 0, angle_z=degrees(0)), relative_to_robot=True)
         robot.world.delete_custom_objects()
 
+
 if __name__ == "__main__":
     main()
