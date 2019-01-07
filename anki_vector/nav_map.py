@@ -344,7 +344,7 @@ class NavMapComponent(util.Component):
                 # Make sure Vector drives around so the nav map will update
                 robot.behavior.drive_off_charger()
                 robot.motors.set_wheel_motors(-100, 100)
-            latest_nav_map = robot.nav_map.latest_nav_map
+                latest_nav_map = robot.nav_map.latest_nav_map
 
     :param robot: A reference to the owner Robot object.
     """
