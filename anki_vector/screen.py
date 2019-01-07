@@ -143,6 +143,7 @@ class ScreenComponent(util.Component):
         .. testcode::
 
             import anki_vector
+            import time
 
             try:
                 from PIL import Image
@@ -185,6 +186,7 @@ class ScreenComponent(util.Component):
         .. testcode::
 
             import anki_vector
+            import time
 
             with anki_vector.Robot() as robot:
                 duration_s = 4.0
