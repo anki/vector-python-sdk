@@ -134,7 +134,8 @@ def setup_basic_logging(custom_handler: logging.Handler = None,
         formatter = logging.Formatter("%(asctime)s.%(msecs)03d %(name)+25s %(levelname)+7s  %(message)s",
                                       "%H:%M:%S")
         handler.setFormatter(formatter)
-        class LogCleanup(logging.Filter):
+
+        class LogCleanup(logging.Filter):  # pylint: disable=too-few-public-methods
             def filter(self, record):
                 # Drop 'anki_vector' from log messages
                 record.name = '.'.join(record.name.split('.')[1:])
