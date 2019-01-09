@@ -32,6 +32,7 @@ from typing import Any, Awaitable, Callable, Coroutine, Dict, List
 
 import grpc
 import aiogrpc
+from google.protobuf.text_format import MessageToString
 
 from . import util
 from .exceptions import (connection_error,
@@ -531,7 +532,7 @@ class Connection:
             else:
                 msg = protocol.ControlRequest(priority=priority.value)
                 msg = protocol.BehaviorControlRequest(control_request=msg)
-            self._logger.debug(f"Sending: {msg}")
+            self._logger.debug(f"BehaviorControl {MessageToString(msg, as_one_line=True)}")
             yield msg
 
     async def _open_connections(self):
@@ -540,11 +541,11 @@ class Connection:
             async for response in self._interface.BehaviorControl(self._request_handler()):
                 response_type = response.WhichOneof("response_type")
                 if response_type == 'control_granted_response':
-                    self._logger.info(response)
+                    self._logger.info(f"BehaviorControl {MessageToString(response, as_one_line=True)}")
                     self._control_events.update(True)
                 elif response_type == 'control_lost_event':
                     self._cancel_active()
-                    self._logger.info(response)
+                    self._logger.info(f"BehaviorControl {MessageToString(response, as_one_line=True)}")
                     self._control_events.update(False)
         except futures.CancelledError:
             self._logger.debug('Behavior handler task was cancelled. This is expected during disconnection.')
@@ -709,12 +710,15 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
                     raise VectorControlException(func.__name__)
                 logger.info(f"Delaying {func.__name__} until behavior control is granted")
                 await asyncio.wait([conn.control_granted_event.wait()], timeout=10)
-            logger.debug(f'Outgoing {func.__name__}: {args[1:] if log_messaging else "size = {} bytes".format(sys.getsizeof(args[1:]))}')
+            message = args[1:]
+            outgoing = message if log_messaging else "size = {} bytes".format(sys.getsizeof(message))
+            logger.debug(f'Outgoing {func.__name__}: {outgoing}')
             try:
                 result = await func(*args, **kwargs)
             except grpc.RpcError as rpc_error:
                 raise connection_error(rpc_error) from rpc_error
-            logger.debug(f'Incoming {func.__name__}: {type(result).__name__} ({str(result).strip() if log_messaging else "size = {} bytes".format(sys.getsizeof(result))})')
+            incoming = str(result).strip() if log_messaging else "size = {} bytes".format(sys.getsizeof(result))
+            logger.debug(f'Incoming {func.__name__}: {type(result).__name__}  {incoming}')
             return result
 
         @functools.wraps(func)

@@ -32,6 +32,8 @@ __all__ = ["AnimationComponent"]
 
 import concurrent
 
+from google.protobuf import text_format
+
 from . import connection, exceptions, util
 from .messaging import protocol
 
@@ -84,7 +86,7 @@ class AnimationComponent(util.Component):
     async def _load_animation_list(self):
         req = protocol.ListAnimationsRequest()
         result = await self.grpc_interface.ListAnimations(req)
-        self.logger.debug(f"status: {result.status}, number_of_animations:{len(result.animation_names)}")
+        self.logger.debug(f"Animation List status={text_format.MessageToString(result.status, as_one_line=True)}, number of animations={len(result.animation_names)}")
         self._anim_dict = {a.name: a for a in result.animation_names}
         return result
 
