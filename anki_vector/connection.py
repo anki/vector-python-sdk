@@ -30,9 +30,9 @@ import sys
 import threading
 from typing import Any, Awaitable, Callable, Coroutine, Dict, List
 
+from google.protobuf.text_format import MessageToString
 import grpc
 import aiogrpc
-from google.protobuf.text_format import MessageToString
 
 from . import util
 from .exceptions import (connection_error,
