@@ -131,8 +131,17 @@ def setup_basic_logging(custom_handler: logging.Handler = None,
     handler = custom_handler
     if handler is None:
         handler = logging.StreamHandler(stream=target)
-        formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+        formatter = logging.Formatter("%(asctime)s.%(msecs)03d %(name)+25s %(levelname)+7s  %(message)s",
+                                      "%H:%M:%S")
         handler.setFormatter(formatter)
+        class LogCleanup(logging.Filter):
+            def filter(self, record):
+                # Drop 'anki_vector' from log messages
+                record.name = '.'.join(record.name.split('.')[1:])
+                # Indent past informational chunk
+                record.msg = record.msg.replace("\n", f"\n{'':48}")
+                return True
+        handler.addFilter(LogCleanup())
 
     vector_logger = logging.getLogger('anki_vector')
     if not vector_logger.handlers:
