@@ -111,23 +111,45 @@ class World(util.Component):
 
         .. testcode::
 
-            # Print the visible face's attributes
+            import functools
+            import time
+
             import anki_vector
-            with anki_vector.Robot() as robot:
+            from anki_vector.events import Events
+            from anki_vector.util import degrees
+
+            def test_subscriber(robot, event_type, event):
+                print(f"Subscriber called for: {event_type} = {event}")
+
                 for face in robot.world.visible_faces:
-                    print("Face attributes:")
+                    print("--- Face attributes ---")
                     print(f"Face id: {face.face_id}")
                     print(f"Updated face id: {face.updated_face_id}")
                     print(f"Name: {face.name}")
                     print(f"Expression: {face.expression}")
-                    print(f"Timestamp: {face.timestamp}")
+                    print(f"Timestamp: {face.last_observed_time}")
                     print(f"Pose: {face.pose}")
-                    print(f"Image Rect: {face.face_rect}")
+                    print(f"Image Rect: {face.last_observed_image_rect}")
                     print(f"Expression score: {face.expression_score}")
                     print(f"Left eye: {face.left_eye}")
                     print(f"Right eye: {face.right_eye}")
                     print(f"Nose: {face.nose}")
                     print(f"Mouth: {face.mouth}")
+
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(45.0))
+                robot.behavior.set_lift_height(0.0)
+
+                test_subscriber = functools.partial(test_subscriber, robot)
+                robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
+                robot.events.subscribe(test_subscriber, Events.robot_observed_face)
+
+                print("------ show vector your face, press ctrl+c to exit early ------")
+                try:
+                    time.sleep(10)
+                except KeyboardInterrupt:
+                    robot.disconnect()
 
         Returns:
             A generator yielding :class:`anki_vector.faces.Face` instances.
@@ -272,12 +294,33 @@ class World(util.Component):
 
         .. testcode::
 
-            with anki_vector.Robot() as robot:
-                # First get an existing face_id, for instance:
-                previously_observed_face_id = 1
 
-                # Then use the face_id to retrieve the Face instance
-                my_face = robot.world.get_face(previously_observed_face_id)
+            import functools
+            import time
+
+            import anki_vector
+            from anki_vector.events import Events
+            from anki_vector.util import degrees
+
+            def test_subscriber(robot, event_type, event):
+                for face in robot.world.visible_faces:    
+                    my_face = robot.world.get_face(face.face_id)
+                    print(f"Name: {my_face.name}")
+
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(45.0))
+                robot.behavior.set_lift_height(0.0)
+
+                test_subscriber = functools.partial(test_subscriber, robot)
+                robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
+                robot.events.subscribe(test_subscriber, Events.robot_observed_face)
+
+                print("------ show vector your face, press ctrl+c to exit early ------")
+                try:
+                    time.sleep(10)
+                except KeyboardInterrupt:
+                    robot.disconnect()
         """
         return self._faces.get(face_id)
 
