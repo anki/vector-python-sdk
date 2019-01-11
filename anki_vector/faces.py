@@ -132,12 +132,33 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
+            import functools
+            import time
+
             import anki_vector
+            from anki_vector.events import Events
+            from anki_vector.util import degrees
+
+            def test_subscriber(robot, event_type, event):
+                print(f"Subscriber called for: {event_type} = {event}")
+
+                for face in robot.world.visible_faces:
+                    print(f"Visible face id: {face.face_id}")
 
             with anki_vector.Robot(enable_face_detection=True) as robot:
-                # Print the visible face ids
-                for face in robot.world.visible_faces:
-                    print(f"Visible id: {face.face_id}")
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(45.0))
+                robot.behavior.set_lift_height(0.0)
+
+                test_subscriber = functools.partial(test_subscriber, robot)
+                robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
+                robot.events.subscribe(test_subscriber, Events.robot_observed_face)
+
+                print("------ show vector your face, press ctrl+c to exit early ------")
+                try:
+                    time.sleep(10)
+                except KeyboardInterrupt:
+                    robot.disconnect()
         """
         return self._face_id if self._updated_face_id is None else self._updated_face_id
 
@@ -153,11 +174,33 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
-            import anki_vector
+            import functools
+            import time
 
-            with anki_vector.Robot(enable_face_detection=True) as robot:
+            import anki_vector
+            from anki_vector.events import Events
+            from anki_vector.util import degrees
+
+            def test_subscriber(robot, event_type, event):
+                print(f"Subscriber called for: {event_type} = {event}")
+
                 for face in robot.world.visible_faces:
                     was_face_originally_unrecognized_but_is_now_recognized = face.has_updated_face_id
+
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(45.0))
+                robot.behavior.set_lift_height(0.0)
+
+                test_subscriber = functools.partial(test_subscriber, robot)
+                robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
+                robot.events.subscribe(test_subscriber, Events.robot_observed_face)
+
+                print("------ show vector your face, press ctrl+c to exit early ------")
+                try:
+                    time.sleep(10)
+                except KeyboardInterrupt:
+                    robot.disconnect()
         """
         return self._updated_face_id is not None
 
@@ -167,11 +210,35 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
+        .. testcode::
+
+            import functools
+            import time
+
             import anki_vector
+            from anki_vector.events import Events
+            from anki_vector.util import degrees
+
+            def test_subscriber(robot, event_type, event):
+                print(f"Subscriber called for: {event_type} = {event}")
+
+                for face in robot.world.visible_faces:
+                    print(f"Updated face id: {face.updated_face_id}")
 
             with anki_vector.Robot(enable_face_detection=True) as robot:
-                for face in robot.world.visible_faces:
-                    print(f"updated_face_id: {face.updated_face_id}")
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(45.0))
+                robot.behavior.set_lift_height(0.0)
+
+                test_subscriber = functools.partial(test_subscriber, robot)
+                robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
+                robot.events.subscribe(test_subscriber, Events.robot_observed_face)
+
+                print("------ show vector your face, press ctrl+c to exit early ------")
+                try:
+                    time.sleep(10)
+                except KeyboardInterrupt:
+                    robot.disconnect()
         """
         if self._updated_face_id:
             return self._updated_face_id
@@ -185,11 +252,33 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
-            import anki_vector
+            import functools
+            import time
 
-            with anki_vector.Robot(enable_face_detection=True) as robot:
+            import anki_vector
+            from anki_vector.events import Events
+            from anki_vector.util import degrees
+
+            def test_subscriber(robot, event_type, event):
+                print(f"Subscriber called for: {event_type} = {event}")
+
                 for face in robot.world.visible_faces:
                     print(f"Face name: {face.name}")
+
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(45.0))
+                robot.behavior.set_lift_height(0.0)
+
+                test_subscriber = functools.partial(test_subscriber, robot)
+                robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
+                robot.events.subscribe(test_subscriber, Events.robot_observed_face)
+
+                print("------ show vector your face, press ctrl+c to exit early ------")
+                try:
+                    time.sleep(10)
+                except KeyboardInterrupt:
+                    robot.disconnect()
         """
         return self._name
 
@@ -206,11 +295,33 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
+            import functools
+            import time
+
             import anki_vector
+            from anki_vector.events import Events
+            from anki_vector.util import degrees
+
+            def test_subscriber(robot, event_type, event):
+                print(f"Subscriber called for: {event_type} = {event}")
+
+                for face in robot.world.visible_faces:
+                    print(f"Expression: {face.expression}")
 
             with anki_vector.Robot(enable_face_detection=True) as robot:
-                for face in robot.world.visible_faces:
-                  print(f"expression: {face.expression}")
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(45.0))
+                robot.behavior.set_lift_height(0.0)
+
+                test_subscriber = functools.partial(test_subscriber, robot)
+                robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
+                robot.events.subscribe(test_subscriber, Events.robot_observed_face)
+
+                print("------ show vector your face, press ctrl+c to exit early ------")
+                try:
+                    time.sleep(10)
+                except KeyboardInterrupt:
+                    robot.disconnect()
         """
         return self._expression
 
@@ -224,11 +335,33 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
+            import functools
+            import time
+
             import anki_vector
+            from anki_vector.events import Events
+            from anki_vector.util import degrees
+
+            def test_subscriber(robot, event_type, event):
+                print(f"Subscriber called for: {event_type} = {event}")
+
+                for face in robot.world.visible_faces:
+                    print(f"Expression score: {face.expression_score}")
 
             with anki_vector.Robot(enable_face_detection=True) as robot:
-                for face in robot.world.visible_faces:
-                    print(f"expression_score: {face.expression_score}")
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(45.0))
+                robot.behavior.set_lift_height(0.0)
+
+                test_subscriber = functools.partial(test_subscriber, robot)
+                robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
+                robot.events.subscribe(test_subscriber, Events.robot_observed_face)
+
+                print("------ show vector your face, press ctrl+c to exit early ------")
+                try:
+                    time.sleep(10)
+                except KeyboardInterrupt:
+                    robot.disconnect()
         """
         return self._expression_score
 
@@ -238,11 +371,33 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
+            import functools
+            import time
+
             import anki_vector
+            from anki_vector.events import Events
+            from anki_vector.util import degrees
+
+            def test_subscriber(robot, event_type, event):
+                print(f"Subscriber called for: {event_type} = {event}")
+
+                for face in robot.world.visible_faces:
+                    print(f"Left eye: {face.left_eye}")
 
             with anki_vector.Robot(enable_face_detection=True) as robot:
-                for face in robot.world.visible_faces:
-                    print(f"left_eye: {face.left_eye}")
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(45.0))
+                robot.behavior.set_lift_height(0.0)
+
+                test_subscriber = functools.partial(test_subscriber, robot)
+                robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
+                robot.events.subscribe(test_subscriber, Events.robot_observed_face)
+
+                print("------ show vector your face, press ctrl+c to exit early ------")
+                try:
+                    time.sleep(10)
+                except KeyboardInterrupt:
+                    robot.disconnect()
         """
         return self._left_eye
 
@@ -252,11 +407,33 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
+            import functools
+            import time
+
             import anki_vector
+            from anki_vector.events import Events
+            from anki_vector.util import degrees
+
+            def test_subscriber(robot, event_type, event):
+                print(f"Subscriber called for: {event_type} = {event}")
+
+                for face in robot.world.visible_faces:
+                    print(f"Right eye: {face.right_eye}")
 
             with anki_vector.Robot(enable_face_detection=True) as robot:
-                for face in robot.world.visible_faces:
-                    print(f"right_eye: {face.right_eye}")
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(45.0))
+                robot.behavior.set_lift_height(0.0)
+
+                test_subscriber = functools.partial(test_subscriber, robot)
+                robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
+                robot.events.subscribe(test_subscriber, Events.robot_observed_face)
+
+                print("------ show vector your face, press ctrl+c to exit early ------")
+                try:
+                    time.sleep(10)
+                except KeyboardInterrupt:
+                    robot.disconnect()
         """
         return self._right_eye
 
@@ -266,11 +443,33 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
+            import functools
+            import time
+
             import anki_vector
+            from anki_vector.events import Events
+            from anki_vector.util import degrees
+
+            def test_subscriber(robot, event_type, event):
+                print(f"Subscriber called for: {event_type} = {event}")
+
+                for face in robot.world.visible_faces:
+                    print(f"Nose: {face.nose}")
 
             with anki_vector.Robot(enable_face_detection=True) as robot:
-                for face in robot.world.visible_faces:
-                    print(f"nose: {face.nose}")
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(45.0))
+                robot.behavior.set_lift_height(0.0)
+
+                test_subscriber = functools.partial(test_subscriber, robot)
+                robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
+                robot.events.subscribe(test_subscriber, Events.robot_observed_face)
+
+                print("------ show vector your face, press ctrl+c to exit early ------")
+                try:
+                    time.sleep(10)
+                except KeyboardInterrupt:
+                    robot.disconnect()
         """
         return self._nose
 
@@ -280,11 +479,33 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
+            import functools
+            import time
+
             import anki_vector
+            from anki_vector.events import Events
+            from anki_vector.util import degrees
+
+            def test_subscriber(robot, event_type, event):
+                print(f"Subscriber called for: {event_type} = {event}")
+
+                for face in robot.world.visible_faces:
+                    print(f"Mouth: {face.mouth}")
 
             with anki_vector.Robot(enable_face_detection=True) as robot:
-                for face in robot.world.visible_faces:
-                    print(f"mouth: {face.mouth}")
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(45.0))
+                robot.behavior.set_lift_height(0.0)
+
+                test_subscriber = functools.partial(test_subscriber, robot)
+                robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
+                robot.events.subscribe(test_subscriber, Events.robot_observed_face)
+
+                print("------ show vector your face, press ctrl+c to exit early ------")
+                try:
+                    time.sleep(10)
+                except KeyboardInterrupt:
+                    robot.disconnect()
         """
         return self._mouth
 
