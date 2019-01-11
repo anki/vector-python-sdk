@@ -51,7 +51,7 @@ class ProximitySensorData:
 
     @property
     @util.block_while_none()
-    def distance(self) -> float:
+    def distance(self) -> util.Distance:
         """The distance between the sensor and a detected object
 
         .. testcode::

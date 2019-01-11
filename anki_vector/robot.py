@@ -300,7 +300,7 @@ class Robot:
     def proximity(self) -> proximity.ProximityComponent:
         """Component containing state related to object proximity detection.
 
-        ..code-block ::
+        .. code-block:: python
 
             import anki_vector
             with anki_vector.Robot() as robot:
