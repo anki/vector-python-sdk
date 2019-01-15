@@ -21,7 +21,6 @@ __all__ = ['EventHandler', 'Events']
 import asyncio
 from concurrent.futures import CancelledError
 from enum import Enum
-import inspect
 import threading
 from typing import Callable
 import uuid
@@ -185,7 +184,7 @@ class EventHandler:
             if isinstance(exc, TypeError) and "positional arguments but" in str(exc):
                 self.logger.error("The subscribed function may be missing parameters in its definition. Make sure it has robot, event_type and event positional parameters.")
 
-    async def dispatch_event_by_name(self, event_data, event_name: str = None):
+    async def dispatch_event_by_name(self, event_data, event_name: str):
         """Dispatches event to event listeners by name.
 
         .. testcode::
@@ -328,7 +327,7 @@ class EventHandler:
 
         self.subscribe_by_name(func, event_name, *args, **kwargs)
 
-    def unsubscribe_by_name(self, func: Callable, event_name: str = None):
+    def unsubscribe_by_name(self, func: Callable, event_name: str):
         """Unregister a previously subscribed method from an event.
 
         .. testcode::
@@ -361,7 +360,7 @@ class EventHandler:
             self.logger.error(f"Cannot unsubscribe from event_type '{event_name}'. "
                               "It has no subscribers.")
 
-    def unsubscribe(self, func: Callable, event_type: Events = None):
+    def unsubscribe(self, func: Callable, event_type: Events):
         """Unregister a previously subscribed method from an event.
 
         .. testcode::

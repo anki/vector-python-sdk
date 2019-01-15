@@ -25,10 +25,14 @@ import functools
 from pathlib import Path
 
 from . import (animation, audio, behavior, camera,
-               connection, events, exceptions, faces,
-               motors, nav_map, screen, photos, proximity,
-               status, touch, util, viewer, vision, world)
-from .exceptions import VectorPropertyValueNotReadyException
+               connection, events, faces, motors,
+               nav_map, screen, photos, proximity,
+               status, touch, util, viewer, vision,
+               world)
+from .exceptions import (VectorConfigurationException,
+                         VectorNotReadyException,
+                         VectorPropertyValueNotReadyException,
+                         VectorUnreliableEventStreamException)
 from .viewer import (ViewerComponent, Viewer3DComponent)
 from .messaging import protocol
 
@@ -189,21 +193,23 @@ class Robot:
 
         sections = parser.sections()
         if not sections:
-            raise Exception('\n\nCould not find the sdk configuration file. Please run `python3 -m anki_vector.configure` to set up your Vector for SDK usage.')
+            raise VectorConfigurationException('Could not find the sdk configuration file. Please run `python3 -m anki_vector.configure` to set up your Vector for SDK usage.')
         elif serial is None and len(sections) == 1:
             serial = sections[0]
             self.logger.warning("No serial number provided. Automatically selecting {}".format(serial))
         elif serial is None:
-            raise Exception('\n\nFound multiple robot serial numbers. Please provide the serial number of the Robot you want to control.\n'
-                            'Example: ./01_hello_world.py --serial {robot_serial_number}')
+            raise VectorConfigurationException("Found multiple robot serial numbers. "
+                                               "Please provide the serial number of the Robot you want to control.\n\n"
+                                               "Example: ./01_hello_world.py --serial {{robot_serial_number}}")
 
         serial = serial.lower()
         config = {k.lower(): v for k, v in parser.items()}
         try:
             dict_entry = config[serial]
         except KeyError:
-            raise Exception('\n\nCould not find matching robot info for given serial number: {}. Please check your serial number is correct.\n'
-                            'Example: ./01_hello_world.py --serial {{robot_serial_number}}'.format(serial))
+            raise VectorConfigurationException("Could not find matching robot info for given serial number: {}. "
+                                               "Please check your serial number is correct.\n\n"
+                                               "Example: ./01_hello_world.py --serial {{robot_serial_number}}", serial)
 
         return dict_entry
 
@@ -226,7 +232,7 @@ class Robot:
     def anim(self) -> animation.AnimationComponent:
         """A reference to the AnimationComponent instance."""
         if self._anim is None:
-            raise exceptions.VectorNotReadyException("AnimationComponent is not yet initialized")
+            raise VectorNotReadyException("AnimationComponent is not yet initialized")
         return self._anim
 
     @property
@@ -236,7 +242,7 @@ class Robot:
         print("\n\nNote: Audio stream is not yet supported and does not yet come from Vector's microphones.\n\n")
 
         if self._audio is None:
-            raise exceptions.VectorNotReadyException("AudioComponent is not yet initialized")
+            raise VectorNotReadyException("AudioComponent is not yet initialized")
         return self._audio
 
     @property
@@ -258,42 +264,42 @@ class Robot:
                 image.show()
         """
         if self._camera is None:
-            raise exceptions.VectorNotReadyException("CameraComponent is not yet initialized")
+            raise VectorNotReadyException("CameraComponent is not yet initialized")
         return self._camera
 
     @property
     def faces(self) -> faces.FaceComponent:
         """A reference to the FaceComponent instance."""
         if self._faces is None:
-            raise exceptions.VectorNotReadyException("FaceComponent is not yet initialized")
+            raise VectorNotReadyException("FaceComponent is not yet initialized")
         return self._faces
 
     @property
     def motors(self) -> motors.MotorComponent:
         """A reference to the MotorComponent instance."""
         if self._motors is None:
-            raise exceptions.VectorNotReadyException("MotorComponent is not yet initialized")
+            raise VectorNotReadyException("MotorComponent is not yet initialized")
         return self._motors
 
     @property
     def nav_map(self) -> nav_map.NavMapComponent:
         """A reference to the NavMapComponent instance."""
         if self._nav_map is None:
-            raise exceptions.VectorNotReadyException("NavMapComponent is not yet initialized")
+            raise VectorNotReadyException("NavMapComponent is not yet initialized")
         return self._nav_map
 
     @property
     def screen(self) -> screen.ScreenComponent:
         """A reference to the ScreenComponent instance."""
         if self._screen is None:
-            raise exceptions.VectorNotReadyException("ScreenComponent is not yet initialized")
+            raise VectorNotReadyException("ScreenComponent is not yet initialized")
         return self._screen
 
     @property
     def photos(self) -> photos.PhotographComponent:
         """A reference to the PhotographComponent instance."""
         if self._photos is None:
-            raise exceptions.VectorNotReadyException("PhotographyComponent is not yet initialized")
+            raise VectorNotReadyException("PhotographyComponent is not yet initialized")
         return self._photos
 
     @property
@@ -341,7 +347,7 @@ class Robot:
                 robot.viewer.stop_video()
         """
         if self._viewer is None:
-            raise exceptions.VectorNotReadyException("ViewerComponent is not yet initialized")
+            raise VectorNotReadyException("ViewerComponent is not yet initialized")
         return self._viewer
 
     @property
@@ -359,7 +365,7 @@ class Robot:
                 time.sleep(5)
         """
         if self._viewer_3d is None:
-            raise exceptions.VectorNotReadyException("Viewer3DComponent is not yet initialized")
+            raise VectorNotReadyException("Viewer3DComponent is not yet initialized")
         return self._viewer_3d
 
     @property
@@ -378,7 +384,7 @@ class Robot:
     def world(self) -> world.World:
         """A reference to the World instance, or None if the WorldComponent is not yet initialized."""
         if self._world is None:
-            raise exceptions.VectorNotReadyException("WorldComponent is not yet initialized")
+            raise VectorNotReadyException("WorldComponent is not yet initialized")
         return self._world
 
     @property
@@ -690,13 +696,11 @@ class Robot:
                               _on_connection_thread=True)
 
         # access the pose to prove it has gotten back from the event stream once
-        #
-        # TODO Fix intermittent robot event stream failure
         try:
-            while not self.pose:
+            if not self.pose:
                 pass
-        except VectorPropertyValueNotReadyException:
-            print("The robot event stream is currently unreliable. Please reboot Vector and retry.")
+        except VectorPropertyValueNotReadyException as e:
+            raise VectorUnreliableEventStreamException() from e
 
     def disconnect(self) -> None:
         """Close the connection with Vector.

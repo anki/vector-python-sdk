@@ -41,6 +41,7 @@ __all__ = ["MAX_HEAD_ANGLE", "MIN_HEAD_ANGLE",
 
 from . import connection, objects, util
 from .messaging import protocol
+from .exceptions import VectorException
 
 # Constants
 
@@ -310,7 +311,7 @@ class BehaviorComponent(util.Component):
                     docking_result = dock_response.result
         """
         if target_object is None:
-            raise Exception("Must supply a target_object to dock_with_cube")
+            raise VectorException("Must supply a target_object to dock_with_cube")
 
         motion_prof = self._motion_profile_for_proto()
 
