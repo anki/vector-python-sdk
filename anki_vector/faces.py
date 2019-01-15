@@ -98,13 +98,11 @@ class Face(objects.ObservableObject):
 
         self._on_observed(pose, image_rect, instantiation_timestamp)
 
-        self._robot.events.subscribe(
-            self._on_face_observed,
-            events.Events.robot_observed_face)
+        self._robot.events.subscribe(self._on_face_observed,
+                                     events.Events.robot_observed_face)
 
-        self._robot.events.subscribe(
-            self._on_face_id_changed,
-            events.Events.robot_changed_observed_face_id)
+        self._robot.events.subscribe(self._on_face_id_changed,
+                                     events.Events.robot_changed_observed_face_id)
 
     def __repr__(self):
         return (f"<{self.__class__.__name__} Face id: {self.face_id} "
@@ -113,13 +111,11 @@ class Face(objects.ObservableObject):
 
     def teardown(self):
         """All faces will be torn down by the world when no longer needed."""
-        self._robot.events.unsubscribe(
-            self._on_face_observed,
-            events.Events.robot_observed_face)
+        self._robot.events.unsubscribe(self._on_face_observed,
+                                       events.Events.robot_observed_face)
 
-        self._robot.events.unsubscribe(
-            self._on_face_id_changed,
-            events.Events.robot_changed_observed_face_id)
+        self._robot.events.unsubscribe(self._on_face_id_changed,
+                                       events.Events.robot_changed_observed_face_id)
 
     @property
     def face_id(self) -> int:
@@ -132,7 +128,6 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
-            import functools
             import time
 
             import anki_vector
@@ -150,7 +145,6 @@ class Face(objects.ObservableObject):
                 robot.behavior.set_head_angle(degrees(45.0))
                 robot.behavior.set_lift_height(0.0)
 
-                test_subscriber = functools.partial(test_subscriber, robot)
                 robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
                 robot.events.subscribe(test_subscriber, Events.robot_observed_face)
 
@@ -174,7 +168,6 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
-            import functools
             import time
 
             import anki_vector
@@ -192,7 +185,6 @@ class Face(objects.ObservableObject):
                 robot.behavior.set_head_angle(degrees(45.0))
                 robot.behavior.set_lift_height(0.0)
 
-                test_subscriber = functools.partial(test_subscriber, robot)
                 robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
                 robot.events.subscribe(test_subscriber, Events.robot_observed_face)
 
@@ -212,7 +204,6 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
-            import functools
             import time
 
             import anki_vector
@@ -230,7 +221,6 @@ class Face(objects.ObservableObject):
                 robot.behavior.set_head_angle(degrees(45.0))
                 robot.behavior.set_lift_height(0.0)
 
-                test_subscriber = functools.partial(test_subscriber, robot)
                 robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
                 robot.events.subscribe(test_subscriber, Events.robot_observed_face)
 
@@ -252,7 +242,6 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
-            import functools
             import time
 
             import anki_vector
@@ -270,7 +259,6 @@ class Face(objects.ObservableObject):
                 robot.behavior.set_head_angle(degrees(45.0))
                 robot.behavior.set_lift_height(0.0)
 
-                test_subscriber = functools.partial(test_subscriber, robot)
                 robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
                 robot.events.subscribe(test_subscriber, Events.robot_observed_face)
 
@@ -295,7 +283,6 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
-            import functools
             import time
 
             import anki_vector
@@ -313,7 +300,6 @@ class Face(objects.ObservableObject):
                 robot.behavior.set_head_angle(degrees(45.0))
                 robot.behavior.set_lift_height(0.0)
 
-                test_subscriber = functools.partial(test_subscriber, robot)
                 robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
                 robot.events.subscribe(test_subscriber, Events.robot_observed_face)
 
@@ -335,7 +321,6 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
-            import functools
             import time
 
             import anki_vector
@@ -353,7 +338,6 @@ class Face(objects.ObservableObject):
                 robot.behavior.set_head_angle(degrees(45.0))
                 robot.behavior.set_lift_height(0.0)
 
-                test_subscriber = functools.partial(test_subscriber, robot)
                 robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
                 robot.events.subscribe(test_subscriber, Events.robot_observed_face)
 
@@ -371,7 +355,6 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
-            import functools
             import time
 
             import anki_vector
@@ -389,7 +372,6 @@ class Face(objects.ObservableObject):
                 robot.behavior.set_head_angle(degrees(45.0))
                 robot.behavior.set_lift_height(0.0)
 
-                test_subscriber = functools.partial(test_subscriber, robot)
                 robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
                 robot.events.subscribe(test_subscriber, Events.robot_observed_face)
 
@@ -407,7 +389,6 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
-            import functools
             import time
 
             import anki_vector
@@ -425,7 +406,6 @@ class Face(objects.ObservableObject):
                 robot.behavior.set_head_angle(degrees(45.0))
                 robot.behavior.set_lift_height(0.0)
 
-                test_subscriber = functools.partial(test_subscriber, robot)
                 robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
                 robot.events.subscribe(test_subscriber, Events.robot_observed_face)
 
@@ -443,7 +423,6 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
-            import functools
             import time
 
             import anki_vector
@@ -461,7 +440,6 @@ class Face(objects.ObservableObject):
                 robot.behavior.set_head_angle(degrees(45.0))
                 robot.behavior.set_lift_height(0.0)
 
-                test_subscriber = functools.partial(test_subscriber, robot)
                 robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
                 robot.events.subscribe(test_subscriber, Events.robot_observed_face)
 
@@ -479,7 +457,6 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
-            import functools
             import time
 
             import anki_vector
@@ -497,7 +474,6 @@ class Face(objects.ObservableObject):
                 robot.behavior.set_head_angle(degrees(45.0))
                 robot.behavior.set_lift_height(0.0)
 
-                test_subscriber = functools.partial(test_subscriber, robot)
                 robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
                 robot.events.subscribe(test_subscriber, Events.robot_observed_face)
 
@@ -511,7 +487,7 @@ class Face(objects.ObservableObject):
 
     #### Private Event Handlers ####
 
-    def _on_face_observed(self, _, msg):
+    def _on_face_observed(self, _robot, _event_type, msg):
         """Unpacks the face observed stream data from Vector into a Face instance."""
         if self._face_id == msg.face_id:
 
@@ -534,7 +510,7 @@ class Face(objects.ObservableObject):
             self._mouth = msg.mouth
             self._on_observed(pose, image_rect, msg.timestamp)
 
-    def _on_face_id_changed(self, _, msg):
+    def _on_face_id_changed(self, _robot, _event_type, msg):
         """Updates the face id when a tracked face (negative ID) is recognized and
         receives a positive ID or when face records get merged"""
         if self._face_id == msg.old_id:

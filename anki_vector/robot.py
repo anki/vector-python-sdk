@@ -125,7 +125,7 @@ class Robot:
 
         #: :class:`anki_vector.connection.Connection`: The active connection to the robot.
         self._conn = connection.Connection(self._name, ':'.join([self._ip, self._port]), self._cert_file, self._guid, requires_behavior_control=requires_behavior_control)
-        self._events = events.EventHandler()
+        self._events = events.EventHandler(self)
 
         # placeholders for components before they exist
         self._anim: animation.AnimationComponent = None
@@ -600,7 +600,7 @@ class Robot:
             self.audio.init_audio_feed()
 
     # Unpack streamed data to robot's internal properties
-    def _unpack_robot_state(self, _, msg):
+    def _unpack_robot_state(self, _robot, _event_type, msg):
         self._pose = util.Pose(x=msg.pose.x, y=msg.pose.y, z=msg.pose.z,
                                q0=msg.pose.q0, q1=msg.pose.q1,
                                q2=msg.pose.q2, q3=msg.pose.q3,
@@ -687,7 +687,7 @@ class Robot:
         # Subscribe to a callback that updates the robot's local properties
         self.events.subscribe(self._unpack_robot_state,
                               events.Events.robot_state,
-                              on_connection_thread=True)
+                              _on_connection_thread=True)
 
         # access the pose to prove it has gotten back from the event stream once
         #

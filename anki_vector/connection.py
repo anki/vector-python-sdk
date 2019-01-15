@@ -299,13 +299,13 @@ class Connection:
 
             import anki_vector
 
-            with anki_vector.Robot(requires_behavior_control=False) as robot:
-                async def callback(event_type, event):
-                    await robot.conn.request_control()
-                    print(robot.conn.requires_behavior_control) # Will print True
-                    await robot.anim.play_animation('anim_pounce_success_02')
-                    await robot.conn.release_control()
+            async def callback(robot, event_type, event):
+                await robot.conn.request_control()
+                print(robot.conn.requires_behavior_control) # Will print True
+                await robot.anim.play_animation('anim_pounce_success_02')
+                await robot.conn.release_control()
 
+            with anki_vector.Robot(requires_behavior_control=False) as robot:
                 print(robot.conn.requires_behavior_control) # Will print False
                 robot.events.subscribe(callback, anki_vector.events.Events.robot_observed_face)
 

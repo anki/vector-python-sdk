@@ -56,10 +56,10 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
         if isinstance(vision_mode, futures.Future):
             vision_mode.result()
 
-    def _handle_mirror_mode_disabled_event(self, _, _msg):
+    def _handle_mirror_mode_disabled_event(self, _robot, _event_type, _msg):
         self._display_camera_feed_on_face = False
 
-    def _handle_vision_modes_auto_disabled_event(self, _, _msg):
+    def _handle_vision_modes_auto_disabled_event(self, _robot, _event_type, _msg):
         self._detect_faces = False
         self._detect_custom_objects = False
         # self._detect_motion = False
