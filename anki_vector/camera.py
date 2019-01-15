@@ -37,6 +37,7 @@ except ImportError:
     sys.exit("Cannot import opencv-python: Do `pip3 install opencv-python` to install")
 
 from . import util
+from .exceptions import VectorCameraFeedException
 from .messaging import protocol
 
 try:
@@ -95,7 +96,7 @@ class CameraComponent(util.Component):
                 image.show()
         """
         if not self._camera_feed_task:
-            raise Exception("Camera feed not open!")  # TODO: Use a VectorException
+            raise VectorCameraFeedException()
         return self._latest_image
 
     @property
@@ -118,7 +119,7 @@ class CameraComponent(util.Component):
                 print(f"latest_image_id: {robot.camera.latest_image_id}")
         """
         if not self._camera_feed_task:
-            raise Exception("Camera feed not open!")  # TODO: Use a VectorException
+            raise VectorCameraFeedException()
         return self._latest_image_id
 
     def init_camera_feed(self) -> None:

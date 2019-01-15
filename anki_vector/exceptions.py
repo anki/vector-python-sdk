@@ -19,7 +19,10 @@ SDK-specific exception classes for Vector.
 from grpc import RpcError, StatusCode
 
 # __all__ should order by constants, event classes, other classes, functions.
-__all__ = ['VectorCameraFeedDisabledException',
+__all__ = ['VectorAsyncException',
+           'VectorBehaviorControlException',
+           'VectorCameraFeedException',
+           'VectorConfigurationException',
            'VectorConnectionException',
            'VectorControlException',
            'VectorControlTimeoutException',
@@ -119,9 +122,34 @@ def connection_error(rpc_error: RpcError) -> VectorConnectionException:
 
 
 class _VectorGenericException(VectorException):
-    def __init__(self, cause=None):
-        msg = (f"{self.__class__.__doc__}\n{cause if cause is not None else ''}")
-        super().__init__(msg)
+    def __init__(self, _cause=None, *args, **kwargs):  # pylint: disable=keyword-arg-before-vararg
+        msg = (f"{self.__class__.__doc__}\n\n{_cause if _cause is not None else ''}")
+        super().__init__(msg.format(*args, **kwargs))
+
+
+class VectorAsyncException(_VectorGenericException):
+    """Invalid asynchronous action attempted."""
+
+
+class VectorBehaviorControlException(_VectorGenericException):
+    """Invalid behavior control action attempted."""
+
+
+class VectorCameraFeedException(_VectorGenericException):
+    """The camera feed is not open.
+
+Make sure to enable the camera feed either using Robot(enable_camera_feed=True), or robot.camera.init_camera_feed()"""
+
+
+class VectorConfigurationException(_VectorGenericException):
+    """Invalid or missing configuration data."""
+
+
+class VectorControlTimeoutException(_VectorGenericException):
+    """Failed to get control of Vector.
+
+Please verify that Vector is connected to the internet, is on a flat surface, and is fully charged.
+"""
 
 
 class VectorNotFoundException(_VectorGenericException):
@@ -135,16 +163,11 @@ class VectorNotReadyException(_VectorGenericException):
     """Vector tried to do something before it was ready."""
 
 
-class VectorControlTimeoutException(_VectorGenericException):
-    """Failed to get control of Vector.
-
-Please verify that Vector is connected to the internet, is on a flat surface, and is fully charged.
-"""
-
-
-class VectorCameraFeedDisabledException(VectorException):
-    """Failed to render video because camera feed was disabled."""
-
-
 class VectorPropertyValueNotReadyException(_VectorGenericException):
     """Failed to retrieve the value for this property."""
+
+
+class VectorUnreliableEventStreamException(VectorException):
+    """The robot event stream is currently unreliable.
+
+Please ensure the app is not connected. If this persists, reboot Vector and try again."""

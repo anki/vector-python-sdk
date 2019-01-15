@@ -36,6 +36,9 @@ import aiogrpc
 
 from . import util
 from .exceptions import (connection_error,
+                         VectorAsyncException,
+                         VectorBehaviorControlException,
+                         VectorConfigurationException,
                          VectorControlException,
                          VectorControlTimeoutException,
                          VectorInvalidVersionException,
@@ -116,7 +119,7 @@ class _ControlEventManager:
             interrupt the SDK execution. See :class:`CONTROL_PRIORITY_LEVEL` for more information.
         """
         if priority is None:
-            raise Exception("Must provide a priority level to request. To disable control, use :func:`release()`.")
+            raise VectorBehaviorControlException("Must provide a priority level to request. To disable control, use {}.release().", self.__class__.__name__)
         self._priority = priority
         self._request_event.set()
 
@@ -194,7 +197,7 @@ class Connection:
 
     def __init__(self, name: str, host: str, cert_file: str, guid: str, requires_behavior_control: bool = True):
         if cert_file is None:
-            raise Exception("Must provide a cert file")
+            raise VectorConfigurationException("Must provide a cert file to authenticate to Vector.")
         self._loop: asyncio.BaseEventLoop = None
         self.name = name
         self.host = host
@@ -232,7 +235,7 @@ class Connection:
         :returns: The loop running inside the connection thread
         """
         if self._loop is None:
-            raise Exception("Attempted to access the connection loop before it was ready")
+            raise VectorAsyncException("Attempted to access the connection loop before it was ready")
         return self._loop
 
     @property
@@ -254,7 +257,7 @@ class Connection:
         :returns: The connection thread where all of the grpc messages are being processed.
         """
         if self._thread is None:
-            raise Exception("Attempted to access the connection loop before it was ready")
+            raise VectorAsyncException("Attempted to access the connection loop before it was ready")
         return self._thread
 
     @property
@@ -431,7 +434,7 @@ class Connection:
         :param timeout: The time allotted to attempt a connection, in seconds.
         """
         if self._thread:
-            raise Exception("\n\nRepeated connections made to open Connection.")
+            raise VectorAsyncException("\n\nRepeated connections made to open Connection.")
         self._ready_signal.clear()
         self._thread = threading.Thread(target=self._connect, args=(timeout,), daemon=True, name="gRPC Connection Handler Thread")
         self._thread.start()
@@ -449,7 +452,7 @@ class Connection:
         """
         try:
             if threading.main_thread() is threading.current_thread():
-                raise Exception("\n\nConnection._connect must be run outside of the main thread.")
+                raise VectorAsyncException("\n\nConnection._connect must be run outside of the main thread.")
             self._loop = asyncio.new_event_loop()
             asyncio.set_event_loop(self._loop)
             self._done_signal = asyncio.Event()
@@ -608,13 +611,13 @@ class Connection:
         :param coro: The coroutine, task or any awaitable to schedule for execution on the connection thread.
         """
         if coro is None or not inspect.isawaitable(coro):
-            raise Exception(f"\n\n{coro.__name__ if hasattr(coro, '__name__') else coro} is not awaitable, so cannot be ran with run_soon.\n")
+            raise VectorAsyncException(f"\n\n{coro.__name__ if hasattr(coro, '__name__') else coro} is not awaitable, so cannot be ran with run_soon.\n")
 
         def soon():
             try:
                 asyncio.ensure_future(coro)
             except TypeError as e:
-                raise Exception(f"\n\n{coro.__name__ if hasattr(coro, '__name__') else coro} could not be ensured as a future.\n") from e
+                raise VectorAsyncException(f"\n\n{coro.__name__ if hasattr(coro, '__name__') else coro} could not be ensured as a future.\n") from e
         if threading.current_thread() is self._thread:
             self._loop.call_soon(soon)
         else:
@@ -639,8 +642,8 @@ class Connection:
         :returns: The result of the awaitable's execution.
         """
         if threading.current_thread() is self._thread:
-            raise Exception("Attempting to invoke async from same thread."
-                            "Instead you may want to use 'run_soon'")
+            raise VectorAsyncException("Attempting to invoke async from same thread."
+                                       "Instead you may want to use 'run_soon'")
         if asyncio.iscoroutinefunction(coro) or asyncio.iscoroutine(coro):
             return self._run_coroutine(coro)
         if asyncio.isfuture(coro):
@@ -651,8 +654,8 @@ class Connection:
             async def wrapped_coro():
                 return coro()
             return self._run_coroutine(wrapped_coro())
-        raise Exception("\n\nInvalid parameter to run_coroutine: {}\n"
-                        "This function expects a coroutine, task, or awaitable.".format(type(coro)))
+        raise VectorAsyncException("\n\nInvalid parameter to run_coroutine: {}\n"
+                                   "This function expects a coroutine, task, or awaitable.".format(type(coro)))
 
     def _run_coroutine(self, coro):
         return asyncio.run_coroutine_threadsafe(coro, self._loop)
@@ -694,8 +697,8 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
             called from the connection thread respectively.
         """
         if not asyncio.iscoroutinefunction(func):
-            raise Exception("\n\nCannot define non-coroutine function '{}' to run on connection thread.\n"
-                            "Make sure the function is defined using 'async def'.".format(func.__name__ if hasattr(func, "__name__") else func))
+            raise VectorAsyncException("\n\nCannot define non-coroutine function '{}' to run on connection thread.\n"
+                                       "Make sure the function is defined using 'async def'.".format(func.__name__ if hasattr(func, "__name__") else func))
 
         @functools.wraps(func)
         async def log_handler(conn: Connection, func: Coroutine, logger: logging.Logger, *args: List[Any], **kwargs: Dict[str, Any]) -> Coroutine:
@@ -740,8 +743,8 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
             if threading.current_thread() == self.conn.thread:
                 if self.conn.loop.is_running():
                     return asyncio.ensure_future(wrapped_coroutine, loop=self.conn.loop)
-                raise Exception("\n\nThe connection thread loop is not running, but a "
-                                "function '{}' is being invoked on that thread.\n".format(func.__name__ if hasattr(func, "__name__") else func))
+                raise VectorAsyncException("\n\nThe connection thread loop is not running, but a "
+                                           "function '{}' is being invoked on that thread.\n".format(func.__name__ if hasattr(func, "__name__") else func))
             future = asyncio.run_coroutine_threadsafe(wrapped_coroutine, self.conn.loop)
             if requires_control:
                 self.conn.active_commands.append(future)
