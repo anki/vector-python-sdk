@@ -23,7 +23,6 @@ Vector will also say "I see a face" one time, and the program will exit when
 he finishes speaking.
 """
 
-import functools
 import threading
 
 import anki_vector
@@ -34,15 +33,13 @@ said_text = False
 
 
 def main():
-    evt = threading.Event()
-
-    def on_robot_observed_face(robot, event_type, event):
+    def on_robot_observed_face(robot, event_type, event, done):
         print("Vector sees a face")
         global said_text
         if not said_text:
             said_text = True
             robot.behavior.say_text("I see a face!")
-            evt.set()
+            done.set()
 
     args = anki_vector.util.parse_command_args()
     with anki_vector.Robot(args.serial, enable_face_detection=True) as robot:
@@ -51,13 +48,13 @@ def main():
         robot.behavior.set_head_angle(degrees(45.0))
         robot.behavior.set_lift_height(0.0)
 
-        on_robot_observed_face = functools.partial(on_robot_observed_face, robot)
-        robot.events.subscribe(on_robot_observed_face, Events.robot_observed_face)
+        done = threading.Event()
+        robot.events.subscribe(on_robot_observed_face, Events.robot_observed_face, done)
 
         print("------ waiting for face events, press ctrl+c to exit early ------")
 
         try:
-            if not evt.wait(timeout=5):
+            if not done.wait(timeout=5):
                 print("------ Vector never saw your face! ------")
         except KeyboardInterrupt:
             pass

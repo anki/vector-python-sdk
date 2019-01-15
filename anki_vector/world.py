@@ -77,11 +77,11 @@ class World(util.Component):
         # Subscribe to callbacks that updates the world view
         self._robot.events.subscribe(self._on_face_observed,
                                      Events.robot_observed_face,
-                                     on_connection_thread=True)
+                                     _on_connection_thread=True)
 
         self._robot.events.subscribe(self._on_object_observed,
                                      Events.robot_observed_object,
-                                     on_connection_thread=True)
+                                     _on_connection_thread=True)
 
     #### Public Properties ####
 
@@ -111,7 +111,6 @@ class World(util.Component):
 
         .. testcode::
 
-            import functools
             import time
 
             import anki_vector
@@ -141,7 +140,6 @@ class World(util.Component):
                 robot.behavior.set_head_angle(degrees(45.0))
                 robot.behavior.set_lift_height(0.0)
 
-                test_subscriber = functools.partial(test_subscriber, robot)
                 robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
                 robot.events.subscribe(test_subscriber, Events.robot_observed_face)
 
@@ -295,7 +293,6 @@ class World(util.Component):
         .. testcode::
 
 
-            import functools
             import time
 
             import anki_vector
@@ -303,7 +300,7 @@ class World(util.Component):
             from anki_vector.util import degrees
 
             def test_subscriber(robot, event_type, event):
-                for face in robot.world.visible_faces:    
+                for face in robot.world.visible_faces:
                     my_face = robot.world.get_face(face.face_id)
                     print(f"Name: {my_face.name}")
 
@@ -312,7 +309,6 @@ class World(util.Component):
                 robot.behavior.set_head_angle(degrees(45.0))
                 robot.behavior.set_lift_height(0.0)
 
-                test_subscriber = functools.partial(test_subscriber, robot)
                 robot.events.subscribe(test_subscriber, Events.robot_changed_observed_face_id)
                 robot.events.subscribe(test_subscriber, Events.robot_observed_face)
 
@@ -823,7 +819,7 @@ class World(util.Component):
 
     #### Private Event Handlers ####
 
-    def _on_face_observed(self, _, msg):
+    def _on_face_observed(self, _robot, _event_type, msg):
         """Adds a newly observed face to the world view."""
         if msg.face_id not in self._faces or msg.face_id not in self._objects:
             pose = util.Pose(x=msg.pose.x, y=msg.pose.y, z=msg.pose.z,
@@ -841,7 +837,7 @@ class World(util.Component):
                 self._faces[face.face_id] = face
                 self._objects[face.face_id] = face
 
-    def _on_object_observed(self, _, msg):
+    def _on_object_observed(self, _robot, _event_type, msg):
         """Adds a newly observed custom object to the world view."""
         if msg.object_family == protocol.ObjectFamily.Value("LIGHT_CUBE"):
             if msg.object_id not in self._objects:

@@ -354,65 +354,51 @@ class LightCube(ObservableObject):
         self._factory_id: str = None
 
         #: Subscribe to relevant events
-        self.robot.events.subscribe(
-            self._on_object_connection_state_changed,
-            Events.object_connection_state)
+        self.robot.events.subscribe(self._on_object_connection_state_changed,
+                                    Events.object_connection_state)
 
-        self.robot.events.subscribe(
-            self._on_object_moved,
-            Events.object_moved)
+        self.robot.events.subscribe(self._on_object_moved,
+                                    Events.object_moved)
 
-        self.robot.events.subscribe(
-            self._on_object_stopped_moving,
-            Events.object_stopped_moving)
+        self.robot.events.subscribe(self._on_object_stopped_moving,
+                                    Events.object_stopped_moving)
 
-        self.robot.events.subscribe(
-            self._on_object_up_axis_changed,
-            Events.object_up_axis_changed)
+        self.robot.events.subscribe(self._on_object_up_axis_changed,
+                                    Events.object_up_axis_changed)
 
-        self.robot.events.subscribe(
-            self._on_object_tapped,
-            Events.object_tapped)
+        self.robot.events.subscribe(self._on_object_tapped,
+                                    Events.object_tapped)
 
-        self.robot.events.subscribe(
-            self._on_object_observed,
-            Events.robot_observed_object)
+        self.robot.events.subscribe(self._on_object_observed,
+                                    Events.robot_observed_object)
 
-        self.robot.events.subscribe(
-            self._on_object_connection_lost,
-            Events.cube_connection_lost)
+        self.robot.events.subscribe(self._on_object_connection_lost,
+                                    Events.cube_connection_lost)
 
     #### Public Methods ####
 
     def teardown(self):
         """All faces will be torn down by the world when no longer needed."""
-        self.robot.events.unsubscribe(
-            self._on_object_connection_state_changed,
-            Events.object_connection_state)
+        self.robot.events.unsubscribe(self._on_object_connection_state_changed,
+                                      Events.object_connection_state)
 
-        self.robot.events.unsubscribe(
-            self._on_object_moved,
-            Events.object_moved)
+        self.robot.events.unsubscribe(self._on_object_moved,
+                                      Events.object_moved)
 
-        self.robot.events.unsubscribe(
-            self._on_object_stopped_moving,
-            Events.object_stopped_moving)
+        self.robot.events.unsubscribe(self._on_object_stopped_moving,
+                                      Events.object_stopped_moving)
 
-        self.robot.events.unsubscribe(
-            self._on_object_up_axis_changed,
-            Events.object_up_axis_changed)
+        self.robot.events.unsubscribe(self._on_object_up_axis_changed,
+                                      Events.object_up_axis_changed)
 
-        self.robot.events.unsubscribe(
-            self._on_object_tapped,
-            Events.object_tapped)
+        self.robot.events.unsubscribe(self._on_object_tapped,
+                                      Events.object_tapped)
 
-        self.robot.events.unsubscribe(
-            self._on_object_observed,
-            Events.robot_observed_object)
+        self.robot.events.unsubscribe(self._on_object_observed,
+                                      Events.robot_observed_object)
 
-        self.robot.events.unsubscribe(
-            self._on_object_connection_lost,
-            Events.cube_connection_lost)
+        self.robot.events.unsubscribe(self._on_object_connection_lost,
+                                      Events.cube_connection_lost)
 
     @connection.on_connection_thread()
     async def set_light_corners(self,
@@ -908,7 +894,7 @@ class LightCube(ObservableObject):
 
     #### Private Event Handlers ####
 
-    def _on_object_connection_state_changed(self, _, msg):
+    def _on_object_connection_state_changed(self, _robot, _event_type, msg):
         if msg.object_type == LIGHT_CUBE_1_TYPE:
             self._object_id = msg.object_id
 
@@ -923,7 +909,7 @@ class LightCube(ObservableObject):
                     self.logger.debug('Object disconnected: %s', self)
                 self._is_connected = msg.connected
 
-    def _on_object_moved(self, _, msg):
+    def _on_object_moved(self, _robot, _event_type, msg):
         if msg.object_id == self._object_id:
             now = time.time()
             started_moving = not self._is_moving
@@ -938,7 +924,7 @@ class LightCube(ObservableObject):
         else:
             self.logger.warning('An object not currently tracked by the world moved with id {0}'.format(msg.object_id))
 
-    async def _on_object_stopped_moving(self, _, msg):
+    async def _on_object_stopped_moving(self, _robot, _event_type, msg):
         if msg.object_id == self._object_id:
             now = time.time()
             self._last_event_time = now
@@ -954,7 +940,7 @@ class LightCube(ObservableObject):
         else:
             self.logger.warning('An object not currently tracked by the world stopped moving with id {0}'.format(msg.object_id))
 
-    def _on_object_up_axis_changed(self, _, msg):
+    def _on_object_up_axis_changed(self, _robot, _event_type, msg):
         if msg.object_id == self._object_id:
 
             now = time.time()
@@ -965,7 +951,7 @@ class LightCube(ObservableObject):
         else:
             self.logger.warning('Up Axis changed on an object not currently tracked by the world with id {0}'.format(msg.object_id))
 
-    def _on_object_tapped(self, _, msg):
+    def _on_object_tapped(self, _robot, _event_type, msg):
         if msg.object_id == self._object_id:
 
             now = time.time()
@@ -975,7 +961,7 @@ class LightCube(ObservableObject):
         else:
             self.logger.warning('Tapped an object not currently tracked by the world with id {0}'.format(msg.object_id))
 
-    def _on_object_observed(self, _, msg):
+    def _on_object_observed(self, _robot, _event_type, msg):
         if msg.object_id == self._object_id:
 
             pose = util.Pose(x=msg.pose.x, y=msg.pose.y, z=msg.pose.z,
@@ -990,7 +976,7 @@ class LightCube(ObservableObject):
 
             self._on_observed(pose, image_rect, msg.timestamp)
 
-    def _on_object_connection_lost(self, _, msg):
+    def _on_object_connection_lost(self, _robot, _event_type, msg):
         if msg.object_id == self._object_id:
             self._is_connected = False
 
@@ -1018,18 +1004,16 @@ class Charger(ObservableObject):
 
         self._object_id = object_id
 
-        self.robot.events.subscribe(
-            self._on_object_observed,
-            Events.robot_observed_object)
+        self.robot.events.subscribe(self._on_object_observed,
+                                    Events.robot_observed_object)
 
     #### Public Methods ####
 
     def teardown(self):
         """All objects will be torn down by the world when the world closes."""
 
-        self.robot.events.unsubscribe(
-            self._on_object_observed,
-            Events.robot_observed_object)
+        self.robot.events.unsubscribe(self._on_object_observed,
+                                      Events.robot_observed_object)
 
     #### Properties ####
     @property
@@ -1063,7 +1047,7 @@ class Charger(ObservableObject):
 
     #### Private Methods ####
 
-    def _on_object_observed(self, _, msg):
+    def _on_object_observed(self, _robot, _event_type, msg):
         if msg.object_id == self._object_id:
 
             pose = util.Pose(x=msg.pose.x, y=msg.pose.y, z=msg.pose.z,
@@ -1226,18 +1210,16 @@ class CustomObject(ObservableObject):
         self._object_id = object_id
         self._archetype = archetype
 
-        self.robot.events.subscribe(
-            self._on_object_observed,
-            Events.robot_observed_object)
+        self.robot.events.subscribe(self._on_object_observed,
+                                    Events.robot_observed_object)
 
     #### Public Methods ####
 
     def teardown(self):
         """All objects will be torn down by the world when no longer needed."""
 
-        self.robot.events.unsubscribe(
-            self._on_object_observed,
-            Events.robot_observed_object)
+        self.robot.events.unsubscribe(self._on_object_observed,
+                                      Events.robot_observed_object)
 
     #### Properties ####
 
@@ -1330,7 +1312,7 @@ class CustomObject(ObservableObject):
                 'z_size_mm={archetype.z_size_mm:.1f} '
                 'is_unique={archetype.is_unique}'.format(archetype=self._archetype))
 
-    def _on_object_observed(self, _, msg):
+    def _on_object_observed(self, _robot, _event_type, msg):
         if msg.object_id == self._object_id:
 
             pose = util.Pose(x=msg.pose.x, y=msg.pose.y, z=msg.pose.z,

@@ -407,7 +407,7 @@ class Viewer3DComponent(util.Component):
                 pass
             close_event = self._close_event
 
-    def _on_robot_state_update(self, *_):
+    def _on_robot_state_update(self, robot, *_):
         """Called from SDK process whenever the robot state is updated (so i.e. every engine tick).
 
         Note:
@@ -419,16 +419,15 @@ class Viewer3DComponent(util.Component):
             (main) process via a multiprocessing queue.
         """
         from .opengl import opengl_vector
-        world_frame = opengl_vector.WorldRenderFrame(self.robot, self.connecting_to_cube)
+        world_frame = opengl_vector.WorldRenderFrame(robot, self.connecting_to_cube)
         queue = self._world_frame_queue
         if queue:
             try:
                 queue.put(world_frame, False)
             except mp.queues.Full:
                 pass
-        # self._view_controller.update(self.robot) # TODO: <- sounds like this has something to do with keyboard input...
 
-    def _on_nav_map_update(self, _, msg):
+    def _on_nav_map_update(self, _robot, _event_type, msg):
         """Called from SDK process whenever the nav map is updated.
 
         Note:
