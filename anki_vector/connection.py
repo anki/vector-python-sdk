@@ -671,7 +671,7 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
         import anki_vector
 
         class MyComponent(anki_vector.util.Component):
-            @connection.on_connection_thread()
+            @connection._on_connection_thread()
             async def on_connection_thread(self):
                 # Do work on the connection thread
 
