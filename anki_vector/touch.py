@@ -94,8 +94,7 @@ class TouchComponent(util.Component):
 
         # Subscribe to a callback that updates the robot's local properties - which includes touch data.
         self._robot.events.subscribe(self._on_robot_state,
-                                     Events.robot_state,
-                                     _on_connection_thread=True)
+                                     Events.robot_state)
 
     def close(self):
         """Closing the touch component will unsubscribe from robot state updates."""

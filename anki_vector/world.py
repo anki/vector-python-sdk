@@ -76,12 +76,10 @@ class World(util.Component):
 
         # Subscribe to callbacks that updates the world view
         self._robot.events.subscribe(self._on_face_observed,
-                                     Events.robot_observed_face,
-                                     _on_connection_thread=True)
+                                     Events.robot_observed_face)
 
         self._robot.events.subscribe(self._on_object_observed,
-                                     Events.robot_observed_object,
-                                     _on_connection_thread=True)
+                                     Events.robot_observed_object)
 
     #### Public Properties ####
 
