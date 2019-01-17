@@ -19,8 +19,9 @@ Event handler used to make functions subscribe to robot events.
 __all__ = ['EventHandler', 'Events']
 
 import asyncio
-from concurrent.futures import CancelledError, ThreadPoolExecutor
+from concurrent.futures import CancelledError
 from enum import Enum
+import threading
 from typing import Callable
 import uuid
 
@@ -64,10 +65,15 @@ class Events(Enum):
 
 
 class _EventCallback:
-    def __init__(self, callback, *args, **kwargs):
+    def __init__(self, callback, *args, _on_connection_thread: bool = False, **kwargs):
         self._extra_args = args
         self._extra_kwargs = kwargs
         self._callback = callback
+        self._on_connection_thread = _on_connection_thread
+
+    @property
+    def on_connection_thread(self):
+        return self._on_connection_thread
 
     @property
     def callback(self):
@@ -94,16 +100,17 @@ class _EventCallback:
 class EventHandler:
     """Listen for Vector events."""
 
-    def __init__(self, robot, max_workers=10):
-        self._logger = util.get_class_logger(__name__, self)
+    def __init__(self, robot):
+        self.logger = util.get_class_logger(__name__, self)
         self._robot = robot
         self._conn = None
         self._conn_id = None
-        self._event_future = None
-        self._executor: ThreadPoolExecutor = None
-        self._listening_for_events = False
-        self._max_workers = max_workers
-        self._subscribers = {}
+        self.listening_for_events = False
+        self.event_future = None
+        self._thread: threading.Thread = None
+        self._loop: asyncio.BaseEventLoop = None
+        self.subscribers = {}
+        self._done_signal: asyncio.Event = None
 
     def start(self, connection: Connection):
         """Start listening for events. Automatically called by the :class:`anki_vector.robot.Robot` class.
@@ -112,45 +119,70 @@ class EventHandler:
         :param loop: The loop to run the event task on.
         """
         self._conn = connection
-        self._listening_for_events = True
-        self._executor = ThreadPoolExecutor(max_workers=self._max_workers,
-                                            thread_name_prefix="VectorEventCallbackHandler")
-        self._event_future = asyncio.run_coroutine_threadsafe(self._handle_event_stream(), self._conn.loop)
+        self.listening_for_events = True
+        self._thread = threading.Thread(target=self._run_thread, daemon=True, name="Event Stream Handler Thread")
+        self._thread.start()
+
+    def _run_thread(self):
+        try:
+            self._loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(self._loop)
+            self._done_signal = asyncio.Event(loop=self._loop)
+            # create an event stream handler on the connection thread
+            self.event_future = asyncio.run_coroutine_threadsafe(self._handle_event_stream(), self._conn.loop)
+
+            async def wait_until_done():
+                return await self._done_signal.wait()
+            self._loop.run_until_complete(wait_until_done())
+        finally:
+            self._loop.close()
 
     def close(self):
         """Stop listening for events. Automatically called by the :class:`anki_vector.robot.Robot` class.
         """
-        self._listening_for_events = False
+        self.listening_for_events = False
         try:
-            self._event_future.cancel()
-            self._event_future.result()
+            self.event_future.cancel()
+            self.event_future.result()
         except CancelledError:
             pass
-        self._executor.shutdown(wait=True)
+        self._loop.call_soon_threadsafe(self._done_signal.set)
+        self._thread.join(timeout=5)
+        self._thread = None
 
     def _notify(self, event_callback, event_name, event_data):
+        loop = self._loop
+        thread = self._thread
+        # For high priority events that shouldn't be blocked by user callbacks
+        # they will run directly on the connection thread. This should typically
+        # be used when setting robot properties from events.
+        if event_callback.on_connection_thread:
+            loop = self._conn.loop
+            thread = self._conn.thread
+
         callback = event_callback.callback
         args = event_callback.extra_args
         kwargs = event_callback.extra_kwargs
 
         if asyncio.iscoroutinefunction(callback):
             callback = callback(self._robot, event_name, event_data, *args, **kwargs)
+        elif not asyncio.iscoroutine(callback):
+            async def call_async(fn, *args, **kwargs):
+                fn(*args, **kwargs)
+            callback = call_async(callback, self._robot, event_name, event_data, *args, **kwargs)
 
-        if asyncio.iscoroutine(callback):
-            try:
-                loop = asyncio.new_event_loop()
-                loop.run_until_complete(callback)
-            finally:
-                loop.close()
+        if threading.current_thread() is thread:
+            future = asyncio.ensure_future(callback, loop=loop)
         else:
-            callback(self._robot, event_name, event_data, *args, **kwargs)
+            future = asyncio.run_coroutine_threadsafe(callback, loop=loop)
+        future.add_done_callback(self._done_callback)
 
     def _done_callback(self, completed_future):
         exc = completed_future.exception()
         if exc:
-            self._logger.error("Event callback exception: %s", exc)
+            self.logger.error("Event callback exception: %s", exc)
             if isinstance(exc, TypeError) and "positional arguments but" in str(exc):
-                self._logger.error("The subscribed function may be missing parameters in its definition. Make sure it has robot, event_type and event positional parameters.")
+                self.logger.error("The subscribed function may be missing parameters in its definition. Make sure it has robot, event_type and event positional parameters.")
 
     async def dispatch_event_by_name(self, event_data, event_name: str):
         """Dispatches event to event listeners by name.
@@ -171,18 +203,17 @@ class EventHandler:
         :param event_name: The name of the event that will result in func being called.
         """
         if not event_name:
-            self._logger.error('Bad event_name in dispatch_event.')
+            self.logger.error('Bad event_name in dispatch_event.')
 
-        if event_name in self._subscribers.keys():
-            subscribers = self._subscribers[event_name].copy()
+        if event_name in self.subscribers.keys():
+            subscribers = self.subscribers[event_name].copy()
             for callback in subscribers:
-                fut = self._executor.submit(self._notify, callback, event_name, event_data)
-                fut.add_done_callback(self._done_callback)
+                self._notify(callback, event_name, event_data)
 
     async def dispatch_event(self, event_data, event_type: Events):
         """Dispatches event to event listeners."""
         if not event_type:
-            self._logger.error('Bad event_type in dispatch_event.')
+            self.logger.error('Bad event_type in dispatch_event.')
 
         event_name = event_type.value
 
@@ -207,15 +238,15 @@ class EventHandler:
         try:
             req = protocol.EventRequest(connection_id=self._conn_id)
             async for evt in self._conn.grpc_interface.EventStream(req):
-                if not self._listening_for_events:
+                if not self.listening_for_events:
                     break
                 try:
                     unpackaged_event_key, unpackaged_event_data = self._unpackage_event('event_type', evt.event)
                     await self.dispatch_event_by_name(unpackaged_event_data, unpackaged_event_key)
                 except TypeError:
-                    self._logger.warning('Unknown Event type')
+                    self.logger.warning('Unknown Event type')
         except CancelledError:
-            self._logger.debug('Event handler task was cancelled. This is expected during disconnection.')
+            self.logger.debug('Event handler task was cancelled. This is expected during disconnection.')
 
     def subscribe_by_name(self, func: Callable, event_name: str, *args, **kwargs):
         """Receive a method call when the specified event occurs.
@@ -238,11 +269,11 @@ class EventHandler:
         :param kwargs: Additional keyword arguments to this function will be passed through to the callback.
         """
         if not event_name:
-            self._logger.error('Bad event_name in subscribe.')
+            self.logger.error('Bad event_name in subscribe.')
 
-        if event_name not in self._subscribers.keys():
-            self._subscribers[event_name] = set()
-        self._subscribers[event_name].add(_EventCallback(func, *args, **kwargs))
+        if event_name not in self.subscribers.keys():
+            self.subscribers[event_name] = set()
+        self.subscribers[event_name].add(_EventCallback(func, *args, **kwargs))
 
     def subscribe(self, func: Callable, event_type: Events, *args, **kwargs):
         """Receive a method call when the specified event occurs.
@@ -290,7 +321,7 @@ class EventHandler:
         :param kwargs: Additional keyword arguments to this function will be passed through to the callback.
         """
         if not event_type:
-            self._logger.error('Bad event_type in subscribe.')
+            self.logger.error('Bad event_type in subscribe.')
 
         event_name = event_type.value
 
@@ -315,19 +346,19 @@ class EventHandler:
         :param event_name: The name of the event for which you no longer want to receive a method call.
         """
         if not event_name:
-            self._logger.error('Bad event_key in unsubscribe.')
+            self.logger.error('Bad event_key in unsubscribe.')
 
-        if event_name in self._subscribers.keys():
-            event_subscribers = self._subscribers[event_name]
+        if event_name in self.subscribers.keys():
+            event_subscribers = self.subscribers[event_name]
             if func in event_subscribers:
                 event_subscribers.remove(func)
                 if not event_subscribers:
-                    self._subscribers.pop(event_name, None)
+                    self.subscribers.pop(event_name, None)
             else:
-                self._logger.error(f"The function '{func.__name__}' is not subscribed to '{event_name}'")
+                self.logger.error(f"The function '{func.__name__}' is not subscribed to '{event_name}'")
         else:
-            self._logger.error(f"Cannot unsubscribe from event_type '{event_name}'. "
-                               "It has no subscribers.")
+            self.logger.error(f"Cannot unsubscribe from event_type '{event_name}'. "
+                              "It has no subscribers.")
 
     def unsubscribe(self, func: Callable, event_type: Events):
         """Unregister a previously subscribed method from an event.
@@ -373,7 +404,7 @@ class EventHandler:
         :param event_type: The name of the event for which you no longer want to receive a method call.
         """
         if not event_type:
-            self._logger.error('Bad event_type in unsubscribe.')
+            self.logger.error('Bad event_type in unsubscribe.')
 
         event_name = event_type.value
 

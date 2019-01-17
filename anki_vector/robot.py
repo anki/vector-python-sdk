@@ -692,7 +692,8 @@ class Robot:
 
         # Subscribe to a callback that updates the robot's local properties
         self.events.subscribe(self._unpack_robot_state,
-                              events.Events.robot_state)
+                              events.Events.robot_state,
+                              _on_connection_thread=True)
 
         # access the pose to prove it has gotten back from the event stream once
         try:
