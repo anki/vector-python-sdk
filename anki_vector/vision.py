@@ -141,11 +141,11 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
     # @connection.on_connection_thread()
     # async def enable_motion_detection(self, detect_motion: bool = True):
     #     """Enable motion detection on the robot's camera
-
+    #
     #     :param detect_motion: Specify whether we want the robot to detect motion.
-
+    #
     #     .. testcode::
-
+    #
     #         import anki_vector
     #         with anki_vector.Robot() as robot:
     #             robot.vision.enable_motion_detection(detect_motion=True)
@@ -160,6 +160,16 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
         """Display the robot's camera feed on its face along with any detections (if enabled)
 
         :param display_camera_feed_on_face: Specify whether we want to display the robot's camera feed on its face.
+
+        .. testcode::
+
+            import anki_vector
+
+            import time
+
+            with anki_vector.Robot() as robot:
+                robot.vision.enable_display_camera_feed_on_face()
+                time.sleep(10.0)
         """
         self._display_camera_feed_on_face = display_camera_feed_on_face
 

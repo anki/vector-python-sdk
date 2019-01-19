@@ -927,6 +927,8 @@ class Speed:
 
     This class allows speeds to be measured in millimeters per second.
 
+    The maximum speed is 220 mm/s and is clamped internally.
+
     Use :func:`speed_mmps` convenience methods to generate
     a Speed instance.
 

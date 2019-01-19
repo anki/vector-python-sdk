@@ -84,6 +84,8 @@ class CameraComponent(util.Component):
     def latest_image(self) -> Image.Image:
         """:class:`Image.Image`: The most recently processed image received from the robot.
 
+        The resolution of latest_image is 640x360.
+
         :getter: Returns the Pillow Image representing the latest image
 
         .. testcode::
