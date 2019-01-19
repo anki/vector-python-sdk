@@ -21,7 +21,7 @@ The :class:`anki_vector.world.World` object keeps track of faces the robot curre
 knows about, along with those that are currently visible to the camera.
 
 Each face is assigned a :class:`Face` object, which generates a number of
-observable events whenever the face is observed, has its ID updated.
+observable events whenever the face is observed or when the face id is updated.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
