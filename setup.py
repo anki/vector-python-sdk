@@ -71,7 +71,7 @@ setup(
     ],
     zip_safe=True,
     keywords='anki vector robot robotics sdk ai vision'.split(),
-    packages=['anki_vector', 'anki_vector.configure', 'anki_vector.messaging', 'anki_vector.opengl'],
+    packages=['anki_vector', 'anki_vector.camera_viewer', 'anki_vector.configure', 'anki_vector.messaging', 'anki_vector.opengl'],
     package_data={
         'anki_vector': ['LICENSE.txt', 'opengl/assets/*.obj', 'opengl/assets/*.mtl', 'opengl/assets/*.jpg',
                   'opengl/assets/LICENSE.txt']

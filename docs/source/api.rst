@@ -11,6 +11,7 @@ The API
     anki_vector.audio
     anki_vector.behavior
     anki_vector.camera
+    anki_vector.camera_viewer
     anki_vector.color
     anki_vector.connection
     anki_vector.events

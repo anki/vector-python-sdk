@@ -340,11 +340,11 @@ class Robot:
 
             with anki_vector.Robot() as robot:
                 # Render video for 5 seconds
-                robot.viewer.show_video()
+                robot.viewer.show()
                 time.sleep(5)
 
                 # Disable video render and camera feed for 5 seconds
-                robot.viewer.stop_video()
+                robot.viewer.close()
         """
         if self._viewer is None:
             raise VectorNotReadyException("ViewerComponent is not yet initialized")
@@ -673,7 +673,7 @@ class Robot:
         # Start rendering camera feed
         if self._show_viewer:
             self.camera.init_camera_feed()
-            self.viewer.show_video()
+            self.viewer.show()
 
         if self._show_3d_viewer:
             self.viewer_3d.show()
@@ -717,7 +717,7 @@ class Robot:
             self.vision.close()
 
         # Stop rendering video
-        self.viewer.stop_video()
+        self.viewer.close()
 
         # Stop rendering 3d video
         self.viewer_3d.close()
