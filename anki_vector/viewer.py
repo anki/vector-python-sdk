@@ -19,19 +19,8 @@
 __all__ = ['ViewerComponent', 'Viewer3DComponent']
 
 import multiprocessing as mp
-import os
 import sys
 import threading
-
-try:
-    import cv2
-except ImportError as exc:
-    sys.exit("Cannot import opencv-python: Do `pip3 install opencv-python` to install")
-
-try:
-    import numpy as np
-except ImportError as exc:
-    sys.exit("Cannot import numpy: Do `pip3 install numpy` to install")
 
 try:
     from PIL import Image
@@ -44,10 +33,10 @@ from .events import Events
 
 class ViewerComponent(util.Component):
     """This component opens a window and renders the images obtained from Vector's camera.
-    This viewer window is run in a separate process spawned by :func:`~ViewerComponent.show_video`.
+    This viewer window is run in a separate process spawned by :func:`~ViewerComponent.show`.
     Being on a separate process means the rendering of the camera does not block the main thread
     of the calling code, and allows the viewer to have its own ui thread which it can operate on.
-    :func:`~ViewerComponent.stop_video` will stop the viewer process.
+    :func:`~ViewerComponent.close` will stop the viewer process.
 
     .. testcode::
 
@@ -68,7 +57,7 @@ class ViewerComponent(util.Component):
         self._frame_queue: mp.Queue = None
         self._process = None
 
-    def show_video(self, timeout: float = 10.0) -> None:
+    def show(self, timeout: float = 10.0) -> None:
         """Render a video stream using the images obtained from
         Vector's camera feed.
 
@@ -78,18 +67,19 @@ class ViewerComponent(util.Component):
             import time
 
             with anki_vector.Robot() as robot:
-                robot.viewer.show_video()
+                robot.viewer.show()
                 time.sleep(10)
 
         :param timeout: Render video for the given time. (Renders forever, if timeout not given.)
-        """
+    """
+        from . import camera_viewer
 
         self.robot.camera.init_camera_feed()
 
         ctx = mp.get_context('spawn')
         self._close_event = ctx.Event()
         self._frame_queue = ctx.Queue(maxsize=4)
-        self._process = ctx.Process(target=ViewerComponent._render_frames,
+        self._process = ctx.Process(target=camera_viewer.main,
                                     args=(self._frame_queue,
                                           self._close_event,
                                           self.overlays,
@@ -98,7 +88,7 @@ class ViewerComponent(util.Component):
                                     name="Camera Viewer Process")
         self._process.start()
 
-    def stop_video(self) -> None:
+    def close(self) -> None:
         """Stop rendering video of Vector's camera feed and close the viewer process.
 
         .. testcode::
@@ -108,7 +98,7 @@ class ViewerComponent(util.Component):
 
             with anki_vector.Robot(show_viewer=True) as robot:
                 time.sleep(10)
-                robot.viewer.stop_video()
+                robot.viewer.close()
         """
         if self._close_event:
             self._close_event.set()
@@ -158,41 +148,6 @@ class ViewerComponent(util.Component):
         for overlay in self.overlays:
             overlay.apply_overlay(image)
         return image
-
-    @staticmethod
-    def _render_frames(queue: mp.Queue, event: mp.Event, overlays: list = None, timeout: float = 10.0) -> None:
-        """Rendering the frames in another process. This allows the UI to have the
-        main thread of its process while the user code continues to execute.
-
-        :param queue: A queue to send frames between main thread and other process.
-        :param overlays: overlays to be drawn on the images of the renderer.
-        :param timeout: The time without a new frame before the process will exit.
-        """
-        is_windows = os.name == 'nt'
-        window_name = "Vector Camera Feed"
-        cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
-        try:
-            image = queue.get(True, timeout=timeout)
-            while image:
-                if event.is_set():
-                    break
-                if overlays:
-                    for overlay in overlays:
-                        overlay.apply_overlay(image)
-                image = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
-                cv2.imshow(window_name, image)
-                cv2.waitKey(1)
-                if not is_windows and cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE) < 1:
-                    break
-                image = queue.get(True, timeout=timeout)
-        except TimeoutError:
-            pass
-        except KeyboardInterrupt:
-            pass
-        finally:
-            event.set()
-            cv2.destroyWindow(window_name)
-            cv2.waitKey(1)
 
 
 class _ExternalRenderCallFunctor():  # pylint: disable=too-few-public-methods
@@ -386,8 +341,8 @@ class Viewer3DComponent(util.Component):
                 old_intents = self._last_robot_control_intents
                 self._last_robot_control_intents = input_intents
 
-                if not old_intents or (old_intents.left_wheel_speed != input_intents.left_wheel_speed or
-                                       old_intents.right_wheel_speed != input_intents.right_wheel_speed):
+                if not old_intents or (old_intents.left_wheel_speed != input_intents.left_wheel_speed
+                                       or old_intents.right_wheel_speed != input_intents.right_wheel_speed):
                     self.robot.motors.set_wheel_motors(input_intents.left_wheel_speed,
                                                        input_intents.right_wheel_speed,
                                                        input_intents.left_wheel_speed * 4,

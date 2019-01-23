@@ -28,13 +28,9 @@ __all__ = ['CameraComponent']
 
 import asyncio
 from concurrent.futures import CancelledError
+import io
 import time
 import sys
-
-try:
-    import cv2
-except ImportError:
-    sys.exit("Cannot import opencv-python: Do `pip3 install opencv-python` to install")
 
 from . import util
 from .exceptions import VectorCameraFeedException
@@ -200,13 +196,12 @@ class CameraComponent(util.Component):
         array[0:size] = list(msg.data)
 
         # Decode compressed source data into uncompressed image data
-        imageArray = cv2.imdecode(array, -1)
-        imageArray = cv2.cvtColor(imageArray, cv2.COLOR_BGR2RGB)
+        image = Image.open(io.BytesIO(array))
+        self.robot.viewer.enqueue_frame(image)
 
         # Convert to Pillow Image
-        self._latest_image = Image.fromarray(imageArray)
+        self._latest_image = image
         self._latest_image_id = msg.image_id
-        self.robot.viewer.enqueue_frame(self._latest_image)
 
     async def _request_and_handle_images(self) -> None:
         """Queries and listens for camera feed events from the robot.

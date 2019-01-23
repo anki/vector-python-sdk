@@ -77,6 +77,11 @@ class RemoteControlVector:
     def __init__(self, robot):
         self.vector = robot
 
+        # don't send motor messages if it matches the last setting
+        self.last_lift = None
+        self.last_head = None
+        self.last_wheels = None
+
         self.drive_forwards = 0
         self.drive_back = 0
         self.turn_left = 0
@@ -145,6 +150,9 @@ class RemoteControlVector:
             desired_head_angle = remap_to_range(mouse_y, 0.0, 1.0, 45, -25)
             head_angle_delta = desired_head_angle - util.radians(self.vector.head_angle_rad).degrees
             head_vel = head_angle_delta * 0.03
+            if self.last_head and head_vel == self.last_head:
+                return
+            self.last_head = head_vel
             self.vector.motors.set_head_motor(head_vel)
 
     def set_mouse_look_enabled(self, is_mouse_look_enabled):
@@ -281,12 +289,18 @@ class RemoteControlVector:
     def update_lift(self):
         lift_speed = self.pick_speed(8, 4, 2)
         lift_vel = (self.lift_up - self.lift_down) * lift_speed
+        if self.last_lift and lift_vel == self.last_lift:
+            return
+        self.last_lift = lift_vel
         self.vector.motors.set_lift_motor(lift_vel)
 
     def update_head(self):
         if not self.is_mouse_look_enabled:
             head_speed = self.pick_speed(2, 1, 0.5)
             head_vel = (self.head_up - self.head_down) * head_speed
+            if self.last_head and head_vel == self.last_head:
+                return
+            self.last_head = head_vel
             self.vector.motors.set_head_motor(head_vel)
 
     def update_mouse_driving(self):
@@ -303,7 +317,11 @@ class RemoteControlVector:
         l_wheel_speed = (drive_dir * forward_speed) + (turn_speed * turn_dir)
         r_wheel_speed = (drive_dir * forward_speed) - (turn_speed * turn_dir)
 
-        self.vector.motors.set_wheel_motors(l_wheel_speed, r_wheel_speed, l_wheel_speed * 4, r_wheel_speed * 4)
+        wheel_params = (l_wheel_speed, r_wheel_speed, l_wheel_speed * 4, r_wheel_speed * 4)
+        if self.last_wheels and wheel_params == self.last_wheels:
+            return
+        self.last_wheels = wheel_params
+        self.vector.motors.set_wheel_motors(*wheel_params)
 
 
 def get_anim_sel_drop_down(selectorIndex):
