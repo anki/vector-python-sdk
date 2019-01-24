@@ -13,11 +13,16 @@
 # limitations under the License.
 
 """
-The main robot class for managing Vector.
+This contains the :class:`Robot` and :class:`AsyncRobot` classes for managing Vector.
+
+:class:`Robot` will run all behaviors in sequence and directly return the results.
+
+:class:`AsyncRobot` will instead provide a :class:`concurrent.futures.Future` which the
+caller may use to obtain the result when they desire.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
-__all__ = ['AsyncRobot', 'Robot']
+__all__ = ['Robot', 'AsyncRobot']
 
 import concurrent
 import configparser
@@ -215,22 +220,22 @@ class Robot:
 
     @property
     def force_async(self) -> bool:
-        """A reference to the Robot object instance."""
+        """A flag used to determine if this is a :class:`Robot` or :class:`AsyncRobot`."""
         return self._force_async
 
     @property
     def conn(self) -> connection.Connection:
-        """A reference to the Connection instance."""
+        """A reference to the :class:`~anki_vector.connection.Connection` instance."""
         return self._conn
 
     @property
     def events(self) -> events.EventHandler:
-        """A reference to the EventHandler instance."""
+        """A reference to the :class:`~anki_vector.events.EventHandler` instance."""
         return self._events
 
     @property
     def anim(self) -> animation.AnimationComponent:
-        """A reference to the AnimationComponent instance."""
+        """A reference to the :class:`~anki_vector.animation.AnimationComponent` instance."""
         if self._anim is None:
             raise VectorNotReadyException("AnimationComponent is not yet initialized")
         return self._anim
@@ -247,12 +252,12 @@ class Robot:
 
     @property
     def behavior(self) -> behavior.BehaviorComponent:
-        """A reference to the BehaviorComponent instance."""
+        """A reference to the :class:`~anki_vector.behavior.BehaviorComponent` instance."""
         return self._behavior
 
     @property
     def camera(self) -> camera.CameraComponent:
-        """The camera instance used to control Vector's camera feed.
+        """The :class:`~anki_vector.camera.CameraComponent` instance used to control Vector's camera feed.
 
         .. testcode::
 
@@ -269,42 +274,42 @@ class Robot:
 
     @property
     def faces(self) -> faces.FaceComponent:
-        """A reference to the FaceComponent instance."""
+        """A reference to the :class:`~anki_vector.faces.FaceComponent` instance."""
         if self._faces is None:
             raise VectorNotReadyException("FaceComponent is not yet initialized")
         return self._faces
 
     @property
     def motors(self) -> motors.MotorComponent:
-        """A reference to the MotorComponent instance."""
+        """A reference to the :class:`~anki_vector.motors.MotorComponent` instance."""
         if self._motors is None:
             raise VectorNotReadyException("MotorComponent is not yet initialized")
         return self._motors
 
     @property
     def nav_map(self) -> nav_map.NavMapComponent:
-        """A reference to the NavMapComponent instance."""
+        """A reference to the :class:`~anki_vector.nav_map.NavMapComponent` instance."""
         if self._nav_map is None:
             raise VectorNotReadyException("NavMapComponent is not yet initialized")
         return self._nav_map
 
     @property
     def screen(self) -> screen.ScreenComponent:
-        """A reference to the ScreenComponent instance."""
+        """A reference to the :class:`~anki_vector.screen.ScreenComponent` instance."""
         if self._screen is None:
             raise VectorNotReadyException("ScreenComponent is not yet initialized")
         return self._screen
 
     @property
     def photos(self) -> photos.PhotographComponent:
-        """A reference to the PhotographComponent instance."""
+        """A reference to the :class:`~anki_vector.photos.PhotographComponent` instance."""
         if self._photos is None:
             raise VectorNotReadyException("PhotographyComponent is not yet initialized")
         return self._photos
 
     @property
     def proximity(self) -> proximity.ProximityComponent:
-        """Component containing state related to object proximity detection.
+        """:class:`~anki_vector.proximity.ProximityComponent` containing state related to object proximity detection.
 
         .. code-block:: python
 
@@ -318,7 +323,7 @@ class Robot:
 
     @property
     def touch(self) -> touch.TouchComponent:
-        """Component containing state related to object touch detection.
+        """:class:`~anki_vector.touch.TouchComponent` containing state related to object touch detection.
 
         .. testcode::
 
@@ -330,7 +335,7 @@ class Robot:
 
     @property
     def viewer(self) -> ViewerComponent:
-        """The viewer instance used to render Vector's camera feed.
+        """The :class:`~anki_vector.viewer.ViewerComponent` instance used to render Vector's camera feed.
 
         .. testcode::
 
@@ -352,7 +357,7 @@ class Robot:
 
     @property
     def viewer_3d(self) -> Viewer3DComponent:
-        """The 3D viewer instance used to render Vector's navigation map.
+        """The :class:`~anki_vector.viewer.Viewer3DComponent` instance used to render Vector's navigation map.
 
         .. testcode::
 
@@ -370,7 +375,7 @@ class Robot:
 
     @property
     def vision(self) -> vision.VisionComponent:
-        """Component containing functionality related to vision based object detection.
+        """:class:`~anki_vector.vision.VisionComponent` containing functionality related to vision based object detection.
 
         .. testcode::
 
@@ -382,7 +387,7 @@ class Robot:
 
     @property
     def world(self) -> world.World:
-        """A reference to the World instance, or None if the WorldComponent is not yet initialized."""
+        """A reference to the :class:`~anki_vector.world.World` instance, or None if the World is not yet initialized."""
         if self._world is None:
             raise VectorNotReadyException("WorldComponent is not yet initialized")
         return self._world
@@ -754,10 +759,17 @@ class Robot:
 
         Vector is considered fully-charged above 4.1 volts. At 3.6V, the robot is approaching low charge.
 
-        Battery_level values are as follows:
-         |  Low = 1: 3.6V or less. If on charger, 4V or less.
-         |  Nominal = 2
-         |  Full = 3: This state can only be achieved when Vector is on the charger.
+        Battery level values are as follows:
+
+        +-------+---------+---------------------------------------------------------------+
+        | Value | Level   | Description                                                   |
+        +=======+=========+===============================================================+
+        | 1     | Low     | 3.6V or less. If on charger, 4V or less.                      |
+        +-------+---------+---------------------------------------------------------------+
+        | 2     | Nominal | Normal operating levels.                                      |
+        +-------+---------+---------------------------------------------------------------+
+        | 3     | Full    | This state can only be achieved when Vector is on the charger |
+        +-------+---------+---------------------------------------------------------------+
 
         .. testcode::
 
@@ -863,11 +875,3 @@ class AsyncRobot(Robot):
     def __init__(self, *args, **kwargs):
         super(AsyncRobot, self).__init__(*args, **kwargs)
         self._force_async = True
-
-    # TODO Should be private? Better method name? If not private, Add docstring and sample code
-    def add_pending(self, task):
-        self.pending += [task]
-
-    # TODO Should be private? Better method name? If not private, Add docstring and sample code
-    def remove_pending(self, task):
-        self.pending = [x for x in self.pending if x is not task]
