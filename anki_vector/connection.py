@@ -302,11 +302,11 @@ class Connection:
 
             import anki_vector
 
-            async def callback(robot, event_type, event):
-                await robot.conn.request_control()
+            def callback(robot, event_type, event):
+                robot.conn.request_control()
                 print(robot.conn.requires_behavior_control) # Will print True
-                await robot.anim.play_animation('anim_pounce_success_02')
-                await robot.conn.release_control()
+                robot.anim.play_animation('anim_pounce_success_02')
+                robot.conn.release_control()
 
             with anki_vector.Robot(requires_behavior_control=False) as robot:
                 print(robot.conn.requires_behavior_control) # Will print False

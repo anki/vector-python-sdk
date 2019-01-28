@@ -852,6 +852,31 @@ class AsyncRobot(Robot):
         # Disconnect from Vector
         robot.disconnect()
 
+    When getting callbacks from the event stream, it's important to understand that function calls
+    return a :class:`concurrent.futures.Future` and not an :class:`asyncio.Future`. This means any
+    async callback functions will need to use :func:`asyncio.wrap_future` to be able to await the
+    function's response.
+
+    .. testcode::
+
+        import asyncio
+        import time
+
+        import anki_vector
+
+        async def callback(robot, event_type, event):
+            await asyncio.wrap_future(robot.anim.play_animation('anim_pounce_success_02'))
+            await asyncio.wrap_future(robot.behavior.set_head_angle(anki_vector.util.degrees(40)))
+
+        if __name__ == "__main__":
+            args = anki_vector.util.parse_command_args()
+            with anki_vector.AsyncRobot(serial=args.serial, enable_face_detection=True) as robot:
+                robot.behavior.set_head_angle(anki_vector.util.degrees(40))
+                robot.events.subscribe(callback, anki_vector.events.Events.robot_observed_face)
+
+                # Waits 10 seconds. Show Vector your face.
+                time.sleep(10)
+
     :param serial: Vector's serial number. The robot's serial number (ex. 00e20100) is located on the underside of Vector,
                    or accessible from Vector's debug screen. Used to identify which Vector configuration to load.
     :param ip: Vector's IP Address. (optional)
