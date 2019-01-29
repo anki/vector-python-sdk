@@ -485,10 +485,10 @@ class Connection:
             self._interface = client.ExternalInterfaceStub(self._channel)
 
             # Verify Vector and the SDK have compatible protocol versions
-            version = protocol.ProtocolVersionRequest(client_version=CLIENT_VERSION, min_host_version=MIN_HOST_VERSION)
+            version = protocol.ProtocolVersionRequest(client_version=protocol.PROTOCOL_VERSION_CURRENT, min_host_version=protocol.PROTOCOL_VERSION_MINIMUM)
             protocol_version = self._loop.run_until_complete(self._interface.ProtocolVersion(version))
-            if protocol_version.result != protocol.ProtocolVersionResponse.SUCCESS or MIN_HOST_VERSION > protocol_version.host_version:  # pylint: disable=no-member
-                raise VectorInvalidVersionException(version, protocol_version)
+            if protocol_version.result != protocol.ProtocolVersionResponse.SUCCESS or protocol.PROTOCOL_VERSION_MINIMUM > protocol_version.host_version:  # pylint: disable=no-member
+                raise VectorInvalidVersionException(protocol_version)
 
             self._control_stream_task = self._loop.create_task(self._open_connections())
 
