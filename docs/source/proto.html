@@ -378,6 +378,10 @@
             <ul>
               
               
+                <li>
+                  <a href="#Anki.Vector.external_interface.ProtocolVersion"><span class="badge">E</span>ProtocolVersion</a>
+                </li>
+              
               
               
                 <li>
@@ -2804,6 +2808,40 @@ This is only used in simulation for now.
 
       
 
+      
+        <h3 id="Anki.Vector.external_interface.ProtocolVersion">ProtocolVersion</h3>
+        <p>The valid versions of the protocol.</p>
+<p>Protocol versions are updated when messages change significantly:
+new ones are added and removed, fields deprecated, etc.</p>
+<p>The goal is to support as many old versions as possible, only
+bumping the minimum when there is no way to handle a prior version.</p><p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>PROTOCOL_VERSION_UNKNOWN</td>
+                <td>0</td>
+                <td><p>Required zero value for enums</p></td>
+              </tr>
+            
+              <tr>
+                <td>PROTOCOL_VERSION_MINIMUM</td>
+                <td>0</td>
+                <td><p>Minimum supported version</p></td>
+              </tr>
+            
+              <tr>
+                <td>PROTOCOL_VERSION_CURRENT</td>
+                <td>3</td>
+                <td><p>Current version</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+        <p></p>
       
 
       

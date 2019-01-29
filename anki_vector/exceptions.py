@@ -18,6 +18,8 @@ SDK-specific exception classes for Vector.
 
 from grpc import RpcError, StatusCode
 
+from .messaging import protocol
+
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ['VectorAsyncException',
            'VectorBehaviorControlException',
@@ -45,17 +47,17 @@ class VectorException(Exception):
 class VectorInvalidVersionException(VectorException):
     """Your SDK version is not compatible with Vector's version."""
 
-    def __init__(self, version_request, version_response):
+    def __init__(self, version_response):
         host = version_response.host_version
-        min_host = version_request.min_host_version
-        client = version_request.client_version
+        min_host = protocol.PROTOCOL_VERSION_MINIMUM
+        client = protocol.PROTOCOL_VERSION_CURRENT
         if min_host > host:
             error_message = (f"{self.__class__.__doc__}\n\n"
-                             f"Your Vector is an older version that is not supported by the SDK: min={min_host} > host={host}\n"
+                             f"Your Vector is an older version that is not supported by the SDK: Vector={host}, SDK minimum={min_host}\n"
                              f"Use your app to make sure that Vector is on the internet, and able to download the latest update.")
         else:
             error_message = (f"{self.__class__.__doc__}\n\n"
-                             f"Your SDK is an older version that is not supported by Vector: {host} > {client}\n"
+                             f"Your SDK is an older version that is not supported by Vector: Vector={host}, SDK={client}\n"
                              f"Please install the latest SDK to continue.")
         super().__init__(error_message)
 

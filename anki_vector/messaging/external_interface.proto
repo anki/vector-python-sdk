@@ -25,6 +25,18 @@ import "anki_vector/messaging/messages.proto";
 import "anki_vector/messaging/nav_map.proto";
 import "anki_vector/messaging/shared.proto";
 
+// <p>The valid versions of the protocol.</p>
+// <p>Protocol versions are updated when messages change significantly:
+// new ones are added and removed, fields deprecated, etc.</p>
+// <p>The goal is to support as many old versions as possible, only
+// bumping the minimum when there is no way to handle a prior version.</p>
+enum ProtocolVersion {
+  option allow_alias = true;
+  PROTOCOL_VERSION_UNKNOWN = 0; // Required zero value for enums
+  PROTOCOL_VERSION_MINIMUM = 0; // Minimum supported version
+  PROTOCOL_VERSION_CURRENT = 3; // Current version
+}
+
 // The grpc-defined connection between the SDK and Anki's Vector robot.
 service ExternalInterface {
   // Checks the supported protocol version by passing in the client version and
