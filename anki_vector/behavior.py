@@ -293,9 +293,9 @@ class BehaviorComponent(util.Component):
         if approach_angle is not None:
             dock_request.use_approach_angle = True
             dock_request.use_pre_dock_pose = True
-            dock_request.approach_angle = approach_angle.radians
+            dock_request.approach_angle_rad = approach_angle.radians
         if distance_from_marker is not None:
-            dock_request.distance_from_marker = distance_from_marker.distance_mm
+            dock_request.distance_from_marker_mm = distance_from_marker.distance_mm
 
         return await self.grpc_interface.DockWithCube(dock_request)
 
