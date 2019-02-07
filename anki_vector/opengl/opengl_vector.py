@@ -550,14 +550,9 @@ class CustomObjectRenderFrame(ObservableObjectRenderFrame):  # pylint: disable=t
             super().__init__(custom_object)
 
         self.is_fixed = is_fixed
-        if is_fixed:
-            self.x_size_mm = custom_object.x_size_mm
-            self.y_size_mm = custom_object.y_size_mm
-            self.z_size_mm = custom_object.z_size_mm
-        else:
-            self.x_size_mm = custom_object.archetype.x_size_mm
-            self.y_size_mm = custom_object.archetype.y_size_mm
-            self.z_size_mm = custom_object.archetype.z_size_mm
+        self.x_size_mm = custom_object.archetype.x_size_mm
+        self.y_size_mm = custom_object.archetype.y_size_mm
+        self.z_size_mm = custom_object.archetype.z_size_mm
 
 
 class RobotRenderFrame():  # pylint: disable=too-few-public-methods
