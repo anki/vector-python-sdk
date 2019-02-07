@@ -839,18 +839,19 @@ class World(util.Component):
 
     def _on_object_observed(self, _robot, _event_type, msg):
         """Adds a newly observed custom object to the world view."""
-        if msg.object_family == protocol.ObjectFamily.Value("LIGHT_CUBE"):
+        if msg.object_type == protocol.ObjectType.Value("BLOCK_LIGHTCUBE1"):
             if msg.object_id not in self._objects:
                 if self.light_cube:
                     self._objects[msg.object_id] = self.light_cube
 
-        if msg.object_family == protocol.ObjectFamily.Value("CHARGER"):
+        if msg.object_type == protocol.ObjectType.Value("CHARGER_BASIC"):
             if msg.object_id not in self._objects:
                 charger = self._allocate_charger(msg)
                 if charger:
                     self._objects[msg.object_id] = charger
 
-        if msg.object_family == protocol.ObjectFamily.Value("CUSTOM_OBJECT"):
+        first_custom_type = protocol.ObjectType.Value("FIRST_CUSTOM_OBJECT_TYPE")
+        if first_custom_type <= msg.object_type < (first_custom_type + protocol.CustomType.Value("CUSTOM_TYPE_COUNT")):
             if msg.object_id not in self._objects:
                 custom_object = self._allocate_custom_marker_object(msg)
                 if custom_object:
