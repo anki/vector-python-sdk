@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='anki_vector/messaging/cube.proto',
   package='Anki.Vector.external_interface',
   syntax='proto3',
-  serialized_pb=_b('\n anki_vector/messaging/cube.proto\x12\x1e\x41nki.Vector.external_interface\x1a$anki_vector/messaging/messages.proto\x1a+anki_vector/messaging/response_status.proto\"\x14\n\x12\x43onnectCubeRequest\"\x8d\x01\n\x13\x43onnectCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x0f\n\x07success\x18\x02 \x01(\x08\x12\x11\n\tobject_id\x18\x03 \x01(\r\x12\x12\n\nfactory_id\x18\x04 \x01(\t\"\x17\n\x15\x43ubesAvailableRequest\"m\n\x16\x43ubesAvailableResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x13\n\x0b\x66\x61\x63tory_ids\x18\x02 \x03(\t\"\x17\n\x15\x44isconnectCubeRequest\"X\n\x16\x44isconnectCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x18\n\x16\x46lashCubeLightsRequest\"Y\n\x17\x46lashCubeLightsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x1c\n\x1a\x46orgetPreferredCubeRequest\"]\n\x1b\x46orgetPreferredCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"-\n\x17SetPreferredCubeRequest\x12\x12\n\nfactory_id\x18\x01 \x01(\t\"Z\n\x18SetPreferredCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\xb0\x03\n\x14SetCubeLightsRequest\x12\x11\n\tobject_id\x18\x01 \x01(\r\x12\x10\n\x08on_color\x18\x02 \x03(\r\x12\x11\n\toff_color\x18\x03 \x03(\r\x12\x14\n\x0con_period_ms\x18\x04 \x03(\r\x12\x15\n\roff_period_ms\x18\x05 \x03(\r\x12\x1f\n\x17transition_on_period_ms\x18\x06 \x03(\r\x12 \n\x18transition_off_period_ms\x18\x07 \x03(\r\x12\x0e\n\x06offset\x18\x08 \x03(\x05\x12\x15\n\rrelative_to_x\x18\t \x01(\x02\x12\x15\n\rrelative_to_y\x18\n \x01(\x02\x12\x0e\n\x06rotate\x18\x0b \x01(\x08\x12\\\n\rmake_relative\x18\x0c \x01(\x0e\x32\x45.Anki.Vector.external_interface.SetCubeLightsRequest.MakeRelativeMode\"D\n\x10MakeRelativeMode\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x07\n\x03OFF\x10\x01\x12\r\n\tBY_CORNER\x10\x02\x12\x0b\n\x07\x42Y_SIDE\x10\x03\"W\n\x15SetCubeLightsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"%\n\x0fObjectAvailable\x12\x12\n\nfactory_id\x18\x01 \x01(\t\"\x92\x01\n\x15ObjectConnectionState\x12\x11\n\tobject_id\x18\x01 \x01(\r\x12\x12\n\nfactory_id\x18\x02 \x01(\t\x12?\n\x0bobject_type\x18\x03 \x01(\x0e\x32*.Anki.Vector.external_interface.ObjectType\x12\x11\n\tconnected\x18\x04 \x01(\x08\"3\n\x0bObjectMoved\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\";\n\x13ObjectStoppedMoving\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\"t\n\x13ObjectUpAxisChanged\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\x12\x37\n\x07up_axis\x18\x03 \x01(\x0e\x32&.Anki.Vector.external_interface.UpAxis\"4\n\x0cObjectTapped\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\"\xec\x02\n\x13RobotObservedObject\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x43\n\robject_family\x18\x02 \x01(\x0e\x32,.Anki.Vector.external_interface.ObjectFamily\x12?\n\x0bobject_type\x18\x03 \x01(\x0e\x32*.Anki.Vector.external_interface.ObjectType\x12\x11\n\tobject_id\x18\x04 \x01(\x05\x12:\n\x08img_rect\x18\x05 \x01(\x0b\x32(.Anki.Vector.external_interface.CladRect\x12\x38\n\x04pose\x18\x06 \x01(\x0b\x32*.Anki.Vector.external_interface.PoseStruct\x12 \n\x18top_face_orientation_rad\x18\x07 \x01(\x02\x12\x11\n\tis_active\x18\x08 \x01(\r\"\x14\n\x12\x43ubeConnectionLost\"d\n\x1a\x44\x65leteCustomObjectsRequest\x12\x46\n\x04mode\x18\x01 \x01(\x0e\x32\x38.Anki.Vector.external_interface.CustomObjectDeletionMode\"]\n\x1b\x44\x65leteCustomObjectsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x93\x01\n\x1e\x43reateFixedCustomObjectRequest\x12\x38\n\x04pose\x18\x01 \x01(\x0b\x32*.Anki.Vector.external_interface.PoseStruct\x12\x11\n\tx_size_mm\x18\x02 \x01(\x02\x12\x11\n\ty_size_mm\x18\x03 \x01(\x02\x12\x11\n\tz_size_mm\x18\x04 \x01(\x02\"t\n\x1f\x43reateFixedCustomObjectResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x11\n\tobject_id\x18\x02 \x01(\r\"\xba\x04\n\x13\x43ustomBoxDefinition\x12H\n\x0cmarker_front\x18\x01 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12G\n\x0bmarker_back\x18\x02 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12\x46\n\nmarker_top\x18\x03 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12I\n\rmarker_bottom\x18\x04 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12G\n\x0bmarker_left\x18\x05 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12H\n\x0cmarker_right\x18\x06 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12\x11\n\tx_size_mm\x18\x07 \x01(\x02\x12\x11\n\ty_size_mm\x18\x08 \x01(\x02\x12\x11\n\tz_size_mm\x18\t \x01(\x02\x12\x17\n\x0fmarker_width_mm\x18\n \x01(\x02\x12\x18\n\x10marker_height_mm\x18\x0b \x01(\x02\"\x9e\x01\n\x14\x43ustomCubeDefinition\x12\x42\n\x06marker\x18\x01 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12\x0f\n\x07size_mm\x18\x02 \x01(\x02\x12\x17\n\x0fmarker_width_mm\x18\x03 \x01(\x02\x12\x18\n\x10marker_height_mm\x18\x04 \x01(\x02\"\xb2\x01\n\x14\x43ustomWallDefinition\x12\x42\n\x06marker\x18\x01 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12\x10\n\x08width_mm\x18\x02 \x01(\x02\x12\x11\n\theight_mm\x18\x03 \x01(\x02\x12\x17\n\x0fmarker_width_mm\x18\x04 \x01(\x02\x12\x18\n\x10marker_height_mm\x18\x05 \x01(\x02\"\xf0\x02\n\x19\x44\x65\x66ineCustomObjectRequest\x12?\n\x0b\x63ustom_type\x18\x01 \x01(\x0e\x32*.Anki.Vector.external_interface.CustomType\x12\x11\n\tis_unique\x18\x02 \x01(\x08\x12I\n\ncustom_box\x18\x03 \x01(\x0b\x32\x33.Anki.Vector.external_interface.CustomBoxDefinitionH\x00\x12K\n\x0b\x63ustom_cube\x18\x04 \x01(\x0b\x32\x34.Anki.Vector.external_interface.CustomCubeDefinitionH\x00\x12K\n\x0b\x63ustom_wall\x18\x05 \x01(\x0b\x32\x34.Anki.Vector.external_interface.CustomWallDefinitionH\x00\x42\x1a\n\x18\x63ustom_object_definition\"m\n\x1a\x44\x65\x66ineCustomObjectResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x0f\n\x07success\x18\x02 \x01(\x08\"\xac\x05\n\x0bObjectEvent\x12K\n\x10object_available\x18\x01 \x01(\x0b\x32/.Anki.Vector.external_interface.ObjectAvailableH\x00\x12X\n\x17object_connection_state\x18\x02 \x01(\x0b\x32\x35.Anki.Vector.external_interface.ObjectConnectionStateH\x00\x12\x43\n\x0cobject_moved\x18\x03 \x01(\x0b\x32+.Anki.Vector.external_interface.ObjectMovedH\x00\x12T\n\x15object_stopped_moving\x18\x04 \x01(\x0b\x32\x33.Anki.Vector.external_interface.ObjectStoppedMovingH\x00\x12U\n\x16object_up_axis_changed\x18\x05 \x01(\x0b\x32\x33.Anki.Vector.external_interface.ObjectUpAxisChangedH\x00\x12\x45\n\robject_tapped\x18\x06 \x01(\x0b\x32,.Anki.Vector.external_interface.ObjectTappedH\x00\x12T\n\x15robot_observed_object\x18\x07 \x01(\x0b\x32\x33.Anki.Vector.external_interface.RobotObservedObjectH\x00\x12R\n\x14\x63ube_connection_lost\x18\x08 \x01(\x0b\x32\x32.Anki.Vector.external_interface.CubeConnectionLostH\x00\x42\x13\n\x11object_event_type*\x7f\n\nObjectType\x12\x12\n\x0eINVALID_OBJECT\x10\x00\x12\x12\n\x0eUNKNOWN_OBJECT\x10\x01\x12\x14\n\x10\x42LOCK_LIGHTCUBE1\x10\x02\x12\x1c\n\x18\x46IRST_CUSTOM_OBJECT_TYPE\x10\x0f\x12\x15\n\x11OBJECT_TYPE_COUNT\x10&*\xd0\x03\n\nCustomType\x12\x17\n\x13INVALID_CUSTOM_TYPE\x10\x00\x12\x12\n\x0e\x43USTOM_TYPE_00\x10\x01\x12\x12\n\x0e\x43USTOM_TYPE_01\x10\x02\x12\x12\n\x0e\x43USTOM_TYPE_02\x10\x03\x12\x12\n\x0e\x43USTOM_TYPE_03\x10\x04\x12\x12\n\x0e\x43USTOM_TYPE_04\x10\x05\x12\x12\n\x0e\x43USTOM_TYPE_05\x10\x06\x12\x12\n\x0e\x43USTOM_TYPE_06\x10\x07\x12\x12\n\x0e\x43USTOM_TYPE_07\x10\x08\x12\x12\n\x0e\x43USTOM_TYPE_08\x10\t\x12\x12\n\x0e\x43USTOM_TYPE_09\x10\n\x12\x12\n\x0e\x43USTOM_TYPE_10\x10\x0b\x12\x12\n\x0e\x43USTOM_TYPE_11\x10\x0c\x12\x12\n\x0e\x43USTOM_TYPE_12\x10\r\x12\x12\n\x0e\x43USTOM_TYPE_13\x10\x0e\x12\x12\n\x0e\x43USTOM_TYPE_14\x10\x0f\x12\x12\n\x0e\x43USTOM_TYPE_15\x10\x10\x12\x12\n\x0e\x43USTOM_TYPE_16\x10\x11\x12\x12\n\x0e\x43USTOM_TYPE_17\x10\x12\x12\x12\n\x0e\x43USTOM_TYPE_18\x10\x13\x12\x12\n\x0e\x43USTOM_TYPE_19\x10\x14\x12\x15\n\x11\x43USTOM_TYPE_COUNT\x10\x14\x1a\x02\x10\x01*\x8e\x01\n\x0cObjectFamily\x12\x12\n\x0eINVALID_FAMILY\x10\x00\x12\x12\n\x0eUNKNOWN_FAMILY\x10\x01\x12\t\n\x05\x42LOCK\x10\x02\x12\x0e\n\nLIGHT_CUBE\x10\x03\x12\x0b\n\x07\x43HARGER\x10\x04\x12\x11\n\rCUSTOM_OBJECT\x10\x07\x12\x17\n\x13OBJECT_FAMILY_COUNT\x10\x07\x1a\x02\x10\x01*\x88\x01\n\x06UpAxis\x12\x10\n\x0cINVALID_AXIS\x10\x00\x12\x0e\n\nX_NEGATIVE\x10\x01\x12\x0e\n\nX_POSITIVE\x10\x02\x12\x0e\n\nY_NEGATIVE\x10\x03\x12\x0e\n\nY_POSITIVE\x10\x04\x12\x0e\n\nZ_NEGATIVE\x10\x05\x12\x0e\n\nZ_POSITIVE\x10\x06\x12\x0c\n\x08NUM_AXES\x10\x07*P\n\x0fObjectConstants\x12\x19\n\x15OBJECT_CONSTANTS_NULL\x10\x00\x12\"\n\x1e\x46IXED_CUSTOM_WALL_THICKNESS_MM\x10\n*\xac\x04\n\x12\x43ustomObjectMarker\x12\x19\n\x15\x43USTOM_MARKER_UNKNOWN\x10\x00\x12\x1b\n\x17\x43USTOM_MARKER_CIRCLES_2\x10\x01\x12\x1b\n\x17\x43USTOM_MARKER_CIRCLES_3\x10\x02\x12\x1b\n\x17\x43USTOM_MARKER_CIRCLES_4\x10\x03\x12\x1b\n\x17\x43USTOM_MARKER_CIRCLES_5\x10\x04\x12\x1c\n\x18\x43USTOM_MARKER_DIAMONDS_2\x10\x05\x12\x1c\n\x18\x43USTOM_MARKER_DIAMONDS_3\x10\x06\x12\x1c\n\x18\x43USTOM_MARKER_DIAMONDS_4\x10\x07\x12\x1c\n\x18\x43USTOM_MARKER_DIAMONDS_5\x10\x08\x12\x1c\n\x18\x43USTOM_MARKER_HEXAGONS_2\x10\t\x12\x1c\n\x18\x43USTOM_MARKER_HEXAGONS_3\x10\n\x12\x1c\n\x18\x43USTOM_MARKER_HEXAGONS_4\x10\x0b\x12\x1c\n\x18\x43USTOM_MARKER_HEXAGONS_5\x10\x0c\x12\x1d\n\x19\x43USTOM_MARKER_TRIANGLES_2\x10\r\x12\x1d\n\x19\x43USTOM_MARKER_TRIANGLES_3\x10\x0e\x12\x1d\n\x19\x43USTOM_MARKER_TRIANGLES_4\x10\x0f\x12\x1d\n\x19\x43USTOM_MARKER_TRIANGLES_5\x10\x10\x12\x17\n\x13\x43USTOM_MARKER_COUNT\x10\x10\x1a\x02\x10\x01*\xa4\x01\n\x18\x43ustomObjectDeletionMode\x12\x19\n\x15\x44\x45LETION_MASK_UNKNOWN\x10\x00\x12&\n\"DELETION_MASK_FIXED_CUSTOM_OBJECTS\x10\x01\x12\'\n#DELETION_MASK_CUSTOM_MARKER_OBJECTS\x10\x02\x12\x1c\n\x18\x44\x45LETION_MASK_ARCHETYPES\x10\x03\x62\x06proto3')
+  serialized_pb=_b('\n anki_vector/messaging/cube.proto\x12\x1e\x41nki.Vector.external_interface\x1a$anki_vector/messaging/messages.proto\x1a+anki_vector/messaging/response_status.proto\"\x14\n\x12\x43onnectCubeRequest\"\x8d\x01\n\x13\x43onnectCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x0f\n\x07success\x18\x02 \x01(\x08\x12\x11\n\tobject_id\x18\x03 \x01(\r\x12\x12\n\nfactory_id\x18\x04 \x01(\t\"\x17\n\x15\x43ubesAvailableRequest\"m\n\x16\x43ubesAvailableResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x13\n\x0b\x66\x61\x63tory_ids\x18\x02 \x03(\t\"\x17\n\x15\x44isconnectCubeRequest\"X\n\x16\x44isconnectCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x18\n\x16\x46lashCubeLightsRequest\"Y\n\x17\x46lashCubeLightsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x1c\n\x1a\x46orgetPreferredCubeRequest\"]\n\x1b\x46orgetPreferredCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"-\n\x17SetPreferredCubeRequest\x12\x12\n\nfactory_id\x18\x01 \x01(\t\"Z\n\x18SetPreferredCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\xb0\x03\n\x14SetCubeLightsRequest\x12\x11\n\tobject_id\x18\x01 \x01(\r\x12\x10\n\x08on_color\x18\x02 \x03(\r\x12\x11\n\toff_color\x18\x03 \x03(\r\x12\x14\n\x0con_period_ms\x18\x04 \x03(\r\x12\x15\n\roff_period_ms\x18\x05 \x03(\r\x12\x1f\n\x17transition_on_period_ms\x18\x06 \x03(\r\x12 \n\x18transition_off_period_ms\x18\x07 \x03(\r\x12\x0e\n\x06offset\x18\x08 \x03(\x05\x12\x15\n\rrelative_to_x\x18\t \x01(\x02\x12\x15\n\rrelative_to_y\x18\n \x01(\x02\x12\x0e\n\x06rotate\x18\x0b \x01(\x08\x12\\\n\rmake_relative\x18\x0c \x01(\x0e\x32\x45.Anki.Vector.external_interface.SetCubeLightsRequest.MakeRelativeMode\"D\n\x10MakeRelativeMode\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x07\n\x03OFF\x10\x01\x12\r\n\tBY_CORNER\x10\x02\x12\x0b\n\x07\x42Y_SIDE\x10\x03\"W\n\x15SetCubeLightsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"%\n\x0fObjectAvailable\x12\x12\n\nfactory_id\x18\x01 \x01(\t\"\x92\x01\n\x15ObjectConnectionState\x12\x11\n\tobject_id\x18\x01 \x01(\r\x12\x12\n\nfactory_id\x18\x02 \x01(\t\x12?\n\x0bobject_type\x18\x03 \x01(\x0e\x32*.Anki.Vector.external_interface.ObjectType\x12\x11\n\tconnected\x18\x04 \x01(\x08\"3\n\x0bObjectMoved\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\";\n\x13ObjectStoppedMoving\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\"t\n\x13ObjectUpAxisChanged\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\x12\x37\n\x07up_axis\x18\x03 \x01(\x0e\x32&.Anki.Vector.external_interface.UpAxis\"4\n\x0cObjectTapped\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x11\n\tobject_id\x18\x02 \x01(\r\"\xf0\x02\n\x13RobotObservedObject\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12G\n\robject_family\x18\x02 \x01(\x0e\x32,.Anki.Vector.external_interface.ObjectFamilyB\x02\x18\x01\x12?\n\x0bobject_type\x18\x03 \x01(\x0e\x32*.Anki.Vector.external_interface.ObjectType\x12\x11\n\tobject_id\x18\x04 \x01(\x05\x12:\n\x08img_rect\x18\x05 \x01(\x0b\x32(.Anki.Vector.external_interface.CladRect\x12\x38\n\x04pose\x18\x06 \x01(\x0b\x32*.Anki.Vector.external_interface.PoseStruct\x12 \n\x18top_face_orientation_rad\x18\x07 \x01(\x02\x12\x11\n\tis_active\x18\x08 \x01(\r\"\x14\n\x12\x43ubeConnectionLost\"d\n\x1a\x44\x65leteCustomObjectsRequest\x12\x46\n\x04mode\x18\x01 \x01(\x0e\x32\x38.Anki.Vector.external_interface.CustomObjectDeletionMode\"]\n\x1b\x44\x65leteCustomObjectsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x93\x01\n\x1e\x43reateFixedCustomObjectRequest\x12\x38\n\x04pose\x18\x01 \x01(\x0b\x32*.Anki.Vector.external_interface.PoseStruct\x12\x11\n\tx_size_mm\x18\x02 \x01(\x02\x12\x11\n\ty_size_mm\x18\x03 \x01(\x02\x12\x11\n\tz_size_mm\x18\x04 \x01(\x02\"t\n\x1f\x43reateFixedCustomObjectResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x11\n\tobject_id\x18\x02 \x01(\r\"\xba\x04\n\x13\x43ustomBoxDefinition\x12H\n\x0cmarker_front\x18\x01 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12G\n\x0bmarker_back\x18\x02 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12\x46\n\nmarker_top\x18\x03 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12I\n\rmarker_bottom\x18\x04 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12G\n\x0bmarker_left\x18\x05 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12H\n\x0cmarker_right\x18\x06 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12\x11\n\tx_size_mm\x18\x07 \x01(\x02\x12\x11\n\ty_size_mm\x18\x08 \x01(\x02\x12\x11\n\tz_size_mm\x18\t \x01(\x02\x12\x17\n\x0fmarker_width_mm\x18\n \x01(\x02\x12\x18\n\x10marker_height_mm\x18\x0b \x01(\x02\"\x9e\x01\n\x14\x43ustomCubeDefinition\x12\x42\n\x06marker\x18\x01 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12\x0f\n\x07size_mm\x18\x02 \x01(\x02\x12\x17\n\x0fmarker_width_mm\x18\x03 \x01(\x02\x12\x18\n\x10marker_height_mm\x18\x04 \x01(\x02\"\xb2\x01\n\x14\x43ustomWallDefinition\x12\x42\n\x06marker\x18\x01 \x01(\x0e\x32\x32.Anki.Vector.external_interface.CustomObjectMarker\x12\x10\n\x08width_mm\x18\x02 \x01(\x02\x12\x11\n\theight_mm\x18\x03 \x01(\x02\x12\x17\n\x0fmarker_width_mm\x18\x04 \x01(\x02\x12\x18\n\x10marker_height_mm\x18\x05 \x01(\x02\"\xf0\x02\n\x19\x44\x65\x66ineCustomObjectRequest\x12?\n\x0b\x63ustom_type\x18\x01 \x01(\x0e\x32*.Anki.Vector.external_interface.CustomType\x12\x11\n\tis_unique\x18\x02 \x01(\x08\x12I\n\ncustom_box\x18\x03 \x01(\x0b\x32\x33.Anki.Vector.external_interface.CustomBoxDefinitionH\x00\x12K\n\x0b\x63ustom_cube\x18\x04 \x01(\x0b\x32\x34.Anki.Vector.external_interface.CustomCubeDefinitionH\x00\x12K\n\x0b\x63ustom_wall\x18\x05 \x01(\x0b\x32\x34.Anki.Vector.external_interface.CustomWallDefinitionH\x00\x42\x1a\n\x18\x63ustom_object_definition\"m\n\x1a\x44\x65\x66ineCustomObjectResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x0f\n\x07success\x18\x02 \x01(\x08\"\xac\x05\n\x0bObjectEvent\x12K\n\x10object_available\x18\x01 \x01(\x0b\x32/.Anki.Vector.external_interface.ObjectAvailableH\x00\x12X\n\x17object_connection_state\x18\x02 \x01(\x0b\x32\x35.Anki.Vector.external_interface.ObjectConnectionStateH\x00\x12\x43\n\x0cobject_moved\x18\x03 \x01(\x0b\x32+.Anki.Vector.external_interface.ObjectMovedH\x00\x12T\n\x15object_stopped_moving\x18\x04 \x01(\x0b\x32\x33.Anki.Vector.external_interface.ObjectStoppedMovingH\x00\x12U\n\x16object_up_axis_changed\x18\x05 \x01(\x0b\x32\x33.Anki.Vector.external_interface.ObjectUpAxisChangedH\x00\x12\x45\n\robject_tapped\x18\x06 \x01(\x0b\x32,.Anki.Vector.external_interface.ObjectTappedH\x00\x12T\n\x15robot_observed_object\x18\x07 \x01(\x0b\x32\x33.Anki.Vector.external_interface.RobotObservedObjectH\x00\x12R\n\x14\x63ube_connection_lost\x18\x08 \x01(\x0b\x32\x32.Anki.Vector.external_interface.CubeConnectionLostH\x00\x42\x13\n\x11object_event_type*{\n\nObjectType\x12\x12\n\x0eINVALID_OBJECT\x10\x00\x12\x12\n\x0eUNKNOWN_OBJECT\x10\x01\x12\x14\n\x10\x42LOCK_LIGHTCUBE1\x10\x02\x12\x11\n\rCHARGER_BASIC\x10\x06\x12\x1c\n\x18\x46IRST_CUSTOM_OBJECT_TYPE\x10\x0f*\xd0\x03\n\nCustomType\x12\x17\n\x13INVALID_CUSTOM_TYPE\x10\x00\x12\x12\n\x0e\x43USTOM_TYPE_00\x10\x01\x12\x12\n\x0e\x43USTOM_TYPE_01\x10\x02\x12\x12\n\x0e\x43USTOM_TYPE_02\x10\x03\x12\x12\n\x0e\x43USTOM_TYPE_03\x10\x04\x12\x12\n\x0e\x43USTOM_TYPE_04\x10\x05\x12\x12\n\x0e\x43USTOM_TYPE_05\x10\x06\x12\x12\n\x0e\x43USTOM_TYPE_06\x10\x07\x12\x12\n\x0e\x43USTOM_TYPE_07\x10\x08\x12\x12\n\x0e\x43USTOM_TYPE_08\x10\t\x12\x12\n\x0e\x43USTOM_TYPE_09\x10\n\x12\x12\n\x0e\x43USTOM_TYPE_10\x10\x0b\x12\x12\n\x0e\x43USTOM_TYPE_11\x10\x0c\x12\x12\n\x0e\x43USTOM_TYPE_12\x10\r\x12\x12\n\x0e\x43USTOM_TYPE_13\x10\x0e\x12\x12\n\x0e\x43USTOM_TYPE_14\x10\x0f\x12\x12\n\x0e\x43USTOM_TYPE_15\x10\x10\x12\x12\n\x0e\x43USTOM_TYPE_16\x10\x11\x12\x12\n\x0e\x43USTOM_TYPE_17\x10\x12\x12\x12\n\x0e\x43USTOM_TYPE_18\x10\x13\x12\x12\n\x0e\x43USTOM_TYPE_19\x10\x14\x12\x15\n\x11\x43USTOM_TYPE_COUNT\x10\x14\x1a\x02\x10\x01*\x8e\x01\n\x0cObjectFamily\x12\x12\n\x0eINVALID_FAMILY\x10\x00\x12\x12\n\x0eUNKNOWN_FAMILY\x10\x01\x12\t\n\x05\x42LOCK\x10\x02\x12\x0e\n\nLIGHT_CUBE\x10\x03\x12\x0b\n\x07\x43HARGER\x10\x04\x12\x11\n\rCUSTOM_OBJECT\x10\x07\x12\x17\n\x13OBJECT_FAMILY_COUNT\x10\x07\x1a\x02\x10\x01*\x88\x01\n\x06UpAxis\x12\x10\n\x0cINVALID_AXIS\x10\x00\x12\x0e\n\nX_NEGATIVE\x10\x01\x12\x0e\n\nX_POSITIVE\x10\x02\x12\x0e\n\nY_NEGATIVE\x10\x03\x12\x0e\n\nY_POSITIVE\x10\x04\x12\x0e\n\nZ_NEGATIVE\x10\x05\x12\x0e\n\nZ_POSITIVE\x10\x06\x12\x0c\n\x08NUM_AXES\x10\x07*P\n\x0fObjectConstants\x12\x19\n\x15OBJECT_CONSTANTS_NULL\x10\x00\x12\"\n\x1e\x46IXED_CUSTOM_WALL_THICKNESS_MM\x10\n*\xac\x04\n\x12\x43ustomObjectMarker\x12\x19\n\x15\x43USTOM_MARKER_UNKNOWN\x10\x00\x12\x1b\n\x17\x43USTOM_MARKER_CIRCLES_2\x10\x01\x12\x1b\n\x17\x43USTOM_MARKER_CIRCLES_3\x10\x02\x12\x1b\n\x17\x43USTOM_MARKER_CIRCLES_4\x10\x03\x12\x1b\n\x17\x43USTOM_MARKER_CIRCLES_5\x10\x04\x12\x1c\n\x18\x43USTOM_MARKER_DIAMONDS_2\x10\x05\x12\x1c\n\x18\x43USTOM_MARKER_DIAMONDS_3\x10\x06\x12\x1c\n\x18\x43USTOM_MARKER_DIAMONDS_4\x10\x07\x12\x1c\n\x18\x43USTOM_MARKER_DIAMONDS_5\x10\x08\x12\x1c\n\x18\x43USTOM_MARKER_HEXAGONS_2\x10\t\x12\x1c\n\x18\x43USTOM_MARKER_HEXAGONS_3\x10\n\x12\x1c\n\x18\x43USTOM_MARKER_HEXAGONS_4\x10\x0b\x12\x1c\n\x18\x43USTOM_MARKER_HEXAGONS_5\x10\x0c\x12\x1d\n\x19\x43USTOM_MARKER_TRIANGLES_2\x10\r\x12\x1d\n\x19\x43USTOM_MARKER_TRIANGLES_3\x10\x0e\x12\x1d\n\x19\x43USTOM_MARKER_TRIANGLES_4\x10\x0f\x12\x1d\n\x19\x43USTOM_MARKER_TRIANGLES_5\x10\x10\x12\x17\n\x13\x43USTOM_MARKER_COUNT\x10\x10\x1a\x02\x10\x01*\xa4\x01\n\x18\x43ustomObjectDeletionMode\x12\x19\n\x15\x44\x45LETION_MASK_UNKNOWN\x10\x00\x12&\n\"DELETION_MASK_FIXED_CUSTOM_OBJECTS\x10\x01\x12\'\n#DELETION_MASK_CUSTOM_MARKER_OBJECTS\x10\x02\x12\x1c\n\x18\x44\x45LETION_MASK_ARCHETYPES\x10\x03\x62\x06proto3')
   ,
   dependencies=[anki__vector_dot_messaging_dot_messages__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_response__status__pb2.DESCRIPTOR,])
 
@@ -45,17 +45,17 @@ _OBJECTTYPE = _descriptor.EnumDescriptor(
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='FIRST_CUSTOM_OBJECT_TYPE', index=3, number=15,
+      name='CHARGER_BASIC', index=3, number=6,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='OBJECT_TYPE_COUNT', index=4, number=38,
+      name='FIRST_CUSTOM_OBJECT_TYPE', index=4, number=15,
       options=None,
       type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=4885,
+  serialized_start=4889,
   serialized_end=5012,
 )
 _sym_db.RegisterEnumDescriptor(_OBJECTTYPE)
@@ -398,8 +398,8 @@ CustomObjectDeletionMode = enum_type_wrapper.EnumTypeWrapper(_CUSTOMOBJECTDELETI
 INVALID_OBJECT = 0
 UNKNOWN_OBJECT = 1
 BLOCK_LIGHTCUBE1 = 2
+CHARGER_BASIC = 6
 FIRST_CUSTOM_OBJECT_TYPE = 15
-OBJECT_TYPE_COUNT = 38
 INVALID_CUSTOM_TYPE = 0
 CUSTOM_TYPE_00 = 1
 CUSTOM_TYPE_01 = 2
@@ -1261,7 +1261,7 @@ _ROBOTOBSERVEDOBJECT = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      options=None, file=DESCRIPTOR),
+      options=_descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\030\001')), file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='object_type', full_name='Anki.Vector.external_interface.RobotObservedObject.object_type', index=2,
       number=3, type=14, cpp_type=8, label=1,
@@ -1317,7 +1317,7 @@ _ROBOTOBSERVEDOBJECT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=1948,
-  serialized_end=2312,
+  serialized_end=2316,
 )
 
 
@@ -1340,8 +1340,8 @@ _CUBECONNECTIONLOST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2314,
-  serialized_end=2334,
+  serialized_start=2318,
+  serialized_end=2338,
 )
 
 
@@ -1371,8 +1371,8 @@ _DELETECUSTOMOBJECTSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2336,
-  serialized_end=2436,
+  serialized_start=2340,
+  serialized_end=2440,
 )
 
 
@@ -1402,8 +1402,8 @@ _DELETECUSTOMOBJECTSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2438,
-  serialized_end=2531,
+  serialized_start=2442,
+  serialized_end=2535,
 )
 
 
@@ -1454,8 +1454,8 @@ _CREATEFIXEDCUSTOMOBJECTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2534,
-  serialized_end=2681,
+  serialized_start=2538,
+  serialized_end=2685,
 )
 
 
@@ -1492,8 +1492,8 @@ _CREATEFIXEDCUSTOMOBJECTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2683,
-  serialized_end=2799,
+  serialized_start=2687,
+  serialized_end=2803,
 )
 
 
@@ -1593,8 +1593,8 @@ _CUSTOMBOXDEFINITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2802,
-  serialized_end=3372,
+  serialized_start=2806,
+  serialized_end=3376,
 )
 
 
@@ -1645,8 +1645,8 @@ _CUSTOMCUBEDEFINITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3375,
-  serialized_end=3533,
+  serialized_start=3379,
+  serialized_end=3537,
 )
 
 
@@ -1704,8 +1704,8 @@ _CUSTOMWALLDEFINITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3536,
-  serialized_end=3714,
+  serialized_start=3540,
+  serialized_end=3718,
 )
 
 
@@ -1766,8 +1766,8 @@ _DEFINECUSTOMOBJECTREQUEST = _descriptor.Descriptor(
       name='custom_object_definition', full_name='Anki.Vector.external_interface.DefineCustomObjectRequest.custom_object_definition',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=3717,
-  serialized_end=4085,
+  serialized_start=3721,
+  serialized_end=4089,
 )
 
 
@@ -1804,8 +1804,8 @@ _DEFINECUSTOMOBJECTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4087,
-  serialized_end=4196,
+  serialized_start=4091,
+  serialized_end=4200,
 )
 
 
@@ -1887,8 +1887,8 @@ _OBJECTEVENT = _descriptor.Descriptor(
       name='object_event_type', full_name='Anki.Vector.external_interface.ObjectEvent.object_event_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=4199,
-  serialized_end=4883,
+  serialized_start=4203,
+  serialized_end=4887,
 )
 
 _CONNECTCUBERESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
@@ -2236,4 +2236,6 @@ _OBJECTFAMILY.has_options = True
 _OBJECTFAMILY._options = _descriptor._ParseOptions(descriptor_pb2.EnumOptions(), _b('\020\001'))
 _CUSTOMOBJECTMARKER.has_options = True
 _CUSTOMOBJECTMARKER._options = _descriptor._ParseOptions(descriptor_pb2.EnumOptions(), _b('\020\001'))
+_ROBOTOBSERVEDOBJECT.fields_by_name['object_family'].has_options = True
+_ROBOTOBSERVEDOBJECT.fields_by_name['object_family']._options = _descriptor._ParseOptions(descriptor_pb2.FieldOptions(), _b('\030\001'))
 # @@protoc_insertion_point(module_scope)
