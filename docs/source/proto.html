@@ -2012,7 +2012,7 @@ of whether it originated from us or underlying robot behavior.
       
         <h3 id="Anki.Vector.external_interface.RobotObservedObject">RobotObservedObject</h3>
         RobotObservedObject for signaling that an object
- with specified ID/Type/Family was seen at a particular location in the image
+ with specified ID/Type was seen at a particular location in the image
  and the world
         <p></p>
 
@@ -2032,7 +2032,7 @@ of whether it originated from us or underlying robot behavior.
                 <tr>
                   <td>object_family</td>
                   <td><a href="#Anki.Vector.external_interface.ObjectFamily">ObjectFamily</a> </td>
-                  <td><p> </p></td>
+                  <td><p>ObjectFamily is deprecated. Use ObjectType instead to reason about groupings of objects. </p></td>
                 </tr>
               
                 <tr>
@@ -2571,7 +2571,7 @@ This is only used in simulation for now.
         <p></p>
       
         <h3 id="Anki.Vector.external_interface.ObjectFamily">ObjectFamily</h3>
-        <p></p>
+        Note: ObjectFamily is deprecated and will be removed in future releases<p></p>
         <table class="enum-table">
           <thead>
             <tr><td>Name</td><td>Number</td><td>Description</td></tr>
@@ -2651,14 +2651,14 @@ This is only used in simulation for now.
               </tr>
             
               <tr>
-                <td>FIRST_CUSTOM_OBJECT_TYPE</td>
-                <td>15</td>
+                <td>CHARGER_BASIC</td>
+                <td>6</td>
                 <td><p></p></td>
               </tr>
             
               <tr>
-                <td>OBJECT_TYPE_COUNT</td>
-                <td>38</td>
+                <td>FIRST_CUSTOM_OBJECT_TYPE</td>
+                <td>15</td>
                 <td><p></p></td>
               </tr>
             

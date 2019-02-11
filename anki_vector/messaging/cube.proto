@@ -121,10 +121,10 @@ enum ObjectType
   // Light Cube (a.k.a. Active Block)
   //
   BLOCK_LIGHTCUBE1 = 2;
+  
+  CHARGER_BASIC = 6;
 
   FIRST_CUSTOM_OBJECT_TYPE = 15;
-
-  OBJECT_TYPE_COUNT = 38;
 }
 
 enum CustomType
@@ -157,6 +157,7 @@ enum CustomType
   CUSTOM_TYPE_COUNT = 20;
 }
 
+// Note: ObjectFamily is deprecated and will be removed in future releases
 enum ObjectFamily {
   option allow_alias = true;
 
@@ -217,11 +218,11 @@ message ObjectTapped {
 }
 
 // RobotObservedObject for signaling that an object
-//  with specified ID/Type/Family was seen at a particular location in the image
+//  with specified ID/Type was seen at a particular location in the image
 //  and the world
 message RobotObservedObject {
     uint32       timestamp                = 1;
-    ObjectFamily object_family            = 2;
+    ObjectFamily object_family            = 2 [deprecated=true]; // ObjectFamily is deprecated. Use ObjectType instead to reason about groupings of objects.
     ObjectType   object_type              = 3;
     int32        object_id                = 4; // signed to match U2G::PickAndPlaceObject which has the option to have objectID<0
     CladRect     img_rect                 = 5; // position in image coords
