@@ -409,6 +409,10 @@
                 </li>
               
                 <li>
+                  <a href="#Anki.Vector.external_interface.AnimationTrigger"><span class="badge">M</span>AnimationTrigger</a>
+                </li>
+              
+                <li>
                   <a href="#Anki.Vector.external_interface.AudioChunk"><span class="badge">M</span>AudioChunk</a>
                 </li>
               
@@ -609,6 +613,14 @@
                 </li>
               
                 <li>
+                  <a href="#Anki.Vector.external_interface.ListAnimationTriggersRequest"><span class="badge">M</span>ListAnimationTriggersRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.ListAnimationTriggersResponse"><span class="badge">M</span>ListAnimationTriggersResponse</a>
+                </li>
+              
+                <li>
                   <a href="#Anki.Vector.external_interface.ListAnimationsRequest"><span class="badge">M</span>ListAnimationsRequest</a>
                 </li>
               
@@ -686,6 +698,10 @@
               
                 <li>
                   <a href="#Anki.Vector.external_interface.PlayAnimationResponse"><span class="badge">M</span>PlayAnimationResponse</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.PlayAnimationTriggerRequest"><span class="badge">M</span>PlayAnimationTriggerRequest</a>
                 </li>
               
                 <li>
@@ -2872,6 +2888,11 @@ minimum host version and receiving a response to see whether the versions are su
               </tr>
             
               <tr>
+                <td>PlayAnimationTrigger</td>
+                <td><p>Requests that Vector play an animation trigger.</p></td>
+              </tr>
+            
+              <tr>
                 <td>PlayAnimation</td>
                 <td><p>Requests that Vector play an animation.</p></td>
               </tr>
@@ -2879,6 +2900,11 @@ minimum host version and receiving a response to see whether the versions are su
               <tr>
                 <td>ListAnimations</td>
                 <td><p>Constructs and returns a list of animations.</p></td>
+              </tr>
+            
+              <tr>
+                <td>ListAnimationTriggers</td>
+                <td><p>Constructs and returns a list of animation triggers.</p></td>
               </tr>
             
               <tr>
@@ -3217,6 +3243,30 @@ rgb values each and timing data for how to transition between them.</p></td>
                   <td>name</td>
                   <td><a href="#string">string</a> </td>
                   <td><p>The name of a given animation. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.AnimationTrigger">AnimationTrigger</h3>
+        An animation trigger object.
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>name</td>
+                  <td><a href="#string">string</a> </td>
+                  <td><p>The name of a given animation trigger. </p></td>
                 </tr>
               
             </tbody>
@@ -4728,6 +4778,44 @@ still connected.
 
         
       
+        <h3 id="Anki.Vector.external_interface.ListAnimationTriggersRequest">ListAnimationTriggersRequest</h3>
+        See ListAnimationTriggers rpc for more details.
+        <p></p>
+
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.ListAnimationTriggersResponse">ListAnimationTriggersResponse</h3>
+        See ListAnimationTriggers rpc for more details.
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p>A generic status. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>animation_trigger_names</td>
+                  <td><a href="#Anki.Vector.external_interface.AnimationTrigger">AnimationTrigger</a> repeated</td>
+                  <td><p>The animation triggers that Vector knows. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
         <h3 id="Anki.Vector.external_interface.ListAnimationsRequest">ListAnimationsRequest</h3>
         See ListAnimations rpc for more details.
         <p></p>
@@ -5289,6 +5377,60 @@ path should be modified or traversed.
                   <td>result</td>
                   <td><a href="#Anki.Vector.external_interface.BehaviorResults">BehaviorResults</a> </td>
                   <td><p>Information on whether the animation played successfully. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.PlayAnimationTriggerRequest">PlayAnimationTriggerRequest</h3>
+        See PlayAnimationTrigger rpc for more details.
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>animation_trigger</td>
+                  <td><a href="#Anki.Vector.external_interface.AnimationTrigger">AnimationTrigger</a> </td>
+                  <td><p>The animation trigger to play. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>loops</td>
+                  <td><a href="#uint32">uint32</a> </td>
+                  <td><p>The number of times to play the animation in a row. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>use_lift_safe</td>
+                  <td><a href="#bool">bool</a> </td>
+                  <td><p>Automatically ignore the lift track if Vector is currently carrying an object. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>ignore_body_track</td>
+                  <td><a href="#bool">bool</a> </td>
+                  <td><p>Ignore any movement of Vector's body when playing the animation. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>ignore_head_track</td>
+                  <td><a href="#bool">bool</a> </td>
+                  <td><p>Ignore any movement of Vector's head when playing the animation. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>ignore_lift_track</td>
+                  <td><a href="#bool">bool</a> </td>
+                  <td><p>Ignore any movement of Vector's lift when playing the animation. </p></td>
                 </tr>
               
             </tbody>
@@ -7061,25 +7203,25 @@ of the robot
               <tr>
                 <td>ALIGNMENT_TYPE_LIFT_FINGER</td>
                 <td>1</td>
-                <td><p>Fingers aligned with object</p></td>
+                <td><p>Align the tips of the lift fingers with the target object</p></td>
               </tr>
             
               <tr>
                 <td>ALIGNMENT_TYPE_LIFT_PLATE</td>
                 <td>2</td>
-                <td><p>Lift plate aligned with object</p></td>
+                <td><p>Align the flat part of the lift with the object (useful for getting the fingers in the cube's grooves)</p></td>
               </tr>
             
               <tr>
                 <td>ALIGNMENT_TYPE_BODY</td>
                 <td>3</td>
-                <td><p>Front of body aligned with object</p></td>
+                <td><p>Align the front of Vector's body (useful for when the lift is up)</p></td>
               </tr>
             
               <tr>
                 <td>ALIGNMENT_TYPE_CUSTOM</td>
                 <td>4</td>
-                <td><p></p></td>
+                <td><p>For use with distanceFromMarker parameter</p></td>
               </tr>
             
           </tbody>
