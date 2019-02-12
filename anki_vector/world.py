@@ -361,6 +361,7 @@ class World(util.Component):
         req = protocol.DisconnectCubeRequest()
         return await self.grpc_interface.DisconnectCube(req)
 
+    # TODO move out of world.py and into lights.py?
     @connection.on_connection_thread()
     async def flash_cube_lights(self) -> protocol.FlashCubeLightsResponse:
         """Flash cube lights
@@ -377,6 +378,7 @@ class World(util.Component):
         req = protocol.FlashCubeLightsRequest()
         return await self.grpc_interface.FlashCubeLights(req)
 
+    # TODO move out of world.py and into objects.py?
     @connection.on_connection_thread(requires_control=False)
     async def forget_preferred_cube(self) -> protocol.ForgetPreferredCubeResponse:
         """Forget preferred cube.
@@ -395,6 +397,7 @@ class World(util.Component):
         req = protocol.ForgetPreferredCubeRequest()
         return await self.grpc_interface.ForgetPreferredCube(req)
 
+    # TODO move out of world.py and into objects.py?
     @connection.on_connection_thread(requires_control=False)
     async def set_preferred_cube(self, factory_id: str) -> protocol.SetPreferredCubeResponse:
         """Set preferred cube.
@@ -417,6 +420,7 @@ class World(util.Component):
         req = protocol.SetPreferredCubeRequest(factory_id=factory_id)
         return await self.grpc_interface.SetPreferredCube(req)
 
+    # TODO better place to put this method than world.py?
     @connection.on_connection_thread(requires_control=False)
     async def delete_custom_objects(self,
                                     delete_custom_marker_objects: bool = True,
@@ -451,6 +455,7 @@ class World(util.Component):
 
         return last_blocking_call
 
+    # TODO better place to put this method than world.py?
     @connection.on_connection_thread(requires_control=False)
     async def define_custom_box(self,
                                 custom_object_type: objects.CustomObjectTypes,
@@ -550,6 +555,7 @@ class World(util.Component):
         self.logger.error("Failed to define Custom Object %s", custom_object_archetype)
         return None
 
+    # TODO better place to put this method than world.py?
     @connection.on_connection_thread(requires_control=False)
     async def define_custom_cube(self,
                                  custom_object_type: objects.CustomObjectTypes,
@@ -617,6 +623,7 @@ class World(util.Component):
         self.logger.error("Failed to define Custom Object %s", custom_object_archetype)
         return None
 
+    # TODO better place to put this method than world.py?
     @connection.on_connection_thread(requires_control=False)
     async def define_custom_wall(self,
                                  custom_object_type: objects.CustomObjectTypes,
@@ -691,6 +698,7 @@ class World(util.Component):
         self.logger.error("Failed to define Custom Object %s", custom_object_archetype)
         return None
 
+    # TODO better place to put this method than world.py?
     def create_custom_fixed_object(self,
                                    pose: util.Pose,
                                    x_size_mm: float,

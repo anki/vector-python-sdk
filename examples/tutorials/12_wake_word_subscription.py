@@ -42,7 +42,7 @@ def main():
             done.set()
 
     args = anki_vector.util.parse_command_args()
-    with anki_vector.Robot(args.serial, requires_behavior_control=False, cache_animation_list=False) as robot:
+    with anki_vector.Robot(args.serial, requires_behavior_control=False) as robot:
         done = threading.Event()
         robot.events.subscribe(on_wake_word, Events.wake_word, done)
 

@@ -20,10 +20,10 @@ Behavior related classes and functions.
 Behaviors represent a complex task which requires Vector's
 internal logic to determine how long it will take. This
 may include combinations of animation, path planning or
-other functionality. Examples include :meth:`drive_on_charger`,
-:meth:`set_lift_height`, etc.
+other functionality. Examples include drive_on_charger,
+set_lift_height, etc.
 
-For commands such as :meth:`go_to_pose`, :meth:`drive_on_charger` and :meth:`dock_with_cube`,
+For commands such as go_to_pose, drive_on_charger and dock_with_cube,
 Vector uses path planning, which refers to the problem of
 navigating the robot from point A to B without collisions. Vector
 loads known obstacles from his map, creates a path to navigate

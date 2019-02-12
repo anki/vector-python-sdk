@@ -60,7 +60,7 @@ class Robot:
         # Create the robot connection
         with anki_vector.Robot() as robot:
             # Run your commands
-            robot.anim.play_animation("anim_turn_left_01")
+            robot.anim.play_animation_trigger("GreetAfterLongTime")
 
     2. Using :func:`connect` and :func:`disconnect` to explicitly open and close the connection:
     it allows the robot's connection to continue in the context in which it started.
@@ -74,7 +74,7 @@ class Robot:
         # Connect to the Robot
         robot.connect()
         # Run your commands
-        robot.anim.play_animation("anim_turn_left_01")
+        robot.anim.play_animation_trigger("GreetAfterLongTime")
         # Disconnect from Vector
         robot.disconnect()
 
@@ -88,7 +88,7 @@ class Robot:
                    that identifies the SDK user. Note: Never share your authentication credentials with anyone.
     :param default_logging: Toggle default logging.
     :param behavior_activation_timeout: The time to wait for control of the robot before failing.
-    :param cache_animation_list: Get the list of animations available at startup.
+    :param cache_animation_lists: Get the list of animation triggers and animations available at startup.
     :param enable_face_detection: Turn on face detection.
     :param enable_audio_feed: Turn audio feed on/off.
     :param enable_custom_object_detection: Turn custom object detection on/off.
@@ -103,7 +103,7 @@ class Robot:
                  config: dict = None,
                  default_logging: bool = True,
                  behavior_activation_timeout: int = 10,
-                 cache_animation_list: bool = True,
+                 cache_animation_lists: bool = True,
                  enable_face_detection: bool = False,
                  enable_audio_feed: bool = False,
                  enable_custom_object_detection: bool = False,
@@ -156,7 +156,7 @@ class Robot:
         self.behavior_activation_timeout = behavior_activation_timeout
         self.enable_face_detection = enable_face_detection
         self.enable_custom_object_detection = enable_custom_object_detection
-        self.cache_animation_list = cache_animation_list
+        self.cache_animation_lists = cache_animation_lists
 
         # Robot state/sensor data
         self._pose: util.Pose = None
@@ -639,7 +639,7 @@ class Robot:
 
             robot = anki_vector.Robot()
             robot.connect()
-            robot.anim.play_animation("anim_turn_left_01")
+            robot.anim.play_animation_trigger("GreetAfterLongTime")
             robot.disconnect()
 
         :param timeout: The time to allow for a connection before a
@@ -665,11 +665,14 @@ class Robot:
         self._vision = vision.VisionComponent(self)
         self._world = world.World(self)
 
-        if self.cache_animation_list:
-            # Load animations so they are ready to play when requested
+        if self.cache_animation_lists:
+            # Load animation triggers and animations so they are ready to play when requested
             anim_request = self._anim.load_animation_list()
             if isinstance(anim_request, concurrent.futures.Future):
                 anim_request.result()
+            anim_trigger_request = self._anim.load_animation_trigger_list()
+            if isinstance(anim_trigger_request, concurrent.futures.Future):
+                anim_trigger_request.result()
 
         # Start audio feed
         if self.enable_audio_feed:
@@ -715,7 +718,7 @@ class Robot:
             import anki_vector
             robot = anki_vector.Robot()
             robot.connect()
-            robot.anim.play_animation("anim_turn_left_01")
+            robot.anim.play_animation_trigger("GreetAfterLongTime")
             robot.disconnect()
         """
         if self.conn.requires_behavior_control:
@@ -822,9 +825,9 @@ class AsyncRobot(Robot):
             # Turn robot, wait for completion
             turn_future = robot.behavior.turn_in_place(degrees(3*360))
             turn_future.result()
-            # Play pounce animation, wait for completion
-            pounce_future = robot.anim.play_animation("anim_pounce_03")
-            pounce_future.result()
+            # Play greet animation trigger, wait for completion
+            greet_future = robot.anim.play_animation_trigger("GreetAfterLongTime")
+            greet_future.result()
             # Make sure text has been spoken
             say_future.result()
 
@@ -844,9 +847,9 @@ class AsyncRobot(Robot):
         # Turn robot, wait for completion
         turn_future = robot.behavior.turn_in_place(degrees(3 * 360))
         turn_future.result()
-        # Play pounce animation, wait for completion
-        pounce_future = robot.anim.play_animation("anim_pounce_03")
-        pounce_future.result()
+        # Play greet animation trigger, wait for completion
+        greet_future = robot.anim.play_animation_trigger("GreetAfterLongTime")
+        greet_future.result()
         # Make sure text has been spoken
         say_future.result()
         # Disconnect from Vector
@@ -865,7 +868,7 @@ class AsyncRobot(Robot):
         import anki_vector
 
         async def callback(robot, event_type, event):
-            await asyncio.wrap_future(robot.anim.play_animation('anim_pounce_success_02'))
+            await asyncio.wrap_future(robot.anim.play_animation_trigger('GreetAfterLongTime'))
             await asyncio.wrap_future(robot.behavior.set_head_angle(anki_vector.util.degrees(40)))
 
         if __name__ == "__main__":
@@ -887,7 +890,7 @@ class AsyncRobot(Robot):
                    that identifies the SDK user. Note: Never share your authentication credentials with anyone.
     :param default_logging: Toggle default logging.
     :param behavior_activation_timeout: The time to wait for control of the robot before failing.
-    :param cache_animation_list: Get the list of animations available at startup.
+    :param cache_animation_lists: Get the list of animation triggers and animations available at startup.
     :param enable_face_detection: Turn on face detection.
     :param enable_audio_feed: Turn audio feed on/off.
     :param enable_custom_object_detection: Turn custom object detection on/off.

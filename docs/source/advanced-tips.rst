@@ -31,8 +31,8 @@ which robot you want to use by passing its serial number as a parameter
 to the Robot constructor::
 
 
-  with anki_vector.Robot("00e20142") as robot:        
-    robot.anim.play_animation('anim_pounce_success_02')
+  with anki_vector.Robot("00e20142") as robot:
+    robot.anim.play_animation_trigger("GreetAfterLongTime")
 
 
 Alternatively, you can pass a ``--serial`` flag on the command
