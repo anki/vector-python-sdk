@@ -33,6 +33,11 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.DriveWheelsRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.DriveWheelsResponse.FromString,
         )
+    self.PlayAnimationTrigger = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/PlayAnimationTrigger',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.PlayAnimationTriggerRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.PlayAnimationResponse.FromString,
+        )
     self.PlayAnimation = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/PlayAnimation',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.PlayAnimationRequest.SerializeToString,
@@ -42,6 +47,11 @@ class ExternalInterfaceStub(object):
         '/Anki.Vector.external_interface.ExternalInterface/ListAnimations',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.ListAnimationsRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.ListAnimationsResponse.FromString,
+        )
+    self.ListAnimationTriggers = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/ListAnimationTriggers',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.ListAnimationTriggersRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.ListAnimationTriggersResponse.FromString,
         )
     self.MoveHead = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/MoveHead',
@@ -311,6 +321,13 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def PlayAnimationTrigger(self, request, context):
+    """Requests that Vector play an animation trigger.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def PlayAnimation(self, request, context):
     """Requests that Vector play an animation.
     """
@@ -320,6 +337,13 @@ class ExternalInterfaceServicer(object):
 
   def ListAnimations(self, request, context):
     """Constructs and returns a list of animations.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def ListAnimationTriggers(self, request, context):
+    """Constructs and returns a list of animation triggers.
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
@@ -688,6 +712,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.DriveWheelsRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.DriveWheelsResponse.SerializeToString,
       ),
+      'PlayAnimationTrigger': grpc.unary_unary_rpc_method_handler(
+          servicer.PlayAnimationTrigger,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.PlayAnimationTriggerRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.PlayAnimationResponse.SerializeToString,
+      ),
       'PlayAnimation': grpc.unary_unary_rpc_method_handler(
           servicer.PlayAnimation,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.PlayAnimationRequest.FromString,
@@ -697,6 +726,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.ListAnimations,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.ListAnimationsRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.ListAnimationsResponse.SerializeToString,
+      ),
+      'ListAnimationTriggers': grpc.unary_unary_rpc_method_handler(
+          servicer.ListAnimationTriggers,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.ListAnimationTriggersRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.ListAnimationTriggersResponse.SerializeToString,
       ),
       'MoveHead': grpc.unary_unary_rpc_method_handler(
           servicer.MoveHead,

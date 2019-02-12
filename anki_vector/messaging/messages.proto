@@ -25,6 +25,12 @@ import "anki_vector/messaging/extensions.proto";
 // still connected.
 message KeepAlivePing {}
 
+// An animation trigger object.
+message AnimationTrigger {
+  // The name of a given animation trigger.
+  string name = 1;
+}
+
 // An animation object.
 message Animation {
   // The name of a given animation.
@@ -67,6 +73,22 @@ message MoveLiftResponse {
   ResponseStatus status = 1;
 }
 
+// See PlayAnimationTrigger rpc for more details.
+message PlayAnimationTriggerRequest {
+  // The animation trigger to play.
+  AnimationTrigger animation_trigger = 1;
+  // The number of times to play the animation in a row.
+  uint32 loops = 2;
+  // Automatically ignore the lift track if Vector is currently carrying an object.
+  bool use_lift_safe = 3;
+  // Ignore any movement of Vector's body when playing the animation.
+  bool ignore_body_track = 4;
+  // Ignore any movement of Vector's head when playing the animation.
+  bool ignore_head_track = 5;
+  // Ignore any movement of Vector's lift when playing the animation.
+  bool ignore_lift_track = 6;
+}
+
 // See PlayAnimation rpc for more details.
 message PlayAnimationRequest {
   // The animation to play.
@@ -98,6 +120,17 @@ message ListAnimationsResponse {
   ResponseStatus status = 1;
   // The animations that Vector knows.
   repeated Animation animation_names = 2;
+}
+
+// See ListAnimationTriggers rpc for more details.
+message ListAnimationTriggersRequest {}
+
+// See ListAnimationTriggers rpc for more details.
+message ListAnimationTriggersResponse {
+  // A generic status.
+  ResponseStatus status = 1;
+  // The animation triggers that Vector knows.
+  repeated AnimationTrigger animation_trigger_names = 2;
 }
 
 // See DisplayFaceImageRGB rpc for more details.
@@ -572,10 +605,10 @@ message GoToPoseResponse {
 // This is a uint8 in CLAD
 enum AlignmentType {
   ALIGNMENT_TYPE_UNKNOWN     = 0;
-  ALIGNMENT_TYPE_LIFT_FINGER = 1; // Fingers aligned with object
-  ALIGNMENT_TYPE_LIFT_PLATE  = 2; // Lift plate aligned with object
-  ALIGNMENT_TYPE_BODY        = 3; // Front of body aligned with object
-  ALIGNMENT_TYPE_CUSTOM      = 4;
+  ALIGNMENT_TYPE_LIFT_FINGER = 1; // Align the tips of the lift fingers with the target object
+  ALIGNMENT_TYPE_LIFT_PLATE  = 2; // Align the flat part of the lift with the object (useful for getting the fingers in the cube's grooves)
+  ALIGNMENT_TYPE_BODY        = 3; // Align the front of Vector's body (useful for when the lift is up)
+  ALIGNMENT_TYPE_CUSTOM      = 4; // For use with distanceFromMarker parameter
 }
 
 message DockWithCubeRequest {

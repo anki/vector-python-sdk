@@ -59,6 +59,9 @@ service ExternalInterface {
   // Sets the speed and acceleration for Vector's wheel motors.
   rpc DriveWheels(DriveWheelsRequest) returns (DriveWheelsResponse) {}
 
+  // Requests that Vector play an animation trigger.
+  rpc PlayAnimationTrigger(PlayAnimationTriggerRequest) returns (PlayAnimationResponse) {}
+
   // Requests that Vector play an animation.
   rpc PlayAnimation(PlayAnimationRequest) returns (PlayAnimationResponse) {}
 
@@ -66,6 +69,14 @@ service ExternalInterface {
   rpc ListAnimations(ListAnimationsRequest) returns (ListAnimationsResponse) {
     option (google.api.http) = {
       post: "/v1/list_animations",
+      body: "*"
+    };
+  }
+
+  // Constructs and returns a list of animation triggers.
+  rpc ListAnimationTriggers(ListAnimationTriggersRequest) returns (ListAnimationTriggersResponse) {
+    option (google.api.http) = {
+      post: "/v1/list_animation_triggers",
       body: "*"
     };
   }
