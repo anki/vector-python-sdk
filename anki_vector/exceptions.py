@@ -140,7 +140,7 @@ class VectorBehaviorControlException(_VectorGenericException):
 class VectorCameraFeedException(_VectorGenericException):
     """The camera feed is not open.
 
-Make sure to enable the camera feed either using Robot(enable_camera_feed=True), or robot.camera.init_camera_feed()"""
+Make sure to enable the camera feed either using Robot(show_viewer=True), or robot.camera.init_camera_feed()"""
 
 
 class VectorConfigurationException(_VectorGenericException):
