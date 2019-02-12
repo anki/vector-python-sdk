@@ -33,7 +33,7 @@ to recognize the object and its position and rotation ("pose").  You can attach
 markers to your own objects for Vector to recognize by printing them out from the
 online documentation.  They will be detected as :class:`CustomObject` instances.
 
-Vector connects to his Light Cubes with BLE.
+Vector connects to his Light Cube with BLE.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
@@ -43,7 +43,7 @@ __all__ = ['LIGHT_CUBE_1_TYPE', 'OBJECT_VISIBILITY_TIMEOUT',
            'FixedCustomObject', 'LightCube', 'ObservableObject']
 
 # TODO Curious why events like the following aren't listed? At least some do seem to be supported in other parts of anki_vector.
-# EvtObjectTapped, EvtObjectConnectChanged, EvtObjectConnected, EvtObjectLocated, EvtObjectMoving, EvtObjectMovingStarted
+# EvtObjectTapped, EvtObjectConnectChanged, EvtObjectConnected, EvtObjectLocated, EvtObjectMoving, EvtObjectMovingStarted, EvtObjectMovingStopped
 
 
 import collections

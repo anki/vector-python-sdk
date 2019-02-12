@@ -50,6 +50,7 @@ from pkg_resources import resource_stream
 from anki_vector import util
 
 
+# TODO Move to exceptions.py
 class InvalidOpenGLGlutImplementation(ImportError):
     """Raised by OpenGLViewer if no valid GLUT implementation available."""
 

@@ -305,7 +305,7 @@ class Connection:
             def callback(robot, event_type, event):
                 robot.conn.request_control()
                 print(robot.conn.requires_behavior_control) # Will print True
-                robot.anim.play_animation('anim_pounce_success_02')
+                robot.anim.play_animation_trigger('GreetAfterLongTime')
                 robot.conn.release_control()
 
             with anki_vector.Robot(requires_behavior_control=False) as robot:

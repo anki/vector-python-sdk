@@ -17,6 +17,9 @@
 Vector builds a memory map of the navigable world around him as he drives
 around. This is mostly based on where objects are seen (the cubes, charger, and
 any custom objects), and also includes where Vector detects cliffs/drops, and
+visible edges (e.g. sudden changes in color).
+
+This differs from a standard occupancy map in that it doesn't deal with
 probabilities of occupancy, but instead encodes what type of content is there.
 
 To use the map you must first call :meth:`anki_vector.nav_map.NavMapComponent.init_nav_map_feed`

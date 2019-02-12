@@ -822,7 +822,13 @@ class Pose:
 
 
 class ImageRect:
-    """Image coordinates and size"""
+    '''Defines a bounding box within an image frame.
+
+    This is used when objects and faces are observed to denote where in
+    the robot's camera view the object or face actually appears.  It's then
+    used by the annotate module to show an outline of a box around
+    the object or face.
+    '''
 
     __slots__ = ('_x_top_left', '_y_top_left', '_width', '_height')
 
