@@ -202,8 +202,6 @@ class Face(objects.ObservableObject):
 
         .. testcode::
 
-        .. testcode::
-
             import time
 
             import anki_vector
