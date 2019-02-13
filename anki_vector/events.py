@@ -371,9 +371,8 @@ class EventHandler:
             import threading
 
             said_text = False
-            evt = threading.Event()
 
-            def on_robot_observed_face(event_type, event, robot):
+            def on_robot_observed_face(robot, event_type, event, evt):
                 print("Vector sees a face")
                 global said_text
                 if not said_text:
@@ -388,7 +387,8 @@ class EventHandler:
                 robot.behavior.set_head_angle(degrees(45.0))
                 robot.behavior.set_lift_height(0.0)
 
-                robot.events.subscribe(on_robot_observed_face, Events.robot_observed_face, robot)
+                evt = threading.Event()
+                robot.events.subscribe(on_robot_observed_face, Events.robot_observed_face, evt)
 
                 print("------ waiting for face events, press ctrl+c to exit early ------")
 
