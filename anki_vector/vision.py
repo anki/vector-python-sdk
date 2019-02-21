@@ -95,7 +95,10 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
 
     @connection.on_connection_thread()
     async def enable_custom_object_detection(self, detect_custom_objects: bool = True):
-        """Enable custom object detection on the robot's camera
+        """Enable custom object detection on the robot's camera.
+
+        If custom object detection is being turned off, the robot may still choose to keep it on
+        if another subscriber (including one internal to the robot) requests this vision mode be active.
 
         :param detect_custom_objects: Specify whether we want the robot to detect custom objects.
 
