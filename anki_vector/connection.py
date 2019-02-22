@@ -52,10 +52,12 @@ MIN_HOST_VERSION = 0
 
 class CONTROL_PRIORITY_LEVEL(Enum):
     """Enum used to specify the priority level for the program."""
-
+    #: Runs above mandatory physical reactions, will drive off table, perform while on a slope,
+    #: in the dark, etc.
+    OVERRIDE_BEHAVIORS_PRIORITY = protocol.ControlRequest.OVERRIDE_BEHAVIORS  # pylint: disable=no-member
     #: Runs below Mandatory Physical Reactions such as tucking Vector's head and arms during a fall,
-    #: yet above Trigger-Word Detection.
-    TOP_PRIORITY_AI = protocol.ControlRequest.TOP_PRIORITY_AI  # pylint: disable=no-member
+    #: yet above Trigger-Word Detection.  Default for normal operation.
+    DEFAULT_PRIORITY = protocol.ControlRequest.DEFAULT  # pylint: disable=no-member
 
 
 class _ControlEventManager:
@@ -109,7 +111,7 @@ class _ControlEventManager:
         """Detect if the behavior control stream is supposed to shut down."""
         return self._is_shutdown
 
-    def request(self, priority: CONTROL_PRIORITY_LEVEL = CONTROL_PRIORITY_LEVEL.TOP_PRIORITY_AI) -> None:
+    def request(self, priority: CONTROL_PRIORITY_LEVEL = CONTROL_PRIORITY_LEVEL.DEFAULT_PRIORITY) -> None:
         """Tell the behavior stream to request control via setting the :class:`request_event`.
 
         This will signal Connection's :func:`_request_handler` generator to send a request control message on the BehaviorControl stream.
@@ -192,10 +194,11 @@ class Connection:
     :param host: The IP address and port of Vector in the format "XX.XX.XX.XX:443".
     :param cert_file: The location of the certificate file on disk.
     :param guid: Your robot's unique secret key.
-    :param requires_behavior_control: True if the connection requires behavior control.
+    :param behavior_control_level: pass one of :class:`CONTROL_PRIORITY_LEVEL` priority levels if the connection
+                                   requires behavior control, or None to decline control.
     """
 
-    def __init__(self, name: str, host: str, cert_file: str, guid: str, requires_behavior_control: bool = True):
+    def __init__(self, name: str, host: str, cert_file: str, guid: str, behavior_control_level: CONTROL_PRIORITY_LEVEL = CONTROL_PRIORITY_LEVEL.DEFAULT_PRIORITY):
         if cert_file is None:
             raise VectorConfigurationException("Must provide a cert file to authenticate to Vector.")
         self._loop: asyncio.BaseEventLoop = None
@@ -213,7 +216,7 @@ class Connection:
         self._ready_signal: threading.Event = threading.Event()
         self._done_signal: asyncio.Event = None
         self._conn_exception = False
-        self._requires_behavior_control = requires_behavior_control
+        self._behavior_control_level = behavior_control_level
         self.active_commands = []
 
     @property
@@ -286,6 +289,27 @@ class Connection:
         return self._interface
 
     @property
+    def behavior_control_level(self) -> CONTROL_PRIORITY_LEVEL:
+        """Returns the specific :class:`CONTROL_PRIORITY_LEVEL` requested for behavior control.
+
+        To be able to directly control Vector's motors, override his screen, play an animation, etc.,
+        the :class:`Connection` will need behavior control. This property identifies the enumerated
+        level of behavior control that the SDK will maintain over the robot.
+
+        For more information about behavior control, see :ref:`behavior <behavior>`.
+
+        .. code-block:: python
+
+            import anki_vector
+
+            with anki_vector.Robot() as robot:
+                print(robot.conn.behavior_control_level) # Will print CONTROL_PRIORITY_LEVEL.DEFAULT_PRIORITY
+                robot.conn.release_control()
+                print(robot.conn.behavior_control_level) # Will print None
+        """
+        return self._behavior_control_level
+
+    @property
     def requires_behavior_control(self) -> bool:
         """True if the :class:`Connection` requires behavior control.
 
@@ -308,14 +332,14 @@ class Connection:
                 robot.anim.play_animation_trigger('GreetAfterLongTime')
                 robot.conn.release_control()
 
-            with anki_vector.Robot(requires_behavior_control=False) as robot:
+            with anki_vector.Robot(behavior_control_level=None) as robot:
                 print(robot.conn.requires_behavior_control) # Will print False
                 robot.events.subscribe(callback, anki_vector.events.Events.robot_observed_face)
 
                 # Waits 10 seconds. Show Vector your face.
                 time.sleep(10)
         """
-        return self._requires_behavior_control
+        return self._behavior_control_level is not None
 
     @property
     def control_lost_event(self) -> asyncio.Event:
@@ -347,7 +371,7 @@ class Connection:
         """
         return self._control_events.granted_event
 
-    def request_control(self, timeout: float = 10.0):
+    def request_control(self, behavior_control_level: CONTROL_PRIORITY_LEVEL = CONTROL_PRIORITY_LEVEL.DEFAULT_PRIORITY, timeout: float = 10.0):
         """Explicitly request behavior control. Typically used after detecting :func:`control_lost_event`.
 
         To be able to directly control Vector's motors, override his screen, play an animation, etc.,
@@ -366,14 +390,18 @@ class Connection:
                 conn.request_control(timeout=5.0)
 
         :param timeout: The time allotted to attempt a connection, in seconds.
+        :param behavior_control_level: request control of Vector's behavior system at a specific level of control.
+                    See :class:`CONTROL_PRIORITY_LEVEL` for more information.
         """
+        if not isinstance(behavior_control_level, CONTROL_PRIORITY_LEVEL):
+            raise TypeError("behavior_control_level must be of type CONTROL_PRIORITY_LEVEL")
         if self._thread is threading.current_thread():
-            return asyncio.ensure_future(self._request_control(timeout=timeout), loop=self._loop)
-        return self.run_coroutine(self._request_control(timeout=timeout))
+            return asyncio.ensure_future(self._request_control(behavior_control_level=behavior_control_level, timeout=timeout), loop=self._loop)
+        return self.run_coroutine(self._request_control(behavior_control_level=behavior_control_level, timeout=timeout))
 
-    async def _request_control(self, timeout: float = 10.0):
-        self._requires_behavior_control = True
-        self._control_events.request()
+    async def _request_control(self, behavior_control_level: CONTROL_PRIORITY_LEVEL = CONTROL_PRIORITY_LEVEL.DEFAULT_PRIORITY, timeout: float = 10.0):
+        self._behavior_control_level = behavior_control_level
+        self._control_events.request(self._behavior_control_level)
         try:
             self._has_control = await asyncio.wait_for(self.control_granted_event.wait(), timeout)
         except futures.TimeoutError as e:
@@ -403,7 +431,7 @@ class Connection:
         return self.run_coroutine(self._release_control(timeout=timeout))
 
     async def _release_control(self, timeout: float = 10.0):
-        self._requires_behavior_control = False
+        self._behavior_control_level = None
         self._control_events.release()
         try:
             self._has_control = await asyncio.wait_for(self.control_lost_event.wait(), timeout)
@@ -456,10 +484,10 @@ class Connection:
             self._loop = asyncio.new_event_loop()
             asyncio.set_event_loop(self._loop)
             self._done_signal = asyncio.Event()
-            if not self._requires_behavior_control:
+            if not self._behavior_control_level:
                 self._control_events = _ControlEventManager(self._loop)
             else:
-                self._control_events = _ControlEventManager(self._loop, priority=CONTROL_PRIORITY_LEVEL.TOP_PRIORITY_AI)
+                self._control_events = _ControlEventManager(self._loop, priority=self._behavior_control_level)
             trusted_certs = None
             with open(self.cert_file, 'rb') as cert:
                 trusted_certs = cert.read()
@@ -505,8 +533,8 @@ class Connection:
                                                            cpu_version=cpu_version)
             self._loop.run_until_complete(self._interface.SDKInitialization(initialize))
 
-            if self._requires_behavior_control:
-                self._loop.run_until_complete(self._request_control(timeout=timeout))
+            if self._behavior_control_level:
+                self._loop.run_until_complete(self._request_control(behavior_control_level=self._behavior_control_level, timeout=timeout))
         except Exception as e:  # pylint: disable=broad-except
             # Propagate the errors to the calling thread
             setattr(self._ready_signal, "exception", e)

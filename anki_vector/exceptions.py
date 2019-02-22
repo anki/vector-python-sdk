@@ -67,7 +67,7 @@ class VectorControlException(VectorException):
 
     def __init__(self, function):
         msg = (f"Unable to run '{function}' because it requires behavior control.\n\n"
-               "Make sure to request control from Vector either by providing the 'enable_behavior_control' parameter to Robot, "
+               "Make sure to request control from Vector either by providing the 'behavior_control_level' parameter to Robot, "
                "or directly call 'request_control()' on your connection.")
         super().__init__(msg)
 

@@ -32,8 +32,10 @@ message ControlRequest {
   enum Priority {
     // Unknown priority. Used for versions that don't understand old priority levels.
     UNKNOWN = 0;
-    // Highest priority level. Directly under mandatory physical reactions.
-    TOP_PRIORITY_AI = 20;
+    // Highest priority level. Suppresses most automatic physical reactions, use with caution. 
+    OVERRIDE_BEHAVIORS = 10;
+    // Normal priority level. Directly under mandatory physical reactions.
+    DEFAULT = 20;
   }
   // Where in the behavior tree the SDK code should be executed.
   Priority priority = 1;
