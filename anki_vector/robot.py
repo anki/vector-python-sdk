@@ -30,10 +30,12 @@ import functools
 from pathlib import Path
 
 from . import (animation, audio, behavior, camera,
-               connection, events, faces, motors,
-               nav_map, screen, photos, proximity,
-               status, touch, util, viewer, vision,
-               world)
+               events, faces, motors, nav_map, screen,
+               photos, proximity, status, touch, util,
+               viewer, vision, world)
+from .connection import (Connection,
+                         on_connection_thread,
+                         CONTROL_PRIORITY_LEVEL)
 from .exceptions import (VectorConfigurationException,
                          VectorNotReadyException,
                          VectorPropertyValueNotReadyException,
@@ -95,7 +97,9 @@ class Robot:
     :param enable_nav_map_feed: Turn navigation map feed on/off.
     :param show_viewer: Specifies whether to display a view of Vector's camera in a window.
     :param show_3d_viewer: Specifies whether to display a 3D view of Vector's understanding of the world in a window.
-    :param requires_behavior_control: Request control of Vector's behavior system."""
+    :param behavior_control_level: Request control of Vector's behavior system at a specific level of control.  Pass
+                                :code:`None` if behavior control is not needed.
+                                See :class:`CONTROL_PRIORITY_LEVEL` for more information."""
 
     def __init__(self,
                  serial: str = None,
@@ -110,7 +114,7 @@ class Robot:
                  enable_nav_map_feed: bool = None,
                  show_viewer: bool = False,
                  show_3d_viewer: bool = False,
-                 requires_behavior_control: bool = True):
+                 behavior_control_level: CONTROL_PRIORITY_LEVEL = CONTROL_PRIORITY_LEVEL.DEFAULT_PRIORITY):
         if default_logging:
             util.setup_basic_logging()
         self.logger = util.get_class_logger(__name__, self)
@@ -133,7 +137,7 @@ class Robot:
                              '{"name":"Vector-XXXX", "ip":"XX.XX.XX.XX", "cert":"/path/to/cert_file", "guid":"<secret_key>"}')
 
         #: :class:`anki_vector.connection.Connection`: The active connection to the robot.
-        self._conn = connection.Connection(self._name, ':'.join([self._ip, self._port]), self._cert_file, self._guid, requires_behavior_control=requires_behavior_control)
+        self._conn = Connection(self._name, ':'.join([self._ip, self._port]), self._cert_file, self._guid, behavior_control_level=behavior_control_level)
         self._events = events.EventHandler(self)
 
         # placeholders for components before they exist
@@ -224,7 +228,7 @@ class Robot:
         return self._force_async
 
     @property
-    def conn(self) -> connection.Connection:
+    def conn(self) -> Connection:
         """A reference to the :class:`~anki_vector.connection.Connection` instance."""
         return self._conn
 
@@ -756,7 +760,7 @@ class Robot:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.disconnect()
 
-    @connection.on_connection_thread(requires_control=False)
+    @on_connection_thread(requires_control=False)
     async def get_battery_state(self) -> protocol.BatteryStateResponse:
         """Check the current state of the robot and cube batteries.
 
@@ -789,7 +793,7 @@ class Robot:
         get_battery_state_request = protocol.BatteryStateRequest()
         return await self.conn.grpc_interface.BatteryState(get_battery_state_request)
 
-    @connection.on_connection_thread(requires_control=False)
+    @on_connection_thread(requires_control=False)
     async def get_version_state(self) -> protocol.VersionStateResponse:
         """Get the versioning information for Vector, including Vector's os_version and engine_build_id.
 
@@ -897,7 +901,9 @@ class AsyncRobot(Robot):
     :param enable_nav_map_feed: Turn navigation map feed on/off.
     :param show_viewer: Specifies whether to display a view of Vector's camera in a window.
     :param show_3d_viewer: Specifies whether to display a 3D view of Vector's understanding of the world in a window.
-    :param requires_behavior_control: Request control of Vector's behavior system."""
+    :param behavior_control_level: Request control of Vector's behavior system at a specific level of control.  Pass
+                                   :code:`None` if behavior control is not needed.
+                                   See :class:`CONTROL_PRIORITY_LEVEL` for more information."""
 
     @functools.wraps(Robot.__init__)
     def __init__(self, *args, **kwargs):

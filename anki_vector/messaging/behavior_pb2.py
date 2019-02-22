@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='anki_vector/messaging/behavior.proto',
   package='Anki.Vector.external_interface',
   syntax='proto3',
-  serialized_pb=_b('\n$anki_vector/messaging/behavior.proto\x12\x1e\x41nki.Vector.external_interface\x1a$anki_vector/messaging/messages.proto\"\x10\n\x0e\x43ontrolRelease\"\x89\x01\n\x0e\x43ontrolRequest\x12I\n\x08priority\x18\x01 \x01(\x0e\x32\x37.Anki.Vector.external_interface.ControlRequest.Priority\",\n\x08Priority\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x13\n\x0fTOP_PRIORITY_AI\x10\x14\"\xbe\x01\n\x16\x42\x65haviorControlRequest\x12I\n\x0f\x63ontrol_release\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ControlReleaseH\x00\x12I\n\x0f\x63ontrol_request\x18\x02 \x01(\x0b\x32..Anki.Vector.external_interface.ControlRequestH\x00\x42\x0e\n\x0crequest_type\"\x18\n\x16\x43ontrolGrantedResponse\"\x15\n\x13\x43ontrolLostResponse\"\x9e\x02\n\x17\x42\x65haviorControlResponse\x12Z\n\x18\x63ontrol_granted_response\x18\x01 \x01(\x0b\x32\x36.Anki.Vector.external_interface.ControlGrantedResponseH\x00\x12Q\n\x12\x63ontrol_lost_event\x18\x02 \x01(\x0b\x32\x33.Anki.Vector.external_interface.ControlLostResponseH\x00\x12\x43\n\nkeep_alive\x18\x03 \x01(\x0b\x32-.Anki.Vector.external_interface.KeepAlivePingH\x00\x42\x0f\n\rresponse_typeb\x06proto3')
+  serialized_pb=_b('\n$anki_vector/messaging/behavior.proto\x12\x1e\x41nki.Vector.external_interface\x1a$anki_vector/messaging/messages.proto\"\x10\n\x0e\x43ontrolRelease\"\x99\x01\n\x0e\x43ontrolRequest\x12I\n\x08priority\x18\x01 \x01(\x0e\x32\x37.Anki.Vector.external_interface.ControlRequest.Priority\"<\n\x08Priority\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x16\n\x12OVERRIDE_BEHAVIORS\x10\n\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\x14\"\xbe\x01\n\x16\x42\x65haviorControlRequest\x12I\n\x0f\x63ontrol_release\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ControlReleaseH\x00\x12I\n\x0f\x63ontrol_request\x18\x02 \x01(\x0b\x32..Anki.Vector.external_interface.ControlRequestH\x00\x42\x0e\n\x0crequest_type\"\x18\n\x16\x43ontrolGrantedResponse\"\x15\n\x13\x43ontrolLostResponse\"\x9e\x02\n\x17\x42\x65haviorControlResponse\x12Z\n\x18\x63ontrol_granted_response\x18\x01 \x01(\x0b\x32\x36.Anki.Vector.external_interface.ControlGrantedResponseH\x00\x12Q\n\x12\x63ontrol_lost_event\x18\x02 \x01(\x0b\x32\x33.Anki.Vector.external_interface.ControlLostResponseH\x00\x12\x43\n\nkeep_alive\x18\x03 \x01(\x0b\x32-.Anki.Vector.external_interface.KeepAlivePingH\x00\x42\x0f\n\rresponse_typeb\x06proto3')
   ,
   dependencies=[anki__vector_dot_messaging_dot_messages__pb2.DESCRIPTOR,])
 
@@ -37,14 +37,18 @@ _CONTROLREQUEST_PRIORITY = _descriptor.EnumDescriptor(
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='TOP_PRIORITY_AI', index=1, number=20,
+      name='OVERRIDE_BEHAVIORS', index=1, number=10,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='DEFAULT', index=2, number=20,
       options=None,
       type=None),
   ],
   containing_type=None,
   options=None,
   serialized_start=222,
-  serialized_end=266,
+  serialized_end=282,
 )
 _sym_db.RegisterEnumDescriptor(_CONTROLREQUEST_PRIORITY)
 
@@ -101,7 +105,7 @@ _CONTROLREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=129,
-  serialized_end=266,
+  serialized_end=282,
 )
 
 
@@ -141,8 +145,8 @@ _BEHAVIORCONTROLREQUEST = _descriptor.Descriptor(
       name='request_type', full_name='Anki.Vector.external_interface.BehaviorControlRequest.request_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=269,
-  serialized_end=459,
+  serialized_start=285,
+  serialized_end=475,
 )
 
 
@@ -165,8 +169,8 @@ _CONTROLGRANTEDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=461,
-  serialized_end=485,
+  serialized_start=477,
+  serialized_end=501,
 )
 
 
@@ -189,8 +193,8 @@ _CONTROLLOSTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=487,
-  serialized_end=508,
+  serialized_start=503,
+  serialized_end=524,
 )
 
 
@@ -237,8 +241,8 @@ _BEHAVIORCONTROLRESPONSE = _descriptor.Descriptor(
       name='response_type', full_name='Anki.Vector.external_interface.BehaviorControlResponse.response_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=511,
-  serialized_end=797,
+  serialized_start=527,
+  serialized_end=813,
 )
 
 _CONTROLREQUEST.fields_by_name['priority'].enum_type = _CONTROLREQUEST_PRIORITY
