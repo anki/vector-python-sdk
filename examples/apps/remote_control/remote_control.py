@@ -132,6 +132,19 @@ class RemoteControlVector:
             self.anim_index_for_key[kI] = anim_idx
             kI += 1
 
+        all_anim_trigger_names = self.vector.anim.anim_trigger_list
+        self.anim_trigger_names = []
+
+        bad_anim_trigger_names = [
+            "InvalidAnimTrigger",
+            "UnitTestAnim"]
+
+        for anim_trigger_name in all_anim_trigger_names:
+            if anim_trigger_name not in bad_anim_trigger_names:
+                self.anim_trigger_names.append(anim_trigger_name)
+
+        self.selected_anim_trigger_name = self.anim_trigger_names[0]
+
         self.action_queue = []
         self.text_to_say = "Hi I'm Vector"
 
@@ -240,6 +253,8 @@ class RemoteControlVector:
                 self.queue_action((self.vector.anim.play_animation, anim_name))
             elif key_code == ord(' '):
                 self.queue_action((self.vector.behavior.say_text, self.text_to_say))
+            elif key_code == ord('X'):
+                self.queue_action((self.vector.anim.play_animation_trigger, self.selected_anim_trigger_name))
 
     def key_code_to_anim_name(self, key_code):
         key_num = key_code - ord('0')
@@ -344,6 +359,12 @@ def get_anim_sel_drop_downs():
         html_text += str(key) + """: """ + get_anim_sel_drop_down(key) + """<br>"""
     return html_text
 
+def get_anim_trigger_sel_drop_down():
+    html_text = """<select onchange="handleAnimTriggerDropDownSelect(this)" name="animTriggerSelector">"""
+    for anim_trigger_name in flask_app.remote_control_vector.anim_trigger_names:
+        html_text += """<option value=""" + anim_trigger_name + """>""" + anim_trigger_name + """</option>"""
+    html_text += """</select>"""
+    return html_text
 
 def to_js_bool_string(bool_value):
     return "true" if bool_value else "false"
@@ -397,6 +418,9 @@ def handle_index_page():
                     <td valign=top>
                     <h2>Animation key mappings:</h2>
                     """ + get_anim_sel_drop_downs() + """<br>
+                    <h2>Animation Triggers:</h2>
+                    """ + get_anim_trigger_sel_drop_down() + """<br><br>
+                    <b>X</b> : Play Animation Trigger<br>
                     </td>
                 </tr>
             </table>
@@ -473,6 +497,12 @@ def handle_index_page():
                     selectedIndex = selectObject.selectedIndex
                     itemName = selectObject.name
                     postHttpRequest("dropDownSelect", {selectedIndex, itemName});
+                }
+
+                function handleAnimTriggerDropDownSelect(selectObject)
+                {
+                    animTriggerName = selectObject.value
+                    postHttpRequest("animTriggerDropDownSelect", {animTriggerName});
                 }
 
                 function handleKeyActivity (e, actionType)
@@ -623,10 +653,13 @@ def handle_setMouseLookEnabled():
 def handle_setFreeplayEnabled():
     """Called from Javascript whenever freeplay mode is toggled on/off"""
     message = json.loads(request.data.decode("utf-8"))
+    isFreeplayEnabled = message['isFreeplayEnabled']
     if flask_app.remote_control_vector:
-        isFreeplayEnabled = message['isFreeplayEnabled']
         connection = flask_app.remote_control_vector.vector.conn
-        connection.request_control(enable=(not isFreeplayEnabled))
+        if isFreeplayEnabled:
+            connection.release_control()
+        else:
+            connection.request_control()
     return ""
 
 
@@ -656,6 +689,13 @@ def handle_dropDownSelect():
 
     return ""
 
+@flask_app.route('/animTriggerDropDownSelect', methods=['POST'])
+def handle_animTriggerDropDownSelect():
+    """Called from Javascript whenever the animTriggerSelector dropdown menu is selected (i.e. modified)"""
+    message = json.loads(request.data.decode("utf-8"))
+    selected_anim_trigger_name = message['animTriggerName']
+    flask_app.remote_control_vector.selected_anim_trigger_name = selected_anim_trigger_name
+    return ""
 
 @flask_app.route('/sayText', methods=['POST'])
 def handle_sayText():
@@ -678,7 +718,6 @@ def handle_updateVector():
 
         return "Action Queue:<br>" + action_queue_text + "\n"
     return ""
-
 
 def run():
     args = util.parse_command_args()
