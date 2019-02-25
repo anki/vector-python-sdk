@@ -840,6 +840,7 @@ class AsyncRobot(Robot):
 
         import anki_vector
         from anki_vector.util import degrees
+
         # Create the robot connection
         with anki_vector.AsyncRobot() as robot:
             # Start saying text asynchronously
@@ -860,6 +861,7 @@ class AsyncRobot(Robot):
 
         import anki_vector
         from anki_vector.util import degrees
+
         # Create a Robot object
         robot = anki_vector.AsyncRobot()
         # Connect to Vector

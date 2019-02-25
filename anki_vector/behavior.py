@@ -245,6 +245,10 @@ class BehaviorComponent(util.Component):
         applicable elements of pose in this situation are position.x position.y
         and rotation.angle_z.
 
+        Note that actions that use the wheels cannot be performed at the same time,
+        otherwise you may see a TRACKS_LOCKED error. Methods that use the wheels include
+        :meth:`go_to_pose`, :meth:`dock_with_cube`, :meth:`turn_in_place` and :meth:`drive_straight`.
+
         :param pose: The destination pose.
         :param relative_to_robot: Whether the given pose is relative to
                                   the robot's pose.
@@ -289,6 +293,10 @@ class BehaviorComponent(util.Component):
         """Tells Vector to dock with a light cube, optionally using a given approach angle and distance.
 
         While docking with the cube, Vector will use path planning.
+
+        Note that actions that use the wheels cannot be performed at the same time,
+        otherwise you may see a TRACKS_LOCKED error. Methods that use the wheels include
+        :meth:`go_to_pose`, :meth:`dock_with_cube`, :meth:`turn_in_place` and :meth:`drive_straight`.
 
         :param target_object: The LightCube object to dock with.
         :param approach_angle: Angle to approach the dock with.
@@ -345,6 +353,10 @@ class BehaviorComponent(util.Component):
 
         Vector must be off of the charger for this movement action.
 
+        Note that actions that use the wheels cannot be performed at the same time,
+        otherwise you may see a TRACKS_LOCKED error. Methods that use the wheels include
+        :meth:`go_to_pose`, :meth:`dock_with_cube`, :meth:`turn_in_place` and :meth:`drive_straight`.
+
         :param distance: The distance to drive
             (>0 for forwards, <0 for backwards)
         :param speed: The speed to drive at
@@ -387,6 +399,10 @@ class BehaviorComponent(util.Component):
         """Turn the robot around its current position.
 
         Vector must be off of the charger for this movement action.
+
+        Note that actions that use the wheels cannot be performed at the same time,
+        otherwise you may see a TRACKS_LOCKED error. Methods that use the wheels include
+        :meth:`go_to_pose`, :meth:`dock_with_cube`, :meth:`turn_in_place` and :meth:`drive_straight`.
 
         :param angle: The angle to turn. Positive
                 values turn to the left, negative values to the right.
