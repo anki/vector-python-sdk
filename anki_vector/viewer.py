@@ -57,7 +57,7 @@ class ViewerComponent(util.Component):
         self._frame_queue: mp.Queue = None
         self._process = None
 
-    def show(self, timeout: float = 10.0) -> None:
+    def show(self, timeout: float = 10.0, force_on_top: bool = False) -> None:
         """Render a video stream using the images obtained from
         Vector's camera feed.
 
@@ -71,7 +71,8 @@ class ViewerComponent(util.Component):
                 time.sleep(10)
 
         :param timeout: Render video for the given time. (Renders forever, if timeout not given.)
-    """
+        :param force_on_top: Specifies whether the window should be forced on top of all others.
+        """
         from . import camera_viewer
 
         self.robot.camera.init_camera_feed()
@@ -83,7 +84,8 @@ class ViewerComponent(util.Component):
                                     args=(self._frame_queue,
                                           self._close_event,
                                           self.overlays,
-                                          timeout),
+                                          timeout,
+                                          force_on_top),
                                     daemon=True,
                                     name="Camera Viewer Process")
         self._process.start()

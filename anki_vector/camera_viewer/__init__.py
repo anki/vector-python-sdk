@@ -17,59 +17,98 @@
 It should be launched in a separate process to allow Vector to run freely while
 the viewer is rendering.
 
-It uses python-opencv, an image processing library which is available on most
-platforms. It also depends on the Pillow library for image processing.
+It uses Tkinter, a standard Python GUI package.
+It also depends on the Pillow library for image processing.
 """
 
 import multiprocessing as mp
-import os
 import sys
+import tkinter as tk
 
 try:
-    import numpy as np
-except ImportError as exc:
-    sys.exit("Cannot import numpy: Do `pip3 install numpy` to install")
-
-try:
-    import cv2
-except ImportError as exc:
-    sys.exit("Cannot import opencv-python: Do `pip3 install opencv-python` to install")
+    from PIL import ImageTk
+except ImportError:
+    sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
 
 
-def main(queue: mp.Queue, event: mp.Event, overlays: list = None, timeout: float = 10.0) -> None:
+class TkCameraViewer:  # pylint: disable=too-few-public-methods
+    """A Tkinter based camera video feed.
+
+    :param queue: A queue to send frames between the user's main thread and the viewer process.
+    :param event: An event to signal that the viewer process has closed.
+    :param overlays: Overlays to be drawn on the images of the renderer.
+    :param timeout: The time without a new frame before the process will exit.
+    :param force_on_top: Specifies whether the window should be forced on top of all others.
+    """
+
+    def __init__(self, queue: mp.Queue, event: mp.Event, overlays: list = None, timeout: float = 10.0, force_on_top: bool = False):
+        self.tk_root = tk.Tk()
+        self.width = 640
+        self.height = 360
+        self.queue = queue
+        self.event = event
+        self.overlays = overlays
+        self.timeout = timeout
+        self.tk_root.title("Vector Camera Feed")
+        self.tk_root.protocol("WM_DELETE_WINDOW", self._delete_window)
+        self.tk_root.bind("<Configure>", self._resize_window)
+        if force_on_top:
+            self.tk_root.wm_attributes("-topmost", 1)
+        self.label = tk.Label(self.tk_root, borderwidth=0)
+        self.label.pack(fill=tk.BOTH, expand=True)
+
+    def _delete_window(self) -> None:
+        """Handle window close event."""
+        self.event.set()
+        self.tk_root.destroy()
+
+    def _resize_window(self, evt: tk.Event) -> None:
+        """Handle window resize event.
+
+        :param evt: A Tkinter window event (keyboard, mouse events, etc).
+        """
+        self.width = evt.width
+        self.height = evt.height
+
+    def draw_frame(self) -> None:
+        """Display an image on to a Tkinter label widget."""
+        image = self.queue.get(True, timeout=self.timeout)
+        while image:
+            if self.event.is_set():
+                break
+            if self.overlays:
+                for overlay in self.overlays:
+                    overlay.apply_overlay(image)
+            if (self.width, self.height) != image.size:
+                image = image.resize((self.width, self.height))
+            tk_image = ImageTk.PhotoImage(image)
+            self.label.config(image=tk_image)
+            self.label.image = tk_image
+            self.tk_root.update_idletasks()
+            self.tk_root.update()
+            image = self.queue.get(True, timeout=self.timeout)
+
+
+def main(queue: mp.Queue, event: mp.Event, overlays: list = None, timeout: float = 10.0, force_on_top: bool = False) -> None:
     """Rendering the frames in another process. This allows the UI to have the
     main thread of its process while the user code continues to execute.
 
     :param queue: A queue to send frames between the user's main thread and the viewer process.
     :param event: An event to signal that the viewer process has closed.
-    :param overlays: overlays to be drawn on the images of the renderer.
+    :param overlays: Overlays to be drawn on the images of the renderer.
     :param timeout: The time without a new frame before the process will exit.
+    :param force_on_top: Specifies whether the window should be forced on top of all others.
     """
-    is_windows = os.name == 'nt'
-    window_name = "Vector Camera Feed"
-    cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+
     try:
-        image = queue.get(True, timeout=timeout)
-        while image:
-            if event.is_set():
-                break
-            if overlays:
-                for overlay in overlays:
-                    overlay.apply_overlay(image)
-            image = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
-            cv2.imshow(window_name, np.array(image))
-            cv2.waitKey(1)
-            if not is_windows and cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE) < 1:
-                break
-            image = queue.get(True, timeout=timeout)
+        tk_viewer = TkCameraViewer(queue, event, overlays, timeout, force_on_top)
+        tk_viewer.draw_frame()
     except TimeoutError:
         pass
     except KeyboardInterrupt:
         pass
     finally:
         event.set()
-        cv2.destroyWindow(window_name)
-        cv2.waitKey(1)
 
 
-__all__ = ['main']
+__all__ = ['TkCameraViewer', 'main']
