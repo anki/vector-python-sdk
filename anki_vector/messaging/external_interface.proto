@@ -34,7 +34,7 @@ enum ProtocolVersion {
   option allow_alias = true;
   PROTOCOL_VERSION_UNKNOWN = 0; // Required zero value for enums
   PROTOCOL_VERSION_MINIMUM = 0; // Minimum supported version
-  PROTOCOL_VERSION_CURRENT = 3; // Current version
+  PROTOCOL_VERSION_CURRENT = 4; // Current version (incremented post-1.4.1 on 2/22/19 by msintov)
 }
 
 // The grpc-defined connection between the SDK and Anki's Vector robot.
