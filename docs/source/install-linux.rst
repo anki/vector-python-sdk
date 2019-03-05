@@ -42,6 +42,10 @@ Python Installation
 
     sudo apt install python3-pip
 
+3. Last, install Tkinter::
+
+    sudo apt-get install python3-pil.imagetk
+
 """"""""""""""""
 SDK Installation
 """"""""""""""""
@@ -98,7 +102,7 @@ Python and Module Installation
 
 3. Install the following additional packages::
 
-    sudo apt-get install build-essential libssl-dev libffi-dev python3.6-dev
+    sudo apt-get install build-essential libssl-dev libffi-dev python3.6-dev python3-pil.imagetk
 
 
 """"""""""""""""
