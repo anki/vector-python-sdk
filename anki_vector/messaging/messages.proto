@@ -109,6 +109,8 @@ message PlayAnimationResponse {
   ResponseStatus status = 1;
   // Information on whether the animation played successfully.
   BehaviorResults result = 2;
+  // The animation that the robot executed.
+  Animation animation = 3;
 }
 
 // See ListAnimations rpc for more details.
