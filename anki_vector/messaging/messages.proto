@@ -211,10 +211,9 @@ message GyroData {
 message ProxData {
   uint32 distance_mm             = 1;
   float  signal_quality          = 2;
-  bool   is_in_valid_range       = 3; // Distance is within valid range
-  bool   is_valid_signal_quality = 4; // Signal quality is sufficiently strong to trust that something was detected
+  bool   unobstructed            = 3; // The sensor has confirmed it has not detected anything up to its max range
+  bool   found_object            = 4; // The sensor detected an object in the valid operating range
   bool   is_lift_in_fov          = 5; // Lift (or object on lift) is occluding the sensor
-  bool   is_too_pitched          = 6; // Robot is too far pitched up or down
 }
 
 message TouchData {
@@ -523,62 +522,62 @@ message PathMotionProfile {
   message ActionResult {
   // The possible results of running an action.
   enum ActionResultCode {
-    ACTION_RESULT_SUCCESS                 = 0;
-    ACTION_RESULT_RUNNING                 = 16777216;
+    ACTION_RESULT_SUCCESS                 = 0; // Action completed successfully.
+    ACTION_RESULT_RUNNING                 = 16777216; // Action is still running.
 
-    ACTION_RESULT_CANCELLED_WHILE_RUNNING = 33554432;
-    NOT_STARTED                           = 33554433;
+    ACTION_RESULT_CANCELLED_WHILE_RUNNING = 33554432; // Action was cancelled by SDK request
+    NOT_STARTED                           = 33554433; // Initial state of an Action to indicate it has not yet started.
 
-    ABORT                                 = 50331648;
-    ANIM_ABORTED                          = 50331649;
-    BAD_MARKER                            = 50331650;
-    BAD_MESSAGE_TAG                       = 50331651;
-    BAD_OBJECT                            = 50331652;
-    BAD_POSE                              = 50331653;
-    BAD_TAG                               = 50331654;
-    CHARGER_UNPLUGGED_ABORT               = 50331655;
+    ABORT                                 = 50331648; // Action aborted itself (e.g. had invalid attributes, or a runtime failure).
+    ANIM_ABORTED                          = 50331649; // Animation Action aborted itself (e.g. there was an error playing the animation).
+    BAD_MARKER                            = 50331650; // There was an error related to vision markers.
+    BAD_MESSAGE_TAG                       = 50331651; // There was a problem related to a subscribed or unsupported message tag
+    BAD_OBJECT                            = 50331652; // There was a problem with the Object ID provided (e.g. there is no Object with that ID).
+    BAD_POSE                              = 50331653; // There was a problem with the Pose provided.
+    BAD_TAG                               = 50331654; // The SDK-provided tag was bad.
+    CHARGER_UNPLUGGED_ABORT               = 50331655; // Vector is on the charger but cannot sense the contacts. Charger may be unplugged.
     CLIFF_ALIGN_FAILED_TIMEOUT            = 50331656;
     CLIFF_ALIGN_FAILED_NO_TURNING         = 50331657;
     CLIFF_ALIGN_FAILED_OVER_TURNING       = 50331658;
     CLIFF_ALIGN_FAILED_NO_WHITE           = 50331659;
     CLIFF_ALIGN_FAILED_STOPPED            = 50331660;
-    FAILED_SETTING_CALIBRATION            = 50331661;
-    FOLLOWING_PATH_BUT_NOT_TRAVERSING     = 50331662;
-    INTERRUPTED                           = 50331663;
-    INVALID_OFF_TREADS_STATE              = 50331664;
-    MISMATCHED_UP_AXIS                    = 50331665;
-    NO_ANIM_NAME                          = 50331666;
-    NO_DISTANCE_SET                       = 50331667;
-    NO_FACE                               = 50331668;
-    NO_GOAL_SET                           = 50331669;
-    NO_PREACTION_POSES                    = 50331670;
-    NOT_CARRYING_OBJECT_ABORT             = 50331671;
-    NOT_ON_CHARGER_ABORT                  = 50331672;
-    NULL_SUBACTION                        = 50331673;
-    PATH_PLANNING_FAILED_ABORT            = 50331674;
-    PICKUP_OBJECT_UNEXPECTEDLY_MOVING     = 50331675;
-    SEND_MESSAGE_TO_ROBOT_FAILED          = 50331676;
-    STILL_CARRYING_OBJECT                 = 50331677;
-    TIMEOUT                               = 50331678;
-    TRACKS_LOCKED                         = 50331679;
-    UNEXPECTED_DOCK_ACTION                = 50331680;
-    UNKNOWN_TOOL_CODE                     = 50331681;
-    UPDATE_DERIVED_FAILED                 = 50331682;
-    VISUAL_OBSERVATION_FAILED             = 50331683;
-    SHOULDNT_DRIVE_ON_CHARGER             = 50331684;
+    FAILED_SETTING_CALIBRATION            = 50331661; // Shouldn't occur outside of factory.
+    FOLLOWING_PATH_BUT_NOT_TRAVERSING     = 50331662; // There was an error following the planned path.
+    INTERRUPTED                           = 50331663; // The action was interrupted by another Action or Behavior.
+    INVALID_OFF_TREADS_STATE              = 50331664; // The robot ended up in an "off treads state" not valid for this action (e.g. the robot was placed on its back while executing a turn).
+    MISMATCHED_UP_AXIS                    = 50331665; // The Up Axis of a carried object doesn't match the desired placement pose.
+    NO_ANIM_NAME                          = 50331666; // No valid Animation name was found.
+    NO_DISTANCE_SET                       = 50331667; // An invalid distance value was given.
+    NO_FACE                               = 50331668; // There was a problem with the Face ID (e.g. Vector doesn't no where it is).
+    NO_GOAL_SET                           = 50331669; // No goal pose was set.
+    NO_PREACTION_POSES                    = 50331670; // No pre-action poses were found (e.g. could not get into position).
+    NOT_CARRYING_OBJECT_ABORT             = 50331671; // No object is being carried, but the action requires one.
+    NOT_ON_CHARGER_ABORT                  = 50331672; // Vector is expected to be on the charger, but is not.
+    NULL_SUBACTION                        = 50331673; // No sub-action was provided.
+    PATH_PLANNING_FAILED_ABORT            = 50331674; // Vector was unable to plan a path.
+    PICKUP_OBJECT_UNEXPECTEDLY_MOVING     = 50331675; // The object that Vector is attempting to pickup is unexpectedly moving (e.g it is being moved by someone else).
+    SEND_MESSAGE_TO_ROBOT_FAILED          = 50331676; // Shouldn't occur in SDK usage.
+    STILL_CARRYING_OBJECT                 = 50331677; // Vector is unexpectedly still carrying an object.
+    TIMEOUT                               = 50331678; // The Action timed out before completing correctly.
+    TRACKS_LOCKED                         = 50331679; // One or more movement tracks (Head, Lift, Body, Face, Backpack Lights, Audio) are already being used by another Action.
+    UNEXPECTED_DOCK_ACTION                = 50331680; // There was an internal error related to an unexpected type of dock action.
+    UNKNOWN_TOOL_CODE                     = 50331681; // Shouldn't occur outside of factory.
+    UPDATE_DERIVED_FAILED                 = 50331682; // There was a problem in the subclass's update on the robot.
+    VISUAL_OBSERVATION_FAILED             = 50331683; // Vector did not see the expected result (e.g. unable to see cube in the expected position after a related action).
+    SHOULDNT_DRIVE_ON_CHARGER             = 50331684; // Action is not permitted on the charger.
 
-    RETRY                                 = 67108864;
-    DID_NOT_REACH_PREACTION_POSE          = 67108865;
-    FAILED_TRAVERSING_PATH                = 67108866;
-    LAST_PICK_AND_PLACE_FAILED            = 67108867;
-    MOTOR_STOPPED_MAKING_PROGRESS         = 67108868;
-    NOT_CARRYING_OBJECT_RETRY             = 67108869;
-    NOT_ON_CHARGER_RETRY                  = 67108870;
-    PATH_PLANNING_FAILED_RETRY            = 67108871;
-    PLACEMENT_GOAL_NOT_FREE               = 67108872;
-    PICKUP_OBJECT_UNEXPECTEDLY_NOT_MOVING = 67108873;
-    STILL_ON_CHARGER                      = 67108874;
-    UNEXPECTED_PITCH_ANGLE                = 67108875;
+    RETRY                                 = 67108864; // The Action failed, but may succeed if retried.
+    DID_NOT_REACH_PREACTION_POSE          = 67108865; // Failed to get into position.
+    FAILED_TRAVERSING_PATH                = 67108866; // Failed to follow the planned path.
+    LAST_PICK_AND_PLACE_FAILED            = 67108867; // The previous attempt to pick and place an object failed.
+    MOTOR_STOPPED_MAKING_PROGRESS         = 67108868; // The required motor isn't moving so the action cannot complete.
+    NOT_CARRYING_OBJECT_RETRY             = 67108869; // Not carrying an object when it was expected, but may succeed if the action is retried.
+    NOT_ON_CHARGER_RETRY                  = 67108870; // Driving onto the charger failed, but may succeed if the action is retried.
+    PATH_PLANNING_FAILED_RETRY            = 67108871; // Vector was unable to plan a path, but may succeed if the action is retried.
+    PLACEMENT_GOAL_NOT_FREE               = 67108872; // There is no room to place the object at the desired destination.
+    PICKUP_OBJECT_UNEXPECTEDLY_NOT_MOVING = 67108873; // The object that Vector thought he was lifting didn't start moving, so he must have missed.
+    STILL_ON_CHARGER                      = 67108874; // Vector failed to drive off the charger.
+    UNEXPECTED_PITCH_ANGLE                = 67108875; // Vector's pitch is at an unexpected angle for the Action.
   }
   ActionResultCode code = 1;
 }
@@ -587,6 +586,17 @@ enum ActionTagConstants {
   INVALID_SDK_TAG = 0;
   FIRST_SDK_TAG   = 2000001;
   LAST_SDK_TAG    = 3000000;
+}
+
+// Cancel a previously-requested action. Action requests include GoToPoseRequest, DockWithCubeRequest, DriveStraightRequest, TurnInPlaceRequest, SetHeadAngleRequest, and SetLiftHeightRequest.
+message CancelActionByIdTagRequest {
+  uint32 id_tag = 1; // Use the id_tag provided to the action request
+}
+
+// Response from the robot to CancelActionByIdTagRequest.
+message CancelActionByIdTagResponse {
+  // A generic status.
+  ResponseStatus status = 1;
 }
 
 // GotoPose
@@ -789,7 +799,7 @@ message AudioSendModeChanged {
   AudioProcessingMode mode = 1;
 }
 
-// One frame of audio data and associated metadata
+// One frame of robot audio data and associated metadata
 message AudioChunk {
   uint32 robot_time_stamp    = 1; // robot time at the final chunk of this audio sample group transmission
   uint32 group_id            = 2; // the id of this sample transmission group
@@ -818,6 +828,58 @@ message AudioFeedResponse {
   uint32 noise_floor_power   = 7; // power value, convert to db with log_10(value)
 }
 
+// Preflight and initialization for audio streaming to robot
+message ExternalAudioStreamPrepare {
+  uint32 audio_frame_rate = 1;    // 8000 - 16025
+  uint32 audio_volume = 2;        // 0 - 100
+}
+
+// Send chunk of audio data to stream on robot
+message ExternalAudioStreamChunk {
+  uint32 audio_chunk_size_bytes = 1;  //current engine maximum of 1024 bytes
+  bytes audio_chunk_samples = 2;      //16-bit little-endian PCM audio data
+}
+
+// Send notification of last chunk of audio sent to robot
+message ExternalAudioStreamComplete {
+}
+
+// Cancel a playing external robot audio stream
+message ExternalAudioStreamCancel {
+}
+
+// Request to stream audio to the robot
+message ExternalAudioStreamRequest {
+  oneof audio_request_type {
+    ExternalAudioStreamPrepare audio_stream_prepare = 1;
+    ExternalAudioStreamChunk audio_stream_chunk = 2;
+    ExternalAudioStreamComplete audio_stream_complete = 3;
+    ExternalAudioStreamCancel audio_stream_cancel = 4;
+  }
+}
+
+// Audio has been played on the Robot
+message ExternalAudioStreamPlaybackComplete {
+}
+
+// Audio playback failure
+message ExternalAudioStreamPlaybackFailure {
+}
+
+// Audio has been sent to robot that would overrun the memory buffer
+message ExternalAudioStreamBufferOverrun {
+  uint32 audio_samples_sent = 1;
+  uint32 audio_samples_played = 2;
+}
+
+// Response from streaming audio to robot
+message ExternalAudioStreamResponse {
+  oneof audio_response_type {
+    ExternalAudioStreamPlaybackComplete audio_stream_playback_complete = 1;
+    ExternalAudioStreamBufferOverrun audio_stream_buffer_overrun = 2;
+    ExternalAudioStreamPlaybackFailure audio_stream_playback_failyer = 3;
+  }
+}
 
 // When enabled, RobotObservedObject messages will be produced
 message EnableMarkerDetectionRequest
