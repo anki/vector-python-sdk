@@ -73,6 +73,11 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_shared__pb2.EventRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_shared__pb2.EventResponse.FromString,
         )
+    self.ExternalAudioStreamPlayback = channel.stream_stream(
+        '/Anki.Vector.external_interface.ExternalInterface/ExternalAudioStreamPlayback',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.ExternalAudioStreamRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.ExternalAudioStreamResponse.FromString,
+        )
     self.BehaviorControl = channel.stream_stream(
         '/Anki.Vector.external_interface.ExternalInterface/BehaviorControl',
         request_serializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlRequest.SerializeToString,
@@ -142,6 +147,11 @@ class ExternalInterfaceStub(object):
         '/Anki.Vector.external_interface.ExternalInterface/IsImageStreamingEnabled',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.IsImageStreamingEnabledRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.IsImageStreamingEnabledResponse.FromString,
+        )
+    self.CancelActionByIdTag = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/CancelActionByIdTag',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CancelActionByIdTagRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CancelActionByIdTagResponse.FromString,
         )
     self.GoToPose = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/GoToPose',
@@ -377,6 +387,13 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def ExternalAudioStreamPlayback(self, request_iterator, context):
+    """Play audio using Vector's speaker
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def BehaviorControl(self, request_iterator, context):
     """Integrate with and acquire control of Vector's AI system.
     """
@@ -471,6 +488,13 @@ class ExternalInterfaceServicer(object):
   def IsImageStreamingEnabled(self, request, context):
     # missing associated documentation comment in .proto file
     pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def CancelActionByIdTag(self, request, context):
+    """Cancel action by id
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
@@ -752,6 +776,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           request_deserializer=anki__vector_dot_messaging_dot_shared__pb2.EventRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_shared__pb2.EventResponse.SerializeToString,
       ),
+      'ExternalAudioStreamPlayback': grpc.stream_stream_rpc_method_handler(
+          servicer.ExternalAudioStreamPlayback,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.ExternalAudioStreamRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.ExternalAudioStreamResponse.SerializeToString,
+      ),
       'BehaviorControl': grpc.stream_stream_rpc_method_handler(
           servicer.BehaviorControl,
           request_deserializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlRequest.FromString,
@@ -821,6 +850,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.IsImageStreamingEnabled,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.IsImageStreamingEnabledRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.IsImageStreamingEnabledResponse.SerializeToString,
+      ),
+      'CancelActionByIdTag': grpc.unary_unary_rpc_method_handler(
+          servicer.CancelActionByIdTag,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CancelActionByIdTagRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CancelActionByIdTagResponse.SerializeToString,
       ),
       'GoToPose': grpc.unary_unary_rpc_method_handler(
           servicer.GoToPose,

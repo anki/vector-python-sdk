@@ -106,6 +106,10 @@ service ExternalInterface {
     };
   }
 
+  // Play audio using Vector's speaker
+  rpc ExternalAudioStreamPlayback(stream ExternalAudioStreamRequest) returns (stream ExternalAudioStreamResponse) {
+  }
+
   // Integrate with and acquire control of Vector's AI system.
   rpc BehaviorControl(stream BehaviorControlRequest) returns (stream BehaviorControlResponse) {
   }
@@ -202,6 +206,14 @@ service ExternalInterface {
   rpc IsImageStreamingEnabled(IsImageStreamingEnabledRequest) returns (IsImageStreamingEnabledResponse) {
     option (google.api.http) = {
       post: "/v1/is_image_streaming_enabled",
+      body: "*"
+    };
+  }
+
+  // Cancel action by id
+  rpc CancelActionByIdTag(CancelActionByIdTagRequest) returns (CancelActionByIdTagResponse) {
+    option (google.api.http) = {
+      post: "/v1/cancel_action_by_id_tag",
       body: "*"
     };
   }
@@ -426,6 +438,6 @@ service ExternalInterface {
       post: "/v1/nav_map_feed",
       body: "*"
     };
-  }  
+  }
 
 }
