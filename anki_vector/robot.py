@@ -319,7 +319,7 @@ class Robot:
 
             import anki_vector
             with anki_vector.Robot() as robot:
-                proximity_data = robot.proximity.last_valid_sensor_reading
+                proximity_data = robot.proximity.last_sensor_reading
                 if proximity_data is not None:
                     print(proximity_data.distance)
         """
