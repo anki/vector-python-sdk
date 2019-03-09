@@ -167,16 +167,13 @@ async def add_proximity_non_contact_to_state(node_position: Vector3, state: MapS
 #: Modifies the map state with the details of a proximity reading
 async def analyze_proximity_sample(reading: anki_vector.proximity.ProximitySensorData, robot: anki_vector.robot.Robot, state: MapState):
     # Check if the reading meets the engine's metrics for valid, and that its within our specified distance threshold.
-    reading_contacted = reading.is_valid and reading.distance.distance_mm < PROXIMITY_SCAN_DISTANCE_THRESHOLD_MM
+    reading_contacted = reading.found_object and reading.distance.distance_mm < PROXIMITY_SCAN_DISTANCE_THRESHOLD_MM
 
     if reading_contacted:
-        # The distance will either be the reading data, or our threshold distance if the reading is considered uncontacted.
-        reading_distance = reading.distance.distance_mm if reading_contacted else PROXIMITY_SCAN_DISTANCE_THRESHOLD_MM
-
         # Convert the distance to a 3d position in worldspace.
         reading_position = Vector3(
-            robot.pose.position.x + cos(robot.pose_angle_rad) * reading_distance,
-            robot.pose.position.y + sin(robot.pose_angle_rad) * reading_distance,
+            robot.pose.position.x + cos(robot.pose_angle_rad) * reading.distance.distance_mm,
+            robot.pose.position.y + sin(robot.pose_angle_rad) * reading.distance.distance_mm,
             robot.pose.position.z)
 
         await add_proximity_contact_to_state(reading_position, state)

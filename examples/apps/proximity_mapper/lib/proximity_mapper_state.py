@@ -27,7 +27,6 @@ from math import cos, sin, pi
 import multiprocessing as mp
 from typing import List
 
-from anki_vector.opengl import opengl
 from anki_vector.util import Vector3
 
 try:
@@ -37,6 +36,7 @@ try:
                            glPointSize, glPolygonMode, glVertex3f)
 
 except ImportError as import_exc:
+    from anki_vector.opengl import opengl
     opengl.raise_opengl_or_pillow_import_error(import_exc)
 
 
