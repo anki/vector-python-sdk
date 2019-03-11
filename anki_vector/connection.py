@@ -585,7 +585,7 @@ class Connection:
         self.active_commands = []
 
     def close(self):
-        """Cleanup the connection, and shutdown all the even handlers.
+        """Cleanup the connection, and shutdown all the event handlers.
 
         Usually this should be invoked by the Robot class when it closes.
 
@@ -686,7 +686,7 @@ class Connection:
         return asyncio.run_coroutine_threadsafe(coro, self._loop)
 
 
-def on_connection_thread(log_messaging: bool = True, requires_control: bool = True) -> Callable[[Coroutine[util.Component, Any, None]], Any]:
+def on_connection_thread(log_messaging: bool = True, requires_control: bool = True, is_cancellable_behavior=False) -> Callable[[Coroutine[util.Component, Any, None]], Any]:
     """A decorator generator used internally to denote which functions will run on
     the connection thread. This unblocks the caller of the wrapped function
     and allows them to continue running while the messages are being processed.
@@ -703,6 +703,7 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
     :param log_messaging: True if the log output should include the entire message or just the size. Recommended for
         large binary return values.
     :param requires_control: True if the function should wait until behavior control is granted before executing.
+    :param is_cancellable_behavior: True if the behavior can be cancelled before it has completed.
     :returns: A decorator which has 3 possible returns based on context: the result of the decorated function,
         the :class:`concurrent.futures.Future` which points to the decorated function, or the
         :class:`asyncio.Future` which points to the decorated function.
@@ -764,13 +765,31 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
             self = args[0]  # Get the self reference from the function call
             # if the call supplies a _return_future parameter then override force_async with that.
             _return_future = kwargs.pop('_return_future', self.force_async)
+
+            behavior_id = None
+            if is_cancellable_behavior:
+                behavior_id = self._get_next_behavior_id()
+                kwargs['_behavior_id'] = behavior_id
+
             wrapped_coroutine = log_handler(self.conn, func, self.logger, *args, **kwargs)
+
             if threading.current_thread() == self.conn.thread:
                 if self.conn.loop.is_running():
                     return asyncio.ensure_future(wrapped_coroutine, loop=self.conn.loop)
                 raise VectorAsyncException("\n\nThe connection thread loop is not running, but a "
                                            "function '{}' is being invoked on that thread.\n".format(func.__name__ if hasattr(func, "__name__") else func))
             future = asyncio.run_coroutine_threadsafe(wrapped_coroutine, self.conn.loop)
+
+            if is_cancellable_behavior:
+                def user_cancelled(fut):
+                    if behavior_id is None:
+                        return
+
+                    if fut.cancelled():
+                        self._abort(behavior_id)
+
+                future.add_done_callback(user_cancelled)
+
             if requires_control:
                 self.conn.active_commands.append(future)
 
