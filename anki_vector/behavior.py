@@ -64,11 +64,10 @@ MAX_LIFT_HEIGHT_MM = 92.0
 MAX_LIFT_HEIGHT = util.distance_mm(MAX_LIFT_HEIGHT_MM)
 
 
-# TODO: Expose is_active and priority states of the SDK behavior control from this class.
 class BehaviorComponent(util.Component):
     """Run behaviors on Vector"""
 
-    _next_action_id = protocol.FIRST_SDK_TAG
+    _next_behavior_id = protocol.FIRST_SDK_TAG
 
     def __init__(self, robot):
         super().__init__(robot)
@@ -130,18 +129,24 @@ class BehaviorComponent(util.Component):
         return protocol.PathMotionProfile(**default_motion_profile)
 
     @classmethod
-    def _get_next_action_id(cls):
-        # Post increment _current_action_id (and loop within the SDK_TAG range)
-        next_action_id = cls._next_action_id
-        if cls._next_action_id == protocol.LAST_SDK_TAG:
-            cls._next_action_id = protocol.FIRST_SDK_TAG
+    def _get_next_behavior_id(cls):
+        # Post increment _current_behavior_id (and loop within the SDK_TAG range)
+        next_behavior_id = cls._next_behavior_id
+        if cls._next_behavior_id == protocol.LAST_SDK_TAG:
+            cls._next_behavior_id = protocol.FIRST_SDK_TAG
         else:
-            cls._next_action_id += 1
-        return next_action_id
+            cls._next_behavior_id += 1
+        return next_behavior_id
 
-    # Navigation actions
     @connection.on_connection_thread()
-    async def drive_off_charger(self):
+    async def _abort(self, behavior_id):
+        # TODO Currently cancels actions only. Add ability to cancel behaviors.
+        cancel_action_request = protocol.CancelActionByIdTagRequest(id_tag=behavior_id)
+        return await self.grpc_interface.CancelActionByIdTag(cancel_action_request)
+
+    # TODO Make this cancellable with is_cancellable_behavior
+    @connection.on_connection_thread()
+    async def drive_off_charger(self) -> protocol.DriveOffChargerResponse:
         """Drive Vector off the charger
 
         If Vector is on the charger, drives him off the charger.
@@ -156,8 +161,9 @@ class BehaviorComponent(util.Component):
         drive_off_charger_request = protocol.DriveOffChargerRequest()
         return await self.grpc_interface.DriveOffCharger(drive_off_charger_request)
 
+    # TODO Make this cancellable with is_cancellable_behavior
     @connection.on_connection_thread()
-    async def drive_on_charger(self):
+    async def drive_on_charger(self) -> protocol.DriveOnChargerResponse:
         """Drive Vector onto the charger
 
         Vector will attempt to find the charger and, if successful, he will
@@ -176,6 +182,7 @@ class BehaviorComponent(util.Component):
         drive_on_charger_request = protocol.DriveOnChargerRequest()
         return await self.grpc_interface.DriveOnCharger(drive_on_charger_request)
 
+    # TODO Make this cancellable with is_cancellable_behavior
     @connection.on_connection_thread()
     async def say_text(self, text: str, use_vector_voice: bool = True, duration_scalar: float = 1.0) -> protocol.SayTextResponse:
         """Make Vector speak text.
@@ -199,6 +206,7 @@ class BehaviorComponent(util.Component):
                                                    duration_scalar=duration_scalar)
         return await self.conn.grpc_interface.SayText(say_text_request)
 
+    # TODO Make this cancellable with is_cancellable_behavior?
     @connection.on_connection_thread()
     async def set_eye_color(self, hue: float, saturation: float) -> protocol.SetEyeColorResponse:
         """Set Vector's eye color.
@@ -210,7 +218,6 @@ class BehaviorComponent(util.Component):
          |  Lime: Set hue to 0.21 and saturation to 1.00.
          |  Sapphire: Set hue to 0.57 and saturation to 1.00.
          |  Purple: Set hue to 0.83 and saturation to 0.76.
-         |  Green: Set hue to 0.30 and saturation to 1.00.
 
         .. testcode::
 
@@ -228,11 +235,12 @@ class BehaviorComponent(util.Component):
         eye_color_request = protocol.SetEyeColorRequest(hue=hue, saturation=saturation)
         return await self.conn.grpc_interface.SetEyeColor(eye_color_request)
 
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(is_cancellable_behavior=True)
     async def go_to_pose(self,
                          pose: util.Pose,
                          relative_to_robot: bool = False,
-                         num_retries: int = 0) -> protocol.GoToPoseResponse:
+                         num_retries: int = 0,
+                         _behavior_id: int = None) -> protocol.GoToPoseResponse:
         """Tells Vector to drive to the specified pose and orientation.
 
         In navigating to the requested pose, Vector will use path planning.
@@ -260,36 +268,48 @@ class BehaviorComponent(util.Component):
         .. testcode::
 
             import anki_vector
-            from anki_vector.util import degrees, Pose
+            from anki_vector.util import degrees, Angle, Pose
 
             with anki_vector.Robot() as robot:
-                pose = Pose(x=50, y=0, z=0, angle_z=anki_vector.util.Angle(degrees=0))
+                pose = Pose(x=50, y=0, z=0, angle_z=Angle(degrees=0))
                 robot.behavior.go_to_pose(pose)
+
+        Example of cancelling the :meth:`go_to_pose` behavior:
+
+        .. testcode::
+
+            import anki_vector
+            from anki_vector.util import degrees, Angle, Pose
+            import time
+
+            with anki_vector.AsyncRobot() as robot:
+                pose = Pose(x=50, y=0, z=0, angle_z=Angle(degrees=0))
+                pose_future = robot.behavior.go_to_pose(pose)
+                time.sleep(3.0)
+                pose_future.cancel()
         """
         if relative_to_robot and self.robot.pose:
             pose = self.robot.pose.define_pose_relative_this(pose)
 
         motion_prof = self._motion_profile_for_proto()
-        # @TODO: the id_tag we supply can be used to cancel this action,
-        #  however when we implement that we will need some way to get the id_tag
-        #  out of this function.
         go_to_pose_request = protocol.GoToPoseRequest(x_mm=pose.position.x,
                                                       y_mm=pose.position.y,
                                                       rad=pose.rotation.angle_z.radians,
                                                       motion_prof=motion_prof,
-                                                      id_tag=self._get_next_action_id(),
+                                                      id_tag=_behavior_id,
                                                       num_retries=num_retries)
 
         return await self.grpc_interface.GoToPose(go_to_pose_request)
 
     # TODO alignment_type coming out ugly in the docs without real values
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(is_cancellable_behavior=True)
     async def dock_with_cube(self,
                              target_object: objects.LightCube,
                              approach_angle: util.Angle = None,
                              alignment_type: protocol.AlignmentType = protocol.ALIGNMENT_TYPE_LIFT_PLATE,
                              distance_from_marker: util.Distance = None,
-                             num_retries: int = 0) -> protocol.DockWithCubeResponse:
+                             num_retries: int = 0,
+                             _behavior_id: int = None) -> protocol.DockWithCubeResponse:
         """Tells Vector to dock with a light cube, optionally using a given approach angle and distance.
 
         While docking with the cube, Vector will use path planning.
@@ -317,19 +337,40 @@ class BehaviorComponent(util.Component):
                 if robot.world.connected_light_cube:
                     dock_response = robot.behavior.dock_with_cube(robot.world.connected_light_cube)
                     docking_result = dock_response.result
+
+        Example of cancelling the :meth:`dock_with_cube` behavior:
+
+        .. testcode::
+
+            import anki_vector
+            from anki_vector.util import degrees
+            import time
+
+            with anki_vector.AsyncRobot() as robot:
+                # If necessary, move Vector's Head and Lift down
+                robot.behavior.set_head_angle(degrees(-5.0))
+                robot.behavior.set_lift_height(0.0)
+
+                robot.world.connect_cube()
+
+                time.sleep(10.0)
+
+                dock_future = robot.behavior.dock_with_cube(
+                    robot.world.connected_light_cube,
+                    num_retries=3)
+                time.sleep(3.0)
+                dock_future.cancel()
+
+                robot.world.disconnect_cube()
         """
         if target_object is None:
             raise VectorException("Must supply a target_object to dock_with_cube")
 
         motion_prof = self._motion_profile_for_proto()
-
-        # @TODO: the id_tag we supply can be used to cancel this action,
-        #  however when we implement that we will need some way to get the id_tag
-        #  out of this function.
         dock_request = protocol.DockWithCubeRequest(object_id=target_object.object_id,
                                                     alignment_type=alignment_type,
                                                     motion_prof=motion_prof,
-                                                    id_tag=self._get_next_action_id(),
+                                                    id_tag=_behavior_id,
                                                     num_retries=num_retries)
         if approach_angle is not None:
             dock_request.use_approach_angle = True
@@ -341,12 +382,13 @@ class BehaviorComponent(util.Component):
         return await self.grpc_interface.DockWithCube(dock_request)
 
     # Movement actions
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(is_cancellable_behavior=True)
     async def drive_straight(self,
                              distance: util.Distance,
                              speed: util.Speed,
                              should_play_anim: bool = True,
-                             num_retries: int = 0) -> protocol.DriveStraightResponse:
+                             num_retries: int = 0,
+                             _behavior_id: int = None) -> protocol.DriveStraightResponse:
         """Tells Vector to drive in a straight line.
 
         Vector will drive for the specified distance (forwards or backwards)
@@ -371,31 +413,41 @@ class BehaviorComponent(util.Component):
         .. testcode::
 
             import anki_vector
-            from anki_vector.util import degrees, distance_mm, speed_mmps
+            from anki_vector.util import distance_mm, speed_mmps
 
             with anki_vector.Robot() as robot:
                 robot.behavior.drive_straight(distance_mm(200), speed_mmps(100))
-        """
 
-        # @TODO: the id_tag we supply can be used to cancel this action,
-        #  however when we implement that we will need some way to get the id_tag
-        #  out of this function.
+        Example of cancelling the :meth:`drive_straight` behavior:
+
+        .. testcode::
+
+            import anki_vector
+            from anki_vector.util import distance_mm, speed_mmps
+            import time
+
+            with anki_vector.AsyncRobot() as robot:
+                drive_future = robot.behavior.drive_straight(distance_mm(300), speed_mmps(50))
+                time.sleep(2.0)
+                drive_future.cancel()
+        """
         drive_straight_request = protocol.DriveStraightRequest(speed_mmps=speed.speed_mmps,
                                                                dist_mm=distance.distance_mm,
                                                                should_play_animation=should_play_anim,
-                                                               id_tag=self._get_next_action_id(),
+                                                               id_tag=_behavior_id,
                                                                num_retries=num_retries)
 
         return await self.grpc_interface.DriveStraight(drive_straight_request)
 
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(is_cancellable_behavior=True)
     async def turn_in_place(self,
                             angle: util.Angle,
                             speed: util.Angle = util.Angle(0.0),
                             accel: util.Angle = util.Angle(0.0),
                             angle_tolerance: util.Angle = util.Angle(0.0),
                             is_absolute: bool = 0,
-                            num_retries: int = 0) -> protocol.TurnInPlaceResponse:
+                            num_retries: int = 0,
+                            _behavior_id: int = None) -> protocol.TurnInPlaceResponse:
         """Turn the robot around its current position.
 
         Vector must be off of the charger for this movement action.
@@ -426,24 +478,38 @@ class BehaviorComponent(util.Component):
 
             with anki_vector.Robot() as robot:
                 robot.behavior.turn_in_place(degrees(90))
+
+        Example of cancelling the :meth:`turn_in_place` behavior:
+
+        .. testcode::
+
+            import anki_vector
+            from anki_vector.util import degrees
+            import time
+
+            with anki_vector.AsyncRobot() as robot:
+                turn_future = robot.behavior.turn_in_place(degrees(360))
+                time.sleep(0.5)
+                turn_future.cancel()
         """
         turn_in_place_request = protocol.TurnInPlaceRequest(angle_rad=angle.radians,
                                                             speed_rad_per_sec=speed.radians,
                                                             accel_rad_per_sec2=accel.radians,
                                                             tol_rad=angle_tolerance.radians,
                                                             is_absolute=is_absolute,
-                                                            id_tag=self._get_next_action_id(),
+                                                            id_tag=_behavior_id,
                                                             num_retries=num_retries)
 
         return await self.grpc_interface.TurnInPlace(turn_in_place_request)
 
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(is_cancellable_behavior=True)
     async def set_head_angle(self,
                              angle: util.Angle,
                              accel: float = 10.0,
                              max_speed: float = 10.0,
                              duration: float = 0.0,
-                             num_retries: int = 0) -> protocol.SetHeadAngleResponse:
+                             num_retries: int = 0,
+                             _behavior_id: int = None) -> protocol.SetHeadAngleResponse:
         """Tell Vector's head to move to a given angle.
 
         :param angle: Desired angle for Vector's head.
@@ -470,6 +536,24 @@ class BehaviorComponent(util.Component):
                 robot.behavior.set_head_angle(MAX_HEAD_ANGLE)
                 # move head to middle
                 robot.behavior.set_head_angle(degrees(35.0))
+
+        Example of cancelling the :meth:`set_head_angle` behavior:
+
+        .. testcode::
+
+            import anki_vector
+            from anki_vector.behavior import MIN_HEAD_ANGLE, MAX_HEAD_ANGLE
+            import time
+
+            with anki_vector.AsyncRobot() as robot:
+                # move head from minimum to maximum angle
+                robot.behavior.set_head_angle(MIN_HEAD_ANGLE)
+                time.sleep(1.0)
+                robot.behavior.set_head_angle(MAX_HEAD_ANGLE)
+                time.sleep(1.0)
+                # move head to middle
+                head_future = robot.behavior.set_head_angle(MIN_HEAD_ANGLE)
+                head_future.cancel()
         """
         if angle < MIN_HEAD_ANGLE:
             self.logger.warning("head angle %s too small, should be in %f..%f range - clamping",
@@ -484,18 +568,18 @@ class BehaviorComponent(util.Component):
                                                               max_speed_rad_per_sec=max_speed,
                                                               accel_rad_per_sec2=accel,
                                                               duration_sec=duration,
-                                                              id_tag=self._get_next_action_id(),
+                                                              id_tag=_behavior_id,
                                                               num_retries=num_retries)
-
         return await self.grpc_interface.SetHeadAngle(set_head_angle_request)
 
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(is_cancellable_behavior=True)
     async def set_lift_height(self,
                               height: float,
                               accel: float = 10.0,
                               max_speed: float = 10.0,
                               duration: float = 0.0,
-                              num_retries: int = 0) -> protocol.SetLiftHeightResponse:
+                              num_retries: int = 0,
+                              _behavior_id: int = None) -> protocol.SetLiftHeightResponse:
         """Tell Vector's lift to move to a given height.
 
         :param height: desired height for Vector's lift 0.0 (bottom) to
@@ -506,6 +590,7 @@ class BehaviorComponent(util.Component):
         :param duration: Time for Vector's lift to move in seconds. A value
                 of zero will make Vector try to do it as quickly as possible.
         :param num_retries: Number of times to re-attempt the action in case of a failure.
+        :param _behavior_id: Id to use to cancel the behavior.
 
         Returns:
             A response from the robot with status information sent when this request successfully completes or fails.
@@ -516,8 +601,24 @@ class BehaviorComponent(util.Component):
 
             with anki_vector.Robot() as robot:
                 robot.behavior.set_lift_height(1.0)
-        """
+                robot.behavior.set_lift_height(0.0)
 
+        Example of cancelling the :meth:`set_lift_height` behavior:
+
+        .. testcode::
+
+            import anki_vector
+            from anki_vector.behavior import MIN_LIFT_HEIGHT_MM, MAX_LIFT_HEIGHT_MM
+            import time
+
+            with anki_vector.AsyncRobot() as robot:
+                robot.behavior.set_lift_height(1.0)
+                time.sleep(1.0)
+                lift_future = robot.behavior.set_lift_height(0.0)
+                time.sleep(1.0)
+                lift_future = robot.behavior.set_lift_height(1.0)
+                lift_future.cancel()                
+        """
         if height < 0.0:
             self.logger.warning("lift height %s too small, should be in 0..1 range - clamping", height)
             height = MIN_LIFT_HEIGHT_MM
@@ -531,7 +632,7 @@ class BehaviorComponent(util.Component):
                                                                 max_speed_rad_per_sec=max_speed,
                                                                 accel_rad_per_sec2=accel,
                                                                 duration_sec=duration,
-                                                                id_tag=self._get_next_action_id(),
+                                                                id_tag=_behavior_id,
                                                                 num_retries=num_retries)
 
         return await self.grpc_interface.SetLiftHeight(set_lift_height_request)

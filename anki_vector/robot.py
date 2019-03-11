@@ -177,7 +177,6 @@ class Robot:
         self._localized_to_object_id: float = None
         self._last_image_time_stamp: float = None
         self._status: status.RobotStatus = status.RobotStatus()
-        self.pending = []
 
         self._enable_audio_feed = enable_audio_feed
         if enable_nav_map_feed is not None:
