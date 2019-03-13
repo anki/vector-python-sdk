@@ -1,4 +1,4 @@
-# Copyright (c) 2018 Anki, Inc.
+# Copyright (c) 2019 Anki, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,166 +12,164 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Support for Vector's audio.
+"""Support for accessing Vector's audio.
 
-Vector has multiple built-in microphones which can detect sound and the direction
-it originated from. The robot then processing this data into a single-channel
-audio feed available to the SDK.
+Vector's speakers can be used for playing user-provided audio.
+TODO Ability to access the Vector's audio stream to come.
 
 The :class:`AudioComponent` class defined in this module is made available as
-:attr:`anki_vector.robot.Robot.audio` and can be used to enable/disable audio
-sending and process audio data being sent by the robot.
+:attr:`anki_vector.robot.Robot.audio` and can be used to play audio data on the robot.
 """
-
-# TODO Not yet supported. Audio from robot does not yet reach Python.
 
 # __all__ should order by constants, event classes, other classes, functions.
 __all__ = ['AudioComponent']
 
 import asyncio
-from concurrent.futures import CancelledError
-import sys
-
+from concurrent import futures
+import time
+import wave
+from google.protobuf.text_format import MessageToString
 from . import util
-from .events import Events
+from .connection import on_connection_thread
+from .exceptions import VectorExternalAudioPlaybackException
 from .messaging import protocol
 
-try:
-    import numpy as np
-except ImportError:
-    sys.exit("Cannot import numpy: Do `pip3 install numpy` to install")
+
+MAX_ROBOT_AUDIO_CHUNK_SIZE = 1024  # 1024 is maximum, larger sizes will fail
+DEFAULT_FRAME_SIZE = MAX_ROBOT_AUDIO_CHUNK_SIZE // 2
 
 
 class AudioComponent(util.Component):
-    """Represents Vector's audio feed.
+    """Handles audio on Vector.
 
-    The AudioComponent object receives audio data from Vector's microphones.
+    The AudioComponent object plays audio data to Vector's speaker.
+    Ability to access the Vector's audio stream to come.
 
-    The :class:`anki_vector.robot.Robot` or :class:`anki_vector.robot.AsyncRobot` instance owns this audio component.
+    The :class:`anki_vector.robot.Robot` or :class:`anki_vector.robot.AsyncRobot` instance
+    owns this audio component.
 
     .. code-block:: python
 
-        import time
-
-        try:
-            from scipy.io import wavfile
-        except ImportError as exc:
-            sys.exit("Cannot import scipy: Do `pip3 install scipy` to install")
-
-        with anki_vector.Robot(enable_audio_feed=True) as robot:
-            time.sleep(5.0)
-            wavfile.write("outputfile.wav", anki_vector.protocol.PROCESSED_SAMPLE_RATE, robot.audio.raw_audio_waveform_history)
-
-    :param robot: A reference to the owner Robot object.
+        with anki_vector.Robot() as robot:
+            robot.audio.play_wav_file('sounds/vector_alert.wav')
     """
-    # TODO When audio is ready, convert `.. code-block:: python` to `.. testcode::`
+
+    # TODO restore audio feed code when ready
 
     def __init__(self, robot):
         super().__init__(robot)
+        self._is_shutdown = False
+        # don't create asyncio.Events here, they are not thread-safe
+        self._is_active_event = None
+        self._done_event = None
 
-        # @TODO: Add a variable tracking the current audio send mode once that is implemented
-        self._raw_audio_waveform_history = np.empty(0, dtype=np.int16)
-        self._latest_sample_id = None
+    def _open_file(self, filename):
+        _reader = wave.open(filename, 'rb')
+        _params = _reader.getparams()
+        self.logger.info("Playing audio file %s", filename)
 
-        self._audio_processing_mode = None
+        if _params.sampwidth != 2 or _params.nchannels != 1 or _params.framerate > 16025 or _params.framerate < 8000:
+            raise VectorExternalAudioPlaybackException(
+                f"Audio format must be 8000-16025 hz, 16 bits, 1 channel.  "
+                f"Found {_params.framerate} hz/{_params.sampwidth*8} bits/{_params.nchannels} channels")
 
-        self._audio_feed_task: asyncio.Task = None
+        return _reader, _params
 
-        # Subscribe to callbacks related to objects
-        robot.events.subscribe(self._on_audio_send_mode_changed_event,
-                               Events.audio_send_mode_changed)
+    async def _request_handler(self, reader, params, volume):
+        """Handles generating request messages for the AudioPlaybackStream."""
+        frames = params.nframes  # 16 bit samples, not bytes
 
-    # @TODO: Implement audio history as ringbuffer, caching only recent audio
-    # @TODO: Add function to return a recent chunk of the audio history in a standardized python audio package format
-    # @TODO: Add hook for feeding audio stream into external voice processing library
+        # send preparation message
+        msg = protocol.ExternalAudioStreamPrepare(audio_frame_rate=params.framerate, audio_volume=volume)
+        msg = protocol.ExternalAudioStreamRequest(audio_stream_prepare=msg)
 
-    @property
-    def raw_audio_waveform_history(self) -> np.array:
-        """:class:`np.array`: The most recent processed image received from the robot.
+        yield msg
+        await asyncio.sleep(0)  # give event loop a chance to process messages
 
-        Audio history as signed-16-bit-int waveform data
+        # count of full and partial chunks
+        total_chunks = (frames + DEFAULT_FRAME_SIZE - 1) // DEFAULT_FRAME_SIZE
+        curr_chunk = 0
+        start_time = time.time()
+        self.logger.debug("Starting stream time %f", start_time)
 
-        The sample rate from the microphones is 15625, which the robot processes at 16khz. As a result the pitch is
-        altered by 2.4%.  The last 16000 values of the array represent the last second of audio amplitude.
+        while frames > 0 and not self._done_event.is_set():
+            read_count = min(frames, DEFAULT_FRAME_SIZE)
+            audio_data = reader.readframes(read_count)
+            msg = protocol.ExternalAudioStreamChunk(audio_chunk_size_bytes=len(audio_data), audio_chunk_samples=audio_data)
+            msg = protocol.ExternalAudioStreamRequest(audio_stream_chunk=msg)
+            yield msg
+            await asyncio.sleep(0)
+
+            # check if streaming is way ahead of audio playback time
+            elapsed = time.time() - start_time
+            expected_data_count = elapsed * params.framerate
+            time_ahead = (curr_chunk * DEFAULT_FRAME_SIZE - expected_data_count) / params.framerate
+            if time_ahead > 1.0:
+                self.logger.debug("waiting %f to catchup chunk %f", time_ahead - 0.5, curr_chunk)
+                await asyncio.sleep(time_ahead - 0.5)
+            frames = frames - read_count
+            curr_chunk += 1
+            if curr_chunk == total_chunks:
+                # last chunk:  time to stop stream
+                msg = protocol.ExternalAudioStreamComplete()
+                msg = protocol.ExternalAudioStreamRequest(audio_stream_complete=msg)
+
+                yield msg
+                await asyncio.sleep(0)
+
+        reader.close()
+
+        # Need the done message from the robot
+        await self._done_event.wait()
+        self._done_event.clear()
+
+    @on_connection_thread(requires_control=True)
+    async def stream_wav_file(self, filename, volume=50):
+        """ Plays audio using Vector's speakers.
 
         .. code-block:: python
 
-            import time
+            with anki_vector.Robot() as robot:
+                robot.audio.play_wav_file('sounds/vector_alert.wav')
 
-            try:
-                from scipy.io import wavfile
-            except ImportError as exc:
-                sys.exit("Cannot import scipy: Do `pip3 install scipy` to install")
-
-            with anki_vector.Robot(enable_audio_feed=True) as robot:
-                time.sleep(5.0)
-                wavfile.write("outputfile.wav", anki_vector.protocol.PROCESSED_SAMPLE_RATE, robot.audio.raw_audio_waveform_history)
-
-        :getter: Returns the numpy array representing the audio history
+        :param filename: the filename/path to the .wav audio file
+        :param volume: the audio playback level (0-100)
         """
-        # TODO When audio is ready, convert `.. code-block:: python` to `.. testcode::`
-        return self._raw_audio_waveform_history
 
-    @property
-    def latest_sample_id(self) -> int:
-        """The most recent received audio sample from the robot.
+        # TODO make this support multiple simultaneous sound playback
+        if self._is_active_event is None:
+            self._is_active_event = asyncio.Event()
 
-        :getter: Returns the id for the latest audio sample
-        """
-        return self._latest_sample_id
+        if self._is_active_event.is_set():
+            raise VectorExternalAudioPlaybackException("Cannot start audio when another sound is playing")
 
-    @property
-    def audio_processing_mode(self) -> protocol.AudioProcessingMode:
-        """The current mode which the robot is processing audio.
+        if volume < 0 or volume > 100:
+            raise VectorExternalAudioPlaybackException("Volume must be between 0 and 100")
+        _file_reader, _file_params = self._open_file(filename)
+        playback_error = None
+        self._is_active_event.set()
 
-        :getter: Returns the most recently received audio processing mode on the robot
-        """
-        return self._audio_processing_mode
+        if self._done_event is None:
+            self._done_event = asyncio.Event()
 
-    def init_audio_feed(self) -> None:
-        """Begin audio feed task"""
-        if not self._audio_feed_task or self._audio_feed_task.done():
-            self._audio_feed_task = self.robot.loop.create_task(self._request_and_handle_audio())
-
-    def close_audio_feed(self) -> None:
-        """Cancel audio feed task"""
-        if self._audio_feed_task:
-            self._audio_feed_task.cancel()
-            self.robot.loop.run_until_complete(self._audio_feed_task)
-
-    def _on_audio_send_mode_changed_event(self, msg: protocol.AudioSendModeChanged) -> None:
-        """Callback for changes in the robot's audio processing mode"""
-        self._audio_processing_mode = msg.mode
-        self.logger.info('Audio processing mode changed to {0}'.format(self._audio_processing_mode))
-
-    def _process_audio(self, msg: protocol.AudioFeedResponse) -> None:
-        """Processes raw data from the robot into a more more useful image structure."""
-        audio_data = msg.signal_power
-
-        expected_size = protocol.SAMPLE_COUNTS_PER_SDK_MESSAGE
-        received_size = int(len(audio_data) / 2)
-        if expected_size != received_size:
-            self.logger.warning('WARNING: audio stream received {0} bytes while {1} were expected'.format(received_size, expected_size))
-
-        # Constuct numpy array out of source data
-        array = np.frombuffer(audio_data, dtype=np.int16, count=received_size, offset=0)
-
-        # Append to audio history
-        self._raw_audio_waveform_history = np.append(self._raw_audio_waveform_history, array)
-
-        self._latest_sample_id = len(self._raw_audio_waveform_history) - 1
-
-    async def _request_and_handle_audio(self) -> None:
-        """Queries and listens for audio feed events from the robot.
-        Received events are parsed by a helper function."""
         try:
-            req = protocol.AudioFeedRequest()
-            async for evt in self.grpc_interface.AudioFeed(req):
-                # If the audio feed is disabled after stream is setup, exit the stream
-                # (the audio feed on the robot is disabled internally on stream exit)
-                if not self.robot.enable_audio_feed:
-                    self.logger.warning('Audio feed has been disabled. Enable the feed to start/continue receiving audio feed data')
-                    return
-                self._process_audio(evt)
-        except CancelledError:
-            self.logger.debug('Audio feed task was cancelled. This is expected during disconnection.')
+            async for response in self.grpc_interface.ExternalAudioStreamPlayback(self._request_handler(_file_reader, _file_params, volume)):
+                self.logger.info("ExternalAudioStream %s", MessageToString(response, as_one_line=True))
+                response_type = response.WhichOneof("audio_response_type")
+                if response_type == 'audio_stream_playback_complete':
+                    playback_error = None
+                elif response_type == 'audio_stream_buffer_overrun':
+                    playback_error = response_type
+                elif response_type == 'audio_stream_playback_failyer':
+                    playback_error = response_type
+                self._done_event.set()
+        except asyncio.CancelledError:
+            self.logger.debug('Audio Stream future was cancelled.')
+        except futures.CancelledError:
+            self.logger.debug('Audio Stream handler task was cancelled.')
+        finally:
+            self._is_active_event = None
+            self._done_event = None
+
+        if playback_error is not None:
+            raise VectorExternalAudioPlaybackException(f"Error reported during audio playback {playback_error}")

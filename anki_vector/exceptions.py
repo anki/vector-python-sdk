@@ -37,6 +37,7 @@ __all__ = ['VectorAsyncException',
            'VectorUnauthenticatedException',
            'VectorUnavailableException',
            'VectorUnimplementedException',
+           'VectorExternalAudioPlaybackException',
            'connection_error']
 
 
@@ -173,3 +174,7 @@ class VectorUnreliableEventStreamException(VectorException):
     """The robot event stream is currently unreliable.
 
 Please ensure the app is not connected. If this persists, reboot Vector and try again."""
+
+
+class VectorExternalAudioPlaybackException(VectorException):
+    """Failed to play external audio on Vector."""

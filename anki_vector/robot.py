@@ -31,8 +31,8 @@ from pathlib import Path
 
 from . import (animation, audio, behavior, camera,
                events, faces, motors, nav_map, screen,
-               photos, proximity, status, touch, util,
-               viewer, vision, world)
+               photos, proximity, status, touch,
+               util, viewer, vision, world)
 from .connection import (Connection,
                          on_connection_thread,
                          CONTROL_PRIORITY_LEVEL)
@@ -245,9 +245,7 @@ class Robot:
 
     @property
     def audio(self) -> audio.AudioComponent:
-        """The audio instance used to control Vector's audio feed."""
-
-        print("\n\nNote: Audio stream is not yet supported and does not yet come from Vector's microphones.\n\n")
+        """The audio instance used to control Vector's microphone feed and speaker playback."""
 
         if self._audio is None:
             raise VectorNotReadyException("AudioComponent is not yet initialized")
@@ -610,8 +608,7 @@ class Robot:
     @enable_audio_feed.setter
     def enable_audio_feed(self, enable) -> None:
         self._enable_audio_feed = enable
-        if self.enable_audio_feed:
-            self.audio.init_audio_feed()
+        # TODO add audio feed enablement when ready
 
     # Unpack streamed data to robot's internal properties
     def _unpack_robot_state(self, _robot, _event_type, msg):
@@ -653,7 +650,7 @@ class Robot:
 
         # Initialize components
         self._anim = animation.AnimationComponent(self)
-        # self._audio = audio.AudioComponent(self) # TODO turn on
+        self._audio = audio.AudioComponent(self)
         self._behavior = behavior.BehaviorComponent(self)
         self._camera = camera.CameraComponent(self)
         self._faces = faces.FaceComponent(self)
@@ -677,9 +674,7 @@ class Robot:
             if isinstance(anim_trigger_request, concurrent.futures.Future):
                 anim_trigger_request.result()
 
-        # Start audio feed
-        if self.enable_audio_feed:
-            self.audio.init_audio_feed()
+        # TODO enable audio feed when ready
 
         # Start rendering camera feed
         if self._show_viewer:
@@ -736,9 +731,7 @@ class Robot:
         # Shutdown camera feed
         self.camera.close_camera_feed()
 
-        # Shutdown audio feed
-        if self._audio is not None:
-            self._audio.close_audio_feed()
+        # TODO shutdown audio feed when available
 
         # Shutdown nav map feed
         self.nav_map.close_nav_map_feed()
