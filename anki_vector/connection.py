@@ -50,7 +50,7 @@ from .version import __version__
 class CONTROL_PRIORITY_LEVEL(Enum):
     """Enum used to specify the priority level for the program."""
     #: Runs above mandatory physical reactions, will drive off table, perform while on a slope,
-    #: in the dark, etc.
+    #: ignore low battery state, work in the dark, etc.
     OVERRIDE_BEHAVIORS_PRIORITY = protocol.ControlRequest.OVERRIDE_BEHAVIORS  # pylint: disable=no-member
     #: Runs below Mandatory Physical Reactions such as tucking Vector's head and arms during a fall,
     #: yet above Trigger-Word Detection.  Default for normal operation.
