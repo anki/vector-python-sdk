@@ -294,6 +294,24 @@ service ExternalInterface {
   // Tell Vector's lift to move to a given height.
   rpc SetLiftHeight(SetLiftHeightRequest) returns (SetLiftHeightResponse) {}
 
+  // Tell Vector to turn towards this face.
+  rpc TurnTowardsFace(TurnTowardsFaceRequest) returns (TurnTowardsFaceResponse) {}
+
+  // Tell Vector to drive to the specified object.
+  rpc GoToObject(GoToObjectRequest) returns (GoToObjectResponse) {}
+
+  // Tell Vector to roll his cube.
+  rpc RollObject(RollObjectRequest) returns (RollObjectResponse) {}
+
+  // Tell Vector to "pop a wheelie" using his cube.
+  rpc PopAWheelie(PopAWheelieRequest) returns (PopAWheelieResponse) {}
+
+  // Instruct the robot to pick up the supplied object.
+  rpc PickupObject(PickupObjectRequest) returns (PickupObjectResponse) {}
+
+  // Ask Vector to place the object he is carrying on the ground at the current location.
+  rpc PlaceObjectOnGroundHere(PlaceObjectOnGroundHereRequest) returns (PlaceObjectOnGroundHereResponse) {}
+
   rpc UserAuthentication(UserAuthenticationRequest) returns (UserAuthenticationResponse) {
     option (google.api.http) = {
       post: "/v1/user_authentication",
