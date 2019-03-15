@@ -213,6 +213,36 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetLiftHeightRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetLiftHeightResponse.FromString,
         )
+    self.TurnTowardsFace = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/TurnTowardsFace',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.TurnTowardsFaceRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.TurnTowardsFaceResponse.FromString,
+        )
+    self.GoToObject = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/GoToObject',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.GoToObjectRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.GoToObjectResponse.FromString,
+        )
+    self.RollObject = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/RollObject',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.RollObjectRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.RollObjectResponse.FromString,
+        )
+    self.PopAWheelie = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/PopAWheelie',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.PopAWheelieRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.PopAWheelieResponse.FromString,
+        )
+    self.PickupObject = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/PickupObject',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.PickupObjectRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.PickupObjectResponse.FromString,
+        )
+    self.PlaceObjectOnGroundHere = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/PlaceObjectOnGroundHere',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.PlaceObjectOnGroundHereRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.PlaceObjectOnGroundHereResponse.FromString,
+        )
     self.UserAuthentication = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/UserAuthentication',
         request_serializer=anki__vector_dot_messaging_dot_shared__pb2.UserAuthenticationRequest.SerializeToString,
@@ -583,6 +613,48 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def TurnTowardsFace(self, request, context):
+    """Tell Vector to turn towards this face.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def GoToObject(self, request, context):
+    """Tell Vector to drive to the specified object.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def RollObject(self, request, context):
+    """Tell Vector to roll his cube.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def PopAWheelie(self, request, context):
+    """Tell Vector to "pop a wheelie" using his cube.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def PickupObject(self, request, context):
+    """Instruct the robot to pick up the supplied object.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def PlaceObjectOnGroundHere(self, request, context):
+    """Ask Vector to place the object he is carrying on the ground at the current location.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def UserAuthentication(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -915,6 +987,36 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.SetLiftHeight,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetLiftHeightRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetLiftHeightResponse.SerializeToString,
+      ),
+      'TurnTowardsFace': grpc.unary_unary_rpc_method_handler(
+          servicer.TurnTowardsFace,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.TurnTowardsFaceRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.TurnTowardsFaceResponse.SerializeToString,
+      ),
+      'GoToObject': grpc.unary_unary_rpc_method_handler(
+          servicer.GoToObject,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.GoToObjectRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.GoToObjectResponse.SerializeToString,
+      ),
+      'RollObject': grpc.unary_unary_rpc_method_handler(
+          servicer.RollObject,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.RollObjectRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.RollObjectResponse.SerializeToString,
+      ),
+      'PopAWheelie': grpc.unary_unary_rpc_method_handler(
+          servicer.PopAWheelie,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.PopAWheelieRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.PopAWheelieResponse.SerializeToString,
+      ),
+      'PickupObject': grpc.unary_unary_rpc_method_handler(
+          servicer.PickupObject,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.PickupObjectRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.PickupObjectResponse.SerializeToString,
+      ),
+      'PlaceObjectOnGroundHere': grpc.unary_unary_rpc_method_handler(
+          servicer.PlaceObjectOnGroundHere,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.PlaceObjectOnGroundHereRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.PlaceObjectOnGroundHereResponse.SerializeToString,
       ),
       'UserAuthentication': grpc.unary_unary_rpc_method_handler(
           servicer.UserAuthentication,

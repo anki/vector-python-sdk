@@ -703,6 +703,93 @@ message SetLiftHeightResponse {
   ActionResult   result = 2;
 }
 
+// TurnTowardsFace
+message TurnTowardsFaceRequest {
+  int32              face_id                    = 1;
+  float              max_turn_angle_rad         = 2;
+  int32              id_tag                     = 3;
+  int32              num_retries                = 4;
+}
+
+message TurnTowardsFaceResponse {
+  ResponseStatus status = 1;
+  ActionResult   result = 2;
+}
+
+// GoToObject
+message GoToObjectRequest { 
+  int32             object_id                      = 1;
+  PathMotionProfile motion_prof                    = 2;
+  float             distance_from_object_origin_mm = 3;
+  bool              use_pre_dock_pose              = 4;
+  int32             id_tag                         = 5;
+  int32             num_retries                    = 6;
+}
+
+message GoToObjectResponse {
+  ResponseStatus status = 1;
+  ActionResult   result = 2;
+}
+
+// RollObject
+message RollObjectRequest {
+  int32             object_id            = 1; // negative value means "currently selected object"
+  PathMotionProfile motion_prof          = 2;
+  float             approach_angle_rad   = 3;
+  bool              use_approach_angle   = 4;
+  bool              use_pre_dock_pose    = 5;
+  int32             id_tag               = 6;
+  int32             num_retries          = 7;
+}
+
+message RollObjectResponse {
+  ResponseStatus status = 1;
+  ActionResult   result = 2;
+}
+
+// PopAWheelie
+message PopAWheelieRequest {
+  int32             object_id          = 1; // negative value means "currently selected object"
+  PathMotionProfile motion_prof        = 2;
+  float             approach_angle_rad = 3;
+  bool              use_approach_angle = 4;
+  bool              use_pre_dock_pose  = 5;
+  int32             id_tag             = 6;
+  int32             num_retries        = 7;
+}
+
+message PopAWheelieResponse {
+  ResponseStatus status = 1;
+  ActionResult   result = 2;
+}
+
+// PickupObject
+message PickupObjectRequest {
+  int32              object_id          = 1; // negative value means "currently selected object"
+  PathMotionProfile  motion_prof        = 2;
+  float              approach_angle_rad = 3;
+  bool               use_approach_angle = 4;
+  bool               use_pre_dock_pose  = 5;
+  int32              id_tag             = 6;
+  int32              num_retries        = 7;
+}
+
+message PickupObjectResponse {
+  ResponseStatus status = 1;
+  ActionResult   result = 2;
+}
+
+// PlaceObjectOnGroundHere
+message PlaceObjectOnGroundHereRequest {
+  int32 id_tag      = 1;
+  int32 num_retries = 2;
+}
+
+message PlaceObjectOnGroundHereResponse {
+  ResponseStatus status = 1;
+  ActionResult   result = 2;
+}
+
 enum BatteryLevel {
   BATTERY_LEVEL_UNKNOWN = 0;
   BATTERY_LEVEL_LOW     = 1;

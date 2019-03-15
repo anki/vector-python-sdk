@@ -629,6 +629,14 @@
                 </li>
               
                 <li>
+                  <a href="#Anki.Vector.external_interface.GoToObjectRequest"><span class="badge">M</span>GoToObjectRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.GoToObjectResponse"><span class="badge">M</span>GoToObjectResponse</a>
+                </li>
+              
+                <li>
                   <a href="#Anki.Vector.external_interface.GoToPoseRequest"><span class="badge">M</span>GoToPoseRequest</a>
                 </li>
               
@@ -737,6 +745,22 @@
                 </li>
               
                 <li>
+                  <a href="#Anki.Vector.external_interface.PickupObjectRequest"><span class="badge">M</span>PickupObjectRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.PickupObjectResponse"><span class="badge">M</span>PickupObjectResponse</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.PlaceObjectOnGroundHereRequest"><span class="badge">M</span>PlaceObjectOnGroundHereRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.PlaceObjectOnGroundHereResponse"><span class="badge">M</span>PlaceObjectOnGroundHereResponse</a>
+                </li>
+              
+                <li>
                   <a href="#Anki.Vector.external_interface.PlayAnimationRequest"><span class="badge">M</span>PlayAnimationRequest</a>
                 </li>
               
@@ -746,6 +770,14 @@
               
                 <li>
                   <a href="#Anki.Vector.external_interface.PlayAnimationTriggerRequest"><span class="badge">M</span>PlayAnimationTriggerRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.PopAWheelieRequest"><span class="badge">M</span>PopAWheelieRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.PopAWheelieResponse"><span class="badge">M</span>PopAWheelieResponse</a>
                 </li>
               
                 <li>
@@ -778,6 +810,14 @@
               
                 <li>
                   <a href="#Anki.Vector.external_interface.RobotState"><span class="badge">M</span>RobotState</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.RollObjectRequest"><span class="badge">M</span>RollObjectRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.RollObjectResponse"><span class="badge">M</span>RollObjectResponse</a>
                 </li>
               
                 <li>
@@ -862,6 +902,14 @@
               
                 <li>
                   <a href="#Anki.Vector.external_interface.TurnInPlaceResponse"><span class="badge">M</span>TurnInPlaceResponse</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.TurnTowardsFaceRequest"><span class="badge">M</span>TurnTowardsFaceRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.TurnTowardsFaceResponse"><span class="badge">M</span>TurnTowardsFaceResponse</a>
                 </li>
               
                 <li>
@@ -3118,6 +3166,36 @@ minimum host version and receiving a response to see whether the versions are su
               </tr>
             
               <tr>
+                <td>TurnTowardsFace</td>
+                <td><p>Tell Vector to turn towards this face.</p></td>
+              </tr>
+            
+              <tr>
+                <td>GoToObject</td>
+                <td><p>Tell Vector to drive to the specified object.</p></td>
+              </tr>
+            
+              <tr>
+                <td>RollObject</td>
+                <td><p>Tell Vector to roll his cube.</p></td>
+              </tr>
+            
+              <tr>
+                <td>PopAWheelie</td>
+                <td><p>Tell Vector to "pop a wheelie" using his cube.</p></td>
+              </tr>
+            
+              <tr>
+                <td>PickupObject</td>
+                <td><p>Instruct the robot to pick up the supplied object.</p></td>
+              </tr>
+            
+              <tr>
+                <td>PlaceObjectOnGroundHere</td>
+                <td><p>Ask Vector to place the object he is carrying on the ground at the current location.</p></td>
+              </tr>
+            
+              <tr>
                 <td>UserAuthentication</td>
                 <td><p></p></td>
               </tr>
@@ -4853,6 +4931,90 @@ detections that are enabled from above messages
 
         
       
+        <h3 id="Anki.Vector.external_interface.GoToObjectRequest">GoToObjectRequest</h3>
+        GoToObject
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>object_id</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>motion_prof</td>
+                  <td><a href="#Anki.Vector.external_interface.PathMotionProfile">PathMotionProfile</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>distance_from_object_origin_mm</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>use_pre_dock_pose</td>
+                  <td><a href="#bool">bool</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>id_tag</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>num_retries</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.GoToObjectResponse">GoToObjectResponse</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>result</td>
+                  <td><a href="#Anki.Vector.external_interface.ActionResult">ActionResult</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
         <h3 id="Anki.Vector.external_interface.GoToPoseRequest">GoToPoseRequest</h3>
         GotoPose
         <p></p>
@@ -5616,6 +5778,156 @@ path should be modified or traversed.
 
         
       
+        <h3 id="Anki.Vector.external_interface.PickupObjectRequest">PickupObjectRequest</h3>
+        PickupObject
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>object_id</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>negative value means "currently selected object" </p></td>
+                </tr>
+              
+                <tr>
+                  <td>motion_prof</td>
+                  <td><a href="#Anki.Vector.external_interface.PathMotionProfile">PathMotionProfile</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>approach_angle_rad</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>use_approach_angle</td>
+                  <td><a href="#bool">bool</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>use_pre_dock_pose</td>
+                  <td><a href="#bool">bool</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>id_tag</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>num_retries</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.PickupObjectResponse">PickupObjectResponse</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>result</td>
+                  <td><a href="#Anki.Vector.external_interface.ActionResult">ActionResult</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.PlaceObjectOnGroundHereRequest">PlaceObjectOnGroundHereRequest</h3>
+        PlaceObjectOnGroundHere
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>id_tag</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>num_retries</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.PlaceObjectOnGroundHereResponse">PlaceObjectOnGroundHereResponse</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>result</td>
+                  <td><a href="#Anki.Vector.external_interface.ActionResult">ActionResult</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
         <h3 id="Anki.Vector.external_interface.PlayAnimationRequest">PlayAnimationRequest</h3>
         See PlayAnimation rpc for more details.
         <p></p>
@@ -5745,6 +6057,96 @@ path should be modified or traversed.
                   <td>ignore_lift_track</td>
                   <td><a href="#bool">bool</a> </td>
                   <td><p>Ignore any movement of Vector's lift when playing the animation. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.PopAWheelieRequest">PopAWheelieRequest</h3>
+        PopAWheelie
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>object_id</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>negative value means "currently selected object" </p></td>
+                </tr>
+              
+                <tr>
+                  <td>motion_prof</td>
+                  <td><a href="#Anki.Vector.external_interface.PathMotionProfile">PathMotionProfile</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>approach_angle_rad</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>use_approach_angle</td>
+                  <td><a href="#bool">bool</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>use_pre_dock_pose</td>
+                  <td><a href="#bool">bool</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>id_tag</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>num_retries</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.PopAWheelieResponse">PopAWheelieResponse</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>result</td>
+                  <td><a href="#Anki.Vector.external_interface.ActionResult">ActionResult</a> </td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -6162,6 +6564,96 @@ path should be modified or traversed.
                 <tr>
                   <td>touch_data</td>
                   <td><a href="#Anki.Vector.external_interface.TouchData">TouchData</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.RollObjectRequest">RollObjectRequest</h3>
+        RollObject
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>object_id</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>negative value means "currently selected object" </p></td>
+                </tr>
+              
+                <tr>
+                  <td>motion_prof</td>
+                  <td><a href="#Anki.Vector.external_interface.PathMotionProfile">PathMotionProfile</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>approach_angle_rad</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>use_approach_angle</td>
+                  <td><a href="#bool">bool</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>use_pre_dock_pose</td>
+                  <td><a href="#bool">bool</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>id_tag</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>num_retries</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.RollObjectResponse">RollObjectResponse</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>result</td>
+                  <td><a href="#Anki.Vector.external_interface.ActionResult">ActionResult</a> </td>
                   <td><p> </p></td>
                 </tr>
               
@@ -6922,6 +7414,78 @@ default tolerance of POINT_TURN_ANGLE_TOL.
         
       
         <h3 id="Anki.Vector.external_interface.TurnInPlaceResponse">TurnInPlaceResponse</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>result</td>
+                  <td><a href="#Anki.Vector.external_interface.ActionResult">ActionResult</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.TurnTowardsFaceRequest">TurnTowardsFaceRequest</h3>
+        TurnTowardsFace
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>face_id</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>max_turn_angle_rad</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>id_tag</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>num_retries</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.TurnTowardsFaceResponse">TurnTowardsFaceResponse</h3>
         
         <p></p>
 
