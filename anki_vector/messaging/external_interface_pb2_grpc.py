@@ -323,6 +323,11 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CameraFeedRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CameraFeedResponse.FromString,
         )
+    self.CaptureSingleImage = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/CaptureSingleImage',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CaptureSingleImageRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CaptureSingleImageResponse.FromString,
+        )
     self.SetEyeColor = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/SetEyeColor',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetEyeColorRequest.SerializeToString,
@@ -776,6 +781,13 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def CaptureSingleImage(self, request, context):
+    """Request a single image to be captured and sent from the robot.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def SetEyeColor(self, request, context):
     """Set Vector's eye color.
     """
@@ -1097,6 +1109,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.CameraFeed,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CameraFeedRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CameraFeedResponse.SerializeToString,
+      ),
+      'CaptureSingleImage': grpc.unary_unary_rpc_method_handler(
+          servicer.CaptureSingleImage,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CaptureSingleImageRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CaptureSingleImageResponse.SerializeToString,
       ),
       'SetEyeColor': grpc.unary_unary_rpc_method_handler(
           servicer.SetEyeColor,

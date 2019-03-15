@@ -465,6 +465,14 @@
                 </li>
               
                 <li>
+                  <a href="#Anki.Vector.external_interface.CaptureSingleImageRequest"><span class="badge">M</span>CaptureSingleImageRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.CaptureSingleImageResponse"><span class="badge">M</span>CaptureSingleImageResponse</a>
+                </li>
+              
+                <li>
                   <a href="#Anki.Vector.external_interface.CladPoint"><span class="badge">M</span>CladPoint</a>
                 </li>
               
@@ -2949,8 +2957,8 @@ bumping the minimum when there is no way to handle a prior version.</p><p></p>
             
               <tr>
                 <td>PROTOCOL_VERSION_CURRENT</td>
-                <td>4</td>
-                <td><p>Current version (incremented post-1.4.1 on 2/22/19 by msintov)</p></td>
+                <td>5</td>
+                <td><p>Current version (incremented on 2019.03.12 for streaming update status support.)</p></td>
               </tr>
             
           </tbody>
@@ -3282,6 +3290,11 @@ rgb values each and timing data for how to transition between them.</p></td>
               <tr>
                 <td>CameraFeed</td>
                 <td><p>Request a camera feed from the robot.</p></td>
+              </tr>
+            
+              <tr>
+                <td>CaptureSingleImage</td>
+                <td><p>Request a single image to be captured and sent from the robot.</p></td>
               </tr>
             
               <tr>
@@ -3790,6 +3803,62 @@ rgb values each and timing data for how to transition between them.</p></td>
                 <tr>
                   <td>status</td>
                   <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.CaptureSingleImageRequest">CaptureSingleImageRequest</h3>
+        
+        <p></p>
+
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.CaptureSingleImageResponse">CaptureSingleImageResponse</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>frame_time_stamp</td>
+                  <td><a href="#uint32">uint32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>image_id</td>
+                  <td><a href="#uint32">uint32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>image_encoding</td>
+                  <td><a href="#Anki.Vector.external_interface.ImageChunk.ImageEncoding">ImageChunk.ImageEncoding</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>data</td>
+                  <td><a href="#bytes">bytes</a> </td>
                   <td><p> </p></td>
                 </tr>
               

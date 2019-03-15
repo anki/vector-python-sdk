@@ -1090,6 +1090,16 @@ message CameraFeedResponse {
   bytes                    data = 4;
 }
 
+message CaptureSingleImageRequest {}
+
+message CaptureSingleImageResponse {
+  ResponseStatus           status = 1;
+  uint32                   frame_time_stamp = 2;
+  uint32                   image_id = 3;
+  ImageChunk.ImageEncoding image_encoding = 4;
+  bytes                    data = 5;
+}
+
 message SetEyeColorRequest {
   float hue = 1;
   float saturation = 2;
@@ -1110,4 +1120,5 @@ message SDKInitializationRequest {
 message SDKInitializationResponse {
   ResponseStatus status = 1;
 }
+
 
