@@ -34,7 +34,7 @@ enum ProtocolVersion {
   option allow_alias = true;
   PROTOCOL_VERSION_UNKNOWN = 0; // Required zero value for enums
   PROTOCOL_VERSION_MINIMUM = 0; // Minimum supported version
-  PROTOCOL_VERSION_CURRENT = 4; // Current version (incremented post-1.4.1 on 2/22/19 by msintov)
+  PROTOCOL_VERSION_CURRENT = 5; // Current version (incremented on 2019.03.12 for streaming update status support.)
 }
 
 // The grpc-defined connection between the SDK and Anki's Vector robot.
@@ -438,6 +438,14 @@ service ExternalInterface {
   rpc CameraFeed(CameraFeedRequest) returns (stream CameraFeedResponse) {
     option (google.api.http) = {
       post: "/v1/camera_feed",
+      body: "*"
+    };
+  }
+
+  // Request a single image to be captured and sent from the robot.
+  rpc CaptureSingleImage(CaptureSingleImageRequest) returns (CaptureSingleImageResponse) {
+    option (google.api.http) = {
+      post: "/v1/capture_single_image",
       body: "*"
     };
   }
