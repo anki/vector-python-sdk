@@ -39,7 +39,7 @@ __all__ = ["MAX_HEAD_ANGLE", "MIN_HEAD_ANGLE",
            "BehaviorComponent"]
 
 
-from . import connection, objects, util
+from . import connection, faces, objects, util
 from .messaging import protocol
 from .exceptions import VectorException
 
@@ -71,62 +71,6 @@ class BehaviorComponent(util.Component):
 
     def __init__(self, robot):
         super().__init__(robot)
-        self._motion_profile_map = {}
-
-    # TODO Make the motion_profile_map into a class.
-    @property
-    def motion_profile_map(self) -> dict:
-        """Tells Vector how to drive when receiving navigation and movement actions
-        such as go_to_pose and dock_with_cube.
-
-        motion_prof_map values are as follows:
-         |  speed_mmps (float)
-         |  accel_mmps2 (float)
-         |  decel_mmps2 (float)
-         |  point_turn_speed_rad_per_sec (float)
-         |  point_turn_accel_rad_per_sec2 (float)
-         |  point_turn_decel_rad_per_sec2 (float)
-         |  dock_speed_mmps (float)
-         |  dock_accel_mmps2 (float)
-         |  dock_decel_mmps2 (float)
-         |  reverse_speed_mmps (float)
-         |  is_custom (bool)
-
-        :getter: Returns the motion profile map
-        :setter: Sets the motion profile map
-
-        :param motion_prof_map: Provide custom speed, acceleration and deceleration
-            values with which the robot goes to the given pose.
-        """
-        return self._motion_profile_map
-
-    @motion_profile_map.setter
-    def motion_profile_map(self, motion_profile_map: dict):
-        self._motion_profile_map = motion_profile_map
-
-    def _motion_profile_for_proto(self) -> protocol.PathMotionProfile:
-        """Packages the current motion profile into a proto object
-
-        Returns:
-            A profile object describing motion which can be passed with any proto action message.
-        """
-        # TODO: This should be made into its own class
-        default_motion_profile = {
-            "speed_mmps": 100.0,
-            "accel_mmps2": 200.0,
-            "decel_mmps2": 500.0,
-            "point_turn_speed_rad_per_sec": 2.0,
-            "point_turn_accel_rad_per_sec2": 10.0,
-            "point_turn_decel_rad_per_sec2": 10.0,
-            "dock_speed_mmps": 60.0,
-            "dock_accel_mmps2": 200.0,
-            "dock_decel_mmps2": 500.0,
-            "reverse_speed_mmps": 80.0,
-            "is_custom": 1 if self._motion_profile_map else 0
-        }
-        default_motion_profile.update(self._motion_profile_map)
-
-        return protocol.PathMotionProfile(**default_motion_profile)
 
     @classmethod
     def _get_next_behavior_id(cls):
@@ -255,12 +199,12 @@ class BehaviorComponent(util.Component):
 
         Note that actions that use the wheels cannot be performed at the same time,
         otherwise you may see a TRACKS_LOCKED error. Methods that use the wheels include
-        :meth:`go_to_pose`, :meth:`dock_with_cube`, :meth:`turn_in_place` and :meth:`drive_straight`.
+        :meth:`go_to_pose`, :meth:`dock_with_cube`, :meth:`turn_in_place`, :meth:`drive_straight`, and :meth:`pickup_object`.
 
         :param pose: The destination pose.
         :param relative_to_robot: Whether the given pose is relative to
                                   the robot's pose.
-        :param num_retries: Number of times to re-attempt action in case of a failure.
+        :param num_retries: Number of times to reattempt action in case of a failure.
 
         Returns:
             A response from the robot with status information sent when this request successfully completes or fails.
@@ -291,11 +235,9 @@ class BehaviorComponent(util.Component):
         if relative_to_robot and self.robot.pose:
             pose = self.robot.pose.define_pose_relative_this(pose)
 
-        motion_prof = self._motion_profile_for_proto()
         go_to_pose_request = protocol.GoToPoseRequest(x_mm=pose.position.x,
                                                       y_mm=pose.position.y,
                                                       rad=pose.rotation.angle_z.radians,
-                                                      motion_prof=motion_prof,
                                                       id_tag=_behavior_id,
                                                       num_retries=num_retries)
 
@@ -316,13 +258,13 @@ class BehaviorComponent(util.Component):
 
         Note that actions that use the wheels cannot be performed at the same time,
         otherwise you may see a TRACKS_LOCKED error. Methods that use the wheels include
-        :meth:`go_to_pose`, :meth:`dock_with_cube`, :meth:`turn_in_place` and :meth:`drive_straight`.
+        :meth:`go_to_pose`, :meth:`dock_with_cube`, :meth:`turn_in_place`, :meth:`drive_straight`, and :meth:`pickup_object`.
 
         :param target_object: The LightCube object to dock with.
         :param approach_angle: Angle to approach the dock with.
         :param alignment_type: Which part of the robot to align with the object.
         :param distance_from_marker: How far from the object to approach (0 to dock)
-        :param num_retries: Number of times to re-attempt action in case of a failure.
+        :param num_retries: Number of times to reattempt action in case of a failure.
 
         Returns:
             A response from the robot with status information sent when this request successfully completes or fails.
@@ -335,8 +277,7 @@ class BehaviorComponent(util.Component):
                 robot.world.connect_cube()
 
                 if robot.world.connected_light_cube:
-                    dock_response = robot.behavior.dock_with_cube(robot.world.connected_light_cube)
-                    docking_result = dock_response.result
+                    robot.behavior.dock_with_cube(robot.world.connected_light_cube)
 
         Example of cancelling the :meth:`dock_with_cube` behavior:
 
@@ -366,10 +307,8 @@ class BehaviorComponent(util.Component):
         if target_object is None:
             raise VectorException("Must supply a target_object to dock_with_cube")
 
-        motion_prof = self._motion_profile_for_proto()
         dock_request = protocol.DockWithCubeRequest(object_id=target_object.object_id,
                                                     alignment_type=alignment_type,
-                                                    motion_prof=motion_prof,
                                                     id_tag=_behavior_id,
                                                     num_retries=num_retries)
         if approach_angle is not None:
@@ -397,7 +336,7 @@ class BehaviorComponent(util.Component):
 
         Note that actions that use the wheels cannot be performed at the same time,
         otherwise you may see a TRACKS_LOCKED error. Methods that use the wheels include
-        :meth:`go_to_pose`, :meth:`dock_with_cube`, :meth:`turn_in_place` and :meth:`drive_straight`.
+        :meth:`go_to_pose`, :meth:`dock_with_cube`, :meth:`turn_in_place`, :meth:`drive_straight`, and :meth:`pickup_object`.
 
         :param distance: The distance to drive
             (>0 for forwards, <0 for backwards)
@@ -405,7 +344,7 @@ class BehaviorComponent(util.Component):
             (should always be >0, the abs(speed) is used internally)
         :param should_play_anim: Whether to play idle animations whilst driving
             (tilt head, hum, animated eyes, etc.)
-        :param num_retries: Number of times to re-attempt action in case of a failure.
+        :param num_retries: Number of times to reattempt action in case of a failure.
 
         Returns:
             A response from the robot with status information sent when this request successfully completes or fails.
@@ -454,7 +393,7 @@ class BehaviorComponent(util.Component):
 
         Note that actions that use the wheels cannot be performed at the same time,
         otherwise you may see a TRACKS_LOCKED error. Methods that use the wheels include
-        :meth:`go_to_pose`, :meth:`dock_with_cube`, :meth:`turn_in_place` and :meth:`drive_straight`.
+        :meth:`go_to_pose`, :meth:`dock_with_cube`, :meth:`turn_in_place`, :meth:`drive_straight`, and :meth:`pickup_object`.
 
         :param angle: The angle to turn. Positive
                 values turn to the left, negative values to the right.
@@ -466,7 +405,7 @@ class BehaviorComponent(util.Component):
                 of 2 degrees internally).
         :param is_absolute: True to turn to a specific angle, False to
                 turn relative to the current pose.
-        :param num_retries: Number of times to re-attempt the turn in case of a failure.
+        :param num_retries: Number of times to reattempt the turn in case of a failure.
 
         Returns:
             A response from the robot with status information sent when this request successfully completes or fails.
@@ -519,7 +458,7 @@ class BehaviorComponent(util.Component):
         :param max_speed: Maximum speed of Vector's head in radians per second.
         :param duration: Time for Vector's head to move in seconds. A value
                 of zero will make Vector try to do it as quickly as possible.
-        :param num_retries: Number of times to re-attempt the action in case of a failure.
+        :param num_retries: Number of times to reattempt the action in case of a failure.
 
         Returns:
             A response from the robot with status information sent when this request successfully completes or fails.
@@ -589,8 +528,7 @@ class BehaviorComponent(util.Component):
         :param max_speed: Maximum speed of Vector's lift in radians per second.
         :param duration: Time for Vector's lift to move in seconds. A value
                 of zero will make Vector try to do it as quickly as possible.
-        :param num_retries: Number of times to re-attempt the action in case of a failure.
-        :param _behavior_id: Id to use to cancel the behavior.
+        :param num_retries: Number of times to reattempt the action in case of a failure.
 
         Returns:
             A response from the robot with status information sent when this request successfully completes or fails.
@@ -636,3 +574,239 @@ class BehaviorComponent(util.Component):
                                                                 num_retries=num_retries)
 
         return await self.grpc_interface.SetLiftHeight(set_lift_height_request)
+
+    @connection.on_connection_thread(is_cancellable_behavior=True)
+    async def turn_towards_face(self,
+                                face: faces.Face,
+                                num_retries: int = 0,
+                                _behavior_id: int = None) -> protocol.TurnTowardsFaceResponse:
+        """Tells Vector to turn towards this face.
+
+        :param face_id: The face Vector will turn towards.
+        :param num_retries: Number of times to reattempt the action in case of a failure.
+
+        Returns:
+            A response from the robot with status information sent when this request successfully completes or fails.
+
+        .. testcode::
+
+            import anki_vector
+
+            with anki_vector.Robot() as robot:
+                robot.behavior.turn_towards_face(1)
+
+        Example of cancelling the :meth:`turn_towards_face` behavior:
+
+        .. testcode::
+
+            import anki_vector
+
+            with anki_vector.Robot() as robot:
+                turn_towards_face_future = robot.behavior.turn_towards_face(1)
+                turn_towards_face_future.cancel()                
+        """
+        turn_towards_face_request = protocol.TurnTowardsFaceRequest(face_id=face.face_id,
+                                                                    max_turn_angle_rad=util.degrees(180).radians,
+                                                                    id_tag=_behavior_id,
+                                                                    num_retries=num_retries)
+
+        return await self.grpc_interface.TurnTowardsFace(turn_towards_face_request)
+
+    @connection.on_connection_thread(is_cancellable_behavior=True)
+    async def go_to_object(self,
+                           target_object: objects.LightCube,
+                           distance_from_object,
+                           num_retries: int = 0,
+                           _behavior_id: int = None) -> protocol.GoToObjectResponse:
+        """Tells Vector to drive to his Cube.
+
+        :param target_object: The destination object. CustomObject instances are not supported.
+        :param distance_from_object: The distance from the object to stop. This is the distance
+                between the origins. For instance, the distance from the robot's origin
+                (between Vector's two front wheels) to the cube's origin (at the center of the cube) is ~40mm.
+        :param num_retries: Number of times to reattempt action in case of a failure.
+
+        Returns:
+            A response from the robot with status information sent when this request successfully completes or fails.
+
+        .. testcode::
+            import anki_vector
+            from anki_vector.util import distance_mm
+
+            with anki_vector.Robot() as robot:
+                robot.world.connect_cube()
+
+                if robot.world.connected_light_cube:
+                    robot.behavior.go_to_object(robot.world.connected_light_cube, distance_mm(70.0))
+        """
+        if target_object is None:
+            raise VectorException("Must supply a target_object of type LightCube to go_to_object")
+
+        go_to_object_request = protocol.GoToObjectRequest(object_id=target_object.object_id,
+                                                          distance_from_object_origin_mm=distance_from_object.distance_mm,
+                                                          use_pre_dock_pose=False,
+                                                          id_tag=_behavior_id,
+                                                          num_retries=num_retries)
+
+        return await self.grpc_interface.GoToObject(go_to_object_request)
+
+    @connection.on_connection_thread(is_cancellable_behavior=True)
+    async def roll_cube(self,
+                           target_object: objects.LightCube,
+                           approach_angle: util.Angle = None,
+                           num_retries: int = 0,
+                           _behavior_id: int = None) -> protocol.RollObjectResponse:
+        """Tells Vector to roll a specified cube object.
+
+        :param target_object: The cube to roll.
+        :param approach_angle: The angle to approach the cube from. For example, 180 degrees will cause Vector to drive
+                past the cube and approach it from behind.
+        :param num_retries: Number of times to reattempt action in case of a failure.
+
+        Returns:
+            A response from the robot with status information sent when this request successfully completes or fails.
+
+        .. testcode::
+
+            import anki_vector
+            from anki_vector.util import distance_mm
+
+            with anki_vector.Robot() as robot:
+                robot.world.connect_cube()
+
+                if robot.world.connected_light_cube:
+                    robot.behavior.roll_cube(robot.world.connected_light_cube)
+        """
+        if target_object is None:
+            raise VectorException("Must supply a target_object of type LightCube to roll_cube")
+
+        if approach_angle is None:
+            use_approach_angle = False
+            approach_angle = util.degrees(0)
+        else:
+            use_approach_angle = True
+            approach_angle = approach_angle        
+
+        roll_object_request = protocol.RollObjectRequest(object_id=target_object.object_id,
+                                                       approach_angle_rad=approach_angle.radians,
+                                                       use_approach_angle=use_approach_angle,
+                                                       use_pre_dock_pose=use_approach_angle,
+                                                       id_tag=_behavior_id,
+                                                       num_retries=num_retries)
+
+        return await self.grpc_interface.RollObject(roll_object_request)
+
+    @connection.on_connection_thread(is_cancellable_behavior=True)
+    async def pop_a_wheelie(self,
+                           target_object: objects.LightCube,
+                           approach_angle: util.Angle = None,
+                           num_retries: int = 0,
+                           _behavior_id: int = None) -> protocol.PopAWheelieResponse:
+        """Tells Vector to "pop a wheelie" using his light cube.
+
+        :param target_object: The cube to push down on with Vector's lift, to start the wheelie.
+        :param approach_angle: The angle to approach the cube from. For example, 180 degrees will cause Vector to drive
+                past the cube and approach it from behind.
+        :param num_retries: Number of times to reattempt action in case of a failure.
+
+        Returns:
+            A response from the robot with status information sent when this request successfully completes or fails.
+
+        .. testcode::
+
+            import anki_vector
+            from anki_vector.util import distance_mm
+
+            with anki_vector.Robot() as robot:
+                robot.world.connect_cube()
+
+                if robot.world.connected_light_cube:
+                    robot.behavior.pop_a_wheelie(robot.world.connected_light_cube)
+        """
+        if target_object is None:
+            raise VectorException("Must supply a target_object of type LightCube to pop_a_wheelie")
+
+        if approach_angle is None:
+            use_approach_angle = False
+            approach_angle = util.degrees(0)
+        else:
+            use_approach_angle = True
+            approach_angle = approach_angle        
+
+        pop_a_wheelie_request = protocol.PopAWheelieRequest(object_id=target_object.object_id,
+                                                       approach_angle_rad=approach_angle.radians,
+                                                       use_approach_angle=use_approach_angle,
+                                                       use_pre_dock_pose=use_approach_angle,
+                                                       id_tag=_behavior_id,
+                                                       num_retries=num_retries)
+
+        return await self.grpc_interface.PopAWheelie(pop_a_wheelie_request)
+
+    @connection.on_connection_thread(is_cancellable_behavior=True)
+    async def pickup_object(self,
+                             target_object: objects.LightCube,
+                             use_pre_dock_pose: bool = True,
+                             num_retries: int = 0,
+                             _behavior_id: int = None) -> protocol.PickupObjectResponse:
+        """Instruct the robot to pick up his LightCube.
+
+        While picking up the cube, Vector will use path planning.
+
+        Note that actions that use the wheels cannot be performed at the same time,
+        otherwise you may see a TRACKS_LOCKED error. Methods that use the wheels include
+        :meth:`go_to_pose`, :meth:`dock_with_cube`, :meth:`turn_in_place`, :meth:`drive_straight`, and :meth:`pickup_object`.
+
+        :param target_object: The LightCube object to dock with.
+        :param use_pre_dock_pose: Whether or not to try to immediately pick
+                up an object or first position the robot next to the object.
+        :param num_retries: Number of times to reattempt action in case of a failure.
+
+        Returns:
+            A response from the robot with status information sent when this request successfully completes or fails.
+
+        .. testcode::
+
+            import anki_vector
+
+            with anki_vector.Robot() as robot:
+                robot.world.connect_cube()
+
+                if robot.world.connected_light_cube:
+                    robot.behavior.pickup_object(robot.world.connected_light_cube)
+        """
+        if target_object is None:
+            raise VectorException("Must supply a target_object to dock_with_cube")
+
+        pickup_object_request = protocol.PickupObjectRequest(object_id=target_object.object_id,
+                                                             use_pre_dock_pose=use_pre_dock_pose,
+                                                             id_tag=_behavior_id,
+                                                             num_retries=num_retries)
+
+        return await self.grpc_interface.PickupObject(pickup_object_request)
+
+    @connection.on_connection_thread(is_cancellable_behavior=True)
+    async def place_object_on_ground_here(self,
+                             num_retries: int = 0,
+                             _behavior_id: int = None) -> protocol.PlaceObjectOnGroundHereResponse:
+        """Ask Vector to place the object he is carrying on the ground at the current location.
+
+        :param num_retries: Number of times to reattempt action in case of a failure.
+
+        Returns:
+            A response from the robot with status information sent when this request successfully completes or fails.
+
+        .. testcode::
+
+            import anki_vector
+
+            with anki_vector.Robot() as robot:
+                robot.world.connect_cube()
+
+                if robot.world.connected_light_cube:
+                    robot.behavior.pickup_object(robot.world.connected_light_cube)
+                    robot.behavior.place_object_on_ground_here()
+        """
+        place_object_on_ground_here_request = protocol.PlaceObjectOnGroundHereRequest(id_tag=_behavior_id,
+                                                                                      num_retries=num_retries)
+
+        return await self.grpc_interface.PlaceObjectOnGroundHere(place_object_on_ground_here_request)
