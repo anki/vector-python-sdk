@@ -63,6 +63,11 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.MoveLiftRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.MoveLiftResponse.FromString,
         )
+    self.StopAllMotors = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/StopAllMotors',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.StopAllMotorsRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.StopAllMotorsResponse.FromString,
+        )
     self.DisplayFaceImageRGB = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/DisplayFaceImageRGB',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.DisplayFaceImageRGBRequest.SerializeToString,
@@ -403,6 +408,13 @@ class ExternalInterfaceServicer(object):
 
   def MoveLift(self, request, context):
     """Moves Vector's lift.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def StopAllMotors(self, request, context):
+    """Stop all motor commands requested: MoveHead, MoveLift and DriveWheels.
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
@@ -849,6 +861,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.MoveLift,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.MoveLiftRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.MoveLiftResponse.SerializeToString,
+      ),
+      'StopAllMotors': grpc.unary_unary_rpc_method_handler(
+          servicer.StopAllMotors,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.StopAllMotorsRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.StopAllMotorsResponse.SerializeToString,
       ),
       'DisplayFaceImageRGB': grpc.unary_unary_rpc_method_handler(
           servicer.DisplayFaceImageRGB,

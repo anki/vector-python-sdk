@@ -87,6 +87,9 @@ service ExternalInterface {
   // Moves Vector's lift.
   rpc MoveLift(MoveLiftRequest) returns (MoveLiftResponse) {}
   
+  // Stop all motor commands requested: MoveHead, MoveLift and DriveWheels.
+  rpc StopAllMotors(StopAllMotorsRequest) returns (StopAllMotorsResponse) {}
+
   // Sets screen (Vector's face) to a solid color.
   rpc DisplayFaceImageRGB(DisplayFaceImageRGBRequest) returns (DisplayFaceImageRGBResponse) {
     option (google.api.http) = {
