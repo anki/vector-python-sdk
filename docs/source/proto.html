@@ -885,6 +885,14 @@
                 </li>
               
                 <li>
+                  <a href="#Anki.Vector.external_interface.StopAllMotorsRequest"><span class="badge">M</span>StopAllMotorsRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.StopAllMotorsResponse"><span class="badge">M</span>StopAllMotorsResponse</a>
+                </li>
+              
+                <li>
                   <a href="#Anki.Vector.external_interface.ThumbnailPathMessage"><span class="badge">M</span>ThumbnailPathMessage</a>
                 </li>
               
@@ -3021,6 +3029,11 @@ minimum host version and receiving a response to see whether the versions are su
               <tr>
                 <td>MoveLift</td>
                 <td><p>Moves Vector's lift.</p></td>
+              </tr>
+            
+              <tr>
+                <td>StopAllMotors</td>
+                <td><p>Stop all motor commands requested: MoveHead, MoveLift and DriveWheels.</p></td>
               </tr>
             
               <tr>
@@ -7257,6 +7270,38 @@ path should be modified or traversed.
                 <tr>
                   <td>max_value</td>
                   <td><a href="#float">float</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.StopAllMotorsRequest">StopAllMotorsRequest</h3>
+        See the StopAllMotors rpc for more details.
+        <p></p>
+
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.StopAllMotorsResponse">StopAllMotorsResponse</h3>
+        See the StopAllMotors rpc for more details.
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
                   <td><p> </p></td>
                 </tr>
               

@@ -73,6 +73,15 @@ message MoveLiftResponse {
   ResponseStatus status = 1;
 }
 
+// See the StopAllMotors rpc for more details.
+message StopAllMotorsRequest {
+}
+
+// See the StopAllMotors rpc for more details.
+message StopAllMotorsResponse {  
+  ResponseStatus status = 1;
+}
+
 // See PlayAnimationTrigger rpc for more details.
 message PlayAnimationTriggerRequest {
   // The animation trigger to play.
