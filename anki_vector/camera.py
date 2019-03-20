@@ -32,7 +32,7 @@ import io
 import time
 import sys
 
-from . import util
+from . import connection, util
 from .exceptions import VectorCameraFeedException
 from .messaging import protocol
 
@@ -187,19 +187,23 @@ class CameraComponent(util.Component):
         future = self.conn.run_coroutine(self._image_streaming_enabled())
         return future.result()
 
-    def _unpack_image(self, msg: protocol.CameraFeedResponse) -> None:
-        """Processes raw data from the robot into a more more useful image structure."""
-        size = len(msg.data)
+    def _convert_to_pillow_image(self, image_data: bytes) -> Image.Image:
+        """Convert raw image bytes to a Pillow Image."""
+        size = len(image_data)
 
         # Constuct numpy array out of source data
         array = np.empty(size, dtype=np.uint8)
-        array[0:size] = list(msg.data)
+        array[0:size] = list(image_data)
 
         # Decode compressed source data into uncompressed image data
         image = Image.open(io.BytesIO(array))
+        return image
+
+    def _unpack_image(self, msg: protocol.CameraFeedResponse) -> None:
+        """Processes raw data from the robot into a more useful image structure."""
+        image = self._convert_to_pillow_image(msg.data)
         self.robot.viewer.enqueue_frame(image)
 
-        # Convert to Pillow Image
         self._latest_image = image
         self._latest_image_id = msg.image_id
 
@@ -217,3 +221,29 @@ class CameraComponent(util.Component):
                 self._unpack_image(evt)
         except CancelledError:
             self.logger.debug('Camera feed task was cancelled. This is expected during disconnection.')
+
+    @connection.on_connection_thread()
+    async def capture_single_image(self) -> Image.Image:
+        """Request to capture a single image from the robot's camera.
+
+        This call requests the robot to capture an image and returns the 
+        received image, formatted as a Pillow image. This differs from `latest_image`,
+        which maintains the last image received from the camera feed (if enabled). 
+
+        Note that when the camera feed is enabled this call returns the `latest_image`.
+
+        .. testcode::
+
+            import anki_vector
+
+            with anki_vector.Robot() as robot:
+                image = robot.camera.capture_single_image()
+                image.show()
+        """
+        if self._enabled:
+            return self._latest_image
+        req = protocol.CaptureSingleImageRequest()
+        res = await self.grpc_interface.CaptureSingleImage(req)
+        if res and res.data:
+            return self._convert_to_pillow_image(res.data)
+        self.logger.error('Failed to capture a single image')
