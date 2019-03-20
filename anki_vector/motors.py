@@ -34,7 +34,7 @@ class MotorComponent(util.Component):
         """Tell Vector to move his wheels / treads at a given speed.
 
         The wheels will continue to move at that speed until commanded to drive
-        at a new speed.
+        at a new speed, or if :meth:`stop_all_motors` is called.
 
         To unlock the wheel track, call `set_wheel_motors(0, 0)`.
 
@@ -105,3 +105,23 @@ class MotorComponent(util.Component):
         """
         set_lift_request = protocol.MoveLiftRequest(speed_rad_per_sec=speed)
         return await self.grpc_interface.MoveLift(set_lift_request)
+
+    @connection.on_connection_thread()
+    async def stop_all_motors(self):
+        """Tell Vector to stop all motors.
+
+        .. testcode::
+
+            import anki_vector
+            import time
+
+            with anki_vector.Robot() as robot:
+                robot.motors.set_wheel_motors(25, 50)
+
+                # wait a short time to observe the motors moving
+                time.sleep(0.5)
+
+                robot.motors.stop_all_motors()
+        """
+        stop_all_motors_request = protocol.StopAllMotorsRequest()
+        return await self.grpc_interface.StopAllMotors(stop_all_motors_request)
