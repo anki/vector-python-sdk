@@ -36,6 +36,8 @@ message ControlRequest {
     OVERRIDE_BEHAVIORS = 10;
     // Normal priority level. Directly under mandatory physical reactions.
     DEFAULT = 20;
+    // Enable long-running SDK control between script execution.  Not to be used for regular behavior control.
+    RESERVE_CONTROL = 30;
   }
   // Where in the behavior tree the SDK code should be executed.
   Priority priority = 1;
@@ -63,6 +65,10 @@ message ControlGrantedResponse {}
 // can be as a result of conditions passed to the original ControlRequest.
 message ControlLostResponse {}
 
+// The ability to reserve control before/after SDK scripts has been lost.  
+// This control can be regained through another ControlRequest.
+message ReservedControlLostResponse {}
+
 // Responses from the behavior stream.
 message BehaviorControlResponse {
   oneof response_type {
@@ -72,5 +78,7 @@ message BehaviorControlResponse {
     ControlLostResponse control_lost_event = 2;
     // Used by Vector to verify the connection is still alive.
     KeepAlivePing keep_alive = 3;
+    // Behavior system lock has been lost to another connection
+    ReservedControlLostResponse reserved_control_lost_event = 4;
   }
 }
