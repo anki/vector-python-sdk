@@ -176,6 +176,10 @@
                   <a href="#Anki.Vector.external_interface.ControlRequest"><span class="badge">M</span>ControlRequest</a>
                 </li>
               
+                <li>
+                  <a href="#Anki.Vector.external_interface.ReservedControlLostResponse"><span class="badge">M</span>ReservedControlLostResponse</a>
+                </li>
+              
               
                 <li>
                   <a href="#Anki.Vector.external_interface.ControlRequest.Priority"><span class="badge">E</span>ControlRequest.Priority</a>
@@ -1195,6 +1199,12 @@ requesting or releasing control.
                   <td><p>Used by Vector to verify the connection is still alive. </p></td>
                 </tr>
               
+                <tr>
+                  <td>reserved_control_lost_event</td>
+                  <td><a href="#Anki.Vector.external_interface.ReservedControlLostResponse">ReservedControlLostResponse</a> </td>
+                  <td><p>Behavior system lock has been lost to another connection </p></td>
+                </tr>
+              
             </tbody>
           </table>
           <p></p>
@@ -1258,6 +1268,15 @@ Currently there is only one priority level.
 
         
       
+        <h3 id="Anki.Vector.external_interface.ReservedControlLostResponse">ReservedControlLostResponse</h3>
+        The ability to reserve control before/after SDK scripts has been lost.  
+This control can be regained through another ControlRequest.
+        <p></p>
+
+        
+
+        
+      
 
       
         <h3 id="Anki.Vector.external_interface.ControlRequest.Priority">ControlRequest.Priority</h3>
@@ -1284,6 +1303,12 @@ Currently there is only one priority level.
                 <td>DEFAULT</td>
                 <td>20</td>
                 <td><p>Normal priority level. Directly under mandatory physical reactions.</p></td>
+              </tr>
+            
+              <tr>
+                <td>RESERVE_CONTROL</td>
+                <td>30</td>
+                <td><p>Enable long-running SDK control between script execution.  Not to be used for regular behavior control.</p></td>
               </tr>
             
           </tbody>
