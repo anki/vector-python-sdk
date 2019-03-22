@@ -1068,6 +1068,8 @@ class CustomObjectArchetype():
     This defined object is given a size in the x,y and z axis. The dimensions
     of the markers on the object are also defined.
 
+    See :class:`CustomObjectMarkers`.
+
     When the robot observes custom objects, they will be linked to these archetypes.
     These can be created using the methods
     :meth:`~anki_vector.world.World.define_custom_box`,
@@ -1096,7 +1098,9 @@ class CustomObjectArchetype():
 
     @property
     def custom_type(self) -> protocol.CustomType:
-        """id of this archetype on the robot
+        """id of this archetype on the robot.
+
+        See :class:`CustomObjectMarkers`.
 
         .. testcode::
 
@@ -1111,6 +1115,8 @@ class CustomObjectArchetype():
     def x_size_mm(self) -> float:
         """Size of this object in its X axis, in millimeters.
 
+        See :class:`CustomObjectMarkers`.
+
         .. testcode::
 
             import anki_vector
@@ -1123,6 +1129,8 @@ class CustomObjectArchetype():
     @property
     def y_size_mm(self) -> float:
         """Size of this object in its Y axis, in millimeters.
+
+        See :class:`CustomObjectMarkers`.
 
         .. testcode::
 
@@ -1137,6 +1145,8 @@ class CustomObjectArchetype():
     def z_size_mm(self) -> float:
         """Size of this object in its Z axis, in millimeters.
 
+        See :class:`CustomObjectMarkers`.
+
         .. testcode::
 
             import anki_vector
@@ -1149,6 +1159,8 @@ class CustomObjectArchetype():
     @property
     def marker_width_mm(self) -> float:
         """Width in millimeters of the marker on this object.
+
+        See :class:`CustomObjectMarkers`.
 
         .. testcode::
 
@@ -1163,6 +1175,8 @@ class CustomObjectArchetype():
     def marker_height_mm(self) -> float:
         """Height in millimeters of the marker on this object.
 
+        See :class:`CustomObjectMarkers`.
+
         .. testcode::
 
             import anki_vector
@@ -1174,7 +1188,10 @@ class CustomObjectArchetype():
 
     @property
     def is_unique(self) -> bool:
-        """True if there should only be one of this object type in the world."""
+        """True if there should only be one of this object type in the world.
+
+        See :class:`CustomObjectMarkers`.
+        """
         return self._is_unique
 
     #### Private Methods ####
@@ -1199,6 +1216,8 @@ class CustomObject(ObservableObject):
     :meth:`~anki_vector.world.World.define_custom_box`.
     :meth:`~anki_vector.world.World.define_custom_cube`, or
     :meth:`~anki_vector.world.World.define_custom_wall`
+
+    See :class:`CustomObjectMarkers`.
     """
 
     def __init__(self,
@@ -1216,7 +1235,10 @@ class CustomObject(ObservableObject):
     #### Public Methods ####
 
     def teardown(self):
-        """All objects will be torn down by the world when no longer needed."""
+        """All objects will be torn down by the world when no longer needed.
+
+        See :class:`CustomObjectMarkers`.
+        """
 
         self.robot.events.unsubscribe(self._on_object_observed,
                                       Events.robot_observed_object)
@@ -1228,6 +1250,8 @@ class CustomObject(ObservableObject):
         """The internal ID assigned to the object.
 
         This value can only be assigned once as it is static on the robot.
+
+        See :class:`CustomObjectMarkers`.
 
         .. testcode::
 
@@ -1262,6 +1286,8 @@ class CustomObject(ObservableObject):
     def archetype(self) -> CustomObjectArchetype:
         """Archetype defining this custom object's properties.
 
+        See :class:`CustomObjectMarkers`.
+
         .. testcode::
 
             import anki_vector
@@ -1283,6 +1309,8 @@ class CustomObject(ObservableObject):
     @property
     def descriptive_name(self) -> str:
         """A descriptive name for this CustomObject instance.
+
+        See :class:`CustomObjectMarkers`.
 
         .. testcode::
 
@@ -1345,6 +1373,8 @@ class CustomObjectTypes():  # pylint: disable=too-few-public-methods
     :meth:`anki_vector.world.World.define_custom_box`,
     :meth:`anki_vector.world.World.define_custom_cube`, and
     :meth:`anki_vector.world.World.define_custom_wall`
+
+    See :class:`CustomObjectMarkers`.
 
     .. testcode::
 
@@ -1437,6 +1467,8 @@ class CustomObjectMarkers():  # pylint: disable=too-few-public-methods
     :meth:`anki_vector.world.World.define_custom_box`,
     :meth:`anki_vector.world.World.define_custom_cube`, and
     :meth:`anki_vector.world.World.define_custom_wall`
+
+    See :class:`CustomObject`.
 
     .. testcode::
 

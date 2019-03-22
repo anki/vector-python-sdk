@@ -160,6 +160,8 @@ class World(util.Component):
     def custom_object_archetypes(self) -> Iterable[objects.CustomObjectArchetype]:
         """generator: yields each custom object archetype that Vector will look for.
 
+        See :class:`objects.CustomObjectMarkers`.
+
         .. testcode::
 
             import anki_vector
@@ -176,6 +178,8 @@ class World(util.Component):
     @property
     def visible_custom_objects(self) -> Iterable[objects.CustomObject]:
         """generator: yields each custom object that Vector can currently see.
+
+        See :class:`objects.CustomObjectMarkers`.
 
         .. testcode::
 
@@ -428,6 +432,8 @@ class World(util.Component):
                                     delete_custom_object_archetypes: bool = True):
         """Causes the robot to forget about custom objects it currently knows about.
 
+        See :class:`objects.CustomObjectMarkers`.
+
         .. testcode::
 
             import anki_vector
@@ -476,6 +482,8 @@ class World(util.Component):
         The robot will now detect the markers associated with this object and send an
         object_observed message when they are seen. The markers must be placed in the center
         of their respective sides. All 6 markers must be unique.
+
+        See :class:`objects.CustomObjectMarkers`.
 
         :param custom_object_type: the object type you are binding this custom object to.
         :param marker_front: the marker affixed to the front of the object.
@@ -570,6 +578,8 @@ class World(util.Component):
         object_observed message when they are seen. The markers must be placed in the center
         of their respective sides.
 
+        See :class:`objects.CustomObjectMarkers`.
+
         :param custom_object_type: the object type you are binding this custom object to.
         :param marker: the marker affixed to every side of the cube.
         :param size_mm: size of each side of the cube (in millimeters).
@@ -639,6 +649,8 @@ class World(util.Component):
         object_observed message when they are seen. The markers must be placed in the center
         of their respective sides.
 
+        See :class:`objects.CustomObjectMarkers`.
+
         :param custom_object_type: the object type you are binding this custom object to.
         :param marker: the marker affixed to the front and back of the wall.
         :param width_mm: width of the object (in millimeters). (Y axis).
@@ -707,6 +719,8 @@ class World(util.Component):
                                    relative_to_robot: bool = False,
                                    use_robot_origin: bool = True) -> objects.FixedCustomObject:
         """Defines a cuboid of custom size and places it in the world. It cannot be observed.
+
+        See :class:`objects.CustomObjectMarkers`.
 
         :param pose: The pose of the object we are creating.
         :param x_size_mm: size of the object (in millimeters) in the x axis.
