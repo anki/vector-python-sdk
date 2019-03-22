@@ -100,6 +100,8 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
         If custom object detection is being turned off, the robot may still choose to keep it on
         if another subscriber (including one internal to the robot) requests this vision mode be active.
 
+        See :class:`objects.CustomObjectMarkers`.
+
         :param detect_custom_objects: Specify whether we want the robot to detect custom objects.
 
         .. testcode::
