@@ -36,7 +36,7 @@ functions for all the behaviors.
 
 __all__ = ["MAX_HEAD_ANGLE", "MIN_HEAD_ANGLE",
            "MAX_LIFT_HEIGHT", "MAX_LIFT_HEIGHT_MM", "MIN_LIFT_HEIGHT", "MIN_LIFT_HEIGHT_MM",
-           "BehaviorComponent"]
+           "BehaviorComponent", "ReserveBehaviorControl"]
 
 
 from . import connection, faces, objects, util
@@ -68,9 +68,6 @@ class BehaviorComponent(util.Component):
     """Run behaviors on Vector"""
 
     _next_behavior_id = protocol.FIRST_SDK_TAG
-
-    def __init__(self, robot):
-        super().__init__(robot)
 
     @classmethod
     def _get_next_behavior_id(cls):
@@ -555,7 +552,7 @@ class BehaviorComponent(util.Component):
                 lift_future = robot.behavior.set_lift_height(0.0)
                 time.sleep(1.0)
                 lift_future = robot.behavior.set_lift_height(1.0)
-                lift_future.cancel()                
+                lift_future.cancel()
         """
         if height < 0.0:
             self.logger.warning("lift height %s too small, should be in 0..1 range - clamping", height)
@@ -603,7 +600,7 @@ class BehaviorComponent(util.Component):
 
             with anki_vector.Robot() as robot:
                 turn_towards_face_future = robot.behavior.turn_towards_face(1)
-                turn_towards_face_future.cancel()                
+                turn_towards_face_future.cancel()
         """
         turn_towards_face_request = protocol.TurnTowardsFaceRequest(face_id=face.face_id,
                                                                     max_turn_angle_rad=util.degrees(180).radians,
@@ -652,10 +649,10 @@ class BehaviorComponent(util.Component):
 
     @connection.on_connection_thread(is_cancellable_behavior=True)
     async def roll_cube(self,
-                           target_object: objects.LightCube,
-                           approach_angle: util.Angle = None,
-                           num_retries: int = 0,
-                           _behavior_id: int = None) -> protocol.RollObjectResponse:
+                        target_object: objects.LightCube,
+                        approach_angle: util.Angle = None,
+                        num_retries: int = 0,
+                        _behavior_id: int = None) -> protocol.RollObjectResponse:
         """Tells Vector to roll a specified cube object.
 
         :param target_object: The cube to roll.
@@ -685,23 +682,23 @@ class BehaviorComponent(util.Component):
             approach_angle = util.degrees(0)
         else:
             use_approach_angle = True
-            approach_angle = approach_angle        
+            approach_angle = approach_angle
 
         roll_object_request = protocol.RollObjectRequest(object_id=target_object.object_id,
-                                                       approach_angle_rad=approach_angle.radians,
-                                                       use_approach_angle=use_approach_angle,
-                                                       use_pre_dock_pose=use_approach_angle,
-                                                       id_tag=_behavior_id,
-                                                       num_retries=num_retries)
+                                                         approach_angle_rad=approach_angle.radians,
+                                                         use_approach_angle=use_approach_angle,
+                                                         use_pre_dock_pose=use_approach_angle,
+                                                         id_tag=_behavior_id,
+                                                         num_retries=num_retries)
 
         return await self.grpc_interface.RollObject(roll_object_request)
 
     @connection.on_connection_thread(is_cancellable_behavior=True)
     async def pop_a_wheelie(self,
-                           target_object: objects.LightCube,
-                           approach_angle: util.Angle = None,
-                           num_retries: int = 0,
-                           _behavior_id: int = None) -> protocol.PopAWheelieResponse:
+                            target_object: objects.LightCube,
+                            approach_angle: util.Angle = None,
+                            num_retries: int = 0,
+                            _behavior_id: int = None) -> protocol.PopAWheelieResponse:
         """Tells Vector to "pop a wheelie" using his light cube.
 
         :param target_object: The cube to push down on with Vector's lift, to start the wheelie.
@@ -731,23 +728,23 @@ class BehaviorComponent(util.Component):
             approach_angle = util.degrees(0)
         else:
             use_approach_angle = True
-            approach_angle = approach_angle        
+            approach_angle = approach_angle
 
         pop_a_wheelie_request = protocol.PopAWheelieRequest(object_id=target_object.object_id,
-                                                       approach_angle_rad=approach_angle.radians,
-                                                       use_approach_angle=use_approach_angle,
-                                                       use_pre_dock_pose=use_approach_angle,
-                                                       id_tag=_behavior_id,
-                                                       num_retries=num_retries)
+                                                            approach_angle_rad=approach_angle.radians,
+                                                            use_approach_angle=use_approach_angle,
+                                                            use_pre_dock_pose=use_approach_angle,
+                                                            id_tag=_behavior_id,
+                                                            num_retries=num_retries)
 
         return await self.grpc_interface.PopAWheelie(pop_a_wheelie_request)
 
     @connection.on_connection_thread(is_cancellable_behavior=True)
     async def pickup_object(self,
-                             target_object: objects.LightCube,
-                             use_pre_dock_pose: bool = True,
-                             num_retries: int = 0,
-                             _behavior_id: int = None) -> protocol.PickupObjectResponse:
+                            target_object: objects.LightCube,
+                            use_pre_dock_pose: bool = True,
+                            num_retries: int = 0,
+                            _behavior_id: int = None) -> protocol.PickupObjectResponse:
         """Instruct the robot to pick up his LightCube.
 
         While picking up the cube, Vector will use path planning.
@@ -786,8 +783,8 @@ class BehaviorComponent(util.Component):
 
     @connection.on_connection_thread(is_cancellable_behavior=True)
     async def place_object_on_ground_here(self,
-                             num_retries: int = 0,
-                             _behavior_id: int = None) -> protocol.PlaceObjectOnGroundHereResponse:
+                                          num_retries: int = 0,
+                                          _behavior_id: int = None) -> protocol.PlaceObjectOnGroundHereResponse:
         """Ask Vector to place the object he is carrying on the ground at the current location.
 
         :param num_retries: Number of times to reattempt action in case of a failure.
@@ -810,3 +807,95 @@ class BehaviorComponent(util.Component):
                                                                                       num_retries=num_retries)
 
         return await self.grpc_interface.PlaceObjectOnGroundHere(place_object_on_ground_here_request)
+
+
+class ReserveBehaviorControl():
+    """A ReserveBehaviorControl object can be used to suppress the ordinary idle behaviors of
+    the Robot and keep Vector still between SDK control instances.  Care must be taken when
+    blocking background behaviors, as this may make Vector appear non-responsive.
+
+    This class is most easily used via a built-in SDK script, and can be called on the command-line
+    via the executable module :class:`anki_vector.reserve_control`:
+
+        .. code-block:: bash
+
+            python3 -m anki_vector.reserve_control
+
+    As long as the script is running, background behaviors will not activate, keeping Vector
+    still while other SDK scripts may take control.  Highest-level behaviors like returning to
+    the charger due to low battery will still activate.
+
+    System-specific shortcuts calling this executable module can be found in the examples/scripts
+    folder.  These scripts can be double-clicked to easily reserve behavior control for the current
+    SDK default robot.
+
+    If there is a need to keep background behaviors from activating in a single script, the class
+    may be used to reserve behavior control while in scope:
+
+        .. code-block:: python
+
+            import anki_vector
+            from anki_vector import behavior
+
+            args = anki_vector.util.parse_command_args()
+            with behavior.ReserveBehaviorControl(args.serial):
+
+                # At this point, Vector will remain still, even without
+                # a Robot instance being in scope.
+
+                ...
+
+                # take control of the robot as usual
+                with anki_vector.Robot() as robot:
+
+                    robot.anim.play_animation("anim_turn_left_01")
+
+                # Robot will not perform idle behaviors until the script completes
+
+                ...
+
+    :param serial: Vector's serial number. The robot's serial number (ex. 00e20100) is located on
+                   the underside of Vector, or accessible from Vector's debug screen. Used to
+                   identify which Vector configuration to load.
+    :param ip: Vector's IP address. (optional)
+    :param config: A custom :class:`dict` to override values in Vector's configuration. (optional)
+                   Example: :code:`{"cert": "/path/to/file.cert", "name": "Vector-XXXX", "guid": "<secret_key>"}`
+                   where :code:`cert` is the certificate to identify Vector, :code:`name` is the
+                   name on Vector's face when his backpack is double-clicked on the charger, and
+                   :code:`guid` is the authorization token that identifies the SDK user.
+                   Note: Never share your authentication credentials with anyone.
+    :param behavior_activation_timeout: The time to wait for control of the robot before failing.
+    """
+
+    def __init__(self,
+                 serial: str = None,
+                 ip: str = None,
+                 config: dict = None,
+                 behavior_activation_timeout: int = 10):
+        config = config if config is not None else {}
+        self.logger = util.get_class_logger(__name__, self)
+        config = {**util.read_configuration(serial, self.logger), **config}
+        self._name = config["name"]
+        self._ip = ip if ip is not None else config["ip"]
+        self._cert_file = config["cert"]
+        self._guid = config["guid"]
+
+        self._port = "443"
+        if 'port' in config:
+            self._port = config["port"]
+
+        if self._name is None or self._ip is None or self._cert_file is None or self._guid is None:
+            raise ValueError("The Robot object requires a serial and for Vector to be logged in (using the app then running the anki_vector.configure executable submodule).\n"
+                             "You may also provide the values necessary for connection through the config parameter. ex: "
+                             '{"name":"Vector-XXXX", "ip":"XX.XX.XX.XX", "cert":"/path/to/cert_file", "guid":"<secret_key>"}')
+
+        self._conn = connection.Connection(self._name, ':'.join([self._ip, self._port]), self._cert_file, self._guid,
+                                           behavior_control_level=connection.CONTROL_PRIORITY_LEVEL.RESERVE_CONTROL)
+        self._behavior_activation_timeout = behavior_activation_timeout
+
+    def __enter__(self):
+        self._conn.connect(self._behavior_activation_timeout)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._conn.close()

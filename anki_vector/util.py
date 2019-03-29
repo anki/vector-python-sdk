@@ -42,23 +42,23 @@ __all__ = ['Angle',
            'speed_mmps']
 
 import argparse
+import configparser
 from functools import wraps
 import logging
 import math
 import os
+from pathlib import Path
 import sys
 import time
 from typing import Callable
 
-from .exceptions import VectorPropertyValueNotReadyException
+from .exceptions import VectorConfigurationException, VectorPropertyValueNotReadyException
 from .messaging import protocol
 
 try:
     from PIL import Image, ImageDraw
 except ImportError:
     sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
-
-# TODO Move to the robot class
 
 
 def parse_command_args(parser: argparse.ArgumentParser = None):
@@ -796,8 +796,8 @@ class Pose:
         Returns:
             True if the two poses are comparable, False otherwise.
         """
-        return (self.is_valid and other_pose.is_valid and
-                (self.origin_id == other_pose.origin_id))
+        return (self.is_valid and other_pose.is_valid
+                and (self.origin_id == other_pose.origin_id))
 
     def to_matrix(self) -> Matrix44:
         """Convert the Pose to a Matrix44.
@@ -1068,3 +1068,36 @@ class Component:
         """A direct reference to the connected aiogrpc interface.
         """
         return self._robot.conn.grpc_interface
+
+
+def read_configuration(serial: str, logger: logging.Logger) -> dict:
+    """Open the default conf file, and read it into a :class:`configparser.ConfigParser`
+
+    :param serial: Vector's serial number
+    :param logger: Logger object
+    """
+    home = Path.home() / ".anki_vector"
+    conf_file = str(home / "sdk_config.ini")
+    parser = configparser.ConfigParser(strict=False)
+    parser.read(conf_file)
+
+    sections = parser.sections()
+    if not sections:
+        raise VectorConfigurationException('Could not find the sdk configuration file. Please run `python3 -m anki_vector.configure` to set up your Vector for SDK usage.')
+    elif serial is None and len(sections) == 1:
+        serial = sections[0]
+        logger.warning("No serial number provided. Automatically selecting {}".format(serial))
+    elif serial is None:
+        raise VectorConfigurationException("Found multiple robot serial numbers. "
+                                           "Please provide the serial number of the Robot you want to control.\n\n"
+                                           "Example: ./01_hello_world.py --serial {{robot_serial_number}}")
+
+    serial = serial.lower()
+    config = {k.lower(): v for k, v in parser.items()}
+    try:
+        dict_entry = config[serial]
+    except KeyError:
+        raise VectorConfigurationException("Could not find matching robot info for given serial number: {}. "
+                                           "Please check your serial number is correct.\n\n"
+                                           "Example: ./01_hello_world.py --serial {{robot_serial_number}}", serial)
+    return dict_entry
