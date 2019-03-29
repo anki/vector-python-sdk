@@ -32,6 +32,7 @@ The API
     anki_vector.screen
     anki_vector.status
     anki_vector.touch
+    anki_vector.user_intent
     anki_vector.util
     anki_vector.viewer
     anki_vector.vision
