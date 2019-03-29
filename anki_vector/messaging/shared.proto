@@ -61,6 +61,7 @@ message Event {
     ConnectionResponse               connection_response                 = 13;
     MirrorModeDisabled               mirror_mode_disabled                = 16;
     VisionModesAutoDisabled          vision_modes_auto_disabled          = 17;
+    UserIntent                       user_intent                         = 19;
   }
 }
 

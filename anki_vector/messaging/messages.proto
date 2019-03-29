@@ -444,6 +444,30 @@ message DriveOnChargerResponse {
   BehaviorResults result = 2;
 }
 
+message FindFacesRequest {
+}
+
+message FindFacesResponse {
+  ResponseStatus status = 1;
+  BehaviorResults result = 2;
+}
+
+message LookAroundInPlaceRequest {
+}
+
+message LookAroundInPlaceResponse {
+  ResponseStatus status = 1;
+  BehaviorResults result = 2;
+}
+
+//this triggers a Vector Behavior, different from RollObjectRequest which triggers an Action
+message RollBlockRequest {
+}
+
+message RollBlockResponse {
+  ResponseStatus status = 1;
+  BehaviorResults result = 2;
+}
 
 message WakeWordBegin {
 }
@@ -451,6 +475,11 @@ message WakeWordBegin {
 message WakeWordEnd {
   bool intent_heard = 1;
   string intent_json = 2;
+}
+
+message UserIntent {
+  uint32 intent_id = 1;
+  string json_data = 2;
 }
 
 message PhotoInfo {
@@ -975,6 +1004,25 @@ message ExternalAudioStreamResponse {
     ExternalAudioStreamBufferOverrun audio_stream_buffer_overrun = 2;
     ExternalAudioStreamPlaybackFailure audio_stream_playback_failyer = 3;
   }
+}
+
+enum MasterVolumeLevel
+{
+  VOLUME_LOW         = 0;
+  VOLUME_MEDIUM_LOW  = 1;
+  VOLUME_MEDIUM      = 2;
+  VOLUME_MEDIUM_HIGH = 3;
+  VOLUME_HIGH        = 4;
+}
+
+message MasterVolumeRequest 
+{
+  MasterVolumeLevel volume_level = 1;
+}
+
+message MasterVolumeResponse
+{
+  ResponseStatus status = 1;
 }
 
 // When enabled, RobotObservedObject messages will be produced

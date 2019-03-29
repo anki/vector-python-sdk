@@ -253,6 +253,30 @@ service ExternalInterface {
     };
   }
 
+  // Make Vector look for faces by turning and angling his head
+  rpc FindFaces(FindFacesRequest) returns (FindFacesResponse) {
+    option (google.api.http) = {
+      post: "/v1/find_faces",
+      body: "*"
+    };
+  }
+
+  // Make Vector look around in place by turning and moving his head
+  rpc LookAroundInPlace(LookAroundInPlaceRequest) returns (LookAroundInPlaceResponse) {
+    option (google.api.http) = {
+      post: "/v1/look_around_in_place",
+      body: "*"
+    };
+  }
+  
+  // Make Vector roll his block, regardless of relative position and orientation
+  rpc RollBlock(RollBlockRequest) returns (RollBlockResponse) {
+    option (google.api.http) = {
+      post: "/v1/roll_block",
+      body: "*"
+    };
+  }
+
   // Get the photos info.
   rpc PhotosInfo(PhotosInfoRequest) returns (PhotosInfoResponse) {
     option (google.api.http) = {
@@ -314,6 +338,9 @@ service ExternalInterface {
 
   // Ask Vector to place the object he is carrying on the ground at the current location.
   rpc PlaceObjectOnGroundHere(PlaceObjectOnGroundHereRequest) returns (PlaceObjectOnGroundHereResponse) {}
+
+  // Set the Robot's master volume
+  rpc SetMasterVolume(MasterVolumeRequest) returns (MasterVolumeResponse) {}
 
   rpc UserAuthentication(UserAuthenticationRequest) returns (UserAuthenticationResponse) {
     option (google.api.http) = {
