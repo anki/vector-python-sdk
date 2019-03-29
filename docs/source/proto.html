@@ -641,6 +641,14 @@
                 </li>
               
                 <li>
+                  <a href="#Anki.Vector.external_interface.FindFacesRequest"><span class="badge">M</span>FindFacesRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.FindFacesResponse"><span class="badge">M</span>FindFacesResponse</a>
+                </li>
+              
+                <li>
                   <a href="#Anki.Vector.external_interface.GoToObjectRequest"><span class="badge">M</span>GoToObjectRequest</a>
                 </li>
               
@@ -694,6 +702,22 @@
               
                 <li>
                   <a href="#Anki.Vector.external_interface.LoadedKnownFace"><span class="badge">M</span>LoadedKnownFace</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.LookAroundInPlaceRequest"><span class="badge">M</span>LookAroundInPlaceRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.LookAroundInPlaceResponse"><span class="badge">M</span>LookAroundInPlaceResponse</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.MasterVolumeRequest"><span class="badge">M</span>MasterVolumeRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.MasterVolumeResponse"><span class="badge">M</span>MasterVolumeResponse</a>
                 </li>
               
                 <li>
@@ -825,6 +849,14 @@
                 </li>
               
                 <li>
+                  <a href="#Anki.Vector.external_interface.RollBlockRequest"><span class="badge">M</span>RollBlockRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.RollBlockResponse"><span class="badge">M</span>RollBlockResponse</a>
+                </li>
+              
+                <li>
                   <a href="#Anki.Vector.external_interface.RollObjectRequest"><span class="badge">M</span>RollObjectRequest</a>
                 </li>
               
@@ -941,6 +973,10 @@
                 </li>
               
                 <li>
+                  <a href="#Anki.Vector.external_interface.UserIntent"><span class="badge">M</span>UserIntent</a>
+                </li>
+              
+                <li>
                   <a href="#Anki.Vector.external_interface.VersionStateRequest"><span class="badge">M</span>VersionStateRequest</a>
                 </li>
               
@@ -1007,6 +1043,10 @@
               
                 <li>
                   <a href="#Anki.Vector.external_interface.ImageChunk.ImageEncoding"><span class="badge">E</span>ImageChunk.ImageEncoding</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.MasterVolumeLevel"><span class="badge">E</span>MasterVolumeLevel</a>
                 </li>
               
                 <li>
@@ -3172,6 +3212,21 @@ minimum host version and receiving a response to see whether the versions are su
               </tr>
             
               <tr>
+                <td>FindFaces</td>
+                <td><p>Make Vector look for faces by turning and angling his head</p></td>
+              </tr>
+            
+              <tr>
+                <td>LookAroundInPlace</td>
+                <td><p>Make Vector look around in place by turning and moving his head</p></td>
+              </tr>
+            
+              <tr>
+                <td>RollBlock</td>
+                <td><p>Make Vector roll his block, regardless of relative position and orientation</p></td>
+              </tr>
+            
+              <tr>
                 <td>PhotosInfo</td>
                 <td><p>Get the photos info.</p></td>
               </tr>
@@ -3239,6 +3294,11 @@ minimum host version and receiving a response to see whether the versions are su
               <tr>
                 <td>PlaceObjectOnGroundHere</td>
                 <td><p>Ask Vector to place the object he is carrying on the ground at the current location.</p></td>
+              </tr>
+            
+              <tr>
+                <td>SetMasterVolume</td>
+                <td><p>Set the Robot's master volume</p></td>
               </tr>
             
               <tr>
@@ -5038,6 +5098,44 @@ detections that are enabled from above messages
 
         
       
+        <h3 id="Anki.Vector.external_interface.FindFacesRequest">FindFacesRequest</h3>
+        
+        <p></p>
+
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.FindFacesResponse">FindFacesResponse</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>result</td>
+                  <td><a href="#Anki.Vector.external_interface.BehaviorResults">BehaviorResults</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
         <h3 id="Anki.Vector.external_interface.GoToObjectRequest">GoToObjectRequest</h3>
         GoToObject
         <p></p>
@@ -5475,6 +5573,92 @@ still connected.
                 <tr>
                   <td>name</td>
                   <td><a href="#string">string</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.LookAroundInPlaceRequest">LookAroundInPlaceRequest</h3>
+        
+        <p></p>
+
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.LookAroundInPlaceResponse">LookAroundInPlaceResponse</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>result</td>
+                  <td><a href="#Anki.Vector.external_interface.BehaviorResults">BehaviorResults</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.MasterVolumeRequest">MasterVolumeRequest</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>volume_level</td>
+                  <td><a href="#Anki.Vector.external_interface.MasterVolumeLevel">MasterVolumeLevel</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.MasterVolumeResponse">MasterVolumeResponse</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
                   <td><p> </p></td>
                 </tr>
               
@@ -6681,6 +6865,44 @@ path should be modified or traversed.
 
         
       
+        <h3 id="Anki.Vector.external_interface.RollBlockRequest">RollBlockRequest</h3>
+        this triggers a Vector Behavior, different from RollObjectRequest which triggers an Action
+        <p></p>
+
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.RollBlockResponse">RollBlockResponse</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>result</td>
+                  <td><a href="#Anki.Vector.external_interface.BehaviorResults">BehaviorResults</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
         <h3 id="Anki.Vector.external_interface.RollObjectRequest">RollObjectRequest</h3>
         RollObject
         <p></p>
@@ -7714,6 +7936,36 @@ default tolerance of POINT_TURN_ANGLE_TOL.
 
         
       
+        <h3 id="Anki.Vector.external_interface.UserIntent">UserIntent</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>intent_id</td>
+                  <td><a href="#uint32">uint32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>json_data</td>
+                  <td><a href="#string">string</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
         <h3 id="Anki.Vector.external_interface.VersionStateRequest">VersionStateRequest</h3>
         
         <p></p>
@@ -8624,6 +8876,48 @@ Proto field names are prefixed with "EXPRESSION_"<p></p>
         </table>
         <p></p>
       
+        <h3 id="Anki.Vector.external_interface.MasterVolumeLevel">MasterVolumeLevel</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>VOLUME_LOW</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>VOLUME_MEDIUM_LOW</td>
+                <td>1</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>VOLUME_MEDIUM</td>
+                <td>2</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>VOLUME_MEDIUM_HIGH</td>
+                <td>3</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>VOLUME_HIGH</td>
+                <td>4</td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+        <p></p>
+      
         <h3 id="Anki.Vector.external_interface.RobotStatus">RobotStatus</h3>
         <p></p>
         <table class="enum-table">
@@ -9245,6 +9539,12 @@ This will indicate the generic state of the request.
                 <tr>
                   <td>vision_modes_auto_disabled</td>
                   <td><a href="#Anki.Vector.external_interface.VisionModesAutoDisabled">VisionModesAutoDisabled</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>user_intent</td>
+                  <td><a href="#Anki.Vector.external_interface.UserIntent">UserIntent</a> </td>
                   <td><p> </p></td>
                 </tr>
               
