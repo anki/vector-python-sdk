@@ -125,6 +125,61 @@ class BehaviorComponent(util.Component):
 
     # TODO Make this cancellable with is_cancellable_behavior
     @connection.on_connection_thread()
+    async def find_faces(self) -> protocol.FindFacesResponse:
+        """Look around for faces
+
+        Turn in place and move head to look for faces
+
+        .. testcode::
+
+            import anki_vector
+
+            with anki_vector.Robot() as robot:
+                robot.behavior.find_faces()
+        """
+        find_faces_request = protocol.FindFacesRequest()
+        return await self.grpc_interface.FindFaces(find_faces_request)
+
+    # TODO Make this cancellable with is_cancellable_behavior
+    @connection.on_connection_thread()
+    async def look_around_in_place(self) -> protocol.LookAroundInPlaceResponse:
+        """Look around in place
+
+        Turn in place and move head to see what's around Vector
+
+        .. testcode::
+
+            import anki_vector
+
+            with anki_vector.Robot() as robot:
+                robot.behavior.look_around_in_place()
+        """
+        look_around_in_place_request = protocol.LookAroundInPlaceRequest()
+        return await self.grpc_interface.LookAroundInPlace(look_around_in_place_request)
+
+    # TODO Make this cancellable with is_cancellable_behavior
+    @connection.on_connection_thread()
+    async def find_and_roll_block(self) -> protocol.RollBlockResponse:
+        """Roll a block
+
+        This behavior will move into position as necessary based on relative
+        distance and orientation.
+
+        Vector needs to see the block for this to succeed.
+
+        .. testcode::
+
+            import anki_vector
+
+            with anki_vector.Robot() as robot:
+                robot.behavior.find_and_roll_block()
+        """
+        roll_block_request = protocol.RollBlockRequest()
+        return await self.grpc_interface.RollBlock(roll_block_request)
+
+
+    # TODO Make this cancellable with is_cancellable_behavior
+    @connection.on_connection_thread()
     async def say_text(self, text: str, use_vector_voice: bool = True, duration_scalar: float = 1.0) -> protocol.SayTextResponse:
         """Make Vector speak text.
 
