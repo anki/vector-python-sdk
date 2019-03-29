@@ -55,6 +55,9 @@ class CONTROL_PRIORITY_LEVEL(Enum):
     #: Runs below Mandatory Physical Reactions such as tucking Vector's head and arms during a fall,
     #: yet above Trigger-Word Detection.  Default for normal operation.
     DEFAULT_PRIORITY = protocol.ControlRequest.DEFAULT  # pylint: disable=no-member
+    #: Holds control of robot before/after other SDK connections
+    #: Used to disable idle behaviors.  Not to be used for regular behavior control.
+    RESERVE_CONTROL = protocol.ControlRequest.RESERVE_CONTROL  # pylint: disable=no-member
 
 
 class _ControlEventManager:

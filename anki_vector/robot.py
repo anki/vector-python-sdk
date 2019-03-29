@@ -25,9 +25,7 @@ caller may use to obtain the result when they desire.
 __all__ = ['Robot', 'AsyncRobot']
 
 import concurrent
-import configparser
 import functools
-from pathlib import Path
 
 from . import (animation, audio, behavior, camera,
                events, faces, motors, nav_map, screen,
@@ -36,8 +34,7 @@ from . import (animation, audio, behavior, camera,
 from .connection import (Connection,
                          on_connection_thread,
                          CONTROL_PRIORITY_LEVEL)
-from .exceptions import (VectorConfigurationException,
-                         VectorNotReadyException,
+from .exceptions import (VectorNotReadyException,
                          VectorPropertyValueNotReadyException,
                          VectorUnreliableEventStreamException)
 from .viewer import (ViewerComponent, Viewer3DComponent)
@@ -120,7 +117,7 @@ class Robot:
         self.logger = util.get_class_logger(__name__, self)
         self._force_async = False
         config = config if config is not None else {}
-        config = {**self._read_configuration(serial), **config}
+        config = {**util.read_configuration(serial, self.logger), **config}
 
         self._name = config["name"]
         self._ip = ip if ip is not None else config["ip"]
@@ -188,38 +185,6 @@ class Robot:
         if show_3d_viewer and enable_nav_map_feed is None:
             self.logger.warning("enable_nav_map_feed should be True for 3d viewer to render correctly.")
             self._enable_nav_map_feed = True
-
-    def _read_configuration(self, serial: str) -> dict:
-        """Open the default conf file, and read it into a :class:`configparser.ConfigParser`
-
-        :param serial: Vector's serial number
-        """
-        home = Path.home() / ".anki_vector"
-        conf_file = str(home / "sdk_config.ini")
-        parser = configparser.ConfigParser(strict=False)
-        parser.read(conf_file)
-
-        sections = parser.sections()
-        if not sections:
-            raise VectorConfigurationException('Could not find the sdk configuration file. Please run `python3 -m anki_vector.configure` to set up your Vector for SDK usage.')
-        elif serial is None and len(sections) == 1:
-            serial = sections[0]
-            self.logger.warning("No serial number provided. Automatically selecting {}".format(serial))
-        elif serial is None:
-            raise VectorConfigurationException("Found multiple robot serial numbers. "
-                                               "Please provide the serial number of the Robot you want to control.\n\n"
-                                               "Example: ./01_hello_world.py --serial {{robot_serial_number}}")
-
-        serial = serial.lower()
-        config = {k.lower(): v for k, v in parser.items()}
-        try:
-            dict_entry = config[serial]
-        except KeyError:
-            raise VectorConfigurationException("Could not find matching robot info for given serial number: {}. "
-                                               "Please check your serial number is correct.\n\n"
-                                               "Example: ./01_hello_world.py --serial {{robot_serial_number}}", serial)
-
-        return dict_entry
 
     @property
     def force_async(self) -> bool:

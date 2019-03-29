@@ -47,6 +47,19 @@ except ImportError:
     sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
 
 
+def _convert_to_pillow_image(image_data: bytes) -> Image.Image:
+    """Convert raw image bytes to a Pillow Image."""
+    size = len(image_data)
+
+    # Constuct numpy array out of source data
+    array = np.empty(size, dtype=np.uint8)
+    array[0:size] = list(image_data)
+
+    # Decode compressed source data into uncompressed image data
+    image = Image.open(io.BytesIO(array))
+    return image
+
+
 class CameraComponent(util.Component):
     """Represents Vector's camera.
 
@@ -187,21 +200,9 @@ class CameraComponent(util.Component):
         future = self.conn.run_coroutine(self._image_streaming_enabled())
         return future.result()
 
-    def _convert_to_pillow_image(self, image_data: bytes) -> Image.Image:
-        """Convert raw image bytes to a Pillow Image."""
-        size = len(image_data)
-
-        # Constuct numpy array out of source data
-        array = np.empty(size, dtype=np.uint8)
-        array[0:size] = list(image_data)
-
-        # Decode compressed source data into uncompressed image data
-        image = Image.open(io.BytesIO(array))
-        return image
-
     def _unpack_image(self, msg: protocol.CameraFeedResponse) -> None:
         """Processes raw data from the robot into a more useful image structure."""
-        image = self._convert_to_pillow_image(msg.data)
+        image = _convert_to_pillow_image(msg.data)
         self.robot.viewer.enqueue_frame(image)
 
         self._latest_image = image
@@ -226,9 +227,9 @@ class CameraComponent(util.Component):
     async def capture_single_image(self) -> Image.Image:
         """Request to capture a single image from the robot's camera.
 
-        This call requests the robot to capture an image and returns the 
+        This call requests the robot to capture an image and returns the
         received image, formatted as a Pillow image. This differs from `latest_image`,
-        which maintains the last image received from the camera feed (if enabled). 
+        which maintains the last image received from the camera feed (if enabled).
 
         Note that when the camera feed is enabled this call returns the `latest_image`.
 
@@ -245,5 +246,5 @@ class CameraComponent(util.Component):
         req = protocol.CaptureSingleImageRequest()
         res = await self.grpc_interface.CaptureSingleImage(req)
         if res and res.data:
-            return self._convert_to_pillow_image(res.data)
+            return _convert_to_pillow_image(res.data)
         self.logger.error('Failed to capture a single image')
