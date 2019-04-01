@@ -177,7 +177,6 @@ class BehaviorComponent(util.Component):
         roll_block_request = protocol.RollBlockRequest()
         return await self.grpc_interface.RollBlock(roll_block_request)
 
-
     # TODO Make this cancellable with is_cancellable_behavior
     @connection.on_connection_thread()
     async def say_text(self, text: str, use_vector_voice: bool = True, duration_scalar: float = 1.0) -> protocol.SayTextResponse:
