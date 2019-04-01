@@ -8,6 +8,7 @@ The API
 
     anki_vector
     anki_vector.animation
+    anki_vector.annotate
     anki_vector.audio
     anki_vector.behavior
     anki_vector.camera

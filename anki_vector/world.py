@@ -196,6 +196,24 @@ class World(util.Component):
                 yield obj
 
     @property
+    def visible_objects(self) -> Iterable[objects.ObservableObject]:
+        """generator: yields each object that Vector can currently see.
+
+        .. testcode::
+
+            import anki_vector
+            with anki_vector.Robot() as robot:
+                for obj in robot.world.visible_objects:
+                    print(obj)
+
+        Returns:
+            A generator yielding Charger, LightCube and CustomObject instances
+        """
+        for obj in self._objects.values():
+            if obj.is_visible:
+                yield obj
+
+    @property
     def connected_light_cube(self) -> objects.LightCube:
         """A light cube connected to Vector, if any.
 
@@ -843,7 +861,7 @@ class World(util.Component):
 
     def _on_face_observed(self, _robot, _event_type, msg):
         """Adds a newly observed face to the world view."""
-        if msg.face_id not in self._faces or msg.face_id not in self._objects:
+        if msg.face_id not in self._faces:
             pose = util.Pose(x=msg.pose.x, y=msg.pose.y, z=msg.pose.z,
                              q0=msg.pose.q0, q1=msg.pose.q1,
                              q2=msg.pose.q2, q3=msg.pose.q3,
@@ -857,23 +875,24 @@ class World(util.Component):
                                      msg.left_eye, msg.right_eye, msg.nose, msg.mouth, msg.timestamp)
             if face:
                 self._faces[face.face_id] = face
-                self._objects[face.face_id] = face
 
     def _on_object_observed(self, _robot, _event_type, msg):
         """Adds a newly observed custom object to the world view."""
-        if msg.object_type == protocol.ObjectType.Value("BLOCK_LIGHTCUBE1"):
+        first_custom_type = protocol.ObjectType.Value("FIRST_CUSTOM_OBJECT_TYPE")
+        if msg.object_type == objects.LIGHT_CUBE_1_TYPE:
             if msg.object_id not in self._objects:
-                if self.light_cube:
-                    self._objects[msg.object_id] = self.light_cube
+                light_cube = self._light_cube.get(objects.LIGHT_CUBE_1_TYPE)
+                if light_cube:
+                    light_cube.object_id = msg.object_id
+                    self._objects[msg.object_id] = light_cube
 
-        if msg.object_type == protocol.ObjectType.Value("CHARGER_BASIC"):
+        elif msg.object_type == protocol.ObjectType.Value("CHARGER_BASIC"):
             if msg.object_id not in self._objects:
                 charger = self._allocate_charger(msg)
                 if charger:
                     self._objects[msg.object_id] = charger
 
-        first_custom_type = protocol.ObjectType.Value("FIRST_CUSTOM_OBJECT_TYPE")
-        if first_custom_type <= msg.object_type < (first_custom_type + protocol.CustomType.Value("CUSTOM_TYPE_COUNT")):
+        elif first_custom_type <= msg.object_type < (first_custom_type + protocol.CustomType.Value("CUSTOM_TYPE_COUNT")):
             if msg.object_id not in self._objects:
                 custom_object = self._allocate_custom_marker_object(msg)
                 if custom_object:

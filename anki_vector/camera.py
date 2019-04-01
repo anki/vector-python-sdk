@@ -32,7 +32,7 @@ import io
 import time
 import sys
 
-from . import connection, util
+from . import annotate, connection, util
 from .exceptions import VectorCameraFeedException
 from .messaging import protocol
 
@@ -60,6 +60,78 @@ def _convert_to_pillow_image(image_data: bytes) -> Image.Image:
     return image
 
 
+class CameraImage:
+    """A single image from the robot's camera.
+    This wraps a raw image and provides an :meth:`annotate_image` method
+    that can resize and add dynamic annotations to the image, such as
+    marking up the location of objects and faces.
+
+    .. testcode::
+
+        import anki_vector
+
+        with anki_vector.Robot() as robot:
+            image = robot.camera.capture_single_image()
+            print(f"Displaying image with id {image.image_id}, received at {image.image_recv_time}")
+            image.raw_image.show()
+
+    :param raw_image: The raw unprocessed image from the camera.
+    :param image_annotator: The image annotation object.
+    :param image_id: An image number that increments on every new image received.
+    """
+
+    def __init__(self, raw_image: Image.Image, image_annotator: annotate.ImageAnnotator, image_id: int):
+
+        self._raw_image = raw_image
+        self._image_annotator = image_annotator
+        self._image_id = image_id
+        self._image_recv_time = time.time()
+
+    @property
+    def raw_image(self) -> Image.Image:
+        """The raw unprocessed image from the camera."""
+        return self._raw_image
+
+    @property
+    def image_id(self) -> int:
+        """An image number that increments on every new image received."""
+        return self._image_id
+
+    @property
+    def image_recv_time(self) -> float:
+        """The time the image was received and processed by the SDK."""
+        return self._image_recv_time
+
+    def annotate_image(self, scale: float = None, fit_size: tuple = None, resample_mode: int = annotate.RESAMPLE_MODE_NEAREST) -> Image.Image:
+        """Adds any enabled annotations to the image.
+        Optionally resizes the image prior to annotations being applied.  The
+        aspect ratio of the resulting image always matches that of the raw image.
+
+        .. testcode::
+
+            import anki_vector
+
+            with anki_vector.Robot() as robot:
+                image = robot.camera.capture_single_image()
+                annotated_image = image.annotate_image()
+                annotated_image.show()
+
+        :param scale: If set then the base image will be scaled by the
+            supplied multiplier.  Cannot be combined with fit_size
+        :param fit_size:  If set, then scale the image to fit inside
+            the supplied (width, height) dimensions. The original aspect
+            ratio will be preserved.  Cannot be combined with scale.
+        :param resample_mode: The resampling mode to use when scaling the
+            image. Should be either :attr:`~anki_vector.annotate.RESAMPLE_MODE_NEAREST`
+            (fast) or :attr:`~anki_vector.annotate.RESAMPLE_MODE_BILINEAR` (slower,
+            but smoother).
+        """
+        return self._image_annotator.annotate_image(self._raw_image,
+                                                    scale=scale,
+                                                    fit_size=fit_size,
+                                                    resample_mode=resample_mode)
+
+
 class CameraComponent(util.Component):
     """Represents Vector's camera.
 
@@ -75,22 +147,27 @@ class CameraComponent(util.Component):
         with anki_vector.Robot() as robot:
             robot.camera.init_camera_feed()
             image = robot.camera.latest_image
-            image.show()
+            image.raw_image.show()
 
     :param robot: A reference to the owner Robot object.
     """
 
+    #: callable: The factory function that returns an
+    #: :class:`annotate.ImageAnnotator` class or subclass instance.
+    annotator_factory = annotate.ImageAnnotator
+
     def __init__(self, robot):
         super().__init__(robot)
 
-        self._latest_image: Image.Image = None
+        self._image_annotator: annotate.ImageAnnotator = self.annotator_factory(self.robot.world)
+        self._latest_image: CameraImage = None
         self._latest_image_id: int = None
         self._camera_feed_task: asyncio.Task = None
         self._enabled = False
 
     @property
     @util.block_while_none()
-    def latest_image(self) -> Image.Image:
+    def latest_image(self) -> CameraImage:
         """:class:`Image.Image`: The most recently processed image received from the robot.
 
         The resolution of latest_image is 640x360.
@@ -104,7 +181,7 @@ class CameraComponent(util.Component):
             with anki_vector.Robot() as robot:
                 robot.camera.init_camera_feed()
                 image = robot.camera.latest_image
-                image.show()
+                image.raw_image.show()
         """
         if not self._camera_feed_task:
             raise VectorCameraFeedException()
@@ -126,12 +203,30 @@ class CameraComponent(util.Component):
             with anki_vector.Robot() as robot:
                 robot.camera.init_camera_feed()
                 image = robot.camera.latest_image
-                image.show()
+                image.raw_image.show()
                 print(f"latest_image_id: {robot.camera.latest_image_id}")
         """
         if not self._camera_feed_task:
             raise VectorCameraFeedException()
         return self._latest_image_id
+
+    @property
+    def image_annotator(self) -> annotate.ImageAnnotator:
+        """The image annotator used to add annotations to the raw camera images.
+
+        .. testcode::
+
+            import time
+            import anki_vector
+
+            with anki_vector.Robot(show_viewer=True) as robot:
+                # Annotations (enabled by default) are displayed on the camera feed
+                time.sleep(5)
+                # Disable all annotations
+                robot.camera.image_annotator.annotation_enabled = False
+                time.sleep(5)
+        """
+        return self._image_annotator
 
     def init_camera_feed(self) -> None:
         """Begin camera feed task.
@@ -143,7 +238,7 @@ class CameraComponent(util.Component):
             with anki_vector.Robot() as robot:
                 robot.camera.init_camera_feed()
                 image = robot.camera.latest_image
-                image.show()
+                image.raw_image.show()
         """
         if not self._camera_feed_task or self._camera_feed_task.done():
             self._enabled = True
@@ -203,10 +298,13 @@ class CameraComponent(util.Component):
     def _unpack_image(self, msg: protocol.CameraFeedResponse) -> None:
         """Processes raw data from the robot into a more useful image structure."""
         image = _convert_to_pillow_image(msg.data)
-        self.robot.viewer.enqueue_frame(image)
 
-        self._latest_image = image
+        self._latest_image = CameraImage(image, self._image_annotator, msg.image_id)
         self._latest_image_id = msg.image_id
+
+        if self._image_annotator.annotation_enabled:
+            image = self._image_annotator.annotate_image(image)
+        self.robot.viewer.enqueue_frame(image)
 
     async def _request_and_handle_images(self) -> None:
         """Queries and listens for camera feed events from the robot.
@@ -224,7 +322,7 @@ class CameraComponent(util.Component):
             self.logger.debug('Camera feed task was cancelled. This is expected during disconnection.')
 
     @connection.on_connection_thread()
-    async def capture_single_image(self) -> Image.Image:
+    async def capture_single_image(self) -> CameraImage:
         """Request to capture a single image from the robot's camera.
 
         This call requests the robot to capture an image and returns the
@@ -239,12 +337,14 @@ class CameraComponent(util.Component):
 
             with anki_vector.Robot() as robot:
                 image = robot.camera.capture_single_image()
-                image.show()
+                image.raw_image.show()
         """
         if self._enabled:
             return self._latest_image
         req = protocol.CaptureSingleImageRequest()
         res = await self.grpc_interface.CaptureSingleImage(req)
         if res and res.data:
-            return _convert_to_pillow_image(res.data)
+            image = _convert_to_pillow_image(res.data)
+            return CameraImage(image, self._image_annotator, res.image_id)
+
         self.logger.error('Failed to capture a single image')
