@@ -63,6 +63,8 @@ class Events(Enum):
     object_disappeared = "object_disappeared"       #: Python event triggered when an object has not received a robot_observed_object for a specified time.
     object_finished_move = "object_finished_move"   #: Python event triggered in response to object_stopped_moving with duration data.
     nav_map_update = "nav_map_update"               #: Python event containing nav map data.
+    new_raw_camera_image = "new_raw_camera_image"   #: Python event containing a raw camera image
+    new_camera_image = "new_camera_image"           #: Python event containing a processed camera image (:class:`anki_vector.camera.CameraImage` instance)
 
 
 class _EventCallback:

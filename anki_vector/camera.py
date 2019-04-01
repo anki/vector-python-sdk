@@ -18,13 +18,15 @@ Vector has a built-in camera which he uses to observe the world around him.
 
 The :class:`CameraComponent` class defined in this module is made available as
 :attr:`anki_vector.robot.Robot.camera` and can be used to enable/disable image
-sending and observe images being sent by the robot.
+sending and observe images being sent by the robot. It emits :class:`EvtNewRawCameraImage`
+and :class:`EvtNewCameraImage` objects whenever a new camera image is available.
 
 The camera resolution is 1280 x 720 with a field of view of 90 deg (H) x 50 deg (V).
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
-__all__ = ['CameraComponent']
+__all__ = ["EvtNewRawCameraImage", "EvtNewCameraImage",
+           "CameraComponent", "CameraImage"]
 
 import asyncio
 from concurrent.futures import CancelledError
@@ -33,6 +35,7 @@ import time
 import sys
 
 from . import annotate, connection, util
+from .events import Events
 from .exceptions import VectorCameraFeedException
 from .messaging import protocol
 
@@ -302,6 +305,11 @@ class CameraComponent(util.Component):
         self._latest_image = CameraImage(image, self._image_annotator, msg.image_id)
         self._latest_image_id = msg.image_id
 
+        self.conn.run_soon(self.robot.events.dispatch_event(EvtNewRawCameraImage(image),
+                                                            Events.new_raw_camera_image))
+        self.conn.run_soon(self.robot.events.dispatch_event(EvtNewCameraImage(self._latest_image),
+                                                            Events.new_camera_image))
+
         if self._image_annotator.annotation_enabled:
             image = self._image_annotator.annotate_image(image)
         self.robot.viewer.enqueue_frame(image)
@@ -348,3 +356,77 @@ class CameraComponent(util.Component):
             return CameraImage(image, self._image_annotator, res.image_id)
 
         self.logger.error('Failed to capture a single image')
+
+
+class EvtNewRawCameraImage:  # pylint: disable=too-few-public-methods
+    """Dispatched when a new raw image is received from the robot's camera.
+
+    See also :class:`~anki_vector.camera.EvtNewCameraImage` which provides access
+    to both the raw image and a scaled and annotated version.
+
+    .. testcode::
+
+        import threading
+
+        import anki_vector
+        from anki_vector import events
+
+        def on_new_raw_camera_image(robot, event_type, event, done):
+            print("Display new camera image")
+            event.image.show()
+            done.set()
+
+        with anki_vector.Robot() as robot:
+            robot.camera.init_camera_feed()
+            done = threading.Event()
+            robot.events.subscribe(on_new_raw_camera_image, events.Events.new_raw_camera_image, done)
+
+            print("------ waiting for camera events, press ctrl+c to exit early ------")
+
+            try:
+                if not done.wait(timeout=5):
+                    print("------ Did not receive a new camera image! ------")
+            except KeyboardInterrupt:
+                pass
+
+    :param image: A raw camera image.
+    """
+
+    def __init__(self, image: Image.Image):
+        self.image = image
+
+
+class EvtNewCameraImage:  # pylint: disable=too-few-public-methods
+    """Dispatched when a new camera image is received and processed from the robot's camera.
+
+    .. testcode::
+
+        import threading
+
+        import anki_vector
+        from anki_vector import events
+
+        def on_new_camera_image(robot, event_type, event, done):
+            print(f"Display new annotated camera image with id {event.image.image_id}")
+            annotated_image = event.image.annotate_image()
+            annotated_image.show()
+            done.set()
+
+        with anki_vector.Robot(enable_face_detection=True, enable_custom_object_detection=True) as robot:
+            robot.camera.init_camera_feed()
+            done = threading.Event()
+            robot.events.subscribe(on_new_camera_image, events.Events.new_camera_image, done)
+
+            print("------ waiting for camera events, press ctrl+c to exit early ------")
+
+            try:
+                if not done.wait(timeout=5):
+                    print("------ Did not receive a new camera image! ------")
+            except KeyboardInterrupt:
+                pass
+
+    :param: A wrapped camera image object that contains the raw image.
+    """
+
+    def __init__(self, image: CameraImage):
+        self.image = image
