@@ -50,7 +50,7 @@ import os
 from pathlib import Path
 import sys
 import time
-from typing import Callable
+from typing import Callable, Union
 
 from .exceptions import VectorConfigurationException, VectorPropertyValueNotReadyException
 from .messaging import protocol
@@ -858,6 +858,15 @@ class ImageRect:
         """The height of the object from when it was last visible within Vector's camera view."""
         return self._height
 
+    def scale_by(self, scale_multiplier: Union[int, float]) -> None:
+        """Scales the image rectangle by the multiplier provided."""
+        if not isinstance(scale_multiplier, (int, float)):
+            raise TypeError("Unsupported operand for * expected number")
+        self._x_top_left *= scale_multiplier
+        self._y_top_left *= scale_multiplier
+        self._width *= scale_multiplier
+        self._height *= scale_multiplier
+
 
 class Distance:
     """Represents a distance.
@@ -1084,7 +1093,7 @@ def read_configuration(serial: str, logger: logging.Logger) -> dict:
     sections = parser.sections()
     if not sections:
         raise VectorConfigurationException('Could not find the sdk configuration file. Please run `python3 -m anki_vector.configure` to set up your Vector for SDK usage.')
-    elif serial is None and len(sections) == 1:
+    if serial is None and len(sections) == 1:
         serial = sections[0]
         logger.warning("No serial number provided. Automatically selecting {}".format(serial))
     elif serial is None:

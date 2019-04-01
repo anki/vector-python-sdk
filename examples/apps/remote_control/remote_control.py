@@ -23,11 +23,12 @@ import io
 import json
 import sys
 import time
+from enum import Enum
 from lib import flask_helpers
 
 import anki_vector
 from anki_vector import util
-
+from anki_vector import annotate
 
 try:
     from flask import Flask, request
@@ -35,7 +36,7 @@ except ImportError:
     sys.exit("Cannot import from flask: Do `pip3 install --user flask` to install")
 
 try:
-    from PIL import Image
+    from PIL import Image, ImageDraw
 except ImportError:
     sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
 
@@ -70,6 +71,39 @@ def remap_to_range(x, x_min, x_max, out_min, out_max):
         return out_max
     ratio = (x - x_min) / (x_max - x_min)
     return out_min + ratio * (out_max - out_min)
+
+
+class DebugAnnotations(Enum):
+    DISABLED = 0
+    ENABLED_VISION = 1
+    ENABLED_ALL = 2
+
+
+# Annotator for displaying RobotState (position, etc.) on top of the camera feed
+class RobotStateDisplay(annotate.Annotator):
+    def apply(self, image, scale):
+        d = ImageDraw.Draw(image)
+
+        bounds = [3, 0, image.width, image.height]
+
+        def print_line(text_line):
+            text = annotate.ImageText(text_line, position=annotate.AnnotationPosition.TOP_LEFT, outline_color='black', color='lightblue')
+            text.render(d, bounds)
+            TEXT_HEIGHT = 11
+            bounds[1] += TEXT_HEIGHT
+
+        robot = self.world.robot  # type: robot.Robot
+
+        # Display the Pose info for the robot
+        pose = robot.pose
+        print_line('Pose: Pos = <%.1f, %.1f, %.1f>' % pose.position.x_y_z)
+        print_line('Pose: Rot quat = <%.1f, %.1f, %.1f, %.1f>' % pose.rotation.q0_q1_q2_q3)
+        print_line('Pose: angle_z = %.1f' % pose.rotation.angle_z.degrees)
+        print_line('Pose: origin_id: %s' % pose.origin_id)
+
+        # Display the Accelerometer and Gyro data for the robot
+        print_line('Accelmtr: <%.1f, %.1f, %.1f>' % robot.accel.x_y_z)
+        print_line('Gyro: <%.1f, %.1f, %.1f>' % robot.gyro.x_y_z)
 
 
 class RemoteControlVector:
@@ -409,6 +443,7 @@ def handle_index_page():
                         <b>Shift</b> : Hold to Move Faster (Driving, Head and Lift)<br>
                         <b>Alt</b> : Hold to Move Slower (Driving, Head and Lift)<br>
                         <b>P</b> : Toggle Free Play mode: <button id="freeplayId" onClick=onFreeplayButtonClicked(this) style="font-size: 14px">Default</button><br>
+                        <b>O</b> : Toggle Debug Annotations: <button id="debugAnnotationsId" onClick=onDebugAnnotationsButtonClicked(this) style="font-size: 14px">Default</button><br>
                         <h3>Play Animations</h3>
                         <b>0 .. 9</b> : Play Animation mapped to that key<br>
                         <h3>Talk</h3>
@@ -429,6 +464,7 @@ def handle_index_page():
                 var gLastClientX = -1
                 var gLastClientY = -1
                 var gIsMouseLookEnabled = """ + to_js_bool_string(_is_mouse_look_enabled_by_default) + """
+                var gAreDebugAnnotationsEnabled = """+ str(flask_app.display_debug_annotations.value) + """
                 var gIsFreeplayEnabled = false
                 var gUserAgent = window.navigator.userAgent;
                 var gIsMicrosoftBrowser = gUserAgent.indexOf('MSIE ') > 0 || gUserAgent.indexOf('Trident/') > 0 || gUserAgent.indexOf('Edge/') > 0;
@@ -481,6 +517,37 @@ def handle_index_page():
                     postHttpRequest("setMouseLookEnabled", {isMouseLookEnabled})
                 }
 
+                function updateDebugAnnotationButtonEnabledText(button, isEnabled)
+                {
+                    switch(gAreDebugAnnotationsEnabled)
+                    {
+                    case 0:
+                        button.firstChild.data = "Disabled";
+                        break;
+                    case 1:
+                        button.firstChild.data = "Enabled (vision)";
+                        break;
+                    case 2:
+                        button.firstChild.data = "Enabled (all)";
+                        break;
+                    default:
+                        button.firstChild.data = "ERROR";
+                        break;
+                    }
+                }
+
+                function onDebugAnnotationsButtonClicked(button)
+                {
+                    gAreDebugAnnotationsEnabled += 1;
+                    if (gAreDebugAnnotationsEnabled > 2)
+                    {
+                        gAreDebugAnnotationsEnabled = 0
+                    }
+                    updateDebugAnnotationButtonEnabledText(button, gAreDebugAnnotationsEnabled)
+                    areDebugAnnotationsEnabled = gAreDebugAnnotationsEnabled
+                    postHttpRequest("setAreDebugAnnotationsEnabled", {areDebugAnnotationsEnabled})
+                }
+
                 function onFreeplayButtonClicked(button)
                 {
                     gIsFreeplayEnabled = !gIsFreeplayEnabled;
@@ -491,6 +558,7 @@ def handle_index_page():
 
                 updateButtonEnabledText(document.getElementById("mouseLookId"), gIsMouseLookEnabled);
                 updateButtonEnabledText(document.getElementById("freeplayId"), gIsFreeplayEnabled);
+                updateDebugAnnotationButtonEnabledText(document.getElementById("debugAnnotationsId"), gAreDebugAnnotationsEnabled);
 
                 function handleDropDownSelect(selectObject)
                 {
@@ -514,7 +582,12 @@ def handle_index_page():
 
                     if (actionType=="keyup")
                     {
-                        if (keyCode == 80) // 'P'
+                        if (keyCode == 79) // 'O'
+                        {
+                            // Simulate a click of the debug annotations button
+                            onDebugAnnotationsButtonClicked(document.getElementById("debugAnnotationsId"))
+                        }
+                        else if (keyCode == 80) // 'P'
                         {
                             // Simulate a click of the freeplay button
                             onFreeplayButtonClicked(document.getElementById("freeplayId"))
@@ -579,12 +652,10 @@ def handle_index_page():
 
 
 def get_annotated_image():
-    # TODO: Update to use annotated image (add annotate module)
     image = flask_app.remote_control_vector.vector.camera.latest_image
-    if image is None:
-        return _default_camera_image
-
-    return image
+    if flask_app.display_debug_annotations != DebugAnnotations.DISABLED.value:
+        return image.annotate_image()
+    return image.raw_image
 
 
 def streaming_video():
@@ -646,6 +717,19 @@ def handle_setMouseLookEnabled():
     message = json.loads(request.data.decode("utf-8"))
     if flask_app.remote_control_vector:
         flask_app.remote_control_vector.set_mouse_look_enabled(is_mouse_look_enabled=message['isMouseLookEnabled'])
+    return ""
+
+
+@flask_app.route('/setAreDebugAnnotationsEnabled', methods=['POST'])
+def handle_setAreDebugAnnotationsEnabled():
+    """Called from Javascript whenever debug-annotations mode is toggled"""
+    message = json.loads(request.data.decode("utf-8"))
+    flask_app.display_debug_annotations = message['areDebugAnnotationsEnabled']
+    if flask_app.remote_control_vector:
+        if flask_app.display_debug_annotations == DebugAnnotations.ENABLED_ALL.value:
+            flask_app.remote_control_vector.vector.camera.image_annotator.enable_annotator('robotState')
+        else:
+            flask_app.remote_control_vector.vector.camera.image_annotator.disable_annotator('robotState')
     return ""
 
 
@@ -722,11 +806,13 @@ def handle_updateVector():
 def run():
     args = util.parse_command_args()
 
-    with anki_vector.AsyncRobot(args.serial) as robot:
+    with anki_vector.AsyncRobot(args.serial, enable_face_detection=True, enable_custom_object_detection=True) as robot:
         flask_app.remote_control_vector = RemoteControlVector(robot)
+        flask_app.display_debug_annotations = DebugAnnotations.ENABLED_ALL
 
         robot.camera.init_camera_feed()
         robot.behavior.drive_off_charger()
+        robot.camera.image_annotator.add_annotator('robotState', RobotStateDisplay)
 
         flask_helpers.run_flask(flask_app)
 

@@ -232,7 +232,7 @@ class Robot:
             with anki_vector.Robot() as robot:
                 robot.camera.init_camera_feed()
                 image = robot.camera.latest_image
-                image.show()
+                image.raw_image.show()
         """
         if self._camera is None:
             raise VectorNotReadyException("CameraComponent is not yet initialized")
@@ -617,7 +617,6 @@ class Robot:
         self._anim = animation.AnimationComponent(self)
         self._audio = audio.AudioComponent(self)
         self._behavior = behavior.BehaviorComponent(self)
-        self._camera = camera.CameraComponent(self)
         self._faces = faces.FaceComponent(self)
         self._motors = motors.MotorComponent(self)
         self._nav_map = nav_map.NavMapComponent(self)
@@ -629,6 +628,7 @@ class Robot:
         self._viewer_3d = viewer.Viewer3DComponent(self)
         self._vision = vision.VisionComponent(self)
         self._world = world.World(self)
+        self._camera = camera.CameraComponent(self)
 
         if self.cache_animation_lists:
             # Load animation triggers and animations so they are ready to play when requested

@@ -861,7 +861,7 @@ class LightCube(ObservableObject):
                     cube = robot.world.connected_light_cube
                     print(f"{cube.descriptive_name}")
         """
-        return "{0} id={1} factory_id={2} is_connected={3}".format(self.__class__.__name__, self._object_id, self._factory_id, self._is_connected)
+        return f"{self.__class__.__name__}\nid={self._object_id}\nfactory_id={self._factory_id}\nis_connected={self._is_connected}"
 
     @property
     def object_id(self) -> int:
@@ -1044,6 +1044,23 @@ class Charger(ObservableObject):
         else:
             self.logger.debug("Setting object_id for %s to %s", self.__class__, value)
         self._object_id = value
+
+    @property
+    def descriptive_name(self) -> str:
+        """A descriptive name for this ObservableObject instance.
+
+        Note: Sub-classes should override this to add any other relevant info
+        for that object type.
+
+        .. testcode::
+
+            import anki_vector
+
+            with anki_vector.Robot() as robot:
+                if robot.world.charger.is_visible:
+                    print(f"{obot.world.charger.descriptive_name}")
+        """
+        return f"{self.__class__.__name__} id={self._object_id}"
 
     #### Private Methods ####
 
