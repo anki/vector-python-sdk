@@ -26,6 +26,7 @@ __all__ = ['AudioComponent']
 
 import asyncio
 from concurrent import futures
+from enum import Enum
 import time
 import wave
 from google.protobuf.text_format import MessageToString
@@ -38,6 +39,16 @@ from .messaging import protocol
 MAX_ROBOT_AUDIO_CHUNK_SIZE = 1024  # 1024 is maximum, larger sizes will fail
 DEFAULT_FRAME_SIZE = MAX_ROBOT_AUDIO_CHUNK_SIZE // 2
 
+class RobotVolumeLevel(Enum):
+    """Use these values for setting the master audio volume.  See :meth:`set_master_volume`
+
+    Note that muting the robot is not supported from the SDK.
+    """
+    LOW = 1
+    MEDIUM_LOW = 2
+    MEDIUM = 3
+    MEDIUM_HIGH = 4
+    HIGH = 5
 
 class AudioComponent(util.Component):
     """Handles audio on Vector.
@@ -62,6 +73,25 @@ class AudioComponent(util.Component):
         # don't create asyncio.Events here, they are not thread-safe
         self._is_active_event = None
         self._done_event = None
+
+    @on_connection_thread(requires_control=False)
+    async def set_master_volume(self, volume: RobotVolumeLevel) -> protocol.MasterVolumeResponse:
+        """Sets Vector's master volume level.
+
+        Note that muting the robot is not supported from the SDK.
+
+        .. code-block:: python
+            import anki_vector
+            from anki_vector import audio
+
+            with anki_vector.Robot(behavior_control_level=None) as robot:
+                robot.audio.set_master_volume(audio.RobotVolumeLevel.MEDIUM_HIGH)
+
+        :param volume: the robot's desired volume
+        """
+
+        volume_request = protocol.MasterVolumeRequest(volume_level=volume.value)
+        return await self.conn.grpc_interface.SetMasterVolume(volume_request)
 
     def _open_file(self, filename):
         _reader = wave.open(filename, 'rb')
