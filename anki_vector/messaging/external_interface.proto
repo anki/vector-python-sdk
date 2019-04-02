@@ -117,14 +117,6 @@ service ExternalInterface {
   rpc BehaviorControl(stream BehaviorControlRequest) returns (stream BehaviorControlResponse) {
   }
 
-  // Acquire control of Vector's AI system.
-  rpc AssumeBehaviorControl(BehaviorControlRequest) returns (stream BehaviorControlResponse) {
-    option (google.api.http) = {
-      post: "/v1/assume_behavior_control",
-      body: "*"
-    };
-  }
-
   rpc CancelFaceEnrollment(CancelFaceEnrollmentRequest) returns (CancelFaceEnrollmentResponse) {
     option (google.api.http) = {
       post: "/v1/cancel_face_enrollment",
@@ -167,6 +159,14 @@ service ExternalInterface {
   rpc SetFaceToEnroll(SetFaceToEnrollRequest) returns (SetFaceToEnrollResponse) {
     option (google.api.http) = {
       post: "/v1/set_face_to_enroll",
+      body: "*"
+    };
+  }
+
+  // Enroll a face. Must be used with SetFaceToEnroll
+  rpc EnrollFace(EnrollFaceRequest) returns (EnrollFaceResponse) {
+    option (google.api.http) = {
+      post: "/v1/enroll_face",
       body: "*"
     };
   }
