@@ -585,6 +585,14 @@
                 </li>
               
                 <li>
+                  <a href="#Anki.Vector.external_interface.EnrollFaceRequest"><span class="badge">M</span>EnrollFaceRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.EnrollFaceResponse"><span class="badge">M</span>EnrollFaceResponse</a>
+                </li>
+              
+                <li>
                   <a href="#Anki.Vector.external_interface.EraseAllEnrolledFacesRequest"><span class="badge">M</span>EraseAllEnrolledFacesRequest</a>
                 </li>
               
@@ -3122,11 +3130,6 @@ minimum host version and receiving a response to see whether the versions are su
               </tr>
             
               <tr>
-                <td>AssumeBehaviorControl</td>
-                <td><p>Acquire control of Vector's AI system.</p></td>
-              </tr>
-            
-              <tr>
                 <td>CancelFaceEnrollment</td>
                 <td><p></p></td>
               </tr>
@@ -3154,6 +3157,11 @@ minimum host version and receiving a response to see whether the versions are su
               <tr>
                 <td>SetFaceToEnroll</td>
                 <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>EnrollFace</td>
+                <td><p>Enroll a face. Must be used with SetFaceToEnroll</p></td>
               </tr>
             
               <tr>
@@ -4772,6 +4780,44 @@ detections that are enabled from above messages
                 <tr>
                   <td>status</td>
                   <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.EnrollFaceRequest">EnrollFaceRequest</h3>
+        
+        <p></p>
+
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.EnrollFaceResponse">EnrollFaceResponse</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>result</td>
+                  <td><a href="#Anki.Vector.external_interface.BehaviorResults">BehaviorResults</a> </td>
                   <td><p> </p></td>
                 </tr>
               

@@ -417,8 +417,17 @@ message SetFaceToEnrollRequest {
   bool    say_name = 5;       // Play say-name/celebration animations on success before completing
   bool    use_music = 6;      // Starts special music during say-name animations (will leave music playing!)
 }
+
 message SetFaceToEnrollResponse {
   ResponseStatus status = 1;
+}
+
+message EnrollFaceRequest {
+}
+
+message EnrollFaceResponse {
+  ResponseStatus status = 1;
+  BehaviorResults result = 2;
 }
 
 enum BehaviorResults

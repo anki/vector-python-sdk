@@ -88,11 +88,6 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlResponse.FromString,
         )
-    self.AssumeBehaviorControl = channel.unary_stream(
-        '/Anki.Vector.external_interface.ExternalInterface/AssumeBehaviorControl',
-        request_serializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlResponse.FromString,
-        )
     self.CancelFaceEnrollment = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/CancelFaceEnrollment',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CancelFaceEnrollmentRequest.SerializeToString,
@@ -122,6 +117,11 @@ class ExternalInterfaceStub(object):
         '/Anki.Vector.external_interface.ExternalInterface/SetFaceToEnroll',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetFaceToEnrollRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetFaceToEnrollResponse.FromString,
+        )
+    self.EnrollFace = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/EnrollFace',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnrollFaceRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnrollFaceResponse.FromString,
         )
     self.EnableMarkerDetection = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/EnableMarkerDetection',
@@ -468,13 +468,6 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def AssumeBehaviorControl(self, request, context):
-    """Acquire control of Vector's AI system.
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
   def CancelFaceEnrollment(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -513,6 +506,13 @@ class ExternalInterfaceServicer(object):
   def SetFaceToEnroll(self, request, context):
     # missing associated documentation comment in .proto file
     pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def EnrollFace(self, request, context):
+    """Enroll a face. Must be used with SetFaceToEnroll
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
@@ -935,11 +935,6 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           request_deserializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlResponse.SerializeToString,
       ),
-      'AssumeBehaviorControl': grpc.unary_stream_rpc_method_handler(
-          servicer.AssumeBehaviorControl,
-          request_deserializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlResponse.SerializeToString,
-      ),
       'CancelFaceEnrollment': grpc.unary_unary_rpc_method_handler(
           servicer.CancelFaceEnrollment,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CancelFaceEnrollmentRequest.FromString,
@@ -969,6 +964,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.SetFaceToEnroll,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetFaceToEnrollRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetFaceToEnrollResponse.SerializeToString,
+      ),
+      'EnrollFace': grpc.unary_unary_rpc_method_handler(
+          servicer.EnrollFace,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnrollFaceRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnrollFaceResponse.SerializeToString,
       ),
       'EnableMarkerDetection': grpc.unary_unary_rpc_method_handler(
           servicer.EnableMarkerDetection,
