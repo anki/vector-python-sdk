@@ -159,8 +159,8 @@ class BehaviorComponent(util.Component):
 
     # TODO Make this cancellable with is_cancellable_behavior
     @connection.on_connection_thread()
-    async def find_and_roll_block(self) -> protocol.RollBlockResponse:
-        """Roll a block
+    async def roll_visible_cube(self) -> protocol.RollBlockResponse:
+        """Roll a cube that is currently known to the robot
 
         This behavior will move into position as necessary based on relative
         distance and orientation.
@@ -172,7 +172,7 @@ class BehaviorComponent(util.Component):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.behavior.find_and_roll_block()
+                robot.behavior.roll_visible_cube()
         """
         roll_block_request = protocol.RollBlockRequest()
         return await self.grpc_interface.RollBlock(roll_block_request)
