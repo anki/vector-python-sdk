@@ -52,6 +52,7 @@ class RobotVolumeLevel(Enum):
     HIGH = 4
 
 
+
 class AudioComponent(util.Component):
     """Handles audio on Vector.
 

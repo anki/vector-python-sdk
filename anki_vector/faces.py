@@ -52,6 +52,8 @@ class Expression(Enum):
     #: Facial expression sadness
     SADNESS = protocol.FacialExpression.Value("EXPRESSION_SADNESS")
 
+# TODO Review this file and add pytests as is reasonable, like name_face (requires a face object), request_enrolled_names, maybe update_enrolled_face_by_id, etc.
+
 
 class Face(objects.ObservableObject):
     """A single face that Vector has detected.
@@ -108,6 +110,56 @@ class Face(objects.ObservableObject):
         return (f"<{self.__class__.__name__} Face id: {self.face_id} "
                 f"Updated face id: {self.updated_face_id} Name: {self.name} "
                 f"Expression: {protocol.FacialExpression.Name(self.expression)}>")
+
+    @connection.on_connection_thread(requires_control=False)
+    async def name_face(self, name: str) -> protocol.EnrollFaceResponse:
+        """Request to enroll this face with a name. Vector will remember this name between SDK runs.
+
+        Triggers Vector to run his animation that scans faces and use the camera feed to store the face.
+
+        While enrolling a face, make sure to look at Vector straight-on during the enrollment from about 1.5 to 2 feet away.
+
+        :param name: The name that will be assigned to this face.
+
+        .. testcode::
+
+            import anki_vector
+            from anki_vector.util import degrees
+
+            with anki_vector.Robot(enable_face_detection=True) as robot:
+                # If necessary, move Vector's Head and Lift to make it easy to see his face
+                robot.behavior.set_head_angle(degrees(45.0))
+                robot.behavior.set_lift_height(0.0)
+
+                # TODO Replace with wait_for_observed_face
+                face = None
+                for face in robot.world.visible_faces:
+                    break
+
+                if face is None:
+                    print("--- No face found ---")
+                else:
+                    print("--- Existing Face attributes ---")
+                    print(f"Visible face name: {face.name}")
+                    print(f"Visible face id: {face.face_id}")
+
+                    # Name this face "Boris"
+                    face.name_face("Boris")
+
+                    print(f"{robot.faces.request_enrolled_names()}")
+        """
+        self.logger.info("Enrolling face=%s with name '%s'", self, name)
+
+        req = protocol.SetFaceToEnrollRequest(name=name,
+                                              observed_id=self.face_id,
+                                              save_id=0,  # must be 0 if self.face_id doesn't already have a name
+                                              save_to_robot=True,
+                                              say_name=False,
+                                              use_music=False)
+        await self.grpc_interface.SetFaceToEnroll(req)
+
+        enroll_face_request = protocol.EnrollFaceRequest()
+        return await self.grpc_interface.EnrollFace(enroll_face_request)
 
     def teardown(self):
         """All faces will be torn down by the world when no longer needed."""
