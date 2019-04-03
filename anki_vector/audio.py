@@ -39,16 +39,18 @@ from .messaging import protocol
 MAX_ROBOT_AUDIO_CHUNK_SIZE = 1024  # 1024 is maximum, larger sizes will fail
 DEFAULT_FRAME_SIZE = MAX_ROBOT_AUDIO_CHUNK_SIZE // 2
 
+
 class RobotVolumeLevel(Enum):
     """Use these values for setting the master audio volume.  See :meth:`set_master_volume`
 
     Note that muting the robot is not supported from the SDK.
     """
-    LOW = 1
-    MEDIUM_LOW = 2
-    MEDIUM = 3
-    MEDIUM_HIGH = 4
-    HIGH = 5
+    LOW = 0
+    MEDIUM_LOW = 1
+    MEDIUM = 2
+    MEDIUM_HIGH = 3
+    HIGH = 4
+
 
 class AudioComponent(util.Component):
     """Handles audio on Vector.
