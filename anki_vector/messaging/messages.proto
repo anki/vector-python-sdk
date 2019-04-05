@@ -286,6 +286,45 @@ message CladRect
   float height = 4;
 }
 
+message RobotObservedMotion {
+  uint32 timestamp = 1; // Timestamp of the corresponding image
+
+  // Area of the supporting region for the point, as a fraction of the image
+  float img_area = 2;
+  int32 img_x = 3; // Pixel coordinate of the point in the image, relative to top-left corner.
+  int32 img_y = 4; // Pixel coordinate of the point in the image, relative to top-left corner.
+
+  // Area of the supporting region for the point, as a fraction of the ground ROI
+  // If unable to map to the ground, area=0
+  float ground_area = 5;
+  int32 ground_x = 6; // Coordinates of the point on the ground, relative to robot, in mm
+  int32 ground_y = 7; // Coordinates of the point on the ground, relative to robot, in mm
+
+  // Top area
+  // Area of the supporting region for the point, as a fraction of the top region
+  float top_img_area = 8;
+  int32 top_img_x = 9; // Pixel coordinate of the point in the image, relative to top-left corner.
+  int32 top_img_y = 10; // Pixel coordinate of the point in the image, relative to top-left corner.
+
+  // Bottom area
+  // Area of the supporting region for the point, as a fraction of the bottom region
+  float bottom_img_area = 11;
+  int32 bottom_img_x = 12; // Pixel coordinate of the point in the image, relative to top-left corner.
+  int32 bottom_img_y = 13; // Pixel coordinate of the point in the image, relative to top-left corner.
+
+  // Left area
+  // Area of the supporting region for the point, as a fraction of the left region
+  float left_img_area = 14;
+  int32 left_img_x = 15; // Pixel coordinate of the point in the image, relative to top-left corner.
+  int32 left_img_y = 16; // Pixel coordinate of the point in the image, relative to top-left corner.
+
+  // Right area
+  // Area of the supporting region for the point, as a fraction of the right region
+  float right_img_area = 17;
+  int32 right_img_x = 18; // Pixel coordinate of the point in the image, relative to top-left corner.
+  int32 right_img_y = 19; // Pixel coordinate of the point in the image, relative to top-left corner.
+}
+
 // This is an int8 on the clad side.
 // Proto field names are prefixed with "EXPRESSION_"
 enum FacialExpression
