@@ -849,6 +849,10 @@
                 </li>
               
                 <li>
+                  <a href="#Anki.Vector.external_interface.RobotObservedMotion"><span class="badge">M</span>RobotObservedMotion</a>
+                </li>
+              
+                <li>
                   <a href="#Anki.Vector.external_interface.RobotRenamedEnrolledFace"><span class="badge">M</span>RobotRenamedEnrolledFace</a>
                 </li>
               
@@ -6761,6 +6765,143 @@ path should be modified or traversed.
 
         
       
+        <h3 id="Anki.Vector.external_interface.RobotObservedMotion">RobotObservedMotion</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>timestamp</td>
+                  <td><a href="#uint32">uint32</a> </td>
+                  <td><p>Timestamp of the corresponding image </p></td>
+                </tr>
+              
+                <tr>
+                  <td>img_area</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p>Area of the supporting region for the point, as a fraction of the image </p></td>
+                </tr>
+              
+                <tr>
+                  <td>img_x</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>img_y</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>ground_area</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p>Area of the supporting region for the point, as a fraction of the ground ROI
+If unable to map to the ground, area=0 </p></td>
+                </tr>
+              
+                <tr>
+                  <td>ground_x</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>Coordinates of the point on the ground, relative to robot, in mm </p></td>
+                </tr>
+              
+                <tr>
+                  <td>ground_y</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>Coordinates of the point on the ground, relative to robot, in mm </p></td>
+                </tr>
+              
+                <tr>
+                  <td>top_img_area</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p>Top area
+Area of the supporting region for the point, as a fraction of the top region </p></td>
+                </tr>
+              
+                <tr>
+                  <td>top_img_x</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>top_img_y</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>bottom_img_area</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p>Bottom area
+Area of the supporting region for the point, as a fraction of the bottom region </p></td>
+                </tr>
+              
+                <tr>
+                  <td>bottom_img_x</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>bottom_img_y</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>left_img_area</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p>Left area
+Area of the supporting region for the point, as a fraction of the left region </p></td>
+                </tr>
+              
+                <tr>
+                  <td>left_img_x</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>left_img_y</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>right_img_area</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p>Right area
+Area of the supporting region for the point, as a fraction of the right region </p></td>
+                </tr>
+              
+                <tr>
+                  <td>right_img_x</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>right_img_y</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
         <h3 id="Anki.Vector.external_interface.RobotRenamedEnrolledFace">RobotRenamedEnrolledFace</h3>
         
         <p></p>
@@ -9591,6 +9732,12 @@ This will indicate the generic state of the request.
                 <tr>
                   <td>user_intent</td>
                   <td><a href="#Anki.Vector.external_interface.UserIntent">UserIntent</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>robot_observed_motion</td>
+                  <td><a href="#Anki.Vector.external_interface.RobotObservedMotion">RobotObservedMotion</a> </td>
                   <td><p> </p></td>
                 </tr>
               

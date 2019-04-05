@@ -56,12 +56,12 @@ message Event {
     PhotoTaken                       photo_taken                         = 9;
     RobotState                       robot_state                         = 10;
     CubeBattery                      cube_battery                        = 11;
-    // Used by Vector to verify the connection is still alive.
-    KeepAlivePing                    keep_alive                          = 12;
+    KeepAlivePing                    keep_alive                          = 12; // Used by Vector to verify the connection is still alive.
     ConnectionResponse               connection_response                 = 13;
     MirrorModeDisabled               mirror_mode_disabled                = 16;
     VisionModesAutoDisabled          vision_modes_auto_disabled          = 17;
     UserIntent                       user_intent                         = 19;
+    RobotObservedMotion              robot_observed_motion               = 20;
   }
 }
 
