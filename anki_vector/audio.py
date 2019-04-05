@@ -52,7 +52,6 @@ class RobotVolumeLevel(Enum):
     HIGH = 4
 
 
-
 class AudioComponent(util.Component):
     """Handles audio on Vector.
 
@@ -84,6 +83,7 @@ class AudioComponent(util.Component):
         Note that muting the robot is not supported from the SDK.
 
         .. code-block:: python
+
             import anki_vector
             from anki_vector import audio
 

@@ -89,6 +89,11 @@ class Robot:
     :param behavior_activation_timeout: The time to wait for control of the robot before failing.
     :param cache_animation_lists: Get the list of animation triggers and animations available at startup.
     :param enable_face_detection: Turn on face detection.
+    :param estimate_facial_expression: Turn estimating facial expression on/off. Enabling :code:`estimate_facial_expression`
+                                       returns a facial expression, the expression values and the :class:`anki_vector.util.ImageRect`
+                                       for observed face regions (eyes, nose, and mouth) as part of the :code:`RobotObservedFace` event.
+                                       It is turned off by default as the number of :code:`RobotObservedFace` events
+                                       are reduced due to the increased processing time.
     :param enable_audio_feed: Turn audio feed on/off.
     :param enable_custom_object_detection: Turn custom object detection on/off.
     :param enable_nav_map_feed: Turn navigation map feed on/off.
@@ -106,6 +111,7 @@ class Robot:
                  behavior_activation_timeout: int = 10,
                  cache_animation_lists: bool = True,
                  enable_face_detection: bool = False,
+                 estimate_facial_expression: bool = False,
                  enable_audio_feed: bool = False,
                  enable_custom_object_detection: bool = False,
                  enable_nav_map_feed: bool = None,
@@ -156,6 +162,7 @@ class Robot:
 
         self.behavior_activation_timeout = behavior_activation_timeout
         self.enable_face_detection = enable_face_detection
+        self.estimate_facial_expression = estimate_facial_expression
         self.enable_custom_object_detection = enable_custom_object_detection
         self.cache_animation_lists = cache_animation_lists
 
@@ -654,7 +661,7 @@ class Robot:
 
         # Enable face detection, to allow Vector to add faces to its world view
         if self.conn.requires_behavior_control:
-            face_detection = self.vision.enable_face_detection(detect_faces=self.enable_face_detection, estimate_expression=False)
+            face_detection = self.vision.enable_face_detection(detect_faces=self.enable_face_detection, estimate_expression=self.estimate_facial_expression)
             if isinstance(face_detection, concurrent.futures.Future):
                 face_detection.result()
             object_detection = self.vision.enable_custom_object_detection(detect_custom_objects=self.enable_custom_object_detection)
@@ -873,6 +880,7 @@ class AsyncRobot(Robot):
     :param behavior_activation_timeout: The time to wait for control of the robot before failing.
     :param cache_animation_lists: Get the list of animation triggers and animations available at startup.
     :param enable_face_detection: Turn on face detection.
+    :param estimate_facial_expression: Turn estimating facial expression on/off.
     :param enable_audio_feed: Turn audio feed on/off.
     :param enable_custom_object_detection: Turn custom object detection on/off.
     :param enable_nav_map_feed: Turn navigation map feed on/off.
