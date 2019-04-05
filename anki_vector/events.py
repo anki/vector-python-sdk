@@ -48,11 +48,12 @@ class Events(Enum):
     robot_observed_object = "robot_observed_object"     #: Robot event triggered when an object is observed by the robot.
     cube_connection_lost = "cube_connection_lost"       #: Robot event triggered when an object's subscribed connection has been lost.
 
-    robot_observed_face = "robot_observed_face"                       #: Robot event for when a face is observed by the robot.
-    robot_changed_observed_face_id = "robot_changed_observed_face_id"  # : Robot event for when a known face changes its id.
+    robot_observed_motion = "robot_observed_motion"                    #: Robot event dispatched when Vector observes motion.
+    robot_observed_face = "robot_observed_face"                        #: Robot event for when a face is observed by the robot.
+    robot_changed_observed_face_id = "robot_changed_observed_face_id"  #: Robot event for when a known face changes its id.
 
-    wake_word = "wake_word"                             #: Robot event triggered when Vector hears "Hey Vector"
-    user_intent = "user_intent"                         #: Robot event triggered after Vector processes voice commands
+    wake_word = "wake_word"                             #: Robot event triggered when Vector hears "Hey Vector".
+    user_intent = "user_intent"                         #: Robot event triggered after Vector processes voice commands.
 
     # Audio
     audio_send_mode_changed = "audio_send_mode_changed"  #: Robot event containing changes to the robot's audio stream source data processing mode.
