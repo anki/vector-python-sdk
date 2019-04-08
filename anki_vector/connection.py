@@ -17,7 +17,7 @@ Management of the connection to and from Vector.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
-__all__ = ['CONTROL_PRIORITY_LEVEL', 'Connection', 'on_connection_thread']
+__all__ = ['ControlPriorityLevel', 'Connection', 'on_connection_thread']
 
 import asyncio
 from concurrent import futures
@@ -47,7 +47,15 @@ from .messaging import client, protocol
 from .version import __version__
 
 
-class CONTROL_PRIORITY_LEVEL(Enum):
+class CancelType(Enum):
+    """Enum used to specify cancellation options for behaviors -- internal use only """
+    #: Cancellable as an 'Action'
+    CANCELLABLE_ACTION = 0
+    #: Cancellable as a 'Behavior'
+    CANCELLABLE_BEHAVIOR = 1
+
+
+class ControlPriorityLevel(Enum):
     """Enum used to specify the priority level for the program."""
     #: Runs above mandatory physical reactions, will drive off table, perform while on a slope,
     #: ignore low battery state, work in the dark, etc.
@@ -73,7 +81,7 @@ class _ControlEventManager:
     :class:`request_event` Is a way of alerting :class:`Connection` to request control.
     """
 
-    def __init__(self, loop: asyncio.BaseEventLoop = None, priority: CONTROL_PRIORITY_LEVEL = None):
+    def __init__(self, loop: asyncio.BaseEventLoop = None, priority: ControlPriorityLevel = None):
         self._granted_event = asyncio.Event(loop=loop)
         self._lost_event = asyncio.Event(loop=loop)
         self._request_event = asyncio.Event(loop=loop)
@@ -102,7 +110,7 @@ class _ControlEventManager:
         return self._has_control
 
     @property
-    def priority(self) -> CONTROL_PRIORITY_LEVEL:
+    def priority(self) -> ControlPriorityLevel:
         """The currently desired priority for the SDK."""
         return self._priority
 
@@ -111,14 +119,14 @@ class _ControlEventManager:
         """Detect if the behavior control stream is supposed to shut down."""
         return self._is_shutdown
 
-    def request(self, priority: CONTROL_PRIORITY_LEVEL = CONTROL_PRIORITY_LEVEL.DEFAULT_PRIORITY) -> None:
+    def request(self, priority: ControlPriorityLevel = ControlPriorityLevel.DEFAULT_PRIORITY) -> None:
         """Tell the behavior stream to request control via setting the :class:`request_event`.
 
         This will signal Connection's :func:`_request_handler` generator to send a request control message on the BehaviorControl stream.
         This signal happens asynchronously, and can be tracked using the :class:`granted_event` parameter.
 
         :param priority: The level of control in the behavior system. This determines which actions are allowed to
-            interrupt the SDK execution. See :class:`CONTROL_PRIORITY_LEVEL` for more information.
+            interrupt the SDK execution. See :class:`ControlPriorityLevel` for more information.
         """
         if priority is None:
             raise VectorBehaviorControlException("Must provide a priority level to request. To disable control, use {}.release().", self.__class__.__name__)
@@ -194,11 +202,11 @@ class Connection:
     :param host: The IP address and port of Vector in the format "XX.XX.XX.XX:443".
     :param cert_file: The location of the certificate file on disk.
     :param guid: Your robot's unique secret key.
-    :param behavior_control_level: pass one of :class:`CONTROL_PRIORITY_LEVEL` priority levels if the connection
+    :param behavior_control_level: pass one of :class:`ControlPriorityLevel` priority levels if the connection
                                    requires behavior control, or None to decline control.
     """
 
-    def __init__(self, name: str, host: str, cert_file: str, guid: str, behavior_control_level: CONTROL_PRIORITY_LEVEL = CONTROL_PRIORITY_LEVEL.DEFAULT_PRIORITY):
+    def __init__(self, name: str, host: str, cert_file: str, guid: str, behavior_control_level: ControlPriorityLevel = ControlPriorityLevel.DEFAULT_PRIORITY):
         if cert_file is None:
             raise VectorConfigurationException("Must provide a cert file to authenticate to Vector.")
         self._loop: asyncio.BaseEventLoop = None
@@ -289,8 +297,8 @@ class Connection:
         return self._interface
 
     @property
-    def behavior_control_level(self) -> CONTROL_PRIORITY_LEVEL:
-        """Returns the specific :class:`CONTROL_PRIORITY_LEVEL` requested for behavior control.
+    def behavior_control_level(self) -> ControlPriorityLevel:
+        """Returns the specific :class:`ControlPriorityLevel` requested for behavior control.
 
         To be able to directly control Vector's motors, override his screen, play an animation, etc.,
         the :class:`Connection` will need behavior control. This property identifies the enumerated
@@ -303,7 +311,7 @@ class Connection:
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                print(robot.conn.behavior_control_level) # Will print CONTROL_PRIORITY_LEVEL.DEFAULT_PRIORITY
+                print(robot.conn.behavior_control_level) # Will print ControlPriorityLevel.DEFAULT_PRIORITY
                 robot.conn.release_control()
                 print(robot.conn.behavior_control_level) # Will print None
         """
@@ -371,7 +379,7 @@ class Connection:
         """
         return self._control_events.granted_event
 
-    def request_control(self, behavior_control_level: CONTROL_PRIORITY_LEVEL = CONTROL_PRIORITY_LEVEL.DEFAULT_PRIORITY, timeout: float = 10.0):
+    def request_control(self, behavior_control_level: ControlPriorityLevel = ControlPriorityLevel.DEFAULT_PRIORITY, timeout: float = 10.0):
         """Explicitly request behavior control. Typically used after detecting :func:`control_lost_event`.
 
         To be able to directly control Vector's motors, override his screen, play an animation, etc.,
@@ -391,15 +399,15 @@ class Connection:
 
         :param timeout: The time allotted to attempt a connection, in seconds.
         :param behavior_control_level: request control of Vector's behavior system at a specific level of control.
-                    See :class:`CONTROL_PRIORITY_LEVEL` for more information.
+                    See :class:`ControlPriorityLevel` for more information.
         """
-        if not isinstance(behavior_control_level, CONTROL_PRIORITY_LEVEL):
-            raise TypeError("behavior_control_level must be of type CONTROL_PRIORITY_LEVEL")
+        if not isinstance(behavior_control_level, ControlPriorityLevel):
+            raise TypeError("behavior_control_level must be of type ControlPriorityLevel")
         if self._thread is threading.current_thread():
             return asyncio.ensure_future(self._request_control(behavior_control_level=behavior_control_level, timeout=timeout), loop=self._loop)
         return self.run_coroutine(self._request_control(behavior_control_level=behavior_control_level, timeout=timeout))
 
-    async def _request_control(self, behavior_control_level: CONTROL_PRIORITY_LEVEL = CONTROL_PRIORITY_LEVEL.DEFAULT_PRIORITY, timeout: float = 10.0):
+    async def _request_control(self, behavior_control_level: ControlPriorityLevel = ControlPriorityLevel.DEFAULT_PRIORITY, timeout: float = 10.0):
         self._behavior_control_level = behavior_control_level
         self._control_events.request(self._behavior_control_level)
         try:
@@ -689,7 +697,7 @@ class Connection:
         return asyncio.run_coroutine_threadsafe(coro, self._loop)
 
 
-def on_connection_thread(log_messaging: bool = True, requires_control: bool = True, is_cancellable_behavior=False) -> Callable[[Coroutine[util.Component, Any, None]], Any]:
+def on_connection_thread(log_messaging: bool = True, requires_control: bool = True, is_cancellable: CancelType = None) -> Callable[[Coroutine[util.Component, Any, None]], Any]:
     """A decorator generator used internally to denote which functions will run on
     the connection thread. This unblocks the caller of the wrapped function
     and allows them to continue running while the messages are being processed.
@@ -706,7 +714,8 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
     :param log_messaging: True if the log output should include the entire message or just the size. Recommended for
         large binary return values.
     :param requires_control: True if the function should wait until behavior control is granted before executing.
-    :param is_cancellable_behavior: True if the behavior can be cancelled before it has completed.
+    :param is_cancellable: use a valid enum of :class:`CancelType` to specify the type of cancellation for the
+        function. Defaults to 'None' implying no support for responding to cancellation.
     :returns: A decorator which has 3 possible returns based on context: the result of the decorated function,
         the :class:`concurrent.futures.Future` which points to the decorated function, or the
         :class:`asyncio.Future` which points to the decorated function.
@@ -769,10 +778,10 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
             # if the call supplies a _return_future parameter then override force_async with that.
             _return_future = kwargs.pop('_return_future', self.force_async)
 
-            behavior_id = None
-            if is_cancellable_behavior:
-                behavior_id = self._get_next_behavior_id()
-                kwargs['_behavior_id'] = behavior_id
+            action_id = None
+            if is_cancellable == CancelType.CANCELLABLE_ACTION:
+                action_id = self._get_next_action_id()
+                kwargs['_action_id'] = action_id
 
             wrapped_coroutine = log_handler(self.conn, func, self.logger, *args, **kwargs)
 
@@ -783,15 +792,22 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
                                            "function '{}' is being invoked on that thread.\n".format(func.__name__ if hasattr(func, "__name__") else func))
             future = asyncio.run_coroutine_threadsafe(wrapped_coroutine, self.conn.loop)
 
-            if is_cancellable_behavior:
-                def user_cancelled(fut):
-                    if behavior_id is None:
+            if is_cancellable == CancelType.CANCELLABLE_ACTION:
+                def user_cancelled_action(fut):
+                    if action_id is None:
                         return
 
                     if fut.cancelled():
-                        self._abort(behavior_id)
+                        self._abort_action(action_id)
 
-                future.add_done_callback(user_cancelled)
+                future.add_done_callback(user_cancelled_action)
+
+            if is_cancellable == CancelType.CANCELLABLE_BEHAVIOR:
+                def user_cancelled_behavior(fut):
+                    if fut.cancelled():
+                        self._abort_behavior()
+
+                future.add_done_callback(user_cancelled_behavior)
 
             if requires_control:
                 self.conn.active_commands.append(future)
