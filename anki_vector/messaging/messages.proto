@@ -1134,6 +1134,7 @@ message MirrorModeDisabled
 message EnableImageStreamingRequest
 {
   bool enable = 1;
+  bool enable_high_resolution = 2;
 }
 
 message EnableImageStreamingResponse
@@ -1195,7 +1196,11 @@ message CameraFeedResponse {
   bytes                    data = 4;
 }
 
-message CaptureSingleImageRequest {}
+// Request for a single image from the robot. Default resolution is 640*360,
+// enabling high resolution provides a 1280*720 image.
+message CaptureSingleImageRequest {
+  bool enable_high_resolution = 1;
+}
 
 message CaptureSingleImageResponse {
   ResponseStatus           status = 1;

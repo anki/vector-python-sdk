@@ -3924,9 +3924,26 @@ rgb values each and timing data for how to transition between them.</p></td>
         
       
         <h3 id="Anki.Vector.external_interface.CaptureSingleImageRequest">CaptureSingleImageRequest</h3>
-        
+        Request for a single image from the robot. Default resolution is 640*360,
+enabling high resolution provides a 1280*720 image.
         <p></p>
 
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>enable_high_resolution</td>
+                  <td><a href="#bool">bool</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
         
 
         
@@ -4614,6 +4631,12 @@ rgb values each and timing data for how to transition between them.</p></td>
               
                 <tr>
                   <td>enable</td>
+                  <td><a href="#bool">bool</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>enable_high_resolution</td>
                   <td><a href="#bool">bool</a> </td>
                   <td><p> </p></td>
                 </tr>
