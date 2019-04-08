@@ -33,7 +33,7 @@ from . import (animation, audio, behavior, camera,
                util, viewer, vision, world)
 from .connection import (Connection,
                          on_connection_thread,
-                         CONTROL_PRIORITY_LEVEL)
+                         ControlPriorityLevel)
 from .exceptions import (VectorNotReadyException,
                          VectorPropertyValueNotReadyException,
                          VectorUnreliableEventStreamException)
@@ -101,7 +101,7 @@ class Robot:
     :param show_3d_viewer: Specifies whether to display a 3D view of Vector's understanding of the world in a window.
     :param behavior_control_level: Request control of Vector's behavior system at a specific level of control.  Pass
                                 :code:`None` if behavior control is not needed.
-                                See :class:`CONTROL_PRIORITY_LEVEL` for more information."""
+                                See :class:`ControlPriorityLevel` for more information."""
 
     def __init__(self,
                  serial: str = None,
@@ -117,7 +117,7 @@ class Robot:
                  enable_nav_map_feed: bool = None,
                  show_viewer: bool = False,
                  show_3d_viewer: bool = False,
-                 behavior_control_level: CONTROL_PRIORITY_LEVEL = CONTROL_PRIORITY_LEVEL.DEFAULT_PRIORITY):
+                 behavior_control_level: ControlPriorityLevel = ControlPriorityLevel.DEFAULT_PRIORITY):
         if default_logging:
             util.setup_basic_logging()
         self.logger = util.get_class_logger(__name__, self)
@@ -888,7 +888,7 @@ class AsyncRobot(Robot):
     :param show_3d_viewer: Specifies whether to display a 3D view of Vector's understanding of the world in a window.
     :param behavior_control_level: Request control of Vector's behavior system at a specific level of control.  Pass
                                    :code:`None` if behavior control is not needed.
-                                   See :class:`CONTROL_PRIORITY_LEVEL` for more information."""
+                                   See :class:`ControlPriorityLevel` for more information."""
 
     @functools.wraps(Robot.__init__)
     def __init__(self, *args, **kwargs):
