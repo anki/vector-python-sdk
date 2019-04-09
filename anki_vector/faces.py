@@ -571,7 +571,7 @@ class FaceComponent(util.Component):
     """Manage the state of the faces on the robot."""
 
     @connection.on_connection_thread(requires_control=False)
-    async def request_enrolled_names(self) -> protocol.RequestEnrolledNamesRequest:
+    async def request_enrolled_names(self) -> protocol.RequestEnrolledNamesResponse:
         """Asks the robot for the list of names attached to faces that it can identify.
 
         .. testcode::
@@ -612,10 +612,24 @@ class FaceComponent(util.Component):
 
         .. testcode::
 
+            import time
             import anki_vector
+            from anki_vector.events import Events
+
+            def on_robot_erased_enrolled_face(robot, event_type, event):
+                print(f"Face has been erased from robot. Event: {event_type} = {event}")
 
             with anki_vector.Robot() as robot:
-                robot.faces.erase_enrolled_face_by_id(1)
+                robot.events.subscribe(on_robot_erased_enrolled_face, Events.robot_erased_enrolled_face)
+
+                name_data_list = robot.faces.request_enrolled_names()
+                print(f"Enrolled names: {name_data_list}")
+
+                # Deletes all enrolled faces from Vector. Use with care!
+                for face in name_data_list.faces:
+                    robot.faces.erase_enrolled_face_by_id(face.face_id)
+
+                time.sleep(3)
         """
         req = protocol.EraseEnrolledFaceByIDRequest(face_id=face_id)
         return await self.grpc_interface.EraseEnrolledFaceByID(req)
