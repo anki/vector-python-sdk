@@ -43,8 +43,8 @@ class TkCameraViewer:  # pylint: disable=too-few-public-methods
 
     def __init__(self, queue: mp.Queue, event: mp.Event, overlays: list = None, timeout: float = 10.0, force_on_top: bool = False):
         self.tk_root = tk.Tk()
-        self.width = 640
-        self.height = 360
+        self.width = None
+        self.height = None
         self.queue = queue
         self.event = event
         self.overlays = overlays
@@ -73,6 +73,7 @@ class TkCameraViewer:  # pylint: disable=too-few-public-methods
     def draw_frame(self) -> None:
         """Display an image on to a Tkinter label widget."""
         image = self.queue.get(True, timeout=self.timeout)
+        self.width, self.height = image.size
         while image:
             if self.event.is_set():
                 break

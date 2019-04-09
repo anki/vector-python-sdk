@@ -24,6 +24,7 @@ from .messaging import protocol
 __all__ = ['VectorAsyncException',
            'VectorBehaviorControlException',
            'VectorCameraFeedException',
+           'VectorCameraImageCaptureException',
            'VectorConfigurationException',
            'VectorConnectionException',
            'VectorControlException',
@@ -142,6 +143,10 @@ class VectorCameraFeedException(_VectorGenericException):
     """The camera feed is not open.
 
 Make sure to enable the camera feed either using Robot(show_viewer=True), or robot.camera.init_camera_feed()"""
+
+
+class VectorCameraImageCaptureException(_VectorGenericException):
+    """Image capture exception."""
 
 
 class VectorConfigurationException(_VectorGenericException):
