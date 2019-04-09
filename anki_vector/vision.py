@@ -143,9 +143,9 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
     @connection.on_connection_thread()
     async def enable_motion_detection(self, detect_motion: bool = True):
         """Enable motion detection on the robot's camera
-    
+
         :param detect_motion: Specify whether we want the robot to detect motion.
-    
+
         .. testcode::
 
             import time
@@ -162,7 +162,7 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
 
                 # If necessary, move Vector's Head and Lift to make it easy to see his face
                 robot.behavior.set_head_angle(degrees(45.0))
-                robot.behavior.set_lift_height(0.0)        
+                robot.behavior.set_lift_height(0.0)
 
                 robot.vision.enable_motion_detection(detect_motion=True)
 

@@ -36,7 +36,7 @@ import sys
 
 from . import annotate, connection, util
 from .events import Events
-from .exceptions import VectorCameraFeedException
+from .exceptions import VectorCameraFeedException, VectorCameraImageCaptureException
 from .messaging import protocol
 
 try:
@@ -129,6 +129,8 @@ class CameraImage:
             (fast) or :attr:`~anki_vector.annotate.RESAMPLE_MODE_BILINEAR` (slower,
             but smoother).
         """
+        if self._raw_image.size != (640, 360):
+            raise VectorCameraImageCaptureException("Annotation is only supported for default resolution images.")
         return self._image_annotator.annotate_image(self._raw_image,
                                                     scale=scale,
                                                     fit_size=fit_size,
@@ -330,7 +332,7 @@ class CameraComponent(util.Component):
             self.logger.debug('Camera feed task was cancelled. This is expected during disconnection.')
 
     @connection.on_connection_thread()
-    async def capture_single_image(self) -> CameraImage:
+    async def capture_single_image(self, enable_high_resolution: bool = False) -> CameraImage:
         """Request to capture a single image from the robot's camera.
 
         This call requests the robot to capture an image and returns the
@@ -346,10 +348,16 @@ class CameraComponent(util.Component):
             with anki_vector.Robot() as robot:
                 image = robot.camera.capture_single_image()
                 image.raw_image.show()
+
+        :param enable_high_resolution: Enable/disable request for high resolution images. The default resolution
+                                       is 640x360, while the high resolution is 1280x720.
         """
         if self._enabled:
+            self.logger.warning('Camera feed is enabled. Receiving image from the feed at default resolution.')
             return self._latest_image
-        req = protocol.CaptureSingleImageRequest()
+        if enable_high_resolution:
+            self.logger.warning('Capturing a high resolution (1280*720) image. Image events for this frame need to be scaled.')
+        req = protocol.CaptureSingleImageRequest(enable_high_resolution=enable_high_resolution)
         res = await self.grpc_interface.CaptureSingleImage(req)
         if res and res.data:
             image = _convert_to_pillow_image(res.data)
