@@ -221,6 +221,14 @@ service ExternalInterface {
     };
   }
 
+  // Cancel running SDK Behavior
+  rpc CancelBehavior(CancelBehaviorRequest) returns (CancelBehaviorResponse) {
+    option (google.api.http) = {
+      post: "/v1/cancel_behavior",
+      body: "*"
+    };
+  }
+  
   // Tells Vector to drive to the specified pose and orientation.
   rpc GoToPose(GoToPoseRequest) returns (GoToPoseResponse) {
     option (google.api.http) = {

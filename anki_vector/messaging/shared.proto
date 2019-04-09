@@ -62,6 +62,7 @@ message Event {
     VisionModesAutoDisabled          vision_modes_auto_disabled          = 17;
     UserIntent                       user_intent                         = 19;
     RobotObservedMotion              robot_observed_motion               = 20;
+    RobotErasedEnrolledFace          robot_erased_enrolled_face          = 21;
   }
 }
 

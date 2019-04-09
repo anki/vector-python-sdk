@@ -158,6 +158,11 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CancelActionByIdTagRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CancelActionByIdTagResponse.FromString,
         )
+    self.CancelBehavior = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/CancelBehavior',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CancelBehaviorRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CancelBehaviorResponse.FromString,
+        )
     self.GoToPose = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/GoToPose',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.GoToPoseRequest.SerializeToString,
@@ -561,6 +566,13 @@ class ExternalInterfaceServicer(object):
 
   def CancelActionByIdTag(self, request, context):
     """Cancel action by id
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def CancelBehavior(self, request, context):
+    """Cancel running SDK Behavior
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
@@ -1004,6 +1016,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.CancelActionByIdTag,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CancelActionByIdTagRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CancelActionByIdTagResponse.SerializeToString,
+      ),
+      'CancelBehavior': grpc.unary_unary_rpc_method_handler(
+          servicer.CancelBehavior,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CancelBehaviorRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CancelBehaviorResponse.SerializeToString,
       ),
       'GoToPose': grpc.unary_unary_rpc_method_handler(
           servicer.GoToPose,

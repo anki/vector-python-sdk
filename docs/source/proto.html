@@ -461,6 +461,14 @@
                 </li>
               
                 <li>
+                  <a href="#Anki.Vector.external_interface.CancelBehaviorRequest"><span class="badge">M</span>CancelBehaviorRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.CancelBehaviorResponse"><span class="badge">M</span>CancelBehaviorResponse</a>
+                </li>
+              
+                <li>
                   <a href="#Anki.Vector.external_interface.CancelFaceEnrollmentRequest"><span class="badge">M</span>CancelFaceEnrollmentRequest</a>
                 </li>
               
@@ -842,6 +850,10 @@
               
                 <li>
                   <a href="#Anki.Vector.external_interface.RobotChangedObservedFaceID"><span class="badge">M</span>RobotChangedObservedFaceID</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.RobotErasedEnrolledFace"><span class="badge">M</span>RobotErasedEnrolledFace</a>
                 </li>
               
                 <li>
@@ -3204,6 +3216,11 @@ minimum host version and receiving a response to see whether the versions are su
               </tr>
             
               <tr>
+                <td>CancelBehavior</td>
+                <td><p>Cancel running SDK Behavior</p></td>
+              </tr>
+            
+              <tr>
                 <td>GoToPose</td>
                 <td><p>Tells Vector to drive to the specified pose and orientation.</p></td>
               </tr>
@@ -3882,6 +3899,38 @@ rgb values each and timing data for how to transition between them.</p></td>
                   <td>status</td>
                   <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
                   <td><p>A generic status. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.CancelBehaviorRequest">CancelBehaviorRequest</h3>
+        Cancel a behavior in progress
+        <p></p>
+
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.CancelBehaviorResponse">CancelBehaviorResponse</h3>
+        Response from the robot to CancelBehaviorRequest.
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -6694,6 +6743,36 @@ path should be modified or traversed.
                 <tr>
                   <td>new_id</td>
                   <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.RobotErasedEnrolledFace">RobotErasedEnrolledFace</h3>
+        Event confirming that an enrolled face has been removed from the robot.
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>face_id</td>
+                  <td><a href="#int32">int32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>name</td>
+                  <td><a href="#string">string</a> </td>
                   <td><p> </p></td>
                 </tr>
               
@@ -9761,6 +9840,12 @@ This will indicate the generic state of the request.
                 <tr>
                   <td>robot_observed_motion</td>
                   <td><a href="#Anki.Vector.external_interface.RobotObservedMotion">RobotObservedMotion</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>robot_erased_enrolled_face</td>
+                  <td><a href="#Anki.Vector.external_interface.RobotErasedEnrolledFace">RobotErasedEnrolledFace</a> </td>
                   <td><p> </p></td>
                 </tr>
               
