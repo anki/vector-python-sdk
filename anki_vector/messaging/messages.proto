@@ -325,6 +325,12 @@ message RobotObservedMotion {
   int32 right_img_y = 19; // Pixel coordinate of the point in the image, relative to top-left corner.
 }
 
+ // Event confirming that an enrolled face has been removed from the robot.
+message RobotErasedEnrolledFace {
+  int32 face_id = 1;
+  string name = 2;
+}
+
 // This is an int8 on the clad side.
 // Proto field names are prefixed with "EXPRESSION_"
 enum FacialExpression
@@ -682,6 +688,15 @@ message CancelActionByIdTagRequest {
 // Response from the robot to CancelActionByIdTagRequest.
 message CancelActionByIdTagResponse {
   // A generic status.
+  ResponseStatus status = 1;
+}
+
+// Cancel a behavior in progress
+message CancelBehaviorRequest {
+}
+
+// Response from the robot to CancelBehaviorRequest.
+message CancelBehaviorResponse {
   ResponseStatus status = 1;
 }
 
