@@ -64,7 +64,7 @@ class AudioComponent(util.Component):
     .. code-block:: python
 
         with anki_vector.Robot() as robot:
-            robot.audio.play_wav_file('sounds/vector_alert.wav')
+            robot.audio.stream_wav_file('sounds/vector_alert.wav')
     """
 
     # TODO restore audio feed code when ready
@@ -163,7 +163,7 @@ class AudioComponent(util.Component):
         .. code-block:: python
 
             with anki_vector.Robot() as robot:
-                robot.audio.play_wav_file('sounds/vector_alert.wav')
+                robot.audio.stream_wav_file('sounds/vector_alert.wav')
 
         :param filename: the filename/path to the .wav audio file
         :param volume: the audio playback level (0-100)
