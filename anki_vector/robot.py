@@ -490,8 +490,19 @@ class Robot:
         .. testcode::
 
             import anki_vector
+            from anki_vector.util import degrees
+
+            # Set the robot so that he can see a cube.
             with anki_vector.Robot() as robot:
-                current_carrying_object_id = robot.carrying_object_id
+                robot.behavior.set_head_angle(degrees(0.0))
+                robot.behavior.set_lift_height(0.0)
+
+                robot.world.connect_cube()
+
+                if robot.world.connected_light_cube:
+                    robot.behavior.pickup_object(robot.world.connected_light_cube)
+
+                print("carrying_object_id: ", robot.carrying_object_id)
         """
         return self._carrying_object_id
 
