@@ -597,7 +597,11 @@ class FaceComponent(util.Component):
 
             import anki_vector
 
+            def on_robot_renamed_enrolled_face(robot, event_type, event):
+                print(f"----Face has been renamed on robot. Event: {event_type} = {event}----")
+
             with anki_vector.Robot() as robot:
+                robot.events.subscribe(on_robot_renamed_enrolled_face, Events.robot_renamed_enrolled_face)
                 robot.faces.update_enrolled_face_by_id(1, 'Hanns', 'Boris')
         """
         req = protocol.UpdateEnrolledFaceByIDRequest(face_id=face_id,
