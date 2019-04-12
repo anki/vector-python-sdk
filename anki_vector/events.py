@@ -52,6 +52,7 @@ class Events(Enum):
     robot_observed_face = "robot_observed_face"                        #: Robot event for when a face is observed by the robot.
     robot_changed_observed_face_id = "robot_changed_observed_face_id"  #: Robot event for when a known face changes its id.
     robot_erased_enrolled_face = "robot_erased_enrolled_face"          #: Robot event for when an enrolled face has been removed from the robot.
+    robot_renamed_enrolled_face = "robot_renamed_enrolled_face"        #: Robot event for when a known face changes its name.
 
     wake_word = "wake_word"                             #: Robot event triggered when Vector hears "Hey Vector".
     user_intent = "user_intent"                         #: Robot event triggered after Vector processes voice commands.
