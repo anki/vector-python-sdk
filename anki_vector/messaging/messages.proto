@@ -418,7 +418,7 @@ message LoadedKnownFace {
 
 message RobotRenamedEnrolledFace {
     int32   face_id = 1;
-    string   name = 2;
+    string  name = 2;
 }
 
 message RequestEnrolledNamesResponse {
