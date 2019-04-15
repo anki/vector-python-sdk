@@ -155,7 +155,7 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
             from anki_vector.util import degrees
 
             def on_robot_observed_motion(robot, event_type, event):
-                print(f"--------- Vector observed motion --------- \n{event}")
+                print("Robot observed motion")
 
             with anki_vector.Robot(show_viewer=True) as robot:
                 robot.events.subscribe(on_robot_observed_motion, Events.robot_observed_motion)

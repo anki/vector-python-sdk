@@ -105,7 +105,7 @@ class ImageText:  # pylint: disable=too-few-public-methods
         - such as AnnotationPosition.TOP_LEFT or AnnotationPosition.BOTTOM_RIGHT
     :param align: Text alignment for multi-line strings
     :param color: Color to use for the text - see :mod:`PIL.ImageColor`
-    :param font: Font to use (None for a default font)
+    :param font: ImageFont to use (None for a default font)
     :param line_spacing: The vertical spacing for multi-line strings
     :param outline_color: Color to use for the outline - see
         :mod:`PIL.ImageColor` - use None for no outline.
@@ -115,7 +115,7 @@ class ImageText:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, text: str, position: int = AnnotationPosition.BOTTOM_RIGHT, align: str = "left", color: str = "white",
-                 font: PIL.ImageFont = None, line_spacing: int = 3, outline_color: str = None, full_outline: bool = True):
+                 font = None, line_spacing: int = 3, outline_color: str = None, full_outline: bool = True):
         self.text = text
         self.position = position
         self.align = align
