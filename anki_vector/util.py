@@ -1046,8 +1046,8 @@ class RectangleOverlay(BaseOverlay):
         image_width, image_height = image.size
         remaining_width = image_width - self.width
         remaining_height = image_height - self.height
-        x1, y1 = remaining_height // 2, remaining_width // 2
-        x2, y2 = (image_height - (remaining_height // 2)), (image_width - (remaining_width // 2))
+        x1, y1 = remaining_width // 2, remaining_height // 2
+        x2, y2 = (image_width - (remaining_width // 2)), (image_height - (remaining_height // 2))
 
         for i in range(0, self.line_thickness):
             d.rectangle([x1 + i, y1 + i, x2 - i, y2 - i], outline=self.line_color)
