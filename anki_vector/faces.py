@@ -22,16 +22,181 @@ knows about, along with those that are currently visible to the camera.
 
 Each face is assigned a :class:`Face` object, which generates a number of
 observable events whenever the face is observed or when the face id is updated.
+
+Faces can generate events which can be subscribed to from the anki_vector.events
+class, such as face_appeared (of type EvtFaceAppeared), and face_disappeared (of
+type EvtFaceDisappeared), which are broadcast based on both robot originating
+events and local state.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
-__all__ = ['Expression', 'Face', 'FaceComponent']
+__all__ = ['FACE_VISIBILITY_TIMEOUT', 'EvtFaceAppeared', 'EvtFaceDisappeared',
+           'EvtFaceObserved', 'Expression', 'Face', 'FaceComponent']
 
 from enum import Enum
 from typing import List
 
-from . import connection, util, objects, events
+from . import connection, events, util, objects
+from .events import Events
 from .messaging import protocol
+
+#: Length of time in seconds to go without receiving an observed event before
+#: assuming that Vector can no longer see a face.
+FACE_VISIBILITY_TIMEOUT = objects.OBJECT_VISIBILITY_TIMEOUT
+
+
+class EvtFaceObserved():  # pylint: disable=too-few-public-methods
+    """Triggered whenever a face is visually identified by the robot.
+
+    A stream of these events are produced while a face is visible to the robot.
+    Each event has an updated image_rect field.
+
+    See EvtFaceAppeared if you only want to know when a face first
+    becomes visible.
+
+    .. testcode::
+
+        import time
+
+        import anki_vector
+        from anki_vector.events import Events
+        from anki_vector.util import degrees
+
+        def handle_face_observed(robot, event_type, event):
+            # This will be called whenever an EvtFaceObserved is dispatched -
+            # whenever an face comes into view.
+            print(f"--------- Vector observed an face --------- \\n{event.face}")
+
+        with anki_vector.Robot(enable_face_detection = True,
+                               show_viewer=True) as robot:
+            robot.events.subscribe(handle_face_observed, Events.face_observed)
+
+            # If necessary, move Vector's Head and Lift in position to see a face
+            robot.behavior.set_lift_height(0.0)
+            robot.behavior.set_head_angle(degrees(45.0))
+
+            try:
+                while True:
+                    time.sleep(0.5)
+            except KeyboardInterrupt:
+                pass
+
+    :param face: The Face instance that was observed
+    :param image_rect: An :class:`anki_vector.util.ImageRect`: defining where the face is within Vector's camera view
+    :param name: The name of the face
+    :param pose: The :class:`anki_vector.util.Pose`: defining the position and rotation of the face
+    """
+
+    def __init__(self, face, image_rect: util.ImageRect, name, pose: util.Pose):
+        self.face = face
+        self.image_rect = image_rect
+        self.name = name
+        self.pose = pose
+
+
+class EvtFaceAppeared():  # pylint: disable=too-few-public-methods
+    """Triggered whenever a face is first visually identified by a robot.
+
+    This differs from EvtFaceObserved in that it's only triggered when
+    a face initially becomes visible.  If it disappears for more than
+    FACE_VISIBILITY_TIMEOUT seconds and then is seen again, a
+    EvtFaceDisappeared will be dispatched, followed by another
+    EvtFaceAppeared event.
+
+    For continuous tracking information about a visible face, see
+    EvtFaceObserved.
+
+    .. testcode::
+
+        import time
+
+        import anki_vector
+        from anki_vector.events import Events
+        from anki_vector.util import degrees
+
+        def handle_face_appeared(robot, event_type, event):
+            # This will be called whenever an EvtFaceAppeared is dispatched -
+            # whenever an face comes into view.
+            print(f"--------- Vector started seeing an face --------- \\n{event.face}")
+
+
+        def handle_face_disappeared(robot, event_type, event):
+            # This will be called whenever an EvtFaceDisappeared is dispatched -
+            # whenever an face goes out of view.
+            print(f"--------- Vector stopped seeing an face --------- \\n{event.face}")
+
+
+        with anki_vector.Robot(enable_face_detection = True,
+                               show_viewer=True) as robot:
+            robot.events.subscribe(handle_face_appeared, Events.face_appeared)
+            robot.events.subscribe(handle_face_disappeared, Events.face_disappeared)
+
+            # If necessary, move Vector's Head and Lift in position to see a face
+            robot.behavior.set_lift_height(0.0)
+            robot.behavior.set_head_angle(degrees(45.0))
+
+            try:
+                while True:
+                    time.sleep(0.5)
+            except KeyboardInterrupt:
+                pass
+
+    :param face:'The Face instance that appeared
+    :param image_rect: An :class:`anki_vector.util.ImageRect`: defining where the face is within Vector's camera view
+    :param name: The name of the face
+    :param pose: The :class:`anki_vector.util.Pose`: defining the position and rotation of the face
+    """
+
+    def __init__(self, face, image_rect: util.ImageRect, name, pose: util.Pose):
+        self.face = face
+        self.image_rect = image_rect
+        self.name = name
+        self.pose = pose
+
+
+class EvtFaceDisappeared():  # pylint: disable=too-few-public-methods
+    """Triggered whenever a face that was previously being observed is no longer visible.
+
+    .. testcode::
+
+        import time
+
+        import anki_vector
+        from anki_vector.events import Events
+        from anki_vector.util import degrees
+
+        def handle_face_appeared(robot, event_type, event):
+            # This will be called whenever an EvtFaceAppeared is dispatched -
+            # whenever an face comes into view.
+            print(f"--------- Vector started seeing an face --------- \\n{event.face}")
+
+
+        def handle_face_disappeared(robot, event_type, event):
+            # This will be called whenever an EvtFaceDisappeared is dispatched -
+            # whenever an face goes out of view.
+            print(f"--------- Vector stopped seeing an face --------- \\n{event.face}")
+
+
+        with anki_vector.Robot(enable_face_detection = True,
+                               show_viewer=True) as robot:
+            robot.events.subscribe(handle_face_appeared, Events.face_appeared)
+            robot.events.subscribe(handle_face_disappeared, Events.face_disappeared)
+
+            # If necessary, move Vector's Head and Lift in position to see a face
+            robot.behavior.set_lift_height(0.0)
+            robot.behavior.set_head_angle(degrees(45.0))
+
+            try:
+                while True:
+                    time.sleep(0.5)
+            except KeyboardInterrupt:
+                pass
+
+    :param face: The Face instance that is no longer being observed
+    """
+
+    def __init__(self, face):
+        self.face = face
 
 
 class Expression(Enum):
@@ -65,6 +230,10 @@ class Face(objects.ObservableObject):
     Vector later gets an improved view and makes a different prediction about
     which face he is looking at.
     """
+
+    #: Length of time in seconds to go without receiving an observed event before
+    #: assuming that Vector can no longer see a face.
+    visibility_timeout = FACE_VISIBILITY_TIMEOUT
 
     def __init__(self,
                  robot,
@@ -536,6 +705,15 @@ class Face(objects.ObservableObject):
         return self._mouth
 
     #### Private Event Handlers ####
+
+    def _dispatch_observed_event(self, image_rect):
+        self.conn.run_soon(self._robot.events.dispatch_event(EvtFaceObserved(self, image_rect=image_rect, name=self._name, pose=self._pose), Events.face_observed))
+
+    def _dispatch_appeared_event(self, image_rect):
+        self.conn.run_soon(self._robot.events.dispatch_event(EvtFaceAppeared(self, image_rect=image_rect, name=self._name, pose=self._pose), Events.face_appeared))
+
+    def _dispatch_disappeared_event(self):
+        self.conn.run_soon(self._robot.events.dispatch_event(EvtFaceDisappeared(self), Events.face_disappeared))
 
     def _on_face_observed(self, _robot, _event_type, msg):
         """Unpacks the face observed stream data from Vector into a Face instance."""
