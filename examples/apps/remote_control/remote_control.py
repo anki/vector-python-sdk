@@ -464,7 +464,7 @@ def handle_index_page():
                 var gLastClientX = -1
                 var gLastClientY = -1
                 var gIsMouseLookEnabled = """ + to_js_bool_string(_is_mouse_look_enabled_by_default) + """
-                var gAreDebugAnnotationsEnabled = """+ str(flask_app.display_debug_annotations.value) + """
+                var gAreDebugAnnotationsEnabled = """+ str(flask_app.display_debug_annotations) + """
                 var gIsFreeplayEnabled = false
                 var gUserAgent = window.navigator.userAgent;
                 var gIsMicrosoftBrowser = gUserAgent.indexOf('MSIE ') > 0 || gUserAgent.indexOf('Trident/') > 0 || gUserAgent.indexOf('Edge/') > 0;
@@ -808,7 +808,7 @@ def run():
 
     with anki_vector.AsyncRobot(args.serial, enable_face_detection=True, enable_custom_object_detection=True) as robot:
         flask_app.remote_control_vector = RemoteControlVector(robot)
-        flask_app.display_debug_annotations = DebugAnnotations.ENABLED_ALL
+        flask_app.display_debug_annotations = DebugAnnotations.ENABLED_ALL.value
 
         robot.camera.init_camera_feed()
         robot.behavior.drive_off_charger()
