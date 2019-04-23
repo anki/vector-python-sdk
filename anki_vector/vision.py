@@ -166,13 +166,9 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
 
                 robot.vision.enable_motion_detection(detect_motion=True)
 
-                print("\n\nVector is waiting to see motion. Make some movement within Vector's camera view.\n\n")
+                print("Vector is waiting to see motion. Make some movement within Vector's camera view")
 
-                try:
-                    while True:
-                        time.sleep(0.5)
-                except KeyboardInterrupt:
-                    pass
+                time.sleep(3.0)
 
             robot.events.unsubscribe(on_robot_observed_motion, Events.robot_observed_motion)
         """

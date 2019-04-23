@@ -268,7 +268,7 @@ class World(util.Component):
             # First, place Vector directly in front of his charger so he can observe it.
 
             with anki_vector.Robot() as robot:
-                print('most recently observed charger: {0}.'.format(robot.world.charger))
+                print('Most recently observed charger: {0}'.format(robot.world.charger))
         """
         if self._charger is not None:
             return self._charger
@@ -323,8 +323,7 @@ class World(util.Component):
 
             def test_subscriber(robot, event_type, event):
                 for face in robot.world.visible_faces:
-                    my_face = robot.world.get_face(face.face_id)
-                    print(f"Name: {my_face.name}")
+                    print(f"Face id: {face.face_id}")
 
             with anki_vector.Robot(enable_face_detection=True) as robot:
                 # If necessary, move Vector's Head and Lift to make it easy to see his face
@@ -336,7 +335,7 @@ class World(util.Component):
 
                 print("------ show vector your face, press ctrl+c to exit early ------")
                 try:
-                    time.sleep(10)
+                    time.sleep(5)
                 except KeyboardInterrupt:
                     robot.disconnect()
         """

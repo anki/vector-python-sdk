@@ -75,11 +75,7 @@ class EvtFaceObserved():  # pylint: disable=too-few-public-methods
             robot.behavior.set_lift_height(0.0)
             robot.behavior.set_head_angle(degrees(45.0))
 
-            try:
-                while True:
-                    time.sleep(0.5)
-            except KeyboardInterrupt:
-                pass
+            time.sleep(5.0)
 
     :param face: The Face instance that was observed
     :param image_rect: An :class:`anki_vector.util.ImageRect`: defining where the face is within Vector's camera view
@@ -135,11 +131,7 @@ class EvtFaceAppeared():  # pylint: disable=too-few-public-methods
             robot.behavior.set_lift_height(0.0)
             robot.behavior.set_head_angle(degrees(45.0))
 
-            try:
-                while True:
-                    time.sleep(0.5)
-            except KeyboardInterrupt:
-                pass
+            time.sleep(5.0)
 
     :param face:'The Face instance that appeared
     :param image_rect: An :class:`anki_vector.util.ImageRect`: defining where the face is within Vector's camera view
@@ -186,11 +178,7 @@ class EvtFaceDisappeared():  # pylint: disable=too-few-public-methods
             robot.behavior.set_lift_height(0.0)
             robot.behavior.set_head_angle(degrees(45.0))
 
-            try:
-                while True:
-                    time.sleep(0.5)
-            except KeyboardInterrupt:
-                pass
+            time.sleep(5.0)
 
     :param face: The Face instance that is no longer being observed
     """
