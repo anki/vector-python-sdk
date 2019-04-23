@@ -61,10 +61,12 @@ class AudioComponent(util.Component):
     The :class:`anki_vector.robot.Robot` or :class:`anki_vector.robot.AsyncRobot` instance
     owns this audio component.
 
-    .. code-block:: python
+    .. testcode::
+
+        import anki_vector
 
         with anki_vector.Robot() as robot:
-            robot.audio.stream_wav_file('sounds/vector_alert.wav')
+            robot.audio.stream_wav_file('../examples/tutorials/sounds/vector_alert.wav')
     """
 
     # TODO restore audio feed code when ready
@@ -82,7 +84,7 @@ class AudioComponent(util.Component):
 
         Note that muting the robot is not supported from the SDK.
 
-        .. code-block:: python
+        .. testcode::
 
             import anki_vector
             from anki_vector import audio
@@ -160,10 +162,12 @@ class AudioComponent(util.Component):
     async def stream_wav_file(self, filename, volume=50):
         """ Plays audio using Vector's speakers.
 
-        .. code-block:: python
+        .. testcode::
+
+            import anki_vector
 
             with anki_vector.Robot() as robot:
-                robot.audio.stream_wav_file('sounds/vector_alert.wav')
+                robot.audio.stream_wav_file('../examples/tutorials/sounds/vector_alert.wav')
 
         :param filename: the filename/path to the .wav audio file
         :param volume: the audio playback level (0-100)

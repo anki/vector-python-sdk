@@ -94,11 +94,7 @@ class EvtObjectObserved():  # pylint: disable=too-few-public-methods
             robot.behavior.set_lift_height(0.0)
             robot.behavior.set_head_angle(degrees(0.0))
 
-            try:
-                while True:
-                    time.sleep(0.5)
-            except KeyboardInterrupt:
-                pass
+            time.sleep(3.0)
 
     :param obj: The object that was observed
     :param image_rect: An :class:`anki_vector.util.ImageRect`: defining where the object is within Vector's camera view
@@ -148,11 +144,7 @@ class EvtObjectAppeared():  # pylint: disable=too-few-public-methods
             robot.behavior.set_lift_height(0.0)
             robot.behavior.set_head_angle(degrees(0.0))
 
-            try:
-                while True:
-                    time.sleep(0.5)
-            except KeyboardInterrupt:
-                pass
+            time.sleep(3.0)
 
     :param obj: The object that is starting to be observed
     :param image_rect: An :class:`anki_vector.util.ImageRect`: defining where the object is within Vector's camera view
@@ -181,8 +173,7 @@ class EvtObjectDisappeared():  # pylint: disable=too-few-public-methods
             # whenever an Object goes out of view.
             print(f"--------- Vector stopped seeing an object --------- \\n{event.obj}")
 
-        with anki_vector.Robot(args.serial,
-                               default_logging=False,
+        with anki_vector.Robot(default_logging=False,
                                show_viewer=True,
                                show_3d_viewer=True,
                                enable_nav_map_feed=True) as robot:
@@ -194,11 +185,7 @@ class EvtObjectDisappeared():  # pylint: disable=too-few-public-methods
             robot.behavior.set_lift_height(0.0)
             robot.behavior.set_head_angle(degrees(0.0))
 
-            try:
-                while True:
-                    time.sleep(0.5)
-            except KeyboardInterrupt:
-                pass
+            time.sleep(3.0)
 
     :param obj: The object that is no longer being observed
     """
@@ -1163,8 +1150,8 @@ class Charger(ObservableObject):
             import anki_vector
 
             with anki_vector.Robot() as robot:
-                if robot.world.charger.is_visible:
-                    print(f"{obot.world.charger.descriptive_name}")
+                if robot.world.charger:
+                    print(f"{robot.world.charger.descriptive_name}")
         """
         return f"{self.__class__.__name__} id={self._object_id}"
 

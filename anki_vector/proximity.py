@@ -141,7 +141,7 @@ class ProximityComponent(util.Component):
         with anki_vector.Robot() as robot:
             proximity_data = robot.proximity.last_sensor_reading
             if proximity_data is not None:
-                print('Proximity distance: {0}, engine considers useful: {1}'.format(proximity_data.distance, proximity_data.is_valid))
+                print('Proximity distance: {0}'.format(proximity_data.distance))
     """
 
     def __init__(self, robot):

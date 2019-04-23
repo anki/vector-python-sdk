@@ -140,27 +140,25 @@ class UserIntent:
         from anki_vector.events import Events
         from anki_vector.user_intent import UserIntent, UserIntentEvent
 
-        def main():
-            def on_user_intent(robot, event_type, event, done):
-                user_intent = UserIntent(event)
-                if user_intent.intent_event is UserIntentEvent.weather_response:
-                    data = json.loads(user_intent.intent_data)
-                        print(f"Weather report for {data['speakableLocationString']}: "
-                              f"{data['condition']}, temperature {data['temperature']} degrees")
-                        done.set()
+        def on_user_intent(robot, event_type, event, done):
+            user_intent = UserIntent(event)
+            if user_intent.intent_event is UserIntentEvent.weather_response:
+                data = json.loads(user_intent.intent_data)
+                print(f"Weather report for {data['speakableLocationString']}: "
+                      f"{data['condition']}, temperature {data['temperature']} degrees")
+                done.set()
 
-            args = anki_vector.util.parse_command_args()
-            with anki_vector.Robot(args.serial) as robot:
-                done = threading.Event()
-                robot.events.subscribe(on_user_intent, Events.user_intent, done)
+        with anki_vector.Robot() as robot:
+            done = threading.Event()
+            robot.events.subscribe(on_user_intent, Events.user_intent, done)
 
-                print('------ Vector is waiting to be asked "Hey Vector!  What is the weather report?" Press ctrl+c to exit early ------')
+            print('------ Vector is waiting to be asked "Hey Vector!  What is the weather report?" Press ctrl+c to exit early ------')
 
-                try:
-                    if not done.wait(timeout=10):
-                        print('------ Vector never heard a request for the weather report ------')
-                except KeyboardInterrupt:
-                    pass
+            try:
+                if not done.wait(timeout=10):
+                    print('------ Vector never heard a request for the weather report ------')
+            except KeyboardInterrupt:
+                pass
 
     :param event: an event containing UserIntent data
     """

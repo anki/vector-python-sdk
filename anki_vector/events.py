@@ -304,7 +304,6 @@ class EventHandler:
                     robot.behavior.say_text("I see a face!")
                     evt.set()
 
-            args = anki_vector.util.parse_command_args()
             with anki_vector.Robot(enable_face_detection=True) as robot:
 
                 # If necessary, move Vector's Head and Lift to make it easy to see his face
@@ -389,7 +388,6 @@ class EventHandler:
                     robot.behavior.say_text("I see a face!")
                     evt.set()
 
-            args = anki_vector.util.parse_command_args()
             with anki_vector.Robot(enable_face_detection=True) as robot:
 
                 # If necessary, move Vector's Head and Lift to make it easy to see his face

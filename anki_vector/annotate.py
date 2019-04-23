@@ -92,13 +92,33 @@ class ImageText:  # pylint: disable=too-few-public-methods
 
     .. testcode::
 
+        import time
+
+        try:
+            from PIL import ImageDraw
+        except ImportError:
+            sys.exit("run `pip3 install --user Pillow numpy` to run this example")
+
         import anki_vector
         from anki_vector import annotate
-        with anki_vector.Robot(show_viewer=True) as robot:
-            text = annotate.ImageText("Text Annotations",
+
+
+        # Define an annotator using the annotator decorator
+        @annotate.annotator
+        def clock(image, scale, annotator=None, world=None, **kw):
+            d = ImageDraw.Draw(image)
+            bounds = (0, 0, image.width, image.height)
+            text = annotate.ImageText(time.strftime("%H:%m:%S"),
                                       position=annotate.AnnotationPosition.TOP_LEFT,
                                       outline_color="black")
-            robot.camera.image_annotator.add_static_text("custom-text", text)
+            text.render(d, bounds)
+
+        with anki_vector.Robot(show_viewer=True, enable_face_detection=True, enable_custom_object_detection=True) as robot:
+            robot.camera.image_annotator.add_static_text("text", "Vec-Cam", position=annotate.AnnotationPosition.TOP_RIGHT)
+            robot.camera.image_annotator.add_annotator("clock", clock)
+
+            time.sleep(3)
+
 
     :param text: The text to display; may contain newlines
     :param position: Where on the screen to render the text
@@ -401,6 +421,7 @@ class ImageAnnotator:
 
         import anki_vector
         from anki_vector import annotate
+        import time
 
         @annotate.annotator
         def clock(image, scale, annotator=None, world=None, **kw):
@@ -416,7 +437,7 @@ class ImageAnnotator:
             robot.camera.image_annotator.add_annotator("custom-annotator", clock)
             time.sleep(5)
             # Disable the custom annotator
-            robot.camera.image_annotator.disable_annotator("custom-annotator", clock)
+            robot.camera.image_annotator.disable_annotator("custom-annotator")
             time.sleep(5)
     """
 

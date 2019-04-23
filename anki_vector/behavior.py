@@ -950,22 +950,17 @@ class ReserveBehaviorControl():
             import anki_vector
             from anki_vector import behavior
 
-            args = anki_vector.util.parse_command_args()
-            with behavior.ReserveBehaviorControl(args.serial):
+            with behavior.ReserveBehaviorControl():
 
                 # At this point, Vector will remain still, even without
                 # a Robot instance being in scope.
-
-                ...
 
                 # take control of the robot as usual
                 with anki_vector.Robot() as robot:
 
                     robot.anim.play_animation("anim_turn_left_01")
 
-                # Robot will not perform idle behaviors until the script completes
-
-                ...
+                   # Robot will not perform idle behaviors until the script completes
 
     :param serial: Vector's serial number. The robot's serial number (ex. 00e20100) is located on
                    the underside of Vector, or accessible from Vector's debug screen. Used to
