@@ -91,6 +91,7 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
         if self.display_camera_feed_on_face:
             await self.enable_display_camera_feed_on_face(False)
 
+    # TODO: add return type hint
     @connection.on_connection_thread()
     async def enable_custom_object_detection(self, detect_custom_objects: bool = True):
         """Enable custom object detection on the robot's camera.
@@ -113,6 +114,7 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
         enable_marker_detection_request = protocol.EnableMarkerDetectionRequest(enable=detect_custom_objects)
         return await self.grpc_interface.EnableMarkerDetection(enable_marker_detection_request)
 
+    # TODO: add return type hint
     @connection.on_connection_thread()
     async def enable_face_detection(
             self,
@@ -177,6 +179,7 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
         enable_motion_detection_request = protocol.EnableMotionDetectionRequest(enable=detect_motion)
         return await self.grpc_interface.EnableMotionDetection(enable_motion_detection_request)
 
+    # TODO: add return type hint
     @connection.on_connection_thread()
     async def enable_display_camera_feed_on_face(self, display_camera_feed_on_face: bool = True):
         """Display the robot's camera feed on its face along with any detections (if enabled)

@@ -788,6 +788,7 @@ class World(util.Component):
             self._objects[fixed_custom_object.object_id] = fixed_custom_object
         return fixed_custom_object
 
+    # TODO: add return type hint
     @connection.on_connection_thread(requires_control=False)
     async def _create_custom_fixed_object(self,
                                           pose: util.Pose,
