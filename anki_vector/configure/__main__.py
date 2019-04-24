@@ -69,7 +69,7 @@ class Api:
             headers={
                 'User-Agent': 'Vector-sdk/{} {}/{}'.format(anki_vector.__version__,
                                                            platform.python_implementation(),
-                                                           platform.python_version(),
+                                                           platform.python_version()),
 
                 'Anki-App-Key': 'aung2ieCho3aiph7Een3Ei'
             },
