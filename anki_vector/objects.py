@@ -493,6 +493,7 @@ class LightCube(ObservableObject):
         self.robot.events.unsubscribe(self._on_object_connection_lost,
                                       Events.cube_connection_lost)
 
+    # TODO: add return type hint
     @connection.on_connection_thread()
     async def set_light_corners(self,
                                 light1: lights.Light,

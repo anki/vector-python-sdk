@@ -37,6 +37,7 @@ class Events(Enum):
     robot_state = "robot_state"                   #: Robot event containing changes to the robot's state.
     mirror_mode_disabled = "mirror_mode_disabled"  # : Robot event triggered when mirror mode (camera feed displayed on robot's face) is automatically disabled due to SDK no longer having control of the robot.
     vision_modes_auto_disabled = "vision_modes_auto_disabled"  # : Robot event triggered when all vision modes are automatically disabled due to the SDK no longer having control of the robot.
+    camera_settings_update = "camera_settings_update"  # : Robot event triggered when camera exposure settings change
 
     # Objects
     object_available = "object_available"               #: After the ConnectCube process is started, all available light cubes in range will broadcast an availability message through the Robot.
