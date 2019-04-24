@@ -1439,8 +1439,7 @@ class CustomObject(ObservableObject):
                 for obj in robot.world.visible_custom_objects:
                     print('custom object seen with name: {0}'.format(obj.descriptive_name))
         """
-        # Specialization of ObservableObject's method to include the object type.
-        return "%s id=%d" % (self.archetype.object_type.name, self.object_id)
+        return "%s id=%d" % (self.__class__.__name__, self.object_id)
 
     #### Private Methods ####
 
