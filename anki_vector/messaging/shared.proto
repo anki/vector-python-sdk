@@ -64,6 +64,7 @@ message Event {
     RobotObservedMotion              robot_observed_motion               = 20;
     RobotErasedEnrolledFace          robot_erased_enrolled_face          = 21;
     RobotRenamedEnrolledFace         robot_renamed_enrolled_face         = 22;
+    CameraSettingsUpdate             camera_settings_update              = 23;
   }
 }
 

@@ -358,6 +358,11 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CaptureSingleImageRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CaptureSingleImageResponse.FromString,
         )
+    self.GetCameraConfig = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/GetCameraConfig',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CameraConfigRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CameraConfigResponse.FromString,
+        )
     self.SetEyeColor = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/SetEyeColor',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetEyeColorRequest.SerializeToString,
@@ -367,6 +372,11 @@ class ExternalInterfaceStub(object):
         '/Anki.Vector.external_interface.ExternalInterface/NavMapFeed',
         request_serializer=anki__vector_dot_messaging_dot_nav__map__pb2.NavMapFeedRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_nav__map__pb2.NavMapFeedResponse.FromString,
+        )
+    self.SetCameraSettings = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/SetCameraSettings',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetCameraSettingsRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetCameraSettingsResponse.FromString,
         )
 
 
@@ -860,6 +870,13 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def GetCameraConfig(self, request, context):
+    """Get Vector's camera configuration.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def SetEyeColor(self, request, context):
     """Set Vector's eye color.
     """
@@ -869,6 +886,13 @@ class ExternalInterfaceServicer(object):
 
   def NavMapFeed(self, request, context):
     """Stream navigation map data.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def SetCameraSettings(self, request, context):
+    """Set Vector's camera settings
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
@@ -1217,6 +1241,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CaptureSingleImageRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CaptureSingleImageResponse.SerializeToString,
       ),
+      'GetCameraConfig': grpc.unary_unary_rpc_method_handler(
+          servicer.GetCameraConfig,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CameraConfigRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CameraConfigResponse.SerializeToString,
+      ),
       'SetEyeColor': grpc.unary_unary_rpc_method_handler(
           servicer.SetEyeColor,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetEyeColorRequest.FromString,
@@ -1226,6 +1255,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.NavMapFeed,
           request_deserializer=anki__vector_dot_messaging_dot_nav__map__pb2.NavMapFeedRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_nav__map__pb2.NavMapFeedResponse.SerializeToString,
+      ),
+      'SetCameraSettings': grpc.unary_unary_rpc_method_handler(
+          servicer.SetCameraSettings,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetCameraSettingsRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetCameraSettingsResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
