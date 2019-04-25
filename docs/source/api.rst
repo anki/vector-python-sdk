@@ -19,6 +19,7 @@ The API
     anki_vector.exceptions
     anki_vector.faces
     anki_vector.lights
+    anki_vector.mdns
     anki_vector.messaging
     anki_vector.motors
     anki_vector.nav_map
