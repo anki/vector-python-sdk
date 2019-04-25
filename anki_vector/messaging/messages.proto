@@ -1234,6 +1234,39 @@ message SetEyeColorResponse {
   ResponseStatus status = 1;
 }
 
+message CameraConfigRequest {}
+
+message CameraConfigResponse {
+  float  focal_length_x = 1;
+  float  focal_length_y = 2;
+  float  center_x = 3;
+  float  center_y = 4;
+  float  fov_x = 5;  // Full FOV in degrees
+  float  fov_y = 6;  // Full FOV in degrees
+  uint32 min_camera_exposure_time_ms = 7;
+  uint32 max_camera_exposure_time_ms = 8;
+  float  min_camera_gain = 9;
+  float  max_camera_gain = 10;
+}
+
+message SetCameraSettingsRequest {
+  float   gain = 1;
+  uint32  exposure_ms = 2;
+  bool    enable_auto_exposure = 3;
+}
+
+message SetCameraSettingsResponse {
+  ResponseStatus status = 1;
+  string  status_message = 2;
+}
+
+// Event sent when camera exposure settings change
+message CameraSettingsUpdate {
+  float   gain = 1;
+  uint32  exposure_ms = 2;
+  bool    auto_exposure_enabled = 3;
+}
+
 message SDKInitializationRequest {
   string sdk_module_version = 1;
   string python_version = 2;

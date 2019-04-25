@@ -488,6 +488,14 @@ service ExternalInterface {
     };
   }
 
+  // Get Vector's camera configuration.
+  rpc GetCameraConfig(CameraConfigRequest) returns (CameraConfigResponse) {
+    option (google.api.http) = {
+      post: "/v1/get_camera_config",
+      body: "*"
+    };
+  }
+  
   // Set Vector's eye color.
   rpc SetEyeColor(SetEyeColorRequest) returns (SetEyeColorResponse) {
     option (google.api.http) = {
@@ -500,6 +508,14 @@ service ExternalInterface {
   rpc NavMapFeed(NavMapFeedRequest) returns (stream NavMapFeedResponse) {
     option (google.api.http) = {
       post: "/v1/nav_map_feed",
+      body: "*"
+    };
+  }
+
+  // Set Vector's camera settings
+  rpc SetCameraSettings(SetCameraSettingsRequest) returns (SetCameraSettingsResponse) {
+    option (google.api.http) = {
+      post: "/v1/set_camera_settings",
       body: "*"
     };
   }

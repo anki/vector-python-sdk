@@ -445,11 +445,23 @@
                 </li>
               
                 <li>
+                  <a href="#Anki.Vector.external_interface.CameraConfigRequest"><span class="badge">M</span>CameraConfigRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.CameraConfigResponse"><span class="badge">M</span>CameraConfigResponse</a>
+                </li>
+              
+                <li>
                   <a href="#Anki.Vector.external_interface.CameraFeedRequest"><span class="badge">M</span>CameraFeedRequest</a>
                 </li>
               
                 <li>
                   <a href="#Anki.Vector.external_interface.CameraFeedResponse"><span class="badge">M</span>CameraFeedResponse</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.CameraSettingsUpdate"><span class="badge">M</span>CameraSettingsUpdate</a>
                 </li>
               
                 <li>
@@ -902,6 +914,14 @@
               
                 <li>
                   <a href="#Anki.Vector.external_interface.SayTextResponse"><span class="badge">M</span>SayTextResponse</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.SetCameraSettingsRequest"><span class="badge">M</span>SetCameraSettingsRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.SetCameraSettingsResponse"><span class="badge">M</span>SetCameraSettingsResponse</a>
                 </li>
               
                 <li>
@@ -3425,6 +3445,11 @@ rgb values each and timing data for how to transition between them.</p></td>
               </tr>
             
               <tr>
+                <td>GetCameraConfig</td>
+                <td><p>Get Vector's camera configuration.</p></td>
+              </tr>
+            
+              <tr>
                 <td>SetEyeColor</td>
                 <td><p>Set Vector's eye color.</p></td>
               </tr>
@@ -3432,6 +3457,11 @@ rgb values each and timing data for how to transition between them.</p></td>
               <tr>
                 <td>NavMapFeed</td>
                 <td><p>Stream navigation map data.</p></td>
+              </tr>
+            
+              <tr>
+                <td>SetCameraSettings</td>
+                <td><p>Set Vector's camera settings</p></td>
               </tr>
             
           </tbody>
@@ -3810,6 +3840,92 @@ rgb values each and timing data for how to transition between them.</p></td>
 
         
       
+        <h3 id="Anki.Vector.external_interface.CameraConfigRequest">CameraConfigRequest</h3>
+        
+        <p></p>
+
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.CameraConfigResponse">CameraConfigResponse</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>focal_length_x</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>focal_length_y</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>center_x</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>center_y</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fov_x</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p>Full FOV in degrees </p></td>
+                </tr>
+              
+                <tr>
+                  <td>fov_y</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p>Full FOV in degrees </p></td>
+                </tr>
+              
+                <tr>
+                  <td>min_camera_exposure_time_ms</td>
+                  <td><a href="#uint32">uint32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>max_camera_exposure_time_ms</td>
+                  <td><a href="#uint32">uint32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>min_camera_gain</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>max_camera_gain</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
         <h3 id="Anki.Vector.external_interface.CameraFeedRequest">CameraFeedRequest</h3>
         
         <p></p>
@@ -3850,6 +3966,42 @@ rgb values each and timing data for how to transition between them.</p></td>
                 <tr>
                   <td>data</td>
                   <td><a href="#bytes">bytes</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.CameraSettingsUpdate">CameraSettingsUpdate</h3>
+        Event sent when camera exposure settings change
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>gain</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>exposure_ms</td>
+                  <td><a href="#uint32">uint32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>auto_exposure_enabled</td>
+                  <td><a href="#bool">bool</a> </td>
                   <td><p> </p></td>
                 </tr>
               
@@ -7420,6 +7572,72 @@ Area of the supporting region for the point, as a fraction of the right region <
 
         
       
+        <h3 id="Anki.Vector.external_interface.SetCameraSettingsRequest">SetCameraSettingsRequest</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>gain</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>exposure_ms</td>
+                  <td><a href="#uint32">uint32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>enable_auto_exposure</td>
+                  <td><a href="#bool">bool</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
+        <h3 id="Anki.Vector.external_interface.SetCameraSettingsResponse">SetCameraSettingsResponse</h3>
+        
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>status</td>
+                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>status_message</td>
+                  <td><a href="#string">string</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
         <h3 id="Anki.Vector.external_interface.SetEyeColorRequest">SetEyeColorRequest</h3>
         
         <p></p>
@@ -9852,6 +10070,12 @@ This will indicate the generic state of the request.
                 <tr>
                   <td>robot_renamed_enrolled_face</td>
                   <td><a href="#Anki.Vector.external_interface.RobotRenamedEnrolledFace">RobotRenamedEnrolledFace</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>camera_settings_update</td>
+                  <td><a href="#Anki.Vector.external_interface.CameraSettingsUpdate">CameraSettingsUpdate</a> </td>
                   <td><p> </p></td>
                 </tr>
               
