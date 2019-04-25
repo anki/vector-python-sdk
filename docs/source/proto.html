@@ -1009,6 +1009,10 @@
                 </li>
               
                 <li>
+                  <a href="#Anki.Vector.external_interface.UnexpectedMovement"><span class="badge">M</span>UnexpectedMovement</a>
+                </li>
+              
+                <li>
                   <a href="#Anki.Vector.external_interface.UpdateEnrolledFaceByIDRequest"><span class="badge">M</span>UpdateEnrolledFaceByIDRequest</a>
                 </li>
               
@@ -1099,6 +1103,14 @@
               
                 <li>
                   <a href="#Anki.Vector.external_interface.SayTextResponse.UtteranceState"><span class="badge">E</span>SayTextResponse.UtteranceState</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.UnexpectedMovementSide"><span class="badge">E</span>UnexpectedMovementSide</a>
+                </li>
+              
+                <li>
+                  <a href="#Anki.Vector.external_interface.UnexpectedMovementType"><span class="badge">E</span>UnexpectedMovementType</a>
                 </li>
               
               
@@ -8383,6 +8395,43 @@ default tolerance of POINT_TURN_ANGLE_TOL.
 
         
       
+        <h3 id="Anki.Vector.external_interface.UnexpectedMovement">UnexpectedMovement</h3>
+        Event dispatched when the robot does not move as expected. Has additional information
+such as the direction and type of unexpected motion.
+        <p></p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>timestamp</td>
+                  <td><a href="#uint32">uint32</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>movement_type</td>
+                  <td><a href="#Anki.Vector.external_interface.UnexpectedMovementType">UnexpectedMovementType</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>movement_side</td>
+                  <td><a href="#Anki.Vector.external_interface.UnexpectedMovementSide">UnexpectedMovementSide</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+          <p></p>
+        
+
+        
+      
         <h3 id="Anki.Vector.external_interface.UpdateEnrolledFaceByIDRequest">UpdateEnrolledFaceByIDRequest</h3>
         
         <p></p>
@@ -9587,6 +9636,84 @@ Proto field names are prefixed with "EXPRESSION_"<p></p>
         </table>
         <p></p>
       
+        <h3 id="Anki.Vector.external_interface.UnexpectedMovementSide">UnexpectedMovementSide</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>UNKNOWN</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>FRONT</td>
+                <td>1</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>BACK</td>
+                <td>2</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>LEFT</td>
+                <td>3</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>RIGHT</td>
+                <td>4</td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+        <p></p>
+      
+        <h3 id="Anki.Vector.external_interface.UnexpectedMovementType">UnexpectedMovementType</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>TURNED_BUT_STOPPED</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>TURNED_IN_SAME_DIRECTION</td>
+                <td>1</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>TURNED_IN_OPPOSITE_DIRECTION</td>
+                <td>2</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>ROTATING_WITHOUT_MOTORS</td>
+                <td>3</td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
+        <p></p>
+      
 
       
 
@@ -10076,6 +10203,12 @@ This will indicate the generic state of the request.
                 <tr>
                   <td>camera_settings_update</td>
                   <td><a href="#Anki.Vector.external_interface.CameraSettingsUpdate">CameraSettingsUpdate</a> </td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>unexpected_movement</td>
+                  <td><a href="#Anki.Vector.external_interface.UnexpectedMovement">UnexpectedMovement</a> </td>
                   <td><p> </p></td>
                 </tr>
               

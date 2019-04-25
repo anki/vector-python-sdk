@@ -250,8 +250,7 @@ message RobotState {
   TouchData touch_data = 17;
 }
 
-enum RobotStatus
-{
+enum RobotStatus {
   ROBOT_STATUS_NONE                    = 0x0;
   ROBOT_STATUS_IS_MOVING               = 0x1;
   ROBOT_STATUS_IS_CARRYING_BLOCK       = 0x2;
@@ -331,10 +330,32 @@ message RobotErasedEnrolledFace {
   string name = 2;
 }
 
+enum UnexpectedMovementType {
+  TURNED_BUT_STOPPED = 0;
+  TURNED_IN_SAME_DIRECTION = 1;
+  TURNED_IN_OPPOSITE_DIRECTION = 2;
+  ROTATING_WITHOUT_MOTORS = 3;
+}
+
+enum UnexpectedMovementSide {
+  UNKNOWN = 0;
+  FRONT = 1;
+  BACK = 2;
+  LEFT = 3;
+  RIGHT = 4;
+}
+
+// Event dispatched when the robot does not move as expected. Has additional information
+// such as the direction and type of unexpected motion.
+message UnexpectedMovement {
+  uint32 timestamp = 1;
+  UnexpectedMovementType movement_type = 2;
+  UnexpectedMovementSide movement_side = 3;
+}
+
 // This is an int8 on the clad side.
 // Proto field names are prefixed with "EXPRESSION_"
-enum FacialExpression
-{
+enum FacialExpression {
   option allow_alias = true;
   EXPRESSION_UNKNOWN = 0;    // e.g. expression estimation disabled.
 
@@ -375,8 +396,7 @@ message RobotChangedObservedFaceID {
   int32   new_id = 2;
 }
 
-enum FaceEnrollmentResult
-{
+enum FaceEnrollmentResult {
   SUCCESS = 0;
 
   // Failures:
@@ -475,8 +495,7 @@ message EnrollFaceResponse {
   BehaviorResults result = 2;
 }
 
-enum BehaviorResults
-{
+enum BehaviorResults {
   BEHAVIOR_INVALID_STATE = 0;
   BEHAVIOR_COMPLETE_STATE = 1;
   BEHAVIOR_WONT_ACTIVATE_STATE = 2;
@@ -936,8 +955,7 @@ message SayTextRequest {
 }
 
 message SayTextResponse {
-  enum UtteranceState
-  {
+  enum UtteranceState {
     INVALID = 0;
     GENERATING = 1;
     READY = 2;
@@ -1069,8 +1087,7 @@ message ExternalAudioStreamResponse {
   }
 }
 
-enum MasterVolumeLevel
-{
+enum MasterVolumeLevel {
   VOLUME_LOW         = 0;
   VOLUME_MEDIUM_LOW  = 1;
   VOLUME_MEDIUM      = 2;
@@ -1175,8 +1192,7 @@ message VisionModesAutoDisabled
 
 // One frame of image data and associated metadata
 message ImageChunk {
-  enum ImageEncoding
-  {
+  enum ImageEncoding {
     NONE_IMAGE_ENCODING = 0;
     RAW_GRAY = 1; // no compression
     RAW_RGB = 2;  // no compression, just [RGBRGBRG...]
