@@ -65,6 +65,7 @@ message Event {
     RobotErasedEnrolledFace          robot_erased_enrolled_face          = 21;
     RobotRenamedEnrolledFace         robot_renamed_enrolled_face         = 22;
     CameraSettingsUpdate             camera_settings_update              = 23;
+    UnexpectedMovement               unexpected_movement                 = 24;
   }
 }
 
