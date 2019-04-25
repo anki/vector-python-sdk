@@ -1123,7 +1123,7 @@ def read_configuration(serial: str, name: str, logger: logging.Logger) -> dict:
             for key in config[keySerial]:
                 if config[keySerial][key] == name:
                     return config[keySerial]
-                elif config[keySerial][key].lower() == name.lower():
+                if config[keySerial][key].lower() == name.lower():
                     logger.warning("Using case-insensitive name match found in config. Set 'name' field to match 'Vector-A1B2' format.")
                     return config[keySerial]
 

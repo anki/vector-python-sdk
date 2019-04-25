@@ -18,7 +18,6 @@
 
 Note:
     This example requires Python to have Tkinter installed to display the GUI.
-    It also requires the Pillow and numpy python packages to be pip installed.
 
 This example uses tkinter to display the annotated camera feed on the screen
 and adds a couple of custom annotations of its own using two different methods.
@@ -27,11 +26,6 @@ and adds a couple of custom annotations of its own using two different methods.
 import asyncio
 import sys
 import time
-
-try:
-    from PIL import ImageDraw
-except ImportError:
-    sys.exit("run `pip3 install --user Pillow numpy` to run this example")
 
 import anki_vector
 from anki_vector import annotate
@@ -75,30 +69,25 @@ class Battery(annotate.Annotator):
 
 def main():
     args = anki_vector.util.parse_command_args()
-    with anki_vector.Robot(args.serial, show_viewer=True, enable_face_detection=True, enable_custom_object_detection=True) as robot:
+    with anki_vector.Robot(args.serial, show_viewer=True, enable_face_detection=True) as robot:
         robot.camera.image_annotator.add_static_text("text", "Vec-Cam", position=annotate.AnnotationPosition.TOP_RIGHT)
         robot.camera.image_annotator.add_annotator("clock", clock)
         robot.camera.image_annotator.add_annotator("battery", Battery)
 
-        time.sleep(2)
+        time.sleep(5)
 
-        print("Turning off all annotations for 2 seconds")
+        print("Turning off all annotations for 5 seconds")
         robot.camera.image_annotator.annotation_enabled = False
-        time.sleep(2)
+        time.sleep(5)
 
         print("Re-enabling all annotations")
         robot.camera.image_annotator.annotation_enabled = True
 
-        # Disable the face annotator after 10 seconds
-        time.sleep(10)
-        print("Disabling face annotations (light cube and charger still annotated)")
-        robot.camera.image_annotator.disable_annotator("faces")
-
         print("------ Press ctrl+c to exit early ------")
 
         try:
-            # Shutdown the program after 100 seconds
-            time.sleep(100)
+            # Shutdown the program after 30 seconds
+            time.sleep(30)
         except KeyboardInterrupt:
             pass
 

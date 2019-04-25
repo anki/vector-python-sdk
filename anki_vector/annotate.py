@@ -17,7 +17,9 @@
 .. image:: ../images/annotate.png
 
 This module defines an :class:`ImageAnnotator` class used by
-:class:`anki_vector.world.World` to add annotations to camera images received by the robot.
+:class:`anki_vector.camera.CameraImage` and
+:class:`anki_vector.camera.CameraComponent` to add annotations
+to camera images received by the robot.
 
 This can include the location of cubes and faces that the robot currently sees,
 along with user-defined custom annotations.

@@ -14,27 +14,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Use behavior control at the highest priority level
+"""Vector maintains SDK behavior control after being picked up
 
-This script demonstrates how to request behavior control at the highest level.  This allows Vector
-to perform actions under system conditions that normally take priority over the SDK, such as being
-at a cliff, stuck on an edge or obstacle, low battery, tilted or inclined, picked up, in
-darkness, etc.
+During normal operation, SDK programs cannot maintain control over Vector
+when he is at a cliff, stuck on an edge or obstacle, tilted or inclined,
+picked up, in darkness, etc.
 
-After requesting control, Vector will wait until it detects being picked up.  At
-this point the wheel motors will briefly activate.  These commands will not succeed at
-CONTROL_PRIORITY_LEVEL.DEFAULT.
+This script demonstrates how to use the highest level SDK behavior control
+ControlPriorityLevel.OVERRIDE_BEHAVIORS_PRIORITY to make Vector perform
+actions that normally take priority over the SDK. These commands will not
+succeed at ControlPriorityLevel.DEFAULT.
 """
 
 import sys
 import time
 import anki_vector
-from anki_vector.connection import CONTROL_PRIORITY_LEVEL as control_level
+from anki_vector.connection import ControlPriorityLevel
 
 
 def main():
     args = anki_vector.util.parse_command_args()
-    with anki_vector.Robot(args.serial, behavior_control_level=control_level.OVERRIDE_BEHAVIORS_PRIORITY) as robot:
+    with anki_vector.Robot(args.serial, behavior_control_level=ControlPriorityLevel.OVERRIDE_BEHAVIORS_PRIORITY) as robot:
         robot.behavior.say_text("Pick me up!")
         pickup_countdown = 20
 
