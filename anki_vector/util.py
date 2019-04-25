@@ -1079,11 +1079,17 @@ class Component:
         return self._robot.conn.grpc_interface
 
 
-def read_configuration(serial: str, logger: logging.Logger) -> dict:
+def read_configuration(serial: str, name: str, logger: logging.Logger) -> dict:
     """Open the default conf file, and read it into a :class:`configparser.ConfigParser`
+    If :code:`serial is not None`, this method will try to find a configuration with serial
+    number :code:`serial`, and raise an exception otherwise. If :code:`serial is None` and
+    :code:`name is not None`, this method will try to find a configuration which matches
+    the provided name, and raise an exception otherwise. If both :code:`serial is None` and
+    :code:`name is None`, this method will return a configuration if exactly `1` exists, but
+    if multiple configurations exists, it will raise an exception.
 
     :param serial: Vector's serial number
-    :param logger: Logger object
+    :param name: Vector's name
     """
     home = Path.home() / ".anki_vector"
     conf_file = str(home / "sdk_config.ini")
@@ -1093,20 +1099,34 @@ def read_configuration(serial: str, logger: logging.Logger) -> dict:
     sections = parser.sections()
     if not sections:
         raise VectorConfigurationException('Could not find the sdk configuration file. Please run `python3 -m anki_vector.configure` to set up your Vector for SDK usage.')
-    if serial is None and len(sections) == 1:
-        serial = sections[0]
-        logger.warning("No serial number provided. Automatically selecting {}".format(serial))
-    elif serial is None:
-        raise VectorConfigurationException("Found multiple robot serial numbers. "
-                                           "Please provide the serial number of the Robot you want to control.\n\n"
-                                           "Example: ./01_hello_world.py --serial {{robot_serial_number}}")
+    elif (serial is None) and (name is None):
+        if len(sections) == 1:
+            serial = sections[0]
+            logger.warning("No serial number or name provided. Automatically selecting {}".format(serial))
+        else:
+            raise VectorConfigurationException("Found multiple robot serial numbers. "
+                                               "Please provide the serial number or name of the Robot you want to control.\n\n"
+                                               "Example: ./01_hello_world.py --serial {{robot_serial_number}}")
 
-    serial = serial.lower()
     config = {k.lower(): v for k, v in parser.items()}
-    try:
-        dict_entry = config[serial]
-    except KeyError:
-        raise VectorConfigurationException("Could not find matching robot info for given serial number: {}. "
-                                           "Please check your serial number is correct.\n\n"
-                                           "Example: ./01_hello_world.py --serial {{robot_serial_number}}", serial)
-    return dict_entry
+
+    if serial is not None:
+        serial = serial.lower()
+        try:
+            return config[serial]
+        except KeyError:
+            raise VectorConfigurationException("Could not find matching robot info for given serial number: {}. "
+                                               "Please check your serial number is correct.\n\n"
+                                               "Example: ./01_hello_world.py --serial {{robot_serial_number}}", serial)
+    else:
+        for keySerial in config:
+            for key in config[keySerial]:
+                if config[keySerial][key] == name:
+                    return config[keySerial]
+                elif config[keySerial][key].lower() == name.lower():
+                    logger.warning("Using case-insensitive name match found in config. Set 'name' field to match 'Vector-A1B2' format.")
+                    return config[keySerial]
+
+        raise VectorConfigurationException("Could not find matching robot info for given name: {}. "
+                                           "Please check your name is correct.\n\n"
+                                           "Example: ./01_hello_world.py --name {{robot_name}}", name)

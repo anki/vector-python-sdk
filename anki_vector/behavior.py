@@ -982,7 +982,7 @@ class ReserveBehaviorControl():
                  behavior_activation_timeout: int = 10):
         config = config if config is not None else {}
         self.logger = util.get_class_logger(__name__, self)
-        config = {**util.read_configuration(serial, self.logger), **config}
+        config = {**util.read_configuration(serial, name=None, logger=self.logger), **config}
         self._name = config["name"]
         self._ip = ip if ip is not None else config["ip"]
         self._cert_file = config["cert"]

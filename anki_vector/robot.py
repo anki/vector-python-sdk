@@ -39,6 +39,7 @@ from .exceptions import (VectorNotReadyException,
                          VectorUnreliableEventStreamException)
 from .viewer import (ViewerComponent, Viewer3DComponent)
 from .messaging import protocol
+from .mdns import VectorMdns
 
 
 class Robot:
@@ -80,6 +81,8 @@ class Robot:
     :param serial: Vector's serial number. The robot's serial number (ex. 00e20100) is located on the underside of Vector,
                    or accessible from Vector's debug screen. Used to identify which Vector configuration to load.
     :param ip: Vector's IP address. (optional)
+    :param name: Vector's name (in format :code:`"Vector-XXXX"`) to be used for mDNS discovery. If a Vector with the given name
+                 is discovered, the :code:`ip` parameter (and config field) will be overridden.
     :param config: A custom :class:`dict` to override values in Vector's configuration. (optional)
                    Example: :code:`{"cert": "/path/to/file.cert", "name": "Vector-XXXX", "guid": "<secret_key>"}`
                    where :code:`cert` is the certificate to identify Vector, :code:`name` is the name on Vector's face
@@ -106,6 +109,7 @@ class Robot:
     def __init__(self,
                  serial: str = None,
                  ip: str = None,
+                 name: str = None,
                  config: dict = None,
                  default_logging: bool = True,
                  behavior_activation_timeout: int = 10,
@@ -123,7 +127,13 @@ class Robot:
         self.logger = util.get_class_logger(__name__, self)
         self._force_async = False
         config = config if config is not None else {}
-        config = {**util.read_configuration(serial, self.logger), **config}
+        config = {**util.read_configuration(serial, name, self.logger), **config}
+
+        if name is not None:
+            vector_mdns = VectorMdns.find_vector(name)
+
+            if vector_mdns is not None:
+                ip = vector_mdns['ipv4']
 
         self._name = config["name"]
         self._ip = ip if ip is not None else config["ip"]
