@@ -4934,7 +4934,7 @@ enabling high resolution provides a 1280*720 image.
         
       
         <h3 id="Anki.Vector.external_interface.EnableMirrorModeRequest">EnableMirrorModeRequest</h3>
-        When enabled, camera feed will appear on the robot's face, along with any 
+        When enabled, camera feed will appear on the robot's face, along with any
 detections that are enabled from above messages
         <p></p>
 
@@ -6077,7 +6077,7 @@ being disabled
         
       
         <h3 id="Anki.Vector.external_interface.PathMotionProfile">PathMotionProfile</h3>
-        Struct containing all the information relevant to how a 
+        Struct containing all the information relevant to how a
 path should be modified or traversed.
         <p></p>
 
@@ -7544,7 +7544,13 @@ Area of the supporting region for the point, as a fraction of the right region <
                 <tr>
                   <td>duration_scalar</td>
                   <td><a href="#float">float</a> </td>
-                  <td><p> </p></td>
+                  <td><p>Ranges from 0.05 (fast) to 20.0 (slow) </p></td>
+                </tr>
+              
+                <tr>
+                  <td>pitch_scalar</td>
+                  <td><a href="#float">float</a> </td>
+                  <td><p>Ranges from -1.0 (low) to +1.0 (high) </p></td>
                 </tr>
               
             </tbody>

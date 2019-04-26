@@ -78,7 +78,7 @@ message StopAllMotorsRequest {
 }
 
 // See the StopAllMotors rpc for more details.
-message StopAllMotorsResponse {  
+message StopAllMotorsResponse {
   ResponseStatus status = 1;
 }
 
@@ -193,7 +193,7 @@ message PoseStruct {
   float x = 1;
   float y = 2;
   float z = 3;
-  
+
   // Rotation quaternion
   float q0 = 4;
   float q1 = 5;
@@ -613,7 +613,7 @@ message PhotoTaken {
   uint32 photo_id = 1;
 }
 
-// Struct containing all the information relevant to how a 
+// Struct containing all the information relevant to how a
 // path should be modified or traversed.
 message PathMotionProfile {
   float speed_mmps = 1;
@@ -837,7 +837,7 @@ message TurnTowardsFaceResponse {
 }
 
 // GoToObject
-message GoToObjectRequest { 
+message GoToObjectRequest {
   int32             object_id                      = 1;
   PathMotionProfile motion_prof                    = 2;
   float             distance_from_object_origin_mm = 3;
@@ -951,7 +951,8 @@ message VersionStateResponse {
 message SayTextRequest {
   string text = 1;
   bool use_vector_voice = 2;
-  float duration_scalar = 3;
+  float duration_scalar = 3; // Ranges from 0.05 (fast) to 20.0 (slow)
+  float pitch_scalar = 4;    // Ranges from -1.0 (low) to +1.0 (high)
 }
 
 message SayTextResponse {
@@ -1095,7 +1096,7 @@ enum MasterVolumeLevel {
   VOLUME_HIGH        = 4;
 }
 
-message MasterVolumeRequest 
+message MasterVolumeRequest
 {
   MasterVolumeLevel volume_level = 1;
 }
@@ -1143,7 +1144,7 @@ message EnableMotionDetectionResponse
   ResponseStatus status = 1;
 }
 
-// When enabled, camera feed will appear on the robot's face, along with any 
+// When enabled, camera feed will appear on the robot's face, along with any
 // detections that are enabled from above messages
 message EnableMirrorModeRequest
 {
