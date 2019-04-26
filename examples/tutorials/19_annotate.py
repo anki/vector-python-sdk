@@ -27,6 +27,8 @@ import asyncio
 import sys
 import time
 
+from PIL import ImageDraw
+
 import anki_vector
 from anki_vector import annotate
 

@@ -394,7 +394,8 @@ def get_anim_sel_drop_downs():
     return html_text
 
 def get_anim_trigger_sel_drop_down():
-    html_text = """<select onchange="handleAnimTriggerDropDownSelect(this)" name="animTriggerSelector">"""
+    html_text = "x: " # Add keyboard selector
+    html_text += """<select onchange="handleAnimTriggerDropDownSelect(this)" name="animTriggerSelector">"""
     for anim_trigger_name in flask_app.remote_control_vector.anim_trigger_names:
         html_text += """<option value=""" + anim_trigger_name + """>""" + anim_trigger_name + """</option>"""
     html_text += """</select>"""
@@ -455,7 +456,6 @@ def handle_index_page():
                     """ + get_anim_sel_drop_downs() + """<br>
                     <h2>Animation Triggers:</h2>
                     """ + get_anim_trigger_sel_drop_down() + """<br><br>
-                    <b>X</b> : Play Animation Trigger<br>
                     </td>
                 </tr>
             </table>
