@@ -57,7 +57,7 @@ class ViewerComponent(util.Component):
         self._frame_queue: mp.Queue = None
         self._process = None
 
-    def show(self, timeout: float = 10.0, force_on_top: bool = False) -> None:
+    def show(self, timeout: float = 10.0, force_on_top: bool = True) -> None:
         """Render a video stream using the images obtained from
         Vector's camera feed.
 

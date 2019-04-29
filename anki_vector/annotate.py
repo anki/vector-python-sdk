@@ -342,14 +342,19 @@ class FaceAnnotator(Annotator):  # pylint: disable=too-few-public-methods
 
         Override or replace to customize.
         """
+        label_text = ""
         expression = faces.Expression(obj.expression).name
+
+        if obj.name:
+            label_text = f"Name:{obj.name}"
+        if expression != "UNKNOWN":
+            label_text += f"\nExpression:{expression}"
         if obj.expression_score:
             # if there is a specific known expression, then also show the score
             # (display a % to make it clear the value is out of 100)
-            expression += f"\nScore:{sum(obj.expression_score)}"
-        if obj.name:
-            return ImageText(f"Name:{obj.name}\nExpression:{expression}\nFace Id:({obj.face_id})")
-        return ImageText(f"Name:unknown\nExpression:{expression}\nFace Id:{obj.face_id}")
+            label_text += f"\nScore:{sum(obj.expression_score)}"
+
+        return ImageText(label_text + "\n" + f"Face Id:{obj.face_id}")
 
 
 class TextAnnotator(Annotator):  # pylint: disable=too-few-public-methods
