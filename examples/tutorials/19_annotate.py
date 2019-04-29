@@ -76,7 +76,7 @@ def main():
         robot.camera.image_annotator.add_annotator("clock", clock)
         robot.camera.image_annotator.add_annotator("battery", Battery)
 
-        time.sleep(5)
+        time.sleep(10)
 
         print("Turning off all annotations for 5 seconds")
         robot.camera.image_annotator.annotation_enabled = False

@@ -41,7 +41,7 @@ class TkCameraViewer:  # pylint: disable=too-few-public-methods
     :param force_on_top: Specifies whether the window should be forced on top of all others.
     """
 
-    def __init__(self, queue: mp.Queue, event: mp.Event, overlays: list = None, timeout: float = 10.0, force_on_top: bool = False):
+    def __init__(self, queue: mp.Queue, event: mp.Event, overlays: list = None, timeout: float = 10.0, force_on_top: bool = True):
         self.tk_root = tk.Tk()
         self.width = None
         self.height = None
@@ -72,7 +72,10 @@ class TkCameraViewer:  # pylint: disable=too-few-public-methods
 
     def draw_frame(self) -> None:
         """Display an image on to a Tkinter label widget."""
-        image = self.queue.get(True, timeout=self.timeout)
+        try:
+            image = self.queue.get(True, timeout=self.timeout)
+        except:
+            return
         self.width, self.height = image.size
         while image:
             if self.event.is_set():
@@ -87,7 +90,10 @@ class TkCameraViewer:  # pylint: disable=too-few-public-methods
             self.label.image = tk_image
             self.tk_root.update_idletasks()
             self.tk_root.update()
-            image = self.queue.get(True, timeout=self.timeout)
+            try:
+                image = self.queue.get(True, timeout=self.timeout)
+            except:
+                return
 
 
 def main(queue: mp.Queue, event: mp.Event, overlays: list = None, timeout: float = 10.0, force_on_top: bool = False) -> None:
