@@ -190,7 +190,6 @@ class AnimationComponent(util.Component):
         """
         return await self._load_animation_trigger_list()
 
-    # TODO: add return type hint
     @connection.on_connection_thread()
     async def play_animation_trigger(self, anim_trigger: str, loop_count: int = 1, use_lift_safe: bool = False, ignore_body_track: bool = False, ignore_head_track: bool = False, ignore_lift_track: bool = False):  # START
         """Starts an animation trigger playing on a robot.
@@ -228,7 +227,6 @@ class AnimationComponent(util.Component):
                                                    ignore_lift_track=ignore_lift_track)
         return await self.grpc_interface.PlayAnimationTrigger(req)
 
-    # TODO: add return type hint
     @connection.on_connection_thread()
     async def play_animation(self, anim: str, loop_count: int = 1, ignore_body_track: bool = False, ignore_head_track: bool = False, ignore_lift_track: bool = False):
         """Starts an animation playing on a robot.

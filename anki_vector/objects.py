@@ -207,7 +207,7 @@ class EvtObjectFinishedMove():  # pylint: disable=too-few-public-methods
 
 
 class ObservableObject(util.Component):
-    """The base type for anything Vector can see."""
+    """Represents any object Vector can see in the world."""
 
     visibility_timeout = OBJECT_VISIBILITY_TIMEOUT
 
@@ -324,18 +324,6 @@ class ObservableObject(util.Component):
     def _repr_values(self):  # pylint: disable=no-self-use
         return ''
 
-    def _dispatch_observed_event(self, image_rect):
-        # Override in subclass if there is a specific event for that type
-        self.conn.run_soon(self._robot.events.dispatch_event(EvtObjectObserved(self, image_rect, self._pose), Events.object_observed))
-
-    def _dispatch_appeared_event(self, image_rect):
-        # Override in subclass if there is a specific event for that type
-        self.conn.run_soon(self._robot.events.dispatch_event(EvtObjectAppeared(self, image_rect, self._pose), Events.object_appeared))
-
-    def _dispatch_disappeared_event(self):
-        # Override in subclass if there is a specific event for that type
-        self.conn.run_soon(self._robot.events.dispatch_event(EvtObjectDisappeared(self), Events.object_disappeared))
-
     def _reset_observed_timeout_handler(self):
         if self._observed_timeout_handler is not None:
             self._observed_timeout_handler.cancel()
@@ -345,7 +333,7 @@ class ObservableObject(util.Component):
         # Triggered when the element is no longer considered "visible".
         # i.e. visibility_timeout seconds after the last observed event.
         self._is_visible = False
-        self._dispatch_disappeared_event()
+        self.conn.run_soon(self._robot.events.dispatch_event(EvtObjectDisappeared(self), Events.object_disappeared))
 
     def _on_observed(self, pose: util.Pose, image_rect: util.ImageRect, robot_timestamp: int):
         # Called from subclasses on their corresponding observed messages.
@@ -359,10 +347,10 @@ class ObservableObject(util.Component):
         self._last_observed_image_rect = image_rect
         self._pose = pose
         self._reset_observed_timeout_handler()
-        self._dispatch_observed_event(image_rect)
+        self.conn.run_soon(self._robot.events.dispatch_event(EvtObjectObserved(self, image_rect, pose), Events.object_observed))
 
         if newly_visible:
-            self._dispatch_appeared_event(image_rect)
+            self.conn.run_soon(self._robot.events.dispatch_event(EvtObjectAppeared(self, image_rect, pose), Events.object_appeared))
 
 
 #: LIGHT_CUBE_1_TYPE's markers look like 2 concentric circles with lines and gaps.
@@ -493,7 +481,6 @@ class LightCube(ObservableObject):
         self.robot.events.unsubscribe(self._on_object_connection_lost,
                                       Events.cube_connection_lost)
 
-    # TODO: add return type hint
     @connection.on_connection_thread()
     async def set_light_corners(self,
                                 light1: lights.Light,

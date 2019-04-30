@@ -30,7 +30,6 @@ from getpass import getpass
 import json
 import os
 from pathlib import Path
-import platform
 import re
 import socket
 import sys
@@ -67,10 +66,7 @@ class Api:
     def __init__(self):
         self._handler = ApiHandler(
             headers={
-                'User-Agent': 'Vector-sdk/{} {}/{}'.format(anki_vector.__version__,
-                                                           platform.python_implementation(),
-                                                           platform.python_version()),
-
+                'User-Agent': f'Vector-sdk/{anki_vector.__version__}',
                 'Anki-App-Key': 'aung2ieCho3aiph7Een3Ei'
             },
             url='https://accounts.api.anki.com/1/sessions'

@@ -117,6 +117,14 @@ service ExternalInterface {
   rpc BehaviorControl(stream BehaviorControlRequest) returns (stream BehaviorControlResponse) {
   }
 
+  // Acquire control of Vector's AI system.
+  rpc AssumeBehaviorControl(BehaviorControlRequest) returns (stream BehaviorControlResponse) {
+    option (google.api.http) = {
+      post: "/v1/assume_behavior_control",
+      body: "*"
+    };
+  }
+
   rpc CancelFaceEnrollment(CancelFaceEnrollmentRequest) returns (CancelFaceEnrollmentResponse) {
     option (google.api.http) = {
       post: "/v1/cancel_face_enrollment",
@@ -159,14 +167,6 @@ service ExternalInterface {
   rpc SetFaceToEnroll(SetFaceToEnrollRequest) returns (SetFaceToEnrollResponse) {
     option (google.api.http) = {
       post: "/v1/set_face_to_enroll",
-      body: "*"
-    };
-  }
-
-  // Enroll a face. Must be used with SetFaceToEnroll
-  rpc EnrollFace(EnrollFaceRequest) returns (EnrollFaceResponse) {
-    option (google.api.http) = {
-      post: "/v1/enroll_face",
       body: "*"
     };
   }
@@ -221,14 +221,6 @@ service ExternalInterface {
     };
   }
 
-  // Cancel running SDK Behavior
-  rpc CancelBehavior(CancelBehaviorRequest) returns (CancelBehaviorResponse) {
-    option (google.api.http) = {
-      post: "/v1/cancel_behavior",
-      body: "*"
-    };
-  }
-  
   // Tells Vector to drive to the specified pose and orientation.
   rpc GoToPose(GoToPoseRequest) returns (GoToPoseResponse) {
     option (google.api.http) = {
@@ -488,14 +480,6 @@ service ExternalInterface {
     };
   }
 
-  // Get Vector's camera configuration.
-  rpc GetCameraConfig(CameraConfigRequest) returns (CameraConfigResponse) {
-    option (google.api.http) = {
-      post: "/v1/get_camera_config",
-      body: "*"
-    };
-  }
-  
   // Set Vector's eye color.
   rpc SetEyeColor(SetEyeColorRequest) returns (SetEyeColorResponse) {
     option (google.api.http) = {
@@ -508,14 +492,6 @@ service ExternalInterface {
   rpc NavMapFeed(NavMapFeedRequest) returns (stream NavMapFeedResponse) {
     option (google.api.http) = {
       post: "/v1/nav_map_feed",
-      body: "*"
-    };
-  }
-
-  // Set Vector's camera settings
-  rpc SetCameraSettings(SetCameraSettingsRequest) returns (SetCameraSettingsResponse) {
-    option (google.api.http) = {
-      post: "/v1/set_camera_settings",
       body: "*"
     };
   }

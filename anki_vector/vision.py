@@ -43,7 +43,8 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
 
         self._detect_faces = False
         self._detect_custom_objects = False
-        self._detect_motion = False
+        # TODO implement
+        # self._detect_motion = False
         self._display_camera_feed_on_face = False
 
         robot.events.subscribe(self._handle_mirror_mode_disabled_event, events.Events.mirror_mode_disabled)
@@ -61,7 +62,7 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
     def _handle_vision_modes_auto_disabled_event(self, _robot, _event_type, _msg):
         self._detect_faces = False
         self._detect_custom_objects = False
-        self._detect_motion = False
+        # self._detect_motion = False
         self._display_camera_feed_on_face = False
 
     @property
@@ -72,9 +73,10 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
     def detect_custom_objects(self):
         return self._detect_custom_objects
 
-    @property
-    def detect_motion(self):
-        return self._detect_motion
+    # TODO implement
+    # @property
+    # def detect_motion(self):
+    #     return self._detect_motion
 
     @property
     def display_camera_feed_on_face(self):
@@ -86,12 +88,11 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
             await self.enable_face_detection(False, False)
         if self.detect_custom_objects:
             await self.enable_custom_object_detection(False)
-        if self.detect_motion:
-            await self.enable_motion_detection(False)
+        # if self.detect_motion:
+        #     await self.enable_motion_detection(False)
         if self.display_camera_feed_on_face:
             await self.enable_display_camera_feed_on_face(False)
 
-    # TODO: add return type hint
     @connection.on_connection_thread()
     async def enable_custom_object_detection(self, detect_custom_objects: bool = True):
         """Enable custom object detection on the robot's camera.
@@ -114,7 +115,6 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
         enable_marker_detection_request = protocol.EnableMarkerDetectionRequest(enable=detect_custom_objects)
         return await self.grpc_interface.EnableMarkerDetection(enable_marker_detection_request)
 
-    # TODO: add return type hint
     @connection.on_connection_thread()
     async def enable_face_detection(
             self,
@@ -142,44 +142,24 @@ class VisionComponent(util.Component):  # pylint: disable=too-few-public-methods
             enable_gaze_detection=False)
         return await self.grpc_interface.EnableFaceDetection(enable_face_detection_request)
 
-    @connection.on_connection_thread()
-    async def enable_motion_detection(self, detect_motion: bool = True):
-        """Enable motion detection on the robot's camera
+    # TODO implement
+    # @connection.on_connection_thread()
+    # async def enable_motion_detection(self, detect_motion: bool = True):
+    #     """Enable motion detection on the robot's camera
+    #
+    #     :param detect_motion: Specify whether we want the robot to detect motion.
+    #
+    #     .. testcode::
+    #
+    #         import anki_vector
+    #         with anki_vector.Robot() as robot:
+    #             robot.vision.enable_motion_detection(detect_motion=True)
+    #     """
+    #     self._detect_motion = detect_motion
 
-        :param detect_motion: Specify whether we want the robot to detect motion.
+    #     enable_motion_detection_request = protocol.EnableMotionDetectionRequest(enable=detect_motion)
+    #     return await self.grpc_interface.EnableMotionDetection(enable_motion_detection_request)
 
-        .. testcode::
-
-            import time
-
-            import anki_vector
-            from anki_vector.events import Events
-            from anki_vector.util import degrees
-
-            def on_robot_observed_motion(robot, event_type, event):
-                print("Robot observed motion")
-
-            with anki_vector.Robot(show_viewer=True) as robot:
-                robot.events.subscribe(on_robot_observed_motion, Events.robot_observed_motion)
-
-                # If necessary, move Vector's Head and Lift to make it easy to see his face
-                robot.behavior.set_head_angle(degrees(45.0))
-                robot.behavior.set_lift_height(0.0)
-
-                robot.vision.enable_motion_detection(detect_motion=True)
-
-                print("Vector is waiting to see motion. Make some movement within Vector's camera view")
-
-                time.sleep(3.0)
-
-            robot.events.unsubscribe(on_robot_observed_motion, Events.robot_observed_motion)
-        """
-        self._detect_motion = detect_motion
-
-        enable_motion_detection_request = protocol.EnableMotionDetectionRequest(enable=detect_motion)
-        return await self.grpc_interface.EnableMotionDetection(enable_motion_detection_request)
-
-    # TODO: add return type hint
     @connection.on_connection_thread()
     async def enable_display_camera_feed_on_face(self, display_camera_feed_on_face: bool = True):
         """Display the robot's camera feed on its face along with any detections (if enabled)
