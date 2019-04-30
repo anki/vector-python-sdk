@@ -43,7 +43,7 @@ import sys
 from typing import Callable, Iterable, Tuple, Union
 
 try:
-    from PIL import Image, ImageDraw
+    from PIL import Image, ImageDraw, ImageFont
 except ImportError:
     sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
 except SyntaxError:
@@ -137,7 +137,7 @@ class ImageText:  # pylint: disable=too-few-public-methods
     """
 
     def __init__(self, text: str, position: int = AnnotationPosition.BOTTOM_RIGHT, align: str = "left", color: str = "white",
-                 font=None, line_spacing: int = 3, outline_color: str = None, full_outline: bool = True):
+                 font = None, line_spacing: int = 3, outline_color: str = None, full_outline: bool = True):
         self.text = text
         self.position = position
         self.align = align

@@ -89,6 +89,19 @@ up those settings::
     export ANKI_ROBOT_HOST="192.168.42.42"
     export VECTOR_ROBOT_NAME=Vector-A1B2
 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Keeping Vector Still Between SDK Scripts
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Vector can be controlled so that (like Cozmo) he will not move between SDK scripts.  There are three options for entering this mode of operation:
+
+* Control can be reserved from the command prompt: ``python3 -m anki_vector.reserve_control``  Vector will remain still between SDK scripts until the script/process is exited.
+* There are OS-specific scripts (Mac/Win) in the ``examples/scripts/`` folder that can be double-clicked to more easily reserve behavior control.  The script will open in a new window; closing the window or otherwise stopping the script will release control back to the built-in robot behaviors.
+* A single Python file can explicitly reserve control using the ``ReserveBehaviorControl`` object.  Consult the ``anki_vector.connection`` `documentation <https://developer.anki.com/vector/docs/generated/anki_vector.connection.html>`_ for more information.
+
+While normal robot behaviors are suppressed, Vector may look 'broken'.  Closing the SDK scripts, disconnecting from the
+robot, or restarting the robot will all release behavior control.
+
 
 
 ----

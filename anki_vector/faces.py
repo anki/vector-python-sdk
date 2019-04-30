@@ -22,22 +22,15 @@ knows about, along with those that are currently visible to the camera.
 
 Each face is assigned a :class:`Face` object, which generates a number of
 observable events whenever the face is observed or when the face id is updated.
-
-Faces can generate events which can be subscribed to from the anki_vector.events
-class, such as face_appeared (of type EvtFaceAppeared), and face_disappeared (of
-type EvtFaceDisappeared), which are broadcast based on both robot originating
-events and local state.
 """
 
 # __all__ should order by constants, event classes, other classes, functions.
-__all__ = ['FACE_VISIBILITY_TIMEOUT', 'EvtFaceAppeared', 'EvtFaceDisappeared',
-           'EvtFaceObserved', 'Expression', 'Face', 'FaceComponent']
+__all__ = ['Expression', 'Face', 'FaceComponent']
 
 from enum import Enum
 from typing import List
 
-from . import connection, events, util, objects
-from .events import Events
+from . import connection, util, objects, events
 from .messaging import protocol
 
 #: Length of time in seconds to go without receiving an observed event before
@@ -205,8 +198,6 @@ class Expression(Enum):
     #: Facial expression sadness
     SADNESS = protocol.FacialExpression.Value("EXPRESSION_SADNESS")
 
-# TODO Review this file and add pytests as is reasonable, like name_face (requires a face object), request_enrolled_names, maybe update_enrolled_face_by_id, etc.
-
 
 class Face(objects.ObservableObject):
     """A single face that Vector has detected.
@@ -218,10 +209,6 @@ class Face(objects.ObservableObject):
     Vector later gets an improved view and makes a different prediction about
     which face he is looking at.
     """
-
-    #: Length of time in seconds to go without receiving an observed event before
-    #: assuming that Vector can no longer see a face.
-    visibility_timeout = FACE_VISIBILITY_TIMEOUT
 
     def __init__(self,
                  robot,
@@ -267,56 +254,6 @@ class Face(objects.ObservableObject):
         return (f"<{self.__class__.__name__} Face id: {self.face_id} "
                 f"Updated face id: {self.updated_face_id} Name: {self.name} "
                 f"Expression: {protocol.FacialExpression.Name(self.expression)}>")
-
-    @connection.on_connection_thread(requires_control=False)
-    async def name_face(self, name: str) -> protocol.EnrollFaceResponse:
-        """Request to enroll this face with a name. Vector will remember this name between SDK runs.
-
-        Triggers Vector to run his animation that scans faces and use the camera feed to store the face.
-
-        While enrolling a face, make sure to look at Vector straight-on during the enrollment from about 1.5 to 2 feet away.
-
-        :param name: The name that will be assigned to this face.
-
-        .. testcode::
-
-            import anki_vector
-            from anki_vector.util import degrees
-
-            with anki_vector.Robot(enable_face_detection=True) as robot:
-                # If necessary, move Vector's Head and Lift to make it easy to see his face
-                robot.behavior.set_head_angle(degrees(45.0))
-                robot.behavior.set_lift_height(0.0)
-
-                # TODO Replace with wait_for_observed_face
-                face = None
-                for face in robot.world.visible_faces:
-                    break
-
-                if face is None:
-                    print("--- No face found ---")
-                else:
-                    print("--- Existing Face attributes ---")
-                    print(f"Visible face name: {face.name}")
-                    print(f"Visible face id: {face.face_id}")
-
-                    # Name this face "Boris"
-                    face.name_face("Boris")
-
-                    print(f"{robot.faces.request_enrolled_names()}")
-        """
-        self.logger.info("Enrolling face=%s with name '%s'", self, name)
-
-        req = protocol.SetFaceToEnrollRequest(name=name,
-                                              observed_id=self.face_id,
-                                              save_id=0,  # must be 0 if self.face_id doesn't already have a name
-                                              save_to_robot=True,
-                                              say_name=False,
-                                              use_music=False)
-        await self.grpc_interface.SetFaceToEnroll(req)
-
-        enroll_face_request = protocol.EnrollFaceRequest()
-        return await self.grpc_interface.EnrollFace(enroll_face_request)
 
     def teardown(self):
         """All faces will be torn down by the world when no longer needed."""
@@ -694,15 +631,6 @@ class Face(objects.ObservableObject):
 
     #### Private Event Handlers ####
 
-    def _dispatch_observed_event(self, image_rect):
-        self.conn.run_soon(self._robot.events.dispatch_event(EvtFaceObserved(self, image_rect=image_rect, name=self._name, pose=self._pose), Events.face_observed))
-
-    def _dispatch_appeared_event(self, image_rect):
-        self.conn.run_soon(self._robot.events.dispatch_event(EvtFaceAppeared(self, image_rect=image_rect, name=self._name, pose=self._pose), Events.face_appeared))
-
-    def _dispatch_disappeared_event(self):
-        self.conn.run_soon(self._robot.events.dispatch_event(EvtFaceDisappeared(self), Events.face_disappeared))
-
     def _on_face_observed(self, _robot, _event_type, msg):
         """Unpacks the face observed stream data from Vector into a Face instance."""
         if self._face_id == msg.face_id:
@@ -737,7 +665,7 @@ class FaceComponent(util.Component):
     """Manage the state of the faces on the robot."""
 
     @connection.on_connection_thread(requires_control=False)
-    async def request_enrolled_names(self) -> protocol.RequestEnrolledNamesResponse:
+    async def request_enrolled_names(self) -> protocol.RequestEnrolledNamesRequest:
         """Asks the robot for the list of names attached to faces that it can identify.
 
         .. testcode::
@@ -763,11 +691,7 @@ class FaceComponent(util.Component):
 
             import anki_vector
 
-            def on_robot_renamed_enrolled_face(robot, event_type, event):
-                print(f"----Face has been renamed on robot. Event: {event_type} = {event}----")
-
             with anki_vector.Robot() as robot:
-                robot.events.subscribe(on_robot_renamed_enrolled_face, Events.robot_renamed_enrolled_face)
                 robot.faces.update_enrolled_face_by_id(1, 'Hanns', 'Boris')
         """
         req = protocol.UpdateEnrolledFaceByIDRequest(face_id=face_id,
@@ -782,24 +706,10 @@ class FaceComponent(util.Component):
 
         .. testcode::
 
-            import time
             import anki_vector
-            from anki_vector.events import Events
-
-            def on_robot_erased_enrolled_face(robot, event_type, event):
-                print(f"Face has been erased from robot. Event: {event_type} = {event}")
 
             with anki_vector.Robot() as robot:
-                robot.events.subscribe(on_robot_erased_enrolled_face, Events.robot_erased_enrolled_face)
-
-                name_data_list = robot.faces.request_enrolled_names()
-                print(f"Enrolled names: {name_data_list}")
-
-                # Deletes all enrolled faces from Vector. Use with care!
-                for face in name_data_list.faces:
-                    robot.faces.erase_enrolled_face_by_id(face.face_id)
-
-                time.sleep(3)
+                robot.faces.erase_enrolled_face_by_id(1)
         """
         req = protocol.EraseEnrolledFaceByIDRequest(face_id=face_id)
         return await self.grpc_interface.EraseEnrolledFaceByID(req)

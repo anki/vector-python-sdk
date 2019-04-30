@@ -445,14 +445,6 @@
                 </li>
               
                 <li>
-                  <a href="#Anki.Vector.external_interface.CameraConfigRequest"><span class="badge">M</span>CameraConfigRequest</a>
-                </li>
-              
-                <li>
-                  <a href="#Anki.Vector.external_interface.CameraConfigResponse"><span class="badge">M</span>CameraConfigResponse</a>
-                </li>
-              
-                <li>
                   <a href="#Anki.Vector.external_interface.CameraFeedRequest"><span class="badge">M</span>CameraFeedRequest</a>
                 </li>
               
@@ -461,23 +453,11 @@
                 </li>
               
                 <li>
-                  <a href="#Anki.Vector.external_interface.CameraSettingsUpdate"><span class="badge">M</span>CameraSettingsUpdate</a>
-                </li>
-              
-                <li>
                   <a href="#Anki.Vector.external_interface.CancelActionByIdTagRequest"><span class="badge">M</span>CancelActionByIdTagRequest</a>
                 </li>
               
                 <li>
                   <a href="#Anki.Vector.external_interface.CancelActionByIdTagResponse"><span class="badge">M</span>CancelActionByIdTagResponse</a>
-                </li>
-              
-                <li>
-                  <a href="#Anki.Vector.external_interface.CancelBehaviorRequest"><span class="badge">M</span>CancelBehaviorRequest</a>
-                </li>
-              
-                <li>
-                  <a href="#Anki.Vector.external_interface.CancelBehaviorResponse"><span class="badge">M</span>CancelBehaviorResponse</a>
                 </li>
               
                 <li>
@@ -602,14 +582,6 @@
               
                 <li>
                   <a href="#Anki.Vector.external_interface.EnableMotionDetectionResponse"><span class="badge">M</span>EnableMotionDetectionResponse</a>
-                </li>
-              
-                <li>
-                  <a href="#Anki.Vector.external_interface.EnrollFaceRequest"><span class="badge">M</span>EnrollFaceRequest</a>
-                </li>
-              
-                <li>
-                  <a href="#Anki.Vector.external_interface.EnrollFaceResponse"><span class="badge">M</span>EnrollFaceResponse</a>
                 </li>
               
                 <li>
@@ -865,15 +837,7 @@
                 </li>
               
                 <li>
-                  <a href="#Anki.Vector.external_interface.RobotErasedEnrolledFace"><span class="badge">M</span>RobotErasedEnrolledFace</a>
-                </li>
-              
-                <li>
                   <a href="#Anki.Vector.external_interface.RobotObservedFace"><span class="badge">M</span>RobotObservedFace</a>
-                </li>
-              
-                <li>
-                  <a href="#Anki.Vector.external_interface.RobotObservedMotion"><span class="badge">M</span>RobotObservedMotion</a>
                 </li>
               
                 <li>
@@ -914,14 +878,6 @@
               
                 <li>
                   <a href="#Anki.Vector.external_interface.SayTextResponse"><span class="badge">M</span>SayTextResponse</a>
-                </li>
-              
-                <li>
-                  <a href="#Anki.Vector.external_interface.SetCameraSettingsRequest"><span class="badge">M</span>SetCameraSettingsRequest</a>
-                </li>
-              
-                <li>
-                  <a href="#Anki.Vector.external_interface.SetCameraSettingsResponse"><span class="badge">M</span>SetCameraSettingsResponse</a>
                 </li>
               
                 <li>
@@ -1006,10 +962,6 @@
               
                 <li>
                   <a href="#Anki.Vector.external_interface.TurnTowardsFaceResponse"><span class="badge">M</span>TurnTowardsFaceResponse</a>
-                </li>
-              
-                <li>
-                  <a href="#Anki.Vector.external_interface.UnexpectedMovement"><span class="badge">M</span>UnexpectedMovement</a>
                 </li>
               
                 <li>
@@ -1103,14 +1055,6 @@
               
                 <li>
                   <a href="#Anki.Vector.external_interface.SayTextResponse.UtteranceState"><span class="badge">E</span>SayTextResponse.UtteranceState</a>
-                </li>
-              
-                <li>
-                  <a href="#Anki.Vector.external_interface.UnexpectedMovementSide"><span class="badge">E</span>UnexpectedMovementSide</a>
-                </li>
-              
-                <li>
-                  <a href="#Anki.Vector.external_interface.UnexpectedMovementType"><span class="badge">E</span>UnexpectedMovementType</a>
                 </li>
               
               
@@ -3178,6 +3122,11 @@ minimum host version and receiving a response to see whether the versions are su
               </tr>
             
               <tr>
+                <td>AssumeBehaviorControl</td>
+                <td><p>Acquire control of Vector's AI system.</p></td>
+              </tr>
+            
+              <tr>
                 <td>CancelFaceEnrollment</td>
                 <td><p></p></td>
               </tr>
@@ -3205,11 +3154,6 @@ minimum host version and receiving a response to see whether the versions are su
               <tr>
                 <td>SetFaceToEnroll</td>
                 <td><p></p></td>
-              </tr>
-            
-              <tr>
-                <td>EnrollFace</td>
-                <td><p>Enroll a face. Must be used with SetFaceToEnroll</p></td>
               </tr>
             
               <tr>
@@ -3245,11 +3189,6 @@ minimum host version and receiving a response to see whether the versions are su
               <tr>
                 <td>CancelActionByIdTag</td>
                 <td><p>Cancel action by id</p></td>
-              </tr>
-            
-              <tr>
-                <td>CancelBehavior</td>
-                <td><p>Cancel running SDK Behavior</p></td>
               </tr>
             
               <tr>
@@ -3457,11 +3396,6 @@ rgb values each and timing data for how to transition between them.</p></td>
               </tr>
             
               <tr>
-                <td>GetCameraConfig</td>
-                <td><p>Get Vector's camera configuration.</p></td>
-              </tr>
-            
-              <tr>
                 <td>SetEyeColor</td>
                 <td><p>Set Vector's eye color.</p></td>
               </tr>
@@ -3469,11 +3403,6 @@ rgb values each and timing data for how to transition between them.</p></td>
               <tr>
                 <td>NavMapFeed</td>
                 <td><p>Stream navigation map data.</p></td>
-              </tr>
-            
-              <tr>
-                <td>SetCameraSettings</td>
-                <td><p>Set Vector's camera settings</p></td>
               </tr>
             
           </tbody>
@@ -3852,92 +3781,6 @@ rgb values each and timing data for how to transition between them.</p></td>
 
         
       
-        <h3 id="Anki.Vector.external_interface.CameraConfigRequest">CameraConfigRequest</h3>
-        
-        <p></p>
-
-        
-
-        
-      
-        <h3 id="Anki.Vector.external_interface.CameraConfigResponse">CameraConfigResponse</h3>
-        
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>focal_length_x</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>focal_length_y</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>center_x</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>center_y</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>fov_x</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p>Full FOV in degrees </p></td>
-                </tr>
-              
-                <tr>
-                  <td>fov_y</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p>Full FOV in degrees </p></td>
-                </tr>
-              
-                <tr>
-                  <td>min_camera_exposure_time_ms</td>
-                  <td><a href="#uint32">uint32</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>max_camera_exposure_time_ms</td>
-                  <td><a href="#uint32">uint32</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>min_camera_gain</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>max_camera_gain</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          <p></p>
-        
-
-        
-      
         <h3 id="Anki.Vector.external_interface.CameraFeedRequest">CameraFeedRequest</h3>
         
         <p></p>
@@ -3978,42 +3821,6 @@ rgb values each and timing data for how to transition between them.</p></td>
                 <tr>
                   <td>data</td>
                   <td><a href="#bytes">bytes</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          <p></p>
-        
-
-        
-      
-        <h3 id="Anki.Vector.external_interface.CameraSettingsUpdate">CameraSettingsUpdate</h3>
-        Event sent when camera exposure settings change
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>gain</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>exposure_ms</td>
-                  <td><a href="#uint32">uint32</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>auto_exposure_enabled</td>
-                  <td><a href="#bool">bool</a> </td>
                   <td><p> </p></td>
                 </tr>
               
@@ -4072,38 +3879,6 @@ rgb values each and timing data for how to transition between them.</p></td>
 
         
       
-        <h3 id="Anki.Vector.external_interface.CancelBehaviorRequest">CancelBehaviorRequest</h3>
-        Cancel a behavior in progress
-        <p></p>
-
-        
-
-        
-      
-        <h3 id="Anki.Vector.external_interface.CancelBehaviorResponse">CancelBehaviorResponse</h3>
-        Response from the robot to CancelBehaviorRequest.
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>status</td>
-                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          <p></p>
-        
-
-        
-      
         <h3 id="Anki.Vector.external_interface.CancelFaceEnrollmentRequest">CancelFaceEnrollmentRequest</h3>
         
         <p></p>
@@ -4137,26 +3912,9 @@ rgb values each and timing data for how to transition between them.</p></td>
         
       
         <h3 id="Anki.Vector.external_interface.CaptureSingleImageRequest">CaptureSingleImageRequest</h3>
-        Request for a single image from the robot. Default resolution is 640*360,
-enabling high resolution provides a 1280*720 image.
+        
         <p></p>
 
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>enable_high_resolution</td>
-                  <td><a href="#bool">bool</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          <p></p>
         
 
         
@@ -4848,12 +4606,6 @@ enabling high resolution provides a 1280*720 image.
                   <td><p> </p></td>
                 </tr>
               
-                <tr>
-                  <td>enable_high_resolution</td>
-                  <td><a href="#bool">bool</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
             </tbody>
           </table>
           <p></p>
@@ -4934,7 +4686,7 @@ enabling high resolution provides a 1280*720 image.
         
       
         <h3 id="Anki.Vector.external_interface.EnableMirrorModeRequest">EnableMirrorModeRequest</h3>
-        When enabled, camera feed will appear on the robot's face, along with any
+        When enabled, camera feed will appear on the robot's face, along with any 
 detections that are enabled from above messages
         <p></p>
 
@@ -5020,44 +4772,6 @@ detections that are enabled from above messages
                 <tr>
                   <td>status</td>
                   <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          <p></p>
-        
-
-        
-      
-        <h3 id="Anki.Vector.external_interface.EnrollFaceRequest">EnrollFaceRequest</h3>
-        
-        <p></p>
-
-        
-
-        
-      
-        <h3 id="Anki.Vector.external_interface.EnrollFaceResponse">EnrollFaceResponse</h3>
-        
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>status</td>
-                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>result</td>
-                  <td><a href="#Anki.Vector.external_interface.BehaviorResults">BehaviorResults</a> </td>
                   <td><p> </p></td>
                 </tr>
               
@@ -6077,7 +5791,7 @@ being disabled
         
       
         <h3 id="Anki.Vector.external_interface.PathMotionProfile">PathMotionProfile</h3>
-        Struct containing all the information relevant to how a
+        Struct containing all the information relevant to how a 
 path should be modified or traversed.
         <p></p>
 
@@ -6917,36 +6631,6 @@ path should be modified or traversed.
 
         
       
-        <h3 id="Anki.Vector.external_interface.RobotErasedEnrolledFace">RobotErasedEnrolledFace</h3>
-        Event confirming that an enrolled face has been removed from the robot.
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>face_id</td>
-                  <td><a href="#int32">int32</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>name</td>
-                  <td><a href="#string">string</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          <p></p>
-        
-
-        
-      
         <h3 id="Anki.Vector.external_interface.RobotObservedFace">RobotObservedFace</h3>
         
         <p></p>
@@ -7022,143 +6706,6 @@ path should be modified or traversed.
                   <td>mouth</td>
                   <td><a href="#Anki.Vector.external_interface.CladPoint">CladPoint</a> repeated</td>
                   <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          <p></p>
-        
-
-        
-      
-        <h3 id="Anki.Vector.external_interface.RobotObservedMotion">RobotObservedMotion</h3>
-        
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>timestamp</td>
-                  <td><a href="#uint32">uint32</a> </td>
-                  <td><p>Timestamp of the corresponding image </p></td>
-                </tr>
-              
-                <tr>
-                  <td>img_area</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p>Area of the supporting region for the point, as a fraction of the image </p></td>
-                </tr>
-              
-                <tr>
-                  <td>img_x</td>
-                  <td><a href="#int32">int32</a> </td>
-                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
-                </tr>
-              
-                <tr>
-                  <td>img_y</td>
-                  <td><a href="#int32">int32</a> </td>
-                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
-                </tr>
-              
-                <tr>
-                  <td>ground_area</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p>Area of the supporting region for the point, as a fraction of the ground ROI
-If unable to map to the ground, area=0 </p></td>
-                </tr>
-              
-                <tr>
-                  <td>ground_x</td>
-                  <td><a href="#int32">int32</a> </td>
-                  <td><p>Coordinates of the point on the ground, relative to robot, in mm </p></td>
-                </tr>
-              
-                <tr>
-                  <td>ground_y</td>
-                  <td><a href="#int32">int32</a> </td>
-                  <td><p>Coordinates of the point on the ground, relative to robot, in mm </p></td>
-                </tr>
-              
-                <tr>
-                  <td>top_img_area</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p>Top area
-Area of the supporting region for the point, as a fraction of the top region </p></td>
-                </tr>
-              
-                <tr>
-                  <td>top_img_x</td>
-                  <td><a href="#int32">int32</a> </td>
-                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
-                </tr>
-              
-                <tr>
-                  <td>top_img_y</td>
-                  <td><a href="#int32">int32</a> </td>
-                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
-                </tr>
-              
-                <tr>
-                  <td>bottom_img_area</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p>Bottom area
-Area of the supporting region for the point, as a fraction of the bottom region </p></td>
-                </tr>
-              
-                <tr>
-                  <td>bottom_img_x</td>
-                  <td><a href="#int32">int32</a> </td>
-                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
-                </tr>
-              
-                <tr>
-                  <td>bottom_img_y</td>
-                  <td><a href="#int32">int32</a> </td>
-                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
-                </tr>
-              
-                <tr>
-                  <td>left_img_area</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p>Left area
-Area of the supporting region for the point, as a fraction of the left region </p></td>
-                </tr>
-              
-                <tr>
-                  <td>left_img_x</td>
-                  <td><a href="#int32">int32</a> </td>
-                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
-                </tr>
-              
-                <tr>
-                  <td>left_img_y</td>
-                  <td><a href="#int32">int32</a> </td>
-                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
-                </tr>
-              
-                <tr>
-                  <td>right_img_area</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p>Right area
-Area of the supporting region for the point, as a fraction of the right region </p></td>
-                </tr>
-              
-                <tr>
-                  <td>right_img_x</td>
-                  <td><a href="#int32">int32</a> </td>
-                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
-                </tr>
-              
-                <tr>
-                  <td>right_img_y</td>
-                  <td><a href="#int32">int32</a> </td>
-                  <td><p>Pixel coordinate of the point in the image, relative to top-left corner. </p></td>
                 </tr>
               
             </tbody>
@@ -7544,13 +7091,7 @@ Area of the supporting region for the point, as a fraction of the right region <
                 <tr>
                   <td>duration_scalar</td>
                   <td><a href="#float">float</a> </td>
-                  <td><p>Ranges from 0.05 (fast) to 20.0 (slow) </p></td>
-                </tr>
-              
-                <tr>
-                  <td>pitch_scalar</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p>Ranges from -1.0 (low) to +1.0 (high) </p></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -7580,72 +7121,6 @@ Area of the supporting region for the point, as a fraction of the right region <
                 <tr>
                   <td>state</td>
                   <td><a href="#Anki.Vector.external_interface.SayTextResponse.UtteranceState">SayTextResponse.UtteranceState</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          <p></p>
-        
-
-        
-      
-        <h3 id="Anki.Vector.external_interface.SetCameraSettingsRequest">SetCameraSettingsRequest</h3>
-        
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>gain</td>
-                  <td><a href="#float">float</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>exposure_ms</td>
-                  <td><a href="#uint32">uint32</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>enable_auto_exposure</td>
-                  <td><a href="#bool">bool</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          <p></p>
-        
-
-        
-      
-        <h3 id="Anki.Vector.external_interface.SetCameraSettingsResponse">SetCameraSettingsResponse</h3>
-        
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>status</td>
-                  <td><a href="#Anki.Vector.external_interface.ResponseStatus">ResponseStatus</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>status_message</td>
-                  <td><a href="#string">string</a> </td>
                   <td><p> </p></td>
                 </tr>
               
@@ -8391,43 +7866,6 @@ default tolerance of POINT_TURN_ANGLE_TOL.
                 <tr>
                   <td>result</td>
                   <td><a href="#Anki.Vector.external_interface.ActionResult">ActionResult</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-          <p></p>
-        
-
-        
-      
-        <h3 id="Anki.Vector.external_interface.UnexpectedMovement">UnexpectedMovement</h3>
-        Event dispatched when the robot does not move as expected. Has additional information
-such as the direction and type of unexpected motion.
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>timestamp</td>
-                  <td><a href="#uint32">uint32</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>movement_type</td>
-                  <td><a href="#Anki.Vector.external_interface.UnexpectedMovementType">UnexpectedMovementType</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>movement_side</td>
-                  <td><a href="#Anki.Vector.external_interface.UnexpectedMovementSide">UnexpectedMovementSide</a> </td>
                   <td><p> </p></td>
                 </tr>
               
@@ -9642,84 +9080,6 @@ Proto field names are prefixed with "EXPRESSION_"<p></p>
         </table>
         <p></p>
       
-        <h3 id="Anki.Vector.external_interface.UnexpectedMovementSide">UnexpectedMovementSide</h3>
-        <p></p>
-        <table class="enum-table">
-          <thead>
-            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
-          </thead>
-          <tbody>
-            
-              <tr>
-                <td>UNKNOWN</td>
-                <td>0</td>
-                <td><p></p></td>
-              </tr>
-            
-              <tr>
-                <td>FRONT</td>
-                <td>1</td>
-                <td><p></p></td>
-              </tr>
-            
-              <tr>
-                <td>BACK</td>
-                <td>2</td>
-                <td><p></p></td>
-              </tr>
-            
-              <tr>
-                <td>LEFT</td>
-                <td>3</td>
-                <td><p></p></td>
-              </tr>
-            
-              <tr>
-                <td>RIGHT</td>
-                <td>4</td>
-                <td><p></p></td>
-              </tr>
-            
-          </tbody>
-        </table>
-        <p></p>
-      
-        <h3 id="Anki.Vector.external_interface.UnexpectedMovementType">UnexpectedMovementType</h3>
-        <p></p>
-        <table class="enum-table">
-          <thead>
-            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
-          </thead>
-          <tbody>
-            
-              <tr>
-                <td>TURNED_BUT_STOPPED</td>
-                <td>0</td>
-                <td><p></p></td>
-              </tr>
-            
-              <tr>
-                <td>TURNED_IN_SAME_DIRECTION</td>
-                <td>1</td>
-                <td><p></p></td>
-              </tr>
-            
-              <tr>
-                <td>TURNED_IN_OPPOSITE_DIRECTION</td>
-                <td>2</td>
-                <td><p></p></td>
-              </tr>
-            
-              <tr>
-                <td>ROTATING_WITHOUT_MOTORS</td>
-                <td>3</td>
-                <td><p></p></td>
-              </tr>
-            
-          </tbody>
-        </table>
-        <p></p>
-      
 
       
 
@@ -10185,36 +9545,6 @@ This will indicate the generic state of the request.
                 <tr>
                   <td>user_intent</td>
                   <td><a href="#Anki.Vector.external_interface.UserIntent">UserIntent</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>robot_observed_motion</td>
-                  <td><a href="#Anki.Vector.external_interface.RobotObservedMotion">RobotObservedMotion</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>robot_erased_enrolled_face</td>
-                  <td><a href="#Anki.Vector.external_interface.RobotErasedEnrolledFace">RobotErasedEnrolledFace</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>robot_renamed_enrolled_face</td>
-                  <td><a href="#Anki.Vector.external_interface.RobotRenamedEnrolledFace">RobotRenamedEnrolledFace</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>camera_settings_update</td>
-                  <td><a href="#Anki.Vector.external_interface.CameraSettingsUpdate">CameraSettingsUpdate</a> </td>
-                  <td><p> </p></td>
-                </tr>
-              
-                <tr>
-                  <td>unexpected_movement</td>
-                  <td><a href="#Anki.Vector.external_interface.UnexpectedMovement">UnexpectedMovement</a> </td>
                   <td><p> </p></td>
                 </tr>
               
