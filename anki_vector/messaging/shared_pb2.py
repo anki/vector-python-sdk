@@ -15,6 +15,7 @@ _sym_db = _symbol_database.Default()
 
 from anki_vector.messaging import behavior_pb2 as anki__vector_dot_messaging_dot_behavior__pb2
 from anki_vector.messaging import cube_pb2 as anki__vector_dot_messaging_dot_cube__pb2
+from anki_vector.messaging import alexa_pb2 as anki__vector_dot_messaging_dot_alexa__pb2
 from anki_vector.messaging import messages_pb2 as anki__vector_dot_messaging_dot_messages__pb2
 from anki_vector.messaging import settings_pb2 as anki__vector_dot_messaging_dot_settings__pb2
 from anki_vector.messaging import extensions_pb2 as anki__vector_dot_messaging_dot_extensions__pb2
@@ -25,9 +26,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='anki_vector/messaging/shared.proto',
   package='Anki.Vector.external_interface',
   syntax='proto3',
-  serialized_pb=_b('\n\"anki_vector/messaging/shared.proto\x12\x1e\x41nki.Vector.external_interface\x1a$anki_vector/messaging/behavior.proto\x1a anki_vector/messaging/cube.proto\x1a$anki_vector/messaging/messages.proto\x1a$anki_vector/messaging/settings.proto\x1a&anki_vector/messaging/extensions.proto\x1a+anki_vector/messaging/response_status.proto\"J\n\x16ProtocolVersionRequest\x12\x16\n\x0e\x63lient_version\x18\x01 \x01(\x03\x12\x18\n\x10min_host_version\x18\x02 \x01(\x03\"\xa7\x01\n\x17ProtocolVersionResponse\x12N\n\x06result\x18\x01 \x01(\x0e\x32>.Anki.Vector.external_interface.ProtocolVersionResponse.Result\x12\x14\n\x0chost_version\x18\x02 \x01(\x03\"&\n\x06Result\x12\x0f\n\x0bUNSUPPORTED\x10\x00\x12\x0b\n\x07SUCCESS\x10\x01\"h\n\x12\x43onnectionResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x12\n\nis_primary\x18\x02 \x01(\x08\"\xc9\x08\n\x05\x45vent\x12P\n\x13time_stamped_status\x18\x01 \x01(\x0b\x32\x31.Anki.Vector.external_interface.TimeStampedStatusH\x00\x12=\n\twake_word\x18\x03 \x01(\x0b\x32(.Anki.Vector.external_interface.WakeWordH\x00\x12P\n\x13robot_observed_face\x18\x05 \x01(\x0b\x32\x31.Anki.Vector.external_interface.RobotObservedFaceH\x00\x12\x64\n\x1erobot_changed_observed_face_id\x18\x06 \x01(\x0b\x32:.Anki.Vector.external_interface.RobotChangedObservedFaceIDH\x00\x12\x43\n\x0cobject_event\x18\x07 \x01(\x0b\x32+.Anki.Vector.external_interface.ObjectEventH\x00\x12K\n\x10stimulation_info\x18\x08 \x01(\x0b\x32/.Anki.Vector.external_interface.StimulationInfoH\x00\x12\x41\n\x0bphoto_taken\x18\t \x01(\x0b\x32*.Anki.Vector.external_interface.PhotoTakenH\x00\x12\x41\n\x0brobot_state\x18\n \x01(\x0b\x32*.Anki.Vector.external_interface.RobotStateH\x00\x12\x43\n\x0c\x63ube_battery\x18\x0b \x01(\x0b\x32+.Anki.Vector.external_interface.CubeBatteryH\x00\x12\x43\n\nkeep_alive\x18\x0c \x01(\x0b\x32-.Anki.Vector.external_interface.KeepAlivePingH\x00\x12Q\n\x13\x63onnection_response\x18\r \x01(\x0b\x32\x32.Anki.Vector.external_interface.ConnectionResponseH\x00\x12R\n\x14mirror_mode_disabled\x18\x10 \x01(\x0b\x32\x32.Anki.Vector.external_interface.MirrorModeDisabledH\x00\x12]\n\x1avision_modes_auto_disabled\x18\x11 \x01(\x0b\x32\x37.Anki.Vector.external_interface.VisionModesAutoDisabledH\x00\x12\x41\n\x0buser_intent\x18\x13 \x01(\x0b\x32*.Anki.Vector.external_interface.UserIntentH\x00\x42\x0c\n\nevent_type\"\x1a\n\nFilterList\x12\x0c\n\x04list\x18\x01 \x03(\t\"\xb6\x01\n\x0c\x45ventRequest\x12@\n\nwhite_list\x18\x01 \x01(\x0b\x32*.Anki.Vector.external_interface.FilterListH\x00\x12@\n\nblack_list\x18\x02 \x01(\x0b\x32*.Anki.Vector.external_interface.FilterListH\x00\x12\x15\n\rconnection_id\x18\x03 \x01(\tB\x0b\n\tlist_type\"\x8b\x01\n\rEventResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x34\n\x05\x65vent\x18\x02 \x01(\x0b\x32%.Anki.Vector.external_interface.Event:\x04\x80\xa6\x1d\x01\"I\n\x19UserAuthenticationRequest\x12\x17\n\x0fuser_session_id\x18\x01 \x01(\x0c\x12\x13\n\x0b\x63lient_name\x18\x02 \x01(\x0c\"\xf0\x01\n\x1aUserAuthenticationResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12M\n\x04\x63ode\x18\x02 \x01(\x0e\x32?.Anki.Vector.external_interface.UserAuthenticationResponse.Code\x12\x19\n\x11\x63lient_token_guid\x18\x03 \x01(\x0c\"(\n\x04\x43ode\x12\x10\n\x0cUNAUTHORIZED\x10\x00\x12\x0e\n\nAUTHORIZED\x10\x01\x62\x06proto3')
+  serialized_pb=_b('\n\"anki_vector/messaging/shared.proto\x12\x1e\x41nki.Vector.external_interface\x1a$anki_vector/messaging/behavior.proto\x1a anki_vector/messaging/cube.proto\x1a!anki_vector/messaging/alexa.proto\x1a$anki_vector/messaging/messages.proto\x1a$anki_vector/messaging/settings.proto\x1a&anki_vector/messaging/extensions.proto\x1a+anki_vector/messaging/response_status.proto\"J\n\x16ProtocolVersionRequest\x12\x16\n\x0e\x63lient_version\x18\x01 \x01(\x03\x12\x18\n\x10min_host_version\x18\x02 \x01(\x03\"\xa7\x01\n\x17ProtocolVersionResponse\x12N\n\x06result\x18\x01 \x01(\x0e\x32>.Anki.Vector.external_interface.ProtocolVersionResponse.Result\x12\x14\n\x0chost_version\x18\x02 \x01(\x03\"&\n\x06Result\x12\x0f\n\x0bUNSUPPORTED\x10\x00\x12\x0b\n\x07SUCCESS\x10\x01\"h\n\x12\x43onnectionResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x12\n\nis_primary\x18\x02 \x01(\x08\"\xd2\x0b\n\x05\x45vent\x12P\n\x13time_stamped_status\x18\x01 \x01(\x0b\x32\x31.Anki.Vector.external_interface.TimeStampedStatusH\x00\x12@\n\nonboarding\x18\x02 \x01(\x0b\x32*.Anki.Vector.external_interface.OnboardingH\x00\x12=\n\twake_word\x18\x03 \x01(\x0b\x32(.Anki.Vector.external_interface.WakeWordH\x00\x12O\n\x12\x61ttention_transfer\x18\x04 \x01(\x0b\x32\x31.Anki.Vector.external_interface.AttentionTransferH\x00\x12P\n\x13robot_observed_face\x18\x05 \x01(\x0b\x32\x31.Anki.Vector.external_interface.RobotObservedFaceH\x00\x12\x64\n\x1erobot_changed_observed_face_id\x18\x06 \x01(\x0b\x32:.Anki.Vector.external_interface.RobotChangedObservedFaceIDH\x00\x12\x43\n\x0cobject_event\x18\x07 \x01(\x0b\x32+.Anki.Vector.external_interface.ObjectEventH\x00\x12K\n\x10stimulation_info\x18\x08 \x01(\x0b\x32/.Anki.Vector.external_interface.StimulationInfoH\x00\x12\x41\n\x0bphoto_taken\x18\t \x01(\x0b\x32*.Anki.Vector.external_interface.PhotoTakenH\x00\x12\x41\n\x0brobot_state\x18\n \x01(\x0b\x32*.Anki.Vector.external_interface.RobotStateH\x00\x12\x43\n\x0c\x63ube_battery\x18\x0b \x01(\x0b\x32+.Anki.Vector.external_interface.CubeBatteryH\x00\x12\x43\n\nkeep_alive\x18\x0c \x01(\x0b\x32-.Anki.Vector.external_interface.KeepAlivePingH\x00\x12Q\n\x13\x63onnection_response\x18\r \x01(\x0b\x32\x32.Anki.Vector.external_interface.ConnectionResponseH\x00\x12\x45\n\rjdocs_changed\x18\x0e \x01(\x0b\x32,.Anki.Vector.external_interface.JdocsChangedH\x00\x12J\n\x10\x61lexa_auth_event\x18\x0f \x01(\x0b\x32..Anki.Vector.external_interface.AlexaAuthEventH\x00\x12R\n\x14mirror_mode_disabled\x18\x10 \x01(\x0b\x32\x32.Anki.Vector.external_interface.MirrorModeDisabledH\x00\x12]\n\x1avision_modes_auto_disabled\x18\x11 \x01(\x0b\x32\x37.Anki.Vector.external_interface.VisionModesAutoDisabledH\x00\x12\x61\n\x1c\x63heck_update_status_response\x18\x12 \x01(\x0b\x32\x39.Anki.Vector.external_interface.CheckUpdateStatusResponseH\x00\x12\x41\n\x0buser_intent\x18\x13 \x01(\x0b\x32*.Anki.Vector.external_interface.UserIntentH\x00\x42\x0c\n\nevent_type\"\x1a\n\nFilterList\x12\x0c\n\x04list\x18\x01 \x03(\t\"\xb6\x01\n\x0c\x45ventRequest\x12@\n\nwhite_list\x18\x01 \x01(\x0b\x32*.Anki.Vector.external_interface.FilterListH\x00\x12@\n\nblack_list\x18\x02 \x01(\x0b\x32*.Anki.Vector.external_interface.FilterListH\x00\x12\x15\n\rconnection_id\x18\x03 \x01(\tB\x0b\n\tlist_type\"\x8b\x01\n\rEventResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x34\n\x05\x65vent\x18\x02 \x01(\x0b\x32%.Anki.Vector.external_interface.Event:\x04\x80\xa6\x1d\x01\"I\n\x19UserAuthenticationRequest\x12\x17\n\x0fuser_session_id\x18\x01 \x01(\x0c\x12\x13\n\x0b\x63lient_name\x18\x02 \x01(\x0c\"\xf0\x01\n\x1aUserAuthenticationResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12M\n\x04\x63ode\x18\x02 \x01(\x0e\x32?.Anki.Vector.external_interface.UserAuthenticationResponse.Code\x12\x19\n\x11\x63lient_token_guid\x18\x03 \x01(\x0c\"(\n\x04\x43ode\x12\x10\n\x0cUNAUTHORIZED\x10\x00\x12\x0e\n\nAUTHORIZED\x10\x01\x62\x06proto3')
   ,
-  dependencies=[anki__vector_dot_messaging_dot_behavior__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_cube__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_messages__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_settings__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_extensions__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_response__status__pb2.DESCRIPTOR,])
+  dependencies=[anki__vector_dot_messaging_dot_behavior__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_cube__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_alexa__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_messages__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_settings__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_extensions__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_response__status__pb2.DESCRIPTOR,])
 
 
 
@@ -48,8 +49,8 @@ _PROTOCOLVERSIONRESPONSE_RESULT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=509,
-  serialized_end=547,
+  serialized_start=544,
+  serialized_end=582,
 )
 _sym_db.RegisterEnumDescriptor(_PROTOCOLVERSIONRESPONSE_RESULT)
 
@@ -70,8 +71,8 @@ _USERAUTHENTICATIONRESPONSE_CODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2386,
-  serialized_end=2426,
+  serialized_start=2814,
+  serialized_end=2854,
 )
 _sym_db.RegisterEnumDescriptor(_USERAUTHENTICATIONRESPONSE_CODE)
 
@@ -109,8 +110,8 @@ _PROTOCOLVERSIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=303,
-  serialized_end=377,
+  serialized_start=338,
+  serialized_end=412,
 )
 
 
@@ -148,8 +149,8 @@ _PROTOCOLVERSIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=380,
-  serialized_end=547,
+  serialized_start=415,
+  serialized_end=582,
 )
 
 
@@ -186,8 +187,8 @@ _CONNECTIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=549,
-  serialized_end=653,
+  serialized_start=584,
+  serialized_end=688,
 )
 
 
@@ -206,91 +207,126 @@ _EVENT = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='wake_word', full_name='Anki.Vector.external_interface.Event.wake_word', index=1,
+      name='onboarding', full_name='Anki.Vector.external_interface.Event.onboarding', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='wake_word', full_name='Anki.Vector.external_interface.Event.wake_word', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='robot_observed_face', full_name='Anki.Vector.external_interface.Event.robot_observed_face', index=2,
+      name='attention_transfer', full_name='Anki.Vector.external_interface.Event.attention_transfer', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='robot_observed_face', full_name='Anki.Vector.external_interface.Event.robot_observed_face', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='robot_changed_observed_face_id', full_name='Anki.Vector.external_interface.Event.robot_changed_observed_face_id', index=3,
+      name='robot_changed_observed_face_id', full_name='Anki.Vector.external_interface.Event.robot_changed_observed_face_id', index=5,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='object_event', full_name='Anki.Vector.external_interface.Event.object_event', index=4,
+      name='object_event', full_name='Anki.Vector.external_interface.Event.object_event', index=6,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='stimulation_info', full_name='Anki.Vector.external_interface.Event.stimulation_info', index=5,
+      name='stimulation_info', full_name='Anki.Vector.external_interface.Event.stimulation_info', index=7,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='photo_taken', full_name='Anki.Vector.external_interface.Event.photo_taken', index=6,
+      name='photo_taken', full_name='Anki.Vector.external_interface.Event.photo_taken', index=8,
       number=9, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='robot_state', full_name='Anki.Vector.external_interface.Event.robot_state', index=7,
+      name='robot_state', full_name='Anki.Vector.external_interface.Event.robot_state', index=9,
       number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='cube_battery', full_name='Anki.Vector.external_interface.Event.cube_battery', index=8,
+      name='cube_battery', full_name='Anki.Vector.external_interface.Event.cube_battery', index=10,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='keep_alive', full_name='Anki.Vector.external_interface.Event.keep_alive', index=9,
+      name='keep_alive', full_name='Anki.Vector.external_interface.Event.keep_alive', index=11,
       number=12, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='connection_response', full_name='Anki.Vector.external_interface.Event.connection_response', index=10,
+      name='connection_response', full_name='Anki.Vector.external_interface.Event.connection_response', index=12,
       number=13, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='mirror_mode_disabled', full_name='Anki.Vector.external_interface.Event.mirror_mode_disabled', index=11,
+      name='jdocs_changed', full_name='Anki.Vector.external_interface.Event.jdocs_changed', index=13,
+      number=14, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='alexa_auth_event', full_name='Anki.Vector.external_interface.Event.alexa_auth_event', index=14,
+      number=15, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='mirror_mode_disabled', full_name='Anki.Vector.external_interface.Event.mirror_mode_disabled', index=15,
       number=16, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='vision_modes_auto_disabled', full_name='Anki.Vector.external_interface.Event.vision_modes_auto_disabled', index=12,
+      name='vision_modes_auto_disabled', full_name='Anki.Vector.external_interface.Event.vision_modes_auto_disabled', index=16,
       number=17, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='user_intent', full_name='Anki.Vector.external_interface.Event.user_intent', index=13,
+      name='check_update_status_response', full_name='Anki.Vector.external_interface.Event.check_update_status_response', index=17,
+      number=18, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='user_intent', full_name='Anki.Vector.external_interface.Event.user_intent', index=18,
       number=19, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -311,8 +347,8 @@ _EVENT = _descriptor.Descriptor(
       name='event_type', full_name='Anki.Vector.external_interface.Event.event_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=656,
-  serialized_end=1753,
+  serialized_start=691,
+  serialized_end=2181,
 )
 
 
@@ -342,8 +378,8 @@ _FILTERLIST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1755,
-  serialized_end=1781,
+  serialized_start=2183,
+  serialized_end=2209,
 )
 
 
@@ -390,8 +426,8 @@ _EVENTREQUEST = _descriptor.Descriptor(
       name='list_type', full_name='Anki.Vector.external_interface.EventRequest.list_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1784,
-  serialized_end=1966,
+  serialized_start=2212,
+  serialized_end=2394,
 )
 
 
@@ -428,8 +464,8 @@ _EVENTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1969,
-  serialized_end=2108,
+  serialized_start=2397,
+  serialized_end=2536,
 )
 
 
@@ -466,8 +502,8 @@ _USERAUTHENTICATIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2110,
-  serialized_end=2183,
+  serialized_start=2538,
+  serialized_end=2611,
 )
 
 
@@ -512,15 +548,17 @@ _USERAUTHENTICATIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2186,
-  serialized_end=2426,
+  serialized_start=2614,
+  serialized_end=2854,
 )
 
 _PROTOCOLVERSIONRESPONSE.fields_by_name['result'].enum_type = _PROTOCOLVERSIONRESPONSE_RESULT
 _PROTOCOLVERSIONRESPONSE_RESULT.containing_type = _PROTOCOLVERSIONRESPONSE
 _CONNECTIONRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
 _EVENT.fields_by_name['time_stamped_status'].message_type = anki__vector_dot_messaging_dot_messages__pb2._TIMESTAMPEDSTATUS
+_EVENT.fields_by_name['onboarding'].message_type = anki__vector_dot_messaging_dot_messages__pb2._ONBOARDING
 _EVENT.fields_by_name['wake_word'].message_type = anki__vector_dot_messaging_dot_messages__pb2._WAKEWORD
+_EVENT.fields_by_name['attention_transfer'].message_type = anki__vector_dot_messaging_dot_messages__pb2._ATTENTIONTRANSFER
 _EVENT.fields_by_name['robot_observed_face'].message_type = anki__vector_dot_messaging_dot_messages__pb2._ROBOTOBSERVEDFACE
 _EVENT.fields_by_name['robot_changed_observed_face_id'].message_type = anki__vector_dot_messaging_dot_messages__pb2._ROBOTCHANGEDOBSERVEDFACEID
 _EVENT.fields_by_name['object_event'].message_type = anki__vector_dot_messaging_dot_cube__pb2._OBJECTEVENT
@@ -530,15 +568,24 @@ _EVENT.fields_by_name['robot_state'].message_type = anki__vector_dot_messaging_d
 _EVENT.fields_by_name['cube_battery'].message_type = anki__vector_dot_messaging_dot_messages__pb2._CUBEBATTERY
 _EVENT.fields_by_name['keep_alive'].message_type = anki__vector_dot_messaging_dot_messages__pb2._KEEPALIVEPING
 _EVENT.fields_by_name['connection_response'].message_type = _CONNECTIONRESPONSE
+_EVENT.fields_by_name['jdocs_changed'].message_type = anki__vector_dot_messaging_dot_settings__pb2._JDOCSCHANGED
+_EVENT.fields_by_name['alexa_auth_event'].message_type = anki__vector_dot_messaging_dot_alexa__pb2._ALEXAAUTHEVENT
 _EVENT.fields_by_name['mirror_mode_disabled'].message_type = anki__vector_dot_messaging_dot_messages__pb2._MIRRORMODEDISABLED
 _EVENT.fields_by_name['vision_modes_auto_disabled'].message_type = anki__vector_dot_messaging_dot_messages__pb2._VISIONMODESAUTODISABLED
+_EVENT.fields_by_name['check_update_status_response'].message_type = anki__vector_dot_messaging_dot_messages__pb2._CHECKUPDATESTATUSRESPONSE
 _EVENT.fields_by_name['user_intent'].message_type = anki__vector_dot_messaging_dot_messages__pb2._USERINTENT
 _EVENT.oneofs_by_name['event_type'].fields.append(
   _EVENT.fields_by_name['time_stamped_status'])
 _EVENT.fields_by_name['time_stamped_status'].containing_oneof = _EVENT.oneofs_by_name['event_type']
 _EVENT.oneofs_by_name['event_type'].fields.append(
+  _EVENT.fields_by_name['onboarding'])
+_EVENT.fields_by_name['onboarding'].containing_oneof = _EVENT.oneofs_by_name['event_type']
+_EVENT.oneofs_by_name['event_type'].fields.append(
   _EVENT.fields_by_name['wake_word'])
 _EVENT.fields_by_name['wake_word'].containing_oneof = _EVENT.oneofs_by_name['event_type']
+_EVENT.oneofs_by_name['event_type'].fields.append(
+  _EVENT.fields_by_name['attention_transfer'])
+_EVENT.fields_by_name['attention_transfer'].containing_oneof = _EVENT.oneofs_by_name['event_type']
 _EVENT.oneofs_by_name['event_type'].fields.append(
   _EVENT.fields_by_name['robot_observed_face'])
 _EVENT.fields_by_name['robot_observed_face'].containing_oneof = _EVENT.oneofs_by_name['event_type']
@@ -567,11 +614,20 @@ _EVENT.oneofs_by_name['event_type'].fields.append(
   _EVENT.fields_by_name['connection_response'])
 _EVENT.fields_by_name['connection_response'].containing_oneof = _EVENT.oneofs_by_name['event_type']
 _EVENT.oneofs_by_name['event_type'].fields.append(
+  _EVENT.fields_by_name['jdocs_changed'])
+_EVENT.fields_by_name['jdocs_changed'].containing_oneof = _EVENT.oneofs_by_name['event_type']
+_EVENT.oneofs_by_name['event_type'].fields.append(
+  _EVENT.fields_by_name['alexa_auth_event'])
+_EVENT.fields_by_name['alexa_auth_event'].containing_oneof = _EVENT.oneofs_by_name['event_type']
+_EVENT.oneofs_by_name['event_type'].fields.append(
   _EVENT.fields_by_name['mirror_mode_disabled'])
 _EVENT.fields_by_name['mirror_mode_disabled'].containing_oneof = _EVENT.oneofs_by_name['event_type']
 _EVENT.oneofs_by_name['event_type'].fields.append(
   _EVENT.fields_by_name['vision_modes_auto_disabled'])
 _EVENT.fields_by_name['vision_modes_auto_disabled'].containing_oneof = _EVENT.oneofs_by_name['event_type']
+_EVENT.oneofs_by_name['event_type'].fields.append(
+  _EVENT.fields_by_name['check_update_status_response'])
+_EVENT.fields_by_name['check_update_status_response'].containing_oneof = _EVENT.oneofs_by_name['event_type']
 _EVENT.oneofs_by_name['event_type'].fields.append(
   _EVENT.fields_by_name['user_intent'])
 _EVENT.fields_by_name['user_intent'].containing_oneof = _EVENT.oneofs_by_name['event_type']

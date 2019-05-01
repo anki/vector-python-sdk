@@ -19,10 +19,12 @@ syntax = "proto3";
 package Anki.Vector.external_interface;
 
 import "google/api/annotations.proto";
+import "anki_vector/messaging/alexa.proto"; 
 import "anki_vector/messaging/behavior.proto";
 import "anki_vector/messaging/cube.proto";
 import "anki_vector/messaging/messages.proto";
 import "anki_vector/messaging/nav_map.proto";
+import "anki_vector/messaging/settings.proto"; 
 import "anki_vector/messaging/shared.proto";
 
 // <p>The valid versions of the protocol.</p>
@@ -496,4 +498,112 @@ service ExternalInterface {
     };
   }
 
+
+  rpc AppIntent(AppIntentRequest) returns (AppIntentResponse) {
+    option (google.api.http) = {
+      post: "/v1/app_intent",
+      body: "*"
+    };
+  }  
+
+  rpc GetOnboardingState(OnboardingStateRequest) returns (OnboardingStateResponse) {
+    option (google.api.http) = {
+      post: "/v1/get_onboarding_state",
+      body: "*"
+    };
+  }
+
+  rpc SendOnboardingInput(OnboardingInputRequest) returns (OnboardingInputResponse) {
+    option (google.api.http) = {
+      post: "/v1/send_onboarding_input",
+      body: "*"
+    };
+  }  
+
+  rpc GetLatestAttentionTransfer(LatestAttentionTransferRequest) returns (LatestAttentionTransferResponse) {
+    option (google.api.http) = {
+      post: "/v1/get_latest_attention_transfer",
+      body: "*"
+    };
+  }
+
+  rpc PullJdocs(PullJdocsRequest) returns (PullJdocsResponse) {
+    option (google.api.http) = {
+      post: "/v1/pull_jdocs",
+      body: "*"
+    };
+  }
+
+  rpc UpdateSettings(UpdateSettingsRequest) returns (UpdateSettingsResponse) {
+    option (google.api.http) = {
+      post: "/v1/update_settings",
+      body: "*"
+    };
+  }
+
+  rpc UpdateAccountSettings(UpdateAccountSettingsRequest) returns (UpdateAccountSettingsResponse) {
+    option (google.api.http) = {
+      post: "/v1/update_account_settings",
+      body: "*"
+    };
+  }
+
+  // StartUpdateEngine cycles the update-engine service (to start a new check for an update) and sets up a stream of 
+  // UpdateStatusResponse Events.
+  rpc StartUpdateEngine(CheckUpdateStatusRequest) returns (CheckUpdateStatusResponse) {
+    option (google.api.http) = {
+      post: "/v1/start_update_engine",
+      body: "*"
+    };
+  }
+
+  // CheckUpdateStatus tells if the robot is ready to reboot and update.
+  rpc CheckUpdateStatus(CheckUpdateStatusRequest) returns (CheckUpdateStatusResponse) {
+    option (google.api.http) = {
+      post: "/v1/check_update_status",
+      body: "*"
+    };
+  }
+
+  rpc UpdateAndRestart(UpdateAndRestartRequest) returns (UpdateAndRestartResponse) {
+    option (google.api.http) = {
+      post: "/v1/update_and_restart",
+      body: "*"
+    };
+  }
+
+  rpc CheckCloudConnection(CheckCloudRequest) returns (CheckCloudResponse) {
+    option (google.api.http) = {
+      post: "/v1/check_cloud_connection",
+      body: "*"
+    };
+  }
+
+  rpc GetFeatureFlag(FeatureFlagRequest) returns (FeatureFlagResponse) {
+    option (google.api.http) = {
+      post: "/v1/feature_flag",
+      body: "*"
+    };
+  }
+
+  rpc GetFeatureFlagList(FeatureFlagListRequest) returns (FeatureFlagListResponse) {
+    option (google.api.http) = {
+      post: "/v1/feature_flag_list",
+      body: "*"
+    };
+  }
+
+  rpc GetAlexaAuthState(AlexaAuthStateRequest) returns (AlexaAuthStateResponse) {
+    option (google.api.http) = {
+      post: "/v1/alexa_auth_state",
+      body: "*"
+    };
+  }
+
+  rpc AlexaOptIn(AlexaOptInRequest) returns (AlexaOptInResponse) {
+    option (google.api.http) = {
+      post: "/v1/alexa_opt_in",
+      body: "*"
+    };
+  }  
 }

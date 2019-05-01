@@ -20,6 +20,7 @@ package Anki.Vector.external_interface;
 
 import "anki_vector/messaging/behavior.proto";
 import "anki_vector/messaging/cube.proto";
+import "anki_vector/messaging/alexa.proto"; 
 import "anki_vector/messaging/messages.proto";
 import "anki_vector/messaging/settings.proto";
 import "anki_vector/messaging/extensions.proto";
@@ -48,7 +49,9 @@ message ConnectionResponse {
 message Event {
   oneof event_type {
     TimeStampedStatus                time_stamped_status                 = 1;
+    Onboarding                       onboarding                          = 2; 
     WakeWord                         wake_word                           = 3;
+    AttentionTransfer                attention_transfer                  = 4; 
     RobotObservedFace                robot_observed_face                 = 5;
     RobotChangedObservedFaceID       robot_changed_observed_face_id      = 6;
     ObjectEvent                      object_event                        = 7;
@@ -59,8 +62,11 @@ message Event {
     // Used by Vector to verify the connection is still alive.
     KeepAlivePing                    keep_alive                          = 12;
     ConnectionResponse               connection_response                 = 13;
+    JdocsChanged                     jdocs_changed                       = 14; 
+    AlexaAuthEvent                   alexa_auth_event                    = 15; 
     MirrorModeDisabled               mirror_mode_disabled                = 16;
     VisionModesAutoDisabled          vision_modes_auto_disabled          = 17;
+    CheckUpdateStatusResponse        check_update_status_response        = 18; 
     UserIntent                       user_intent                         = 19;
   }
 }
@@ -97,4 +103,5 @@ message UserAuthenticationResponse {
   Code code = 2;
   bytes client_token_guid = 3;
 }
+
 
