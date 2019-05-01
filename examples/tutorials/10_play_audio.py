@@ -23,8 +23,13 @@ import anki_vector
 def main():
     args = anki_vector.util.parse_command_args()
     with anki_vector.Robot(args.serial) as robot:
-        robot.audio.stream_wav_file("../sounds/vector_bell_whistle.wav", 75)
-        robot.audio.stream_wav_file("../sounds/vector_alert.wav", 75)
+        # You can find these sounds files here:
+        # https://github.com/anki/vector-python-sdk/blob/master/examples/sounds/vector_alert.wav
+        # https://github.com/anki/vector-python-sdk/blob/master/examples/sounds/vector_bell_whistle.wav
+        #
+        # Paste these two wav files next to this tutorial to play sounds.
+        robot.audio.stream_wav_file("vector_bell_whistle.wav", 75)
+        robot.audio.stream_wav_file("vector_alert.wav", 75)
 
 
 if __name__ == "__main__":
