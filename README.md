@@ -2,18 +2,18 @@
 
 ![Vector](docs/source/images/vector-sdk-alpha.jpg)
 
-Learn more about Vector: https://www.anki.com/vector
+Learn more about Vector: https://www.anki.com/en-us/vector
 
 Learn more about the SDK: https://developer.anki.com/
 
-SDK documentation: http://developer.anki.com/vector/docs/
+SDK documentation: https://developer.anki.com/vector/docs/index.html
 
 Forums: https://forums.anki.com/
 
 
 ## Getting Started
 
-You can follow steps [here](http://developer.anki.com/vector/docs/) to set up your Vector robot with the SDK.
+You can follow steps [here](https://developer.anki.com/vector/docs/index.html) to set up your Vector robot with the SDK.
 
 
 ## Privacy Policy and Terms and Conditions
