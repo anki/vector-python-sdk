@@ -7,6 +7,14 @@ so changes to the source code will be reflected in docs builds.
 
 To update and build the docs, follow the steps below.
 
+## Installing sphinx
+
+The
+[Sphinx Documetation Generator](https://www.sphinx-doc.org/en/master/)
+is used to build the docs. You'll need to have it installed on your
+system with `pip install -r requirements.txt` using the
+`requirements.txt` file in this directory and not the main project directory.
+
 ## Updating the Docs
 
 There are a few files that are not automatically generated and reside in `source`.  For example, 
@@ -22,3 +30,6 @@ the html version of the docs.
 make clean
 make html
 ```
+
+You will now have an offline copy of the documetation that can be
+accessed by opening `.build/html/index.html`

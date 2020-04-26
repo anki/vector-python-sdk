@@ -15,6 +15,9 @@ Forums: https://forums.anki.com/
 
 You can follow steps [here](https://developer.anki.com/vector/docs/index.html) to set up your Vector robot with the SDK.
 
+You can also generate a local copy of the SDK documetation by
+following the instructions in the `docs` folder of this project.
+
 
 ## Privacy Policy and Terms and Conditions
 
