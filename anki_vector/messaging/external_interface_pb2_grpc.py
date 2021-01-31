@@ -88,11 +88,6 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlResponse.FromString,
         )
-    self.AssumeBehaviorControl = channel.unary_stream(
-        '/Anki.Vector.external_interface.ExternalInterface/AssumeBehaviorControl',
-        request_serializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlRequest.SerializeToString,
-        response_deserializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlResponse.FromString,
-        )
     self.CancelFaceEnrollment = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/CancelFaceEnrollment',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CancelFaceEnrollmentRequest.SerializeToString,
@@ -122,6 +117,11 @@ class ExternalInterfaceStub(object):
         '/Anki.Vector.external_interface.ExternalInterface/SetFaceToEnroll',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetFaceToEnrollRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetFaceToEnrollResponse.FromString,
+        )
+    self.EnrollFace = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/EnrollFace',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnrollFaceRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnrollFaceResponse.FromString,
         )
     self.EnableMarkerDetection = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/EnableMarkerDetection',
@@ -157,6 +157,11 @@ class ExternalInterfaceStub(object):
         '/Anki.Vector.external_interface.ExternalInterface/CancelActionByIdTag',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CancelActionByIdTagRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CancelActionByIdTagResponse.FromString,
+        )
+    self.CancelBehavior = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/CancelBehavior',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CancelBehaviorRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CancelBehaviorResponse.FromString,
         )
     self.GoToPose = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/GoToPose',
@@ -353,6 +358,11 @@ class ExternalInterfaceStub(object):
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CaptureSingleImageRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CaptureSingleImageResponse.FromString,
         )
+    self.GetCameraConfig = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/GetCameraConfig',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.CameraConfigRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CameraConfigResponse.FromString,
+        )
     self.SetEyeColor = channel.unary_unary(
         '/Anki.Vector.external_interface.ExternalInterface/SetEyeColor',
         request_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetEyeColorRequest.SerializeToString,
@@ -362,6 +372,11 @@ class ExternalInterfaceStub(object):
         '/Anki.Vector.external_interface.ExternalInterface/NavMapFeed',
         request_serializer=anki__vector_dot_messaging_dot_nav__map__pb2.NavMapFeedRequest.SerializeToString,
         response_deserializer=anki__vector_dot_messaging_dot_nav__map__pb2.NavMapFeedResponse.FromString,
+        )
+    self.SetCameraSettings = channel.unary_unary(
+        '/Anki.Vector.external_interface.ExternalInterface/SetCameraSettings',
+        request_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetCameraSettingsRequest.SerializeToString,
+        response_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetCameraSettingsResponse.FromString,
         )
 
 
@@ -468,13 +483,6 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def AssumeBehaviorControl(self, request, context):
-    """Acquire control of Vector's AI system.
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
   def CancelFaceEnrollment(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -513,6 +521,13 @@ class ExternalInterfaceServicer(object):
   def SetFaceToEnroll(self, request, context):
     # missing associated documentation comment in .proto file
     pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def EnrollFace(self, request, context):
+    """Enroll a face. Must be used with SetFaceToEnroll
+    """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
@@ -561,6 +576,13 @@ class ExternalInterfaceServicer(object):
 
   def CancelActionByIdTag(self, request, context):
     """Cancel action by id
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def CancelBehavior(self, request, context):
+    """Cancel running SDK Behavior
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
@@ -848,6 +870,13 @@ class ExternalInterfaceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def GetCameraConfig(self, request, context):
+    """Get Vector's camera configuration.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def SetEyeColor(self, request, context):
     """Set Vector's eye color.
     """
@@ -857,6 +886,13 @@ class ExternalInterfaceServicer(object):
 
   def NavMapFeed(self, request, context):
     """Stream navigation map data.
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def SetCameraSettings(self, request, context):
+    """Set Vector's camera settings
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
@@ -935,11 +971,6 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           request_deserializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlResponse.SerializeToString,
       ),
-      'AssumeBehaviorControl': grpc.unary_stream_rpc_method_handler(
-          servicer.AssumeBehaviorControl,
-          request_deserializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlRequest.FromString,
-          response_serializer=anki__vector_dot_messaging_dot_behavior__pb2.BehaviorControlResponse.SerializeToString,
-      ),
       'CancelFaceEnrollment': grpc.unary_unary_rpc_method_handler(
           servicer.CancelFaceEnrollment,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CancelFaceEnrollmentRequest.FromString,
@@ -969,6 +1000,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.SetFaceToEnroll,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetFaceToEnrollRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetFaceToEnrollResponse.SerializeToString,
+      ),
+      'EnrollFace': grpc.unary_unary_rpc_method_handler(
+          servicer.EnrollFace,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.EnrollFaceRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.EnrollFaceResponse.SerializeToString,
       ),
       'EnableMarkerDetection': grpc.unary_unary_rpc_method_handler(
           servicer.EnableMarkerDetection,
@@ -1004,6 +1040,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.CancelActionByIdTag,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CancelActionByIdTagRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CancelActionByIdTagResponse.SerializeToString,
+      ),
+      'CancelBehavior': grpc.unary_unary_rpc_method_handler(
+          servicer.CancelBehavior,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CancelBehaviorRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CancelBehaviorResponse.SerializeToString,
       ),
       'GoToPose': grpc.unary_unary_rpc_method_handler(
           servicer.GoToPose,
@@ -1200,6 +1241,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CaptureSingleImageRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CaptureSingleImageResponse.SerializeToString,
       ),
+      'GetCameraConfig': grpc.unary_unary_rpc_method_handler(
+          servicer.GetCameraConfig,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.CameraConfigRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.CameraConfigResponse.SerializeToString,
+      ),
       'SetEyeColor': grpc.unary_unary_rpc_method_handler(
           servicer.SetEyeColor,
           request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetEyeColorRequest.FromString,
@@ -1209,6 +1255,11 @@ def add_ExternalInterfaceServicer_to_server(servicer, server):
           servicer.NavMapFeed,
           request_deserializer=anki__vector_dot_messaging_dot_nav__map__pb2.NavMapFeedRequest.FromString,
           response_serializer=anki__vector_dot_messaging_dot_nav__map__pb2.NavMapFeedResponse.SerializeToString,
+      ),
+      'SetCameraSettings': grpc.unary_unary_rpc_method_handler(
+          servicer.SetCameraSettings,
+          request_deserializer=anki__vector_dot_messaging_dot_messages__pb2.SetCameraSettingsRequest.FromString,
+          response_serializer=anki__vector_dot_messaging_dot_messages__pb2.SetCameraSettingsResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

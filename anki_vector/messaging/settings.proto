@@ -18,4 +18,159 @@ syntax = "proto3";
 
 package Anki.Vector.external_interface;
 
+import "anki_vector/messaging/response_status.proto";
 
+// Updated by wayne@codaris.com
+message RobotSettingsConfig {
+    bool clock_24_hour = 1;
+    EyeColor eye_color = 2;
+    string default_location = 3;
+    bool dist_is_metric = 4;
+    string locale = 5;
+    Volume master_volume = 6;
+    bool temp_is_fahrenheit = 7;
+    string time_zone = 8;
+    ButtonWakeWord button_wakeword = 9;
+}
+
+
+message AccountSettingsConfig {
+    oneof oneof_data_collection {
+        bool data_collection = 1;
+    }
+    
+    oneof oneof_app_locale {
+        string app_locale = 2;
+    }
+}
+
+message UserEntitlementsConfig {
+    oneof oneof_kickstarter_eyes {
+        bool kickstarter_eyes = 1;
+    }
+}
+
+message Jdoc {
+    uint64 doc_version = 1;
+    uint64 fmt_version = 2;
+    string client_metadata = 3;
+    string json_doc = 4;
+}
+
+message NamedJdoc {
+    JdocType jdoc_type = 1;
+    Jdoc doc = 2;
+}
+
+message PullJdocsRequest {
+    repeated JdocType jdoc_types = 1;
+}
+
+message PullJdocsResponse {
+    ResponseStatus status = 1;
+    repeated NamedJdoc named_jdocs = 2;
+}
+
+message UpdateSettingsRequest {
+    RobotSettingsConfig settings = 1;
+}
+
+message UpdateSettingsResponse {
+    ResponseStatus status = 1;
+    ResultCode code = 2;
+    Jdoc doc = 3;
+}
+
+message UpdateAccountSettingsRequest {
+    AccountSettingsConfig account_settings = 1;
+}
+
+message UpdateAccountSettingsResponse {
+    ResponseStatus status = 1;
+    ResultCode code = 2;
+    Jdoc doc = 3;
+}
+
+message UpdateUserEntitlementsRequest {
+    UserEntitlementsConfig user_entitlements = 1;
+}
+
+message UpdateUserEntitlementsResponse {
+    ResponseStatus status = 1;
+    ResultCode code = 2;
+    Jdoc doc = 3;
+}
+
+message JdocsChanged {
+    repeated JdocType jdoc_types = 1;
+}
+
+enum ApiVersion {
+    INVALID = 0;
+    LATEST = 1;
+}
+
+enum Volume {
+    MUTE = 0;
+    LOW = 1;
+    MEDIUM_LOW = 2;
+    MEDIUM = 3;
+    MEDIUM_HIGH = 4;
+    HIGH = 5;
+}
+
+enum JdocType {
+    ROBOT_SETTINGS = 0;
+    ROBOT_LIFETIME_STATS = 1;
+    ACCOUNT_SETTINGS = 2;
+    USER_ENTITLEMENTS = 3;
+}
+
+enum JdocResolveMethod {
+    PUSH_TO_CLOUD = 0;
+    PULL_FROM_CLOUD = 1;
+}
+
+// RobotSetting enum values are not in all caps for historical reasons.
+// Changing that now would involve a format migration because we're now
+// saving robot settings jdocs in the cloud.
+enum RobotSetting {
+    clock_24_hour = 0;
+    eye_color = 1;
+    default_location = 2;
+    dist_is_metric = 3;
+    locale = 4;
+    master_volume = 5;
+    temp_is_fahrenheit = 6;
+    time_zone = 7;
+    button_wakeword = 8;
+}
+
+enum EyeColor {
+    TIP_OVER_TEAL = 0;
+    OVERFIT_ORANGE = 1;
+    UNCANNY_YELLOW = 2;
+    NON_LINEAR_LIME = 3;
+    SINGULARITY_SAPPHIRE = 4;
+    FALSE_POSITIVE_PURPLE = 5;
+    CONFUSION_MATRIX_GREEN = 6;
+}
+
+enum ButtonWakeWord {
+    BUTTON_WAKEWORD_HEY_VECTOR = 0;
+    BUTTON_WAKEWORD_ALEXA = 1;
+}
+
+enum AccountSetting {
+    DATA_COLLECTION = 0;
+    APP_LOCALE = 1;
+}
+
+enum UserEntitlement {
+    KICKSTARTER_EYES = 0;
+}
+
+enum ResultCode {
+    SETTINGS_ACCEPTED = 0;
+    ERROR_UPDATE_IN_PROGRESS = 1;
+}

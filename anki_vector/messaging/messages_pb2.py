@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='anki_vector/messaging/messages.proto',
   package='Anki.Vector.external_interface',
   syntax='proto3',
-  serialized_pb=_b('\n$anki_vector/messaging/messages.proto\x12\x1e\x41nki.Vector.external_interface\x1a+anki_vector/messaging/response_status.proto\x1a&anki_vector/messaging/extensions.proto\"\x0f\n\rKeepAlivePing\" \n\x10\x41nimationTrigger\x12\x0c\n\x04name\x18\x01 \x01(\t\"\x19\n\tAnimation\x12\x0c\n\x04name\x18\x01 \x01(\t\"|\n\x12\x44riveWheelsRequest\x12\x17\n\x0fleft_wheel_mmps\x18\x01 \x01(\x02\x12\x18\n\x10right_wheel_mmps\x18\x02 \x01(\x02\x12\x18\n\x10left_wheel_mmps2\x18\x03 \x01(\x02\x12\x19\n\x11right_wheel_mmps2\x18\x04 \x01(\x02\"U\n\x13\x44riveWheelsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\",\n\x0fMoveHeadRequest\x12\x19\n\x11speed_rad_per_sec\x18\x01 \x01(\x02\"R\n\x10MoveHeadResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\",\n\x0fMoveLiftRequest\x12\x19\n\x11speed_rad_per_sec\x18\x01 \x01(\x02\"R\n\x10MoveLiftResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x16\n\x14StopAllMotorsRequest\"W\n\x15StopAllMotorsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\xe1\x01\n\x1bPlayAnimationTriggerRequest\x12K\n\x11\x61nimation_trigger\x18\x01 \x01(\x0b\x32\x30.Anki.Vector.external_interface.AnimationTrigger\x12\r\n\x05loops\x18\x02 \x01(\r\x12\x15\n\ruse_lift_safe\x18\x03 \x01(\x08\x12\x19\n\x11ignore_body_track\x18\x04 \x01(\x08\x12\x19\n\x11ignore_head_track\x18\x05 \x01(\x08\x12\x19\n\x11ignore_lift_track\x18\x06 \x01(\x08\"\xb4\x01\n\x14PlayAnimationRequest\x12<\n\tanimation\x18\x01 \x01(\x0b\x32).Anki.Vector.external_interface.Animation\x12\r\n\x05loops\x18\x02 \x01(\r\x12\x19\n\x11ignore_body_track\x18\x03 \x01(\x08\x12\x19\n\x11ignore_head_track\x18\x04 \x01(\x08\x12\x19\n\x11ignore_lift_track\x18\x05 \x01(\x08\"\xd6\x01\n\x15PlayAnimationResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12?\n\x06result\x18\x02 \x01(\x0e\x32/.Anki.Vector.external_interface.BehaviorResults\x12<\n\tanimation\x18\x03 \x01(\x0b\x32).Anki.Vector.external_interface.Animation\"\x17\n\x15ListAnimationsRequest\"\x9c\x01\n\x16ListAnimationsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x42\n\x0f\x61nimation_names\x18\x02 \x03(\x0b\x32).Anki.Vector.external_interface.Animation\"\x1e\n\x1cListAnimationTriggersRequest\"\xb2\x01\n\x1dListAnimationTriggersResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12Q\n\x17\x61nimation_trigger_names\x18\x02 \x03(\x0b\x32\x30.Anki.Vector.external_interface.AnimationTrigger\"_\n\x1a\x44isplayFaceImageRGBRequest\x12\x11\n\tface_data\x18\x01 \x01(\x0c\x12\x13\n\x0b\x64uration_ms\x18\x02 \x01(\r\x12\x19\n\x11interrupt_running\x18\x03 \x01(\x08\"]\n\x1b\x44isplayFaceImageRGBResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x1b\n\x19MeetVictorFaceScanStarted\"\x1c\n\x1aMeetVictorFaceScanComplete\"\xbf\x02\n\x06Status\x12\x62\n\x1dmeet_victor_face_scan_started\x18\x02 \x01(\x0b\x32\x39.Anki.Vector.external_interface.MeetVictorFaceScanStartedH\x00\x12\x64\n\x1emeet_victor_face_scan_complete\x18\x03 \x01(\x0b\x32:.Anki.Vector.external_interface.MeetVictorFaceScanCompleteH\x00\x12\\\n\x19\x66\x61\x63\x65_enrollment_completed\x18\x04 \x01(\x0b\x32\x37.Anki.Vector.external_interface.FaceEnrollmentCompletedH\x00\x42\r\n\x0bstatus_type\"\xac\x01\n\x08WakeWord\x12H\n\x0fwake_word_begin\x18\x01 \x01(\x0b\x32-.Anki.Vector.external_interface.WakeWordBeginH\x00\x12\x44\n\rwake_word_end\x18\x02 \x01(\x0b\x32+.Anki.Vector.external_interface.WakeWordEndH\x00\x42\x10\n\x0ewake_word_type\"b\n\x11TimeStampedStatus\x12\x36\n\x06status\x18\x01 \x01(\x0b\x32&.Anki.Vector.external_interface.Status\x12\x15\n\rtimestamp_utc\x18\x02 \x01(\r\"p\n\nPoseStruct\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x12\t\n\x01z\x18\x03 \x01(\x02\x12\n\n\x02q0\x18\x04 \x01(\x02\x12\n\n\x02q1\x18\x05 \x01(\x02\x12\n\n\x02q2\x18\x06 \x01(\x02\x12\n\n\x02q3\x18\x07 \x01(\x02\x12\x11\n\torigin_id\x18\x08 \x01(\r\",\n\tAccelData\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x12\t\n\x01z\x18\x03 \x01(\x02\"+\n\x08GyroData\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x12\t\n\x01z\x18\x03 \x01(\x02\"{\n\x08ProxData\x12\x13\n\x0b\x64istance_mm\x18\x01 \x01(\r\x12\x16\n\x0esignal_quality\x18\x02 \x01(\x02\x12\x14\n\x0cunobstructed\x18\x03 \x01(\x08\x12\x14\n\x0c\x66ound_object\x18\x04 \x01(\x08\x12\x16\n\x0eis_lift_in_fov\x18\x05 \x01(\x08\">\n\tTouchData\x12\x17\n\x0fraw_touch_value\x18\x01 \x01(\r\x12\x18\n\x10is_being_touched\x18\x02 \x01(\x08\"\x82\x05\n\nRobotState\x12\x38\n\x04pose\x18\x01 \x01(\x0b\x32*.Anki.Vector.external_interface.PoseStruct\x12\x16\n\x0epose_angle_rad\x18\x02 \x01(\x02\x12\x16\n\x0epose_pitch_rad\x18\x03 \x01(\x02\x12\x1d\n\x15left_wheel_speed_mmps\x18\x04 \x01(\x02\x12\x1e\n\x16right_wheel_speed_mmps\x18\x05 \x01(\x02\x12\x16\n\x0ehead_angle_rad\x18\x06 \x01(\x02\x12\x16\n\x0elift_height_mm\x18\x07 \x01(\x02\x12\x38\n\x05\x61\x63\x63\x65l\x18\x08 \x01(\x0b\x32).Anki.Vector.external_interface.AccelData\x12\x36\n\x04gyro\x18\t \x01(\x0b\x32(.Anki.Vector.external_interface.GyroData\x12\x1a\n\x12\x63\x61rrying_object_id\x18\n \x01(\x05\x12!\n\x19\x63\x61rrying_object_on_top_id\x18\x0b \x01(\x05\x12\x1f\n\x17head_tracking_object_id\x18\x0c \x01(\x05\x12\x1e\n\x16localized_to_object_id\x18\r \x01(\x05\x12\x1d\n\x15last_image_time_stamp\x18\x0e \x01(\r\x12\x0e\n\x06status\x18\x0f \x01(\r\x12;\n\tprox_data\x18\x10 \x01(\x0b\x32(.Anki.Vector.external_interface.ProxData\x12=\n\ntouch_data\x18\x11 \x01(\x0b\x32).Anki.Vector.external_interface.TouchData\"!\n\tCladPoint\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\"Q\n\x08\x43ladRect\x12\x12\n\nx_top_left\x18\x01 \x01(\x02\x12\x12\n\ny_top_left\x18\x02 \x01(\x02\x12\r\n\x05width\x18\x03 \x01(\x02\x12\x0e\n\x06height\x18\x04 \x01(\x02\"\x8a\x04\n\x11RobotObservedFace\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x01 \x01(\x05\x12\x11\n\ttimestamp\x18\x02 \x01(\r\x12\x38\n\x04pose\x18\x03 \x01(\x0b\x32*.Anki.Vector.external_interface.PoseStruct\x12:\n\x08img_rect\x18\x04 \x01(\x0b\x32(.Anki.Vector.external_interface.CladRect\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x44\n\nexpression\x18\x06 \x01(\x0e\x32\x30.Anki.Vector.external_interface.FacialExpression\x12\x19\n\x11\x65xpression_values\x18\x07 \x03(\r\x12;\n\x08left_eye\x18\x08 \x03(\x0b\x32).Anki.Vector.external_interface.CladPoint\x12<\n\tright_eye\x18\t \x03(\x0b\x32).Anki.Vector.external_interface.CladPoint\x12\x37\n\x04nose\x18\n \x03(\x0b\x32).Anki.Vector.external_interface.CladPoint\x12\x38\n\x05mouth\x18\x0b \x03(\x0b\x32).Anki.Vector.external_interface.CladPoint\"<\n\x1aRobotChangedObservedFaceID\x12\x0e\n\x06old_id\x18\x01 \x01(\x05\x12\x0e\n\x06new_id\x18\x02 \x01(\x05\"~\n\x17\x46\x61\x63\x65\x45nrollmentCompleted\x12\x44\n\x06result\x18\x01 \x01(\x0e\x32\x34.Anki.Vector.external_interface.FaceEnrollmentResult\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x02 \x01(\x05\x12\x0c\n\x04name\x18\x03 \x01(\t\"\x1d\n\x1b\x43\x61ncelFaceEnrollmentRequest\"^\n\x1c\x43\x61ncelFaceEnrollmentResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x1d\n\x1bRequestEnrolledNamesRequest\"\xc2\x01\n\x0fLoadedKnownFace\x12$\n\x1cseconds_since_first_enrolled\x18\x01 \x01(\x03\x12\"\n\x1aseconds_since_last_updated\x18\x02 \x01(\x03\x12\x1f\n\x17seconds_since_last_seen\x18\x03 \x01(\x03\x12%\n\x1dlast_seen_seconds_since_epoch\x18\x04 \x01(\x03\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x05 \x01(\x05\x12\x0c\n\x04name\x18\x06 \x01(\t\"9\n\x18RobotRenamedEnrolledFace\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\"\x9e\x01\n\x1cRequestEnrolledNamesResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12>\n\x05\x66\x61\x63\x65s\x18\x02 \x03(\x0b\x32/.Anki.Vector.external_interface.LoadedKnownFace\"T\n\x1dUpdateEnrolledFaceByIDRequest\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x01 \x01(\x05\x12\x10\n\x08old_name\x18\x02 \x01(\t\x12\x10\n\x08new_name\x18\x03 \x01(\t\"`\n\x1eUpdateEnrolledFaceByIDResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"/\n\x1c\x45raseEnrolledFaceByIDRequest\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x01 \x01(\x05\"_\n\x1d\x45raseEnrolledFaceByIDResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x1e\n\x1c\x45raseAllEnrolledFacesRequest\"_\n\x1d\x45raseAllEnrolledFacesResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x88\x01\n\x16SetFaceToEnrollRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x13\n\x0bobserved_id\x18\x02 \x01(\x05\x12\x0f\n\x07save_id\x18\x03 \x01(\x05\x12\x15\n\rsave_to_robot\x18\x04 \x01(\x08\x12\x10\n\x08say_name\x18\x05 \x01(\x08\x12\x11\n\tuse_music\x18\x06 \x01(\x08\"Y\n\x17SetFaceToEnrollResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x18\n\x16\x44riveOffChargerRequest\"\x9a\x01\n\x17\x44riveOffChargerResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12?\n\x06result\x18\x02 \x01(\x0e\x32/.Anki.Vector.external_interface.BehaviorResults\"\x17\n\x15\x44riveOnChargerRequest\"\x99\x01\n\x16\x44riveOnChargerResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12?\n\x06result\x18\x02 \x01(\x0e\x32/.Anki.Vector.external_interface.BehaviorResults\"\x12\n\x10\x46indFacesRequest\"\x94\x01\n\x11\x46indFacesResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12?\n\x06result\x18\x02 \x01(\x0e\x32/.Anki.Vector.external_interface.BehaviorResults\"\x1a\n\x18LookAroundInPlaceRequest\"\x9c\x01\n\x19LookAroundInPlaceResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12?\n\x06result\x18\x02 \x01(\x0e\x32/.Anki.Vector.external_interface.BehaviorResults\"\x12\n\x10RollBlockRequest\"\x94\x01\n\x11RollBlockResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12?\n\x06result\x18\x02 \x01(\x0e\x32/.Anki.Vector.external_interface.BehaviorResults\"\x0f\n\rWakeWordBegin\"8\n\x0bWakeWordEnd\x12\x14\n\x0cintent_heard\x18\x01 \x01(\x08\x12\x13\n\x0bintent_json\x18\x02 \x01(\t\"2\n\nUserIntent\x12\x11\n\tintent_id\x18\x01 \x01(\r\x12\x11\n\tjson_data\x18\x02 \x01(\t\"n\n\tPhotoInfo\x12\x10\n\x08photo_id\x18\x01 \x01(\r\x12\x15\n\rtimestamp_utc\x18\x02 \x01(\r\x12\x1b\n\x13photo_copied_to_app\x18\x03 \x01(\x08\x12\x1b\n\x13thumb_copied_to_app\x18\x04 \x01(\x08\"\x13\n\x11PhotosInfoRequest\"\x94\x01\n\x12PhotosInfoResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12>\n\x0bphoto_infos\x18\x02 \x03(\x0b\x32).Anki.Vector.external_interface.PhotoInfo\" \n\x0cPhotoRequest\x12\x10\n\x08photo_id\x18\x01 \x01(\r\"6\n\x10PhotoPathMessage\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x11\n\tfull_path\x18\x02 \x01(\t\"o\n\rPhotoResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x0f\n\x07success\x18\x02 \x01(\x08\x12\r\n\x05image\x18\x03 \x01(\x0c\"$\n\x10ThumbnailRequest\x12\x10\n\x08photo_id\x18\x01 \x01(\r\":\n\x14ThumbnailPathMessage\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x11\n\tfull_path\x18\x02 \x01(\t\"s\n\x11ThumbnailResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x0f\n\x07success\x18\x02 \x01(\x08\x12\r\n\x05image\x18\x03 \x01(\x0c\"&\n\x12\x44\x65letePhotoRequest\x12\x10\n\x08photo_id\x18\x01 \x01(\r\"f\n\x13\x44\x65letePhotoResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x0f\n\x07success\x18\x02 \x01(\x08\"\x1e\n\nPhotoTaken\x12\x10\n\x08photo_id\x18\x01 \x01(\r\"\xc1\x02\n\x11PathMotionProfile\x12\x12\n\nspeed_mmps\x18\x01 \x01(\x02\x12\x13\n\x0b\x61\x63\x63\x65l_mmps2\x18\x02 \x01(\x02\x12\x13\n\x0b\x64\x65\x63\x65l_mmps2\x18\x03 \x01(\x02\x12$\n\x1cpoint_turn_speed_rad_per_sec\x18\x04 \x01(\x02\x12%\n\x1dpoint_turn_accel_rad_per_sec2\x18\x05 \x01(\x02\x12%\n\x1dpoint_turn_decel_rad_per_sec2\x18\x06 \x01(\x02\x12\x17\n\x0f\x64ock_speed_mmps\x18\x07 \x01(\x02\x12\x18\n\x10\x64ock_accel_mmps2\x18\x08 \x01(\x02\x12\x18\n\x10\x64ock_decel_mmps2\x18\t \x01(\x02\x12\x1a\n\x12reverse_speed_mmps\x18\n \x01(\x02\x12\x11\n\tis_custom\x18\x0b \x01(\x08\"\xf8\x0c\n\x0c\x41\x63tionResult\x12K\n\x04\x63ode\x18\x01 \x01(\x0e\x32=.Anki.Vector.external_interface.ActionResult.ActionResultCode\"\x9a\x0c\n\x10\x41\x63tionResultCode\x12\x19\n\x15\x41\x43TION_RESULT_SUCCESS\x10\x00\x12\x1c\n\x15\x41\x43TION_RESULT_RUNNING\x10\x80\x80\x80\x08\x12,\n%ACTION_RESULT_CANCELLED_WHILE_RUNNING\x10\x80\x80\x80\x10\x12\x12\n\x0bNOT_STARTED\x10\x81\x80\x80\x10\x12\x0c\n\x05\x41\x42ORT\x10\x80\x80\x80\x18\x12\x13\n\x0c\x41NIM_ABORTED\x10\x81\x80\x80\x18\x12\x11\n\nBAD_MARKER\x10\x82\x80\x80\x18\x12\x16\n\x0f\x42\x41\x44_MESSAGE_TAG\x10\x83\x80\x80\x18\x12\x11\n\nBAD_OBJECT\x10\x84\x80\x80\x18\x12\x0f\n\x08\x42\x41\x44_POSE\x10\x85\x80\x80\x18\x12\x0e\n\x07\x42\x41\x44_TAG\x10\x86\x80\x80\x18\x12\x1e\n\x17\x43HARGER_UNPLUGGED_ABORT\x10\x87\x80\x80\x18\x12!\n\x1a\x43LIFF_ALIGN_FAILED_TIMEOUT\x10\x88\x80\x80\x18\x12$\n\x1d\x43LIFF_ALIGN_FAILED_NO_TURNING\x10\x89\x80\x80\x18\x12&\n\x1f\x43LIFF_ALIGN_FAILED_OVER_TURNING\x10\x8a\x80\x80\x18\x12\"\n\x1b\x43LIFF_ALIGN_FAILED_NO_WHITE\x10\x8b\x80\x80\x18\x12!\n\x1a\x43LIFF_ALIGN_FAILED_STOPPED\x10\x8c\x80\x80\x18\x12!\n\x1a\x46\x41ILED_SETTING_CALIBRATION\x10\x8d\x80\x80\x18\x12(\n!FOLLOWING_PATH_BUT_NOT_TRAVERSING\x10\x8e\x80\x80\x18\x12\x12\n\x0bINTERRUPTED\x10\x8f\x80\x80\x18\x12\x1f\n\x18INVALID_OFF_TREADS_STATE\x10\x90\x80\x80\x18\x12\x19\n\x12MISMATCHED_UP_AXIS\x10\x91\x80\x80\x18\x12\x13\n\x0cNO_ANIM_NAME\x10\x92\x80\x80\x18\x12\x16\n\x0fNO_DISTANCE_SET\x10\x93\x80\x80\x18\x12\x0e\n\x07NO_FACE\x10\x94\x80\x80\x18\x12\x12\n\x0bNO_GOAL_SET\x10\x95\x80\x80\x18\x12\x19\n\x12NO_PREACTION_POSES\x10\x96\x80\x80\x18\x12 \n\x19NOT_CARRYING_OBJECT_ABORT\x10\x97\x80\x80\x18\x12\x1b\n\x14NOT_ON_CHARGER_ABORT\x10\x98\x80\x80\x18\x12\x15\n\x0eNULL_SUBACTION\x10\x99\x80\x80\x18\x12!\n\x1aPATH_PLANNING_FAILED_ABORT\x10\x9a\x80\x80\x18\x12(\n!PICKUP_OBJECT_UNEXPECTEDLY_MOVING\x10\x9b\x80\x80\x18\x12#\n\x1cSEND_MESSAGE_TO_ROBOT_FAILED\x10\x9c\x80\x80\x18\x12\x1c\n\x15STILL_CARRYING_OBJECT\x10\x9d\x80\x80\x18\x12\x0e\n\x07TIMEOUT\x10\x9e\x80\x80\x18\x12\x14\n\rTRACKS_LOCKED\x10\x9f\x80\x80\x18\x12\x1d\n\x16UNEXPECTED_DOCK_ACTION\x10\xa0\x80\x80\x18\x12\x18\n\x11UNKNOWN_TOOL_CODE\x10\xa1\x80\x80\x18\x12\x1c\n\x15UPDATE_DERIVED_FAILED\x10\xa2\x80\x80\x18\x12 \n\x19VISUAL_OBSERVATION_FAILED\x10\xa3\x80\x80\x18\x12 \n\x19SHOULDNT_DRIVE_ON_CHARGER\x10\xa4\x80\x80\x18\x12\x0c\n\x05RETRY\x10\x80\x80\x80 \x12#\n\x1c\x44ID_NOT_REACH_PREACTION_POSE\x10\x81\x80\x80 \x12\x1d\n\x16\x46\x41ILED_TRAVERSING_PATH\x10\x82\x80\x80 \x12!\n\x1aLAST_PICK_AND_PLACE_FAILED\x10\x83\x80\x80 \x12$\n\x1dMOTOR_STOPPED_MAKING_PROGRESS\x10\x84\x80\x80 \x12 \n\x19NOT_CARRYING_OBJECT_RETRY\x10\x85\x80\x80 \x12\x1b\n\x14NOT_ON_CHARGER_RETRY\x10\x86\x80\x80 \x12!\n\x1aPATH_PLANNING_FAILED_RETRY\x10\x87\x80\x80 \x12\x1e\n\x17PLACEMENT_GOAL_NOT_FREE\x10\x88\x80\x80 \x12,\n%PICKUP_OBJECT_UNEXPECTEDLY_NOT_MOVING\x10\x89\x80\x80 \x12\x17\n\x10STILL_ON_CHARGER\x10\x8a\x80\x80 \x12\x1d\n\x16UNEXPECTED_PITCH_ANGLE\x10\x8b\x80\x80 \",\n\x1a\x43\x61ncelActionByIdTagRequest\x12\x0e\n\x06id_tag\x18\x01 \x01(\r\"]\n\x1b\x43\x61ncelActionByIdTagResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\xa7\x01\n\x0fGoToPoseRequest\x12\x0c\n\x04x_mm\x18\x01 \x01(\x02\x12\x0c\n\x04y_mm\x18\x02 \x01(\x02\x12\x0b\n\x03rad\x18\x03 \x01(\x02\x12\x46\n\x0bmotion_prof\x18\x04 \x01(\x0b\x32\x31.Anki.Vector.external_interface.PathMotionProfile\x12\x0e\n\x06id_tag\x18\x05 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x06 \x01(\x05\"\x90\x01\n\x10GoToPoseResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\xd0\x02\n\x13\x44ockWithCubeRequest\x12\x11\n\tobject_id\x18\x01 \x01(\x05\x12\x1f\n\x17\x64istance_from_marker_mm\x18\x02 \x01(\x02\x12\x1a\n\x12\x61pproach_angle_rad\x18\x03 \x01(\x02\x12\x45\n\x0e\x61lignment_type\x18\x04 \x01(\x0e\x32-.Anki.Vector.external_interface.AlignmentType\x12\x1a\n\x12use_approach_angle\x18\x05 \x01(\x08\x12\x19\n\x11use_pre_dock_pose\x18\x06 \x01(\x08\x12\x46\n\x0bmotion_prof\x18\x07 \x01(\x0b\x32\x31.Anki.Vector.external_interface.PathMotionProfile\x12\x0e\n\x06id_tag\x18\x08 \x01(\x05\x12\x13\n\x0bnum_retries\x18\t \x01(\x05\"\x94\x01\n\x14\x44ockWithCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\x7f\n\x14\x44riveStraightRequest\x12\x12\n\nspeed_mmps\x18\x01 \x01(\x02\x12\x0f\n\x07\x64ist_mm\x18\x02 \x01(\x02\x12\x1d\n\x15should_play_animation\x18\x03 \x01(\x08\x12\x0e\n\x06id_tag\x18\x04 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x05 \x01(\x05\"\x95\x01\n\x15\x44riveStraightResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\xa9\x01\n\x12TurnInPlaceRequest\x12\x11\n\tangle_rad\x18\x01 \x01(\x02\x12\x19\n\x11speed_rad_per_sec\x18\x02 \x01(\x02\x12\x1a\n\x12\x61\x63\x63\x65l_rad_per_sec2\x18\x03 \x01(\x02\x12\x0f\n\x07tol_rad\x18\x04 \x01(\x02\x12\x13\n\x0bis_absolute\x18\x05 \x01(\r\x12\x0e\n\x06id_tag\x18\x06 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x07 \x01(\x05\"\x93\x01\n\x13TurnInPlaceResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\x9e\x01\n\x13SetHeadAngleRequest\x12\x11\n\tangle_rad\x18\x01 \x01(\x02\x12\x1d\n\x15max_speed_rad_per_sec\x18\x02 \x01(\x02\x12\x1a\n\x12\x61\x63\x63\x65l_rad_per_sec2\x18\x03 \x01(\x02\x12\x14\n\x0c\x64uration_sec\x18\x04 \x01(\x02\x12\x0e\n\x06id_tag\x18\x05 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x06 \x01(\x05\"\x94\x01\n\x14SetHeadAngleResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\x9f\x01\n\x14SetLiftHeightRequest\x12\x11\n\theight_mm\x18\x01 \x01(\x02\x12\x1d\n\x15max_speed_rad_per_sec\x18\x02 \x01(\x02\x12\x1a\n\x12\x61\x63\x63\x65l_rad_per_sec2\x18\x03 \x01(\x02\x12\x14\n\x0c\x64uration_sec\x18\x04 \x01(\x02\x12\x0e\n\x06id_tag\x18\x05 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x06 \x01(\x05\"\x95\x01\n\x15SetLiftHeightResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"j\n\x16TurnTowardsFaceRequest\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x01 \x01(\x05\x12\x1a\n\x12max_turn_angle_rad\x18\x02 \x01(\x02\x12\x0e\n\x06id_tag\x18\x03 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x04 \x01(\x05\"\x97\x01\n\x17TurnTowardsFaceResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\xd6\x01\n\x11GoToObjectRequest\x12\x11\n\tobject_id\x18\x01 \x01(\x05\x12\x46\n\x0bmotion_prof\x18\x02 \x01(\x0b\x32\x31.Anki.Vector.external_interface.PathMotionProfile\x12&\n\x1e\x64istance_from_object_origin_mm\x18\x03 \x01(\x02\x12\x19\n\x11use_pre_dock_pose\x18\x04 \x01(\x08\x12\x0e\n\x06id_tag\x18\x05 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x06 \x01(\x05\"\x92\x01\n\x12GoToObjectResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\xe6\x01\n\x11RollObjectRequest\x12\x11\n\tobject_id\x18\x01 \x01(\x05\x12\x46\n\x0bmotion_prof\x18\x02 \x01(\x0b\x32\x31.Anki.Vector.external_interface.PathMotionProfile\x12\x1a\n\x12\x61pproach_angle_rad\x18\x03 \x01(\x02\x12\x1a\n\x12use_approach_angle\x18\x04 \x01(\x08\x12\x19\n\x11use_pre_dock_pose\x18\x05 \x01(\x08\x12\x0e\n\x06id_tag\x18\x06 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x07 \x01(\x05\"\x92\x01\n\x12RollObjectResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\xe7\x01\n\x12PopAWheelieRequest\x12\x11\n\tobject_id\x18\x01 \x01(\x05\x12\x46\n\x0bmotion_prof\x18\x02 \x01(\x0b\x32\x31.Anki.Vector.external_interface.PathMotionProfile\x12\x1a\n\x12\x61pproach_angle_rad\x18\x03 \x01(\x02\x12\x1a\n\x12use_approach_angle\x18\x04 \x01(\x08\x12\x19\n\x11use_pre_dock_pose\x18\x05 \x01(\x08\x12\x0e\n\x06id_tag\x18\x06 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x07 \x01(\x05\"\x93\x01\n\x13PopAWheelieResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\xe8\x01\n\x13PickupObjectRequest\x12\x11\n\tobject_id\x18\x01 \x01(\x05\x12\x46\n\x0bmotion_prof\x18\x02 \x01(\x0b\x32\x31.Anki.Vector.external_interface.PathMotionProfile\x12\x1a\n\x12\x61pproach_angle_rad\x18\x03 \x01(\x02\x12\x1a\n\x12use_approach_angle\x18\x04 \x01(\x08\x12\x19\n\x11use_pre_dock_pose\x18\x05 \x01(\x08\x12\x0e\n\x06id_tag\x18\x06 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x07 \x01(\x05\"\x94\x01\n\x14PickupObjectResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"E\n\x1ePlaceObjectOnGroundHereRequest\x12\x0e\n\x06id_tag\x18\x01 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x02 \x01(\x05\"\x9f\x01\n\x1fPlaceObjectOnGroundHereResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\x15\n\x13\x42\x61tteryStateRequest\"\xc9\x02\n\x14\x42\x61tteryStateResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x43\n\rbattery_level\x18\x02 \x01(\x0e\x32,.Anki.Vector.external_interface.BatteryLevel\x12\x15\n\rbattery_volts\x18\x03 \x01(\x02\x12\x13\n\x0bis_charging\x18\x04 \x01(\x08\x12\x1e\n\x16is_on_charger_platform\x18\x05 \x01(\x08\x12\x1d\n\x15suggested_charger_sec\x18\x06 \x01(\x02\x12\x41\n\x0c\x63ube_battery\x18\x07 \x01(\x0b\x32+.Anki.Vector.external_interface.CubeBattery\"\xd3\x01\n\x0b\x43ubeBattery\x12K\n\x05level\x18\x01 \x01(\x0e\x32<.Anki.Vector.external_interface.CubeBattery.CubeBatteryLevel\x12\x12\n\nfactory_id\x18\x02 \x01(\t\x12\x15\n\rbattery_volts\x18\x03 \x01(\x02\x12#\n\x1btime_since_last_reading_sec\x18\x04 \x01(\x02\"\'\n\x10\x43ubeBatteryLevel\x12\x07\n\x03Low\x10\x00\x12\n\n\x06Normal\x10\x01\"\x15\n\x13VersionStateRequest\"\x83\x01\n\x14VersionStateResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x12\n\nos_version\x18\x02 \x01(\t\x12\x17\n\x0f\x65ngine_build_id\x18\x03 \x01(\t\"Q\n\x0eSayTextRequest\x12\x0c\n\x04text\x18\x01 \x01(\t\x12\x18\n\x10use_vector_voice\x18\x02 \x01(\x08\x12\x17\n\x0f\x64uration_scalar\x18\x03 \x01(\x02\"\xf5\x01\n\x0fSayTextResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12M\n\x05state\x18\x02 \x01(\x0e\x32>.Anki.Vector.external_interface.SayTextResponse.UtteranceState\"S\n\x0eUtteranceState\x12\x0b\n\x07INVALID\x10\x00\x12\x0e\n\nGENERATING\x10\x01\x12\t\n\x05READY\x10\x02\x12\x0b\n\x07PLAYING\x10\x03\x12\x0c\n\x08\x46INISHED\x10\x04\"\x9b\x01\n\x0fStimulationInfo\x12\x16\n\x0e\x65motion_events\x18\x01 \x03(\t\x12\r\n\x05value\x18\x02 \x01(\x02\x12\x10\n\x08velocity\x18\x03 \x01(\x02\x12\r\n\x05\x61\x63\x63\x65l\x18\x04 \x01(\x02\x12\x1a\n\x12value_before_event\x18\x05 \x01(\x02\x12\x11\n\tmin_value\x18\x06 \x01(\x02\x12\x11\n\tmax_value\x18\x07 \x01(\x02\"Y\n\x14\x41udioSendModeRequest\x12\x41\n\x04mode\x18\x01 \x01(\x0e\x32\x33.Anki.Vector.external_interface.AudioProcessingMode\"Y\n\x14\x41udioSendModeChanged\x12\x41\n\x04mode\x18\x01 \x01(\x0e\x32\x33.Anki.Vector.external_interface.AudioProcessingMode\"\xe8\x01\n\nAudioChunk\x12\x18\n\x10robot_time_stamp\x18\x01 \x01(\r\x12\x10\n\x08group_id\x18\x02 \x01(\r\x12\x10\n\x08\x63hunk_id\x18\x03 \x01(\r\x12\x19\n\x11\x61udio_chunk_count\x18\x04 \x01(\r\x12\x14\n\x0csignal_power\x18\x05 \x01(\x0c\x12\x1b\n\x13\x64irection_strengths\x18\x06 \x01(\x0c\x12\x18\n\x10source_direction\x18\x07 \x01(\r\x12\x19\n\x11source_confidence\x18\x08 \x01(\r\x12\x19\n\x11noise_floor_power\x18\t \x01(\r\"\x12\n\x10\x41udioFeedRequest\"\xc8\x01\n\x11\x41udioFeedResponse\x12\x18\n\x10robot_time_stamp\x18\x01 \x01(\r\x12\x10\n\x08group_id\x18\x02 \x01(\r\x12\x14\n\x0csignal_power\x18\x03 \x01(\x0c\x12\x1b\n\x13\x64irection_strengths\x18\x04 \x01(\x0c\x12\x18\n\x10source_direction\x18\x05 \x01(\r\x12\x19\n\x11source_confidence\x18\x06 \x01(\r\x12\x19\n\x11noise_floor_power\x18\x07 \x01(\r:\x04\x80\xa6\x1d\x01\"L\n\x1a\x45xternalAudioStreamPrepare\x12\x18\n\x10\x61udio_frame_rate\x18\x01 \x01(\r\x12\x14\n\x0c\x61udio_volume\x18\x02 \x01(\r\"W\n\x18\x45xternalAudioStreamChunk\x12\x1e\n\x16\x61udio_chunk_size_bytes\x18\x01 \x01(\r\x12\x1b\n\x13\x61udio_chunk_samples\x18\x02 \x01(\x0c\"\x1d\n\x1b\x45xternalAudioStreamComplete\"\x1b\n\x19\x45xternalAudioStreamCancel\"\x9e\x03\n\x1a\x45xternalAudioStreamRequest\x12Z\n\x14\x61udio_stream_prepare\x18\x01 \x01(\x0b\x32:.Anki.Vector.external_interface.ExternalAudioStreamPrepareH\x00\x12V\n\x12\x61udio_stream_chunk\x18\x02 \x01(\x0b\x32\x38.Anki.Vector.external_interface.ExternalAudioStreamChunkH\x00\x12\\\n\x15\x61udio_stream_complete\x18\x03 \x01(\x0b\x32;.Anki.Vector.external_interface.ExternalAudioStreamCompleteH\x00\x12X\n\x13\x61udio_stream_cancel\x18\x04 \x01(\x0b\x32\x39.Anki.Vector.external_interface.ExternalAudioStreamCancelH\x00\x42\x14\n\x12\x61udio_request_type\"%\n#ExternalAudioStreamPlaybackComplete\"$\n\"ExternalAudioStreamPlaybackFailure\"\\\n ExternalAudioStreamBufferOverrun\x12\x1a\n\x12\x61udio_samples_sent\x18\x01 \x01(\r\x12\x1c\n\x14\x61udio_samples_played\x18\x02 \x01(\r\"\xf9\x02\n\x1b\x45xternalAudioStreamResponse\x12m\n\x1e\x61udio_stream_playback_complete\x18\x01 \x01(\x0b\x32\x43.Anki.Vector.external_interface.ExternalAudioStreamPlaybackCompleteH\x00\x12g\n\x1b\x61udio_stream_buffer_overrun\x18\x02 \x01(\x0b\x32@.Anki.Vector.external_interface.ExternalAudioStreamBufferOverrunH\x00\x12k\n\x1d\x61udio_stream_playback_failyer\x18\x03 \x01(\x0b\x32\x42.Anki.Vector.external_interface.ExternalAudioStreamPlaybackFailureH\x00\x42\x15\n\x13\x61udio_response_type\"^\n\x13MasterVolumeRequest\x12G\n\x0cvolume_level\x18\x01 \x01(\x0e\x32\x31.Anki.Vector.external_interface.MasterVolumeLevel\"V\n\x14MasterVolumeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\".\n\x1c\x45nableMarkerDetectionRequest\x12\x0e\n\x06\x65nable\x18\x01 \x01(\x08\"_\n\x1d\x45nableMarkerDetectionResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\xb1\x01\n\x1a\x45nableFaceDetectionRequest\x12\x0e\n\x06\x65nable\x18\x01 \x01(\x08\x12\x1e\n\x16\x65nable_smile_detection\x18\x02 \x01(\x08\x12$\n\x1c\x65nable_expression_estimation\x18\x03 \x01(\x08\x12\x1e\n\x16\x65nable_blink_detection\x18\x04 \x01(\x08\x12\x1d\n\x15\x65nable_gaze_detection\x18\x05 \x01(\x08\"]\n\x1b\x45nableFaceDetectionResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\".\n\x1c\x45nableMotionDetectionRequest\x12\x0e\n\x06\x65nable\x18\x01 \x01(\x08\"_\n\x1d\x45nableMotionDetectionResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\")\n\x17\x45nableMirrorModeRequest\x12\x0e\n\x06\x65nable\x18\x01 \x01(\x08\"Z\n\x18\x45nableMirrorModeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x14\n\x12MirrorModeDisabled\"-\n\x1b\x45nableImageStreamingRequest\x12\x0e\n\x06\x65nable\x18\x01 \x01(\x08\"^\n\x1c\x45nableImageStreamingResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\" \n\x1eIsImageStreamingEnabledRequest\"E\n\x1fIsImageStreamingEnabledResponse\x12\"\n\x1ais_image_streaming_enabled\x18\x01 \x01(\x08\"\x19\n\x17VisionModesAutoDisabled\"\xd1\x03\n\nImageChunk\x12\x18\n\x10\x66rame_time_stamp\x18\x01 \x01(\r\x12\x10\n\x08image_id\x18\x02 \x01(\r\x12\r\n\x05width\x18\x03 \x01(\r\x12\x0e\n\x06height\x18\x04 \x01(\r\x12P\n\x0eimage_encoding\x18\x05 \x01(\x0e\x32\x38.Anki.Vector.external_interface.ImageChunk.ImageEncoding\x12\x15\n\rdisplay_index\x18\x06 \x01(\r\x12\x19\n\x11image_chunk_count\x18\x07 \x01(\r\x12\x10\n\x08\x63hunk_id\x18\x08 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\t \x01(\x0c\"\xd3\x01\n\rImageEncoding\x12\x17\n\x13NONE_IMAGE_ENCODING\x10\x00\x12\x0c\n\x08RAW_GRAY\x10\x01\x12\x0b\n\x07RAW_RGB\x10\x02\x12\x08\n\x04YUYV\x10\x03\x12\x0c\n\x08YUV420SP\x10\x04\x12\t\n\x05\x42\x41YER\x10\x05\x12\r\n\tJPEG_GRAY\x10\x06\x12\x0e\n\nJPEG_COLOR\x10\x07\x12\x19\n\x15JPEG_COLOR_HALF_WIDTH\x10\x08\x12\x17\n\x13JPEG_MINIMIZED_GRAY\x10\t\x12\x18\n\x14JPEG_MINIMIZED_COLOR\x10\n\"\x13\n\x11\x43\x61meraFeedRequest\"\xa6\x01\n\x12\x43\x61meraFeedResponse\x12\x18\n\x10\x66rame_time_stamp\x18\x01 \x01(\r\x12\x10\n\x08image_id\x18\x02 \x01(\r\x12P\n\x0eimage_encoding\x18\x03 \x01(\x0e\x32\x38.Anki.Vector.external_interface.ImageChunk.ImageEncoding\x12\x0c\n\x04\x64\x61ta\x18\x04 \x01(\x0c:\x04\x80\xa6\x1d\x01\"\x1b\n\x19\x43\x61ptureSingleImageRequest\"\xe8\x01\n\x1a\x43\x61ptureSingleImageResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x18\n\x10\x66rame_time_stamp\x18\x02 \x01(\r\x12\x10\n\x08image_id\x18\x03 \x01(\r\x12P\n\x0eimage_encoding\x18\x04 \x01(\x0e\x32\x38.Anki.Vector.external_interface.ImageChunk.ImageEncoding\x12\x0c\n\x04\x64\x61ta\x18\x05 \x01(\x0c\"5\n\x12SetEyeColorRequest\x12\x0b\n\x03hue\x18\x01 \x01(\x02\x12\x12\n\nsaturation\x18\x02 \x01(\x02\"U\n\x13SetEyeColorResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x96\x01\n\x18SDKInitializationRequest\x12\x1a\n\x12sdk_module_version\x18\x01 \x01(\t\x12\x16\n\x0epython_version\x18\x02 \x01(\t\x12\x1d\n\x15python_implementation\x18\x03 \x01(\t\x12\x12\n\nos_version\x18\x04 \x01(\t\x12\x13\n\x0b\x63pu_version\x18\x05 \x01(\t\"[\n\x19SDKInitializationResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus*\xdc\x04\n\x0bRobotStatus\x12\x15\n\x11ROBOT_STATUS_NONE\x10\x00\x12\x1a\n\x16ROBOT_STATUS_IS_MOVING\x10\x01\x12\"\n\x1eROBOT_STATUS_IS_CARRYING_BLOCK\x10\x02\x12&\n\"ROBOT_STATUS_IS_PICKING_OR_PLACING\x10\x04\x12\x1d\n\x19ROBOT_STATUS_IS_PICKED_UP\x10\x08\x12\"\n\x1eROBOT_STATUS_IS_BUTTON_PRESSED\x10\x10\x12\x1b\n\x17ROBOT_STATUS_IS_FALLING\x10 \x12\x1d\n\x19ROBOT_STATUS_IS_ANIMATING\x10@\x12\x1c\n\x17ROBOT_STATUS_IS_PATHING\x10\x80\x01\x12\x1d\n\x18ROBOT_STATUS_LIFT_IN_POS\x10\x80\x02\x12\x1d\n\x18ROBOT_STATUS_HEAD_IN_POS\x10\x80\x04\x12!\n\x1cROBOT_STATUS_CALM_POWER_MODE\x10\x80\x08\x12\x1f\n\x1aROBOT_STATUS_IS_ON_CHARGER\x10\x80 \x12\x1d\n\x18ROBOT_STATUS_IS_CHARGING\x10\x80@\x12!\n\x1bROBOT_STATUS_CLIFF_DETECTED\x10\x80\x80\x01\x12$\n\x1eROBOT_STATUS_ARE_WHEELS_MOVING\x10\x80\x80\x02\x12 \n\x1aROBOT_STATUS_IS_BEING_HELD\x10\x80\x80\x04\x12%\n\x1fROBOT_STATUS_IS_MOTION_DETECTED\x10\x80\x80\x08*\xbd\x01\n\x10\x46\x61\x63ialExpression\x12\x16\n\x12\x45XPRESSION_UNKNOWN\x10\x00\x12\x16\n\x12\x45XPRESSION_NEUTRAL\x10\x01\x12\x18\n\x14\x45XPRESSION_HAPPINESS\x10\x02\x12\x17\n\x13\x45XPRESSION_SURPRISE\x10\x03\x12\x14\n\x10\x45XPRESSION_ANGER\x10\x04\x12\x16\n\x12\x45XPRESSION_SADNESS\x10\x05\x12\x14\n\x10\x45XPRESSION_COUNT\x10\x05\x1a\x02\x10\x01*\xcc\x01\n\x14\x46\x61\x63\x65\x45nrollmentResult\x12\x0b\n\x07SUCCESS\x10\x00\x12\x12\n\x0eSAW_WRONG_FACE\x10\x01\x12\x16\n\x12SAW_MULTIPLE_FACES\x10\x02\x12\r\n\tTIMED_OUT\x10\x03\x12\x0f\n\x0bSAVE_FAILED\x10\x04\x12\x0e\n\nINCOMPLETE\x10\x05\x12\r\n\tCANCELLED\x10\x06\x12\x0f\n\x0bNAME_IN_USE\x10\x07\x12\x16\n\x12NAMED_STORAGE_FULL\x10\x08\x12\x13\n\x0fUNKNOWN_FAILURE\x10\t*l\n\x0f\x42\x65haviorResults\x12\x1a\n\x16\x42\x45HAVIOR_INVALID_STATE\x10\x00\x12\x1b\n\x17\x42\x45HAVIOR_COMPLETE_STATE\x10\x01\x12 \n\x1c\x42\x45HAVIOR_WONT_ACTIVATE_STATE\x10\x02*S\n\x12\x41\x63tionTagConstants\x12\x13\n\x0fINVALID_SDK_TAG\x10\x00\x12\x13\n\rFIRST_SDK_TAG\x10\x81\x89z\x12\x13\n\x0cLAST_SDK_TAG\x10\xc0\x8d\xb7\x01*\x9e\x01\n\rAlignmentType\x12\x1a\n\x16\x41LIGNMENT_TYPE_UNKNOWN\x10\x00\x12\x1e\n\x1a\x41LIGNMENT_TYPE_LIFT_FINGER\x10\x01\x12\x1d\n\x19\x41LIGNMENT_TYPE_LIFT_PLATE\x10\x02\x12\x17\n\x13\x41LIGNMENT_TYPE_BODY\x10\x03\x12\x19\n\x15\x41LIGNMENT_TYPE_CUSTOM\x10\x04*s\n\x0c\x42\x61tteryLevel\x12\x19\n\x15\x42\x41TTERY_LEVEL_UNKNOWN\x10\x00\x12\x15\n\x11\x42\x41TTERY_LEVEL_LOW\x10\x01\x12\x19\n\x15\x42\x41TTERY_LEVEL_NOMINAL\x10\x02\x12\x16\n\x12\x42\x41TTERY_LEVEL_FULL\x10\x03*\xcc\x01\n\x0e\x41udioConstants\x12\x18\n\x14\x41UDIO_CONSTANTS_NULL\x10\x00\x12\x1c\n\x18MIC_DETECTION_DIRECTIONS\x10\x0c\x12%\n SAMPLE_COUNTS_PER_ENGINE_MESSAGE\x10\xa0\x01\x12\"\n\x1dSAMPLE_COUNTS_PER_SDK_MESSAGE\x10\xc0\x0c\x12\x1b\n\x16MICROPHONE_SAMPLE_RATE\x10\x89z\x12\x1a\n\x15PROCESSED_SAMPLE_RATE\x10\x80}*\x85\x01\n\x13\x41udioProcessingMode\x12\x11\n\rAUDIO_UNKNOWN\x10\x00\x12\r\n\tAUDIO_OFF\x10\x01\x12\x13\n\x0f\x41UDIO_FAST_MODE\x10\x02\x12\x1a\n\x16\x41UDIO_DIRECTIONAL_MODE\x10\x03\x12\x1b\n\x17\x41UDIO_VOICE_DETECT_MODE\x10\x04*v\n\x11MasterVolumeLevel\x12\x0e\n\nVOLUME_LOW\x10\x00\x12\x15\n\x11VOLUME_MEDIUM_LOW\x10\x01\x12\x11\n\rVOLUME_MEDIUM\x10\x02\x12\x16\n\x12VOLUME_MEDIUM_HIGH\x10\x03\x12\x0f\n\x0bVOLUME_HIGH\x10\x04\x62\x06proto3')
+  serialized_pb=_b('\n$anki_vector/messaging/messages.proto\x12\x1e\x41nki.Vector.external_interface\x1a+anki_vector/messaging/response_status.proto\x1a&anki_vector/messaging/extensions.proto\"\x0f\n\rKeepAlivePing\" \n\x10\x41nimationTrigger\x12\x0c\n\x04name\x18\x01 \x01(\t\"\x19\n\tAnimation\x12\x0c\n\x04name\x18\x01 \x01(\t\"|\n\x12\x44riveWheelsRequest\x12\x17\n\x0fleft_wheel_mmps\x18\x01 \x01(\x02\x12\x18\n\x10right_wheel_mmps\x18\x02 \x01(\x02\x12\x18\n\x10left_wheel_mmps2\x18\x03 \x01(\x02\x12\x19\n\x11right_wheel_mmps2\x18\x04 \x01(\x02\"U\n\x13\x44riveWheelsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\",\n\x0fMoveHeadRequest\x12\x19\n\x11speed_rad_per_sec\x18\x01 \x01(\x02\"R\n\x10MoveHeadResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\",\n\x0fMoveLiftRequest\x12\x19\n\x11speed_rad_per_sec\x18\x01 \x01(\x02\"R\n\x10MoveLiftResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x16\n\x14StopAllMotorsRequest\"W\n\x15StopAllMotorsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\xe1\x01\n\x1bPlayAnimationTriggerRequest\x12K\n\x11\x61nimation_trigger\x18\x01 \x01(\x0b\x32\x30.Anki.Vector.external_interface.AnimationTrigger\x12\r\n\x05loops\x18\x02 \x01(\r\x12\x15\n\ruse_lift_safe\x18\x03 \x01(\x08\x12\x19\n\x11ignore_body_track\x18\x04 \x01(\x08\x12\x19\n\x11ignore_head_track\x18\x05 \x01(\x08\x12\x19\n\x11ignore_lift_track\x18\x06 \x01(\x08\"\xb4\x01\n\x14PlayAnimationRequest\x12<\n\tanimation\x18\x01 \x01(\x0b\x32).Anki.Vector.external_interface.Animation\x12\r\n\x05loops\x18\x02 \x01(\r\x12\x19\n\x11ignore_body_track\x18\x03 \x01(\x08\x12\x19\n\x11ignore_head_track\x18\x04 \x01(\x08\x12\x19\n\x11ignore_lift_track\x18\x05 \x01(\x08\"\xd6\x01\n\x15PlayAnimationResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12?\n\x06result\x18\x02 \x01(\x0e\x32/.Anki.Vector.external_interface.BehaviorResults\x12<\n\tanimation\x18\x03 \x01(\x0b\x32).Anki.Vector.external_interface.Animation\"\x17\n\x15ListAnimationsRequest\"\x9c\x01\n\x16ListAnimationsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x42\n\x0f\x61nimation_names\x18\x02 \x03(\x0b\x32).Anki.Vector.external_interface.Animation\"\x1e\n\x1cListAnimationTriggersRequest\"\xb2\x01\n\x1dListAnimationTriggersResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12Q\n\x17\x61nimation_trigger_names\x18\x02 \x03(\x0b\x32\x30.Anki.Vector.external_interface.AnimationTrigger\"_\n\x1a\x44isplayFaceImageRGBRequest\x12\x11\n\tface_data\x18\x01 \x01(\x0c\x12\x13\n\x0b\x64uration_ms\x18\x02 \x01(\r\x12\x19\n\x11interrupt_running\x18\x03 \x01(\x08\"]\n\x1b\x44isplayFaceImageRGBResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x1b\n\x19MeetVictorFaceScanStarted\"\x1c\n\x1aMeetVictorFaceScanComplete\"\xbf\x02\n\x06Status\x12\x62\n\x1dmeet_victor_face_scan_started\x18\x02 \x01(\x0b\x32\x39.Anki.Vector.external_interface.MeetVictorFaceScanStartedH\x00\x12\x64\n\x1emeet_victor_face_scan_complete\x18\x03 \x01(\x0b\x32:.Anki.Vector.external_interface.MeetVictorFaceScanCompleteH\x00\x12\\\n\x19\x66\x61\x63\x65_enrollment_completed\x18\x04 \x01(\x0b\x32\x37.Anki.Vector.external_interface.FaceEnrollmentCompletedH\x00\x42\r\n\x0bstatus_type\"\xac\x01\n\x08WakeWord\x12H\n\x0fwake_word_begin\x18\x01 \x01(\x0b\x32-.Anki.Vector.external_interface.WakeWordBeginH\x00\x12\x44\n\rwake_word_end\x18\x02 \x01(\x0b\x32+.Anki.Vector.external_interface.WakeWordEndH\x00\x42\x10\n\x0ewake_word_type\"b\n\x11TimeStampedStatus\x12\x36\n\x06status\x18\x01 \x01(\x0b\x32&.Anki.Vector.external_interface.Status\x12\x15\n\rtimestamp_utc\x18\x02 \x01(\r\"p\n\nPoseStruct\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x12\t\n\x01z\x18\x03 \x01(\x02\x12\n\n\x02q0\x18\x04 \x01(\x02\x12\n\n\x02q1\x18\x05 \x01(\x02\x12\n\n\x02q2\x18\x06 \x01(\x02\x12\n\n\x02q3\x18\x07 \x01(\x02\x12\x11\n\torigin_id\x18\x08 \x01(\r\",\n\tAccelData\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x12\t\n\x01z\x18\x03 \x01(\x02\"+\n\x08GyroData\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\x12\t\n\x01z\x18\x03 \x01(\x02\"{\n\x08ProxData\x12\x13\n\x0b\x64istance_mm\x18\x01 \x01(\r\x12\x16\n\x0esignal_quality\x18\x02 \x01(\x02\x12\x14\n\x0cunobstructed\x18\x03 \x01(\x08\x12\x14\n\x0c\x66ound_object\x18\x04 \x01(\x08\x12\x16\n\x0eis_lift_in_fov\x18\x05 \x01(\x08\">\n\tTouchData\x12\x17\n\x0fraw_touch_value\x18\x01 \x01(\r\x12\x18\n\x10is_being_touched\x18\x02 \x01(\x08\"\x82\x05\n\nRobotState\x12\x38\n\x04pose\x18\x01 \x01(\x0b\x32*.Anki.Vector.external_interface.PoseStruct\x12\x16\n\x0epose_angle_rad\x18\x02 \x01(\x02\x12\x16\n\x0epose_pitch_rad\x18\x03 \x01(\x02\x12\x1d\n\x15left_wheel_speed_mmps\x18\x04 \x01(\x02\x12\x1e\n\x16right_wheel_speed_mmps\x18\x05 \x01(\x02\x12\x16\n\x0ehead_angle_rad\x18\x06 \x01(\x02\x12\x16\n\x0elift_height_mm\x18\x07 \x01(\x02\x12\x38\n\x05\x61\x63\x63\x65l\x18\x08 \x01(\x0b\x32).Anki.Vector.external_interface.AccelData\x12\x36\n\x04gyro\x18\t \x01(\x0b\x32(.Anki.Vector.external_interface.GyroData\x12\x1a\n\x12\x63\x61rrying_object_id\x18\n \x01(\x05\x12!\n\x19\x63\x61rrying_object_on_top_id\x18\x0b \x01(\x05\x12\x1f\n\x17head_tracking_object_id\x18\x0c \x01(\x05\x12\x1e\n\x16localized_to_object_id\x18\r \x01(\x05\x12\x1d\n\x15last_image_time_stamp\x18\x0e \x01(\r\x12\x0e\n\x06status\x18\x0f \x01(\r\x12;\n\tprox_data\x18\x10 \x01(\x0b\x32(.Anki.Vector.external_interface.ProxData\x12=\n\ntouch_data\x18\x11 \x01(\x0b\x32).Anki.Vector.external_interface.TouchData\"!\n\tCladPoint\x12\t\n\x01x\x18\x01 \x01(\x02\x12\t\n\x01y\x18\x02 \x01(\x02\"Q\n\x08\x43ladRect\x12\x12\n\nx_top_left\x18\x01 \x01(\x02\x12\x12\n\ny_top_left\x18\x02 \x01(\x02\x12\r\n\x05width\x18\x03 \x01(\x02\x12\x0e\n\x06height\x18\x04 \x01(\x02\"\x93\x03\n\x13RobotObservedMotion\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12\x10\n\x08img_area\x18\x02 \x01(\x02\x12\r\n\x05img_x\x18\x03 \x01(\x05\x12\r\n\x05img_y\x18\x04 \x01(\x05\x12\x13\n\x0bground_area\x18\x05 \x01(\x02\x12\x10\n\x08ground_x\x18\x06 \x01(\x05\x12\x10\n\x08ground_y\x18\x07 \x01(\x05\x12\x14\n\x0ctop_img_area\x18\x08 \x01(\x02\x12\x11\n\ttop_img_x\x18\t \x01(\x05\x12\x11\n\ttop_img_y\x18\n \x01(\x05\x12\x17\n\x0f\x62ottom_img_area\x18\x0b \x01(\x02\x12\x14\n\x0c\x62ottom_img_x\x18\x0c \x01(\x05\x12\x14\n\x0c\x62ottom_img_y\x18\r \x01(\x05\x12\x15\n\rleft_img_area\x18\x0e \x01(\x02\x12\x12\n\nleft_img_x\x18\x0f \x01(\x05\x12\x12\n\nleft_img_y\x18\x10 \x01(\x05\x12\x16\n\x0eright_img_area\x18\x11 \x01(\x02\x12\x13\n\x0bright_img_x\x18\x12 \x01(\x05\x12\x13\n\x0bright_img_y\x18\x13 \x01(\x05\"8\n\x17RobotErasedEnrolledFace\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\"\xc5\x01\n\x12UnexpectedMovement\x12\x11\n\ttimestamp\x18\x01 \x01(\r\x12M\n\rmovement_type\x18\x02 \x01(\x0e\x32\x36.Anki.Vector.external_interface.UnexpectedMovementType\x12M\n\rmovement_side\x18\x03 \x01(\x0e\x32\x36.Anki.Vector.external_interface.UnexpectedMovementSide\"\x8a\x04\n\x11RobotObservedFace\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x01 \x01(\x05\x12\x11\n\ttimestamp\x18\x02 \x01(\r\x12\x38\n\x04pose\x18\x03 \x01(\x0b\x32*.Anki.Vector.external_interface.PoseStruct\x12:\n\x08img_rect\x18\x04 \x01(\x0b\x32(.Anki.Vector.external_interface.CladRect\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x44\n\nexpression\x18\x06 \x01(\x0e\x32\x30.Anki.Vector.external_interface.FacialExpression\x12\x19\n\x11\x65xpression_values\x18\x07 \x03(\r\x12;\n\x08left_eye\x18\x08 \x03(\x0b\x32).Anki.Vector.external_interface.CladPoint\x12<\n\tright_eye\x18\t \x03(\x0b\x32).Anki.Vector.external_interface.CladPoint\x12\x37\n\x04nose\x18\n \x03(\x0b\x32).Anki.Vector.external_interface.CladPoint\x12\x38\n\x05mouth\x18\x0b \x03(\x0b\x32).Anki.Vector.external_interface.CladPoint\"<\n\x1aRobotChangedObservedFaceID\x12\x0e\n\x06old_id\x18\x01 \x01(\x05\x12\x0e\n\x06new_id\x18\x02 \x01(\x05\"~\n\x17\x46\x61\x63\x65\x45nrollmentCompleted\x12\x44\n\x06result\x18\x01 \x01(\x0e\x32\x34.Anki.Vector.external_interface.FaceEnrollmentResult\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x02 \x01(\x05\x12\x0c\n\x04name\x18\x03 \x01(\t\"\x1d\n\x1b\x43\x61ncelFaceEnrollmentRequest\"^\n\x1c\x43\x61ncelFaceEnrollmentResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x1d\n\x1bRequestEnrolledNamesRequest\"\xc2\x01\n\x0fLoadedKnownFace\x12$\n\x1cseconds_since_first_enrolled\x18\x01 \x01(\x03\x12\"\n\x1aseconds_since_last_updated\x18\x02 \x01(\x03\x12\x1f\n\x17seconds_since_last_seen\x18\x03 \x01(\x03\x12%\n\x1dlast_seen_seconds_since_epoch\x18\x04 \x01(\x03\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x05 \x01(\x05\x12\x0c\n\x04name\x18\x06 \x01(\t\"9\n\x18RobotRenamedEnrolledFace\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x01 \x01(\x05\x12\x0c\n\x04name\x18\x02 \x01(\t\"\x9e\x01\n\x1cRequestEnrolledNamesResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12>\n\x05\x66\x61\x63\x65s\x18\x02 \x03(\x0b\x32/.Anki.Vector.external_interface.LoadedKnownFace\"T\n\x1dUpdateEnrolledFaceByIDRequest\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x01 \x01(\x05\x12\x10\n\x08old_name\x18\x02 \x01(\t\x12\x10\n\x08new_name\x18\x03 \x01(\t\"`\n\x1eUpdateEnrolledFaceByIDResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"/\n\x1c\x45raseEnrolledFaceByIDRequest\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x01 \x01(\x05\"_\n\x1d\x45raseEnrolledFaceByIDResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x1e\n\x1c\x45raseAllEnrolledFacesRequest\"_\n\x1d\x45raseAllEnrolledFacesResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x88\x01\n\x16SetFaceToEnrollRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x13\n\x0bobserved_id\x18\x02 \x01(\x05\x12\x0f\n\x07save_id\x18\x03 \x01(\x05\x12\x15\n\rsave_to_robot\x18\x04 \x01(\x08\x12\x10\n\x08say_name\x18\x05 \x01(\x08\x12\x11\n\tuse_music\x18\x06 \x01(\x08\"Y\n\x17SetFaceToEnrollResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x13\n\x11\x45nrollFaceRequest\"\x95\x01\n\x12\x45nrollFaceResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12?\n\x06result\x18\x02 \x01(\x0e\x32/.Anki.Vector.external_interface.BehaviorResults\"\x18\n\x16\x44riveOffChargerRequest\"\x9a\x01\n\x17\x44riveOffChargerResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12?\n\x06result\x18\x02 \x01(\x0e\x32/.Anki.Vector.external_interface.BehaviorResults\"\x17\n\x15\x44riveOnChargerRequest\"\x99\x01\n\x16\x44riveOnChargerResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12?\n\x06result\x18\x02 \x01(\x0e\x32/.Anki.Vector.external_interface.BehaviorResults\"\x12\n\x10\x46indFacesRequest\"\x94\x01\n\x11\x46indFacesResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12?\n\x06result\x18\x02 \x01(\x0e\x32/.Anki.Vector.external_interface.BehaviorResults\"\x1a\n\x18LookAroundInPlaceRequest\"\x9c\x01\n\x19LookAroundInPlaceResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12?\n\x06result\x18\x02 \x01(\x0e\x32/.Anki.Vector.external_interface.BehaviorResults\"\x12\n\x10RollBlockRequest\"\x94\x01\n\x11RollBlockResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12?\n\x06result\x18\x02 \x01(\x0e\x32/.Anki.Vector.external_interface.BehaviorResults\"\x0f\n\rWakeWordBegin\"8\n\x0bWakeWordEnd\x12\x14\n\x0cintent_heard\x18\x01 \x01(\x08\x12\x13\n\x0bintent_json\x18\x02 \x01(\t\"2\n\nUserIntent\x12\x11\n\tintent_id\x18\x01 \x01(\r\x12\x11\n\tjson_data\x18\x02 \x01(\t\"n\n\tPhotoInfo\x12\x10\n\x08photo_id\x18\x01 \x01(\r\x12\x15\n\rtimestamp_utc\x18\x02 \x01(\r\x12\x1b\n\x13photo_copied_to_app\x18\x03 \x01(\x08\x12\x1b\n\x13thumb_copied_to_app\x18\x04 \x01(\x08\"\x13\n\x11PhotosInfoRequest\"\x94\x01\n\x12PhotosInfoResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12>\n\x0bphoto_infos\x18\x02 \x03(\x0b\x32).Anki.Vector.external_interface.PhotoInfo\" \n\x0cPhotoRequest\x12\x10\n\x08photo_id\x18\x01 \x01(\r\"6\n\x10PhotoPathMessage\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x11\n\tfull_path\x18\x02 \x01(\t\"o\n\rPhotoResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x0f\n\x07success\x18\x02 \x01(\x08\x12\r\n\x05image\x18\x03 \x01(\x0c\"$\n\x10ThumbnailRequest\x12\x10\n\x08photo_id\x18\x01 \x01(\r\":\n\x14ThumbnailPathMessage\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x11\n\tfull_path\x18\x02 \x01(\t\"s\n\x11ThumbnailResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x0f\n\x07success\x18\x02 \x01(\x08\x12\r\n\x05image\x18\x03 \x01(\x0c\"&\n\x12\x44\x65letePhotoRequest\x12\x10\n\x08photo_id\x18\x01 \x01(\r\"f\n\x13\x44\x65letePhotoResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x0f\n\x07success\x18\x02 \x01(\x08\"\x1e\n\nPhotoTaken\x12\x10\n\x08photo_id\x18\x01 \x01(\r\"\xc1\x02\n\x11PathMotionProfile\x12\x12\n\nspeed_mmps\x18\x01 \x01(\x02\x12\x13\n\x0b\x61\x63\x63\x65l_mmps2\x18\x02 \x01(\x02\x12\x13\n\x0b\x64\x65\x63\x65l_mmps2\x18\x03 \x01(\x02\x12$\n\x1cpoint_turn_speed_rad_per_sec\x18\x04 \x01(\x02\x12%\n\x1dpoint_turn_accel_rad_per_sec2\x18\x05 \x01(\x02\x12%\n\x1dpoint_turn_decel_rad_per_sec2\x18\x06 \x01(\x02\x12\x17\n\x0f\x64ock_speed_mmps\x18\x07 \x01(\x02\x12\x18\n\x10\x64ock_accel_mmps2\x18\x08 \x01(\x02\x12\x18\n\x10\x64ock_decel_mmps2\x18\t \x01(\x02\x12\x1a\n\x12reverse_speed_mmps\x18\n \x01(\x02\x12\x11\n\tis_custom\x18\x0b \x01(\x08\"\xf8\x0c\n\x0c\x41\x63tionResult\x12K\n\x04\x63ode\x18\x01 \x01(\x0e\x32=.Anki.Vector.external_interface.ActionResult.ActionResultCode\"\x9a\x0c\n\x10\x41\x63tionResultCode\x12\x19\n\x15\x41\x43TION_RESULT_SUCCESS\x10\x00\x12\x1c\n\x15\x41\x43TION_RESULT_RUNNING\x10\x80\x80\x80\x08\x12,\n%ACTION_RESULT_CANCELLED_WHILE_RUNNING\x10\x80\x80\x80\x10\x12\x12\n\x0bNOT_STARTED\x10\x81\x80\x80\x10\x12\x0c\n\x05\x41\x42ORT\x10\x80\x80\x80\x18\x12\x13\n\x0c\x41NIM_ABORTED\x10\x81\x80\x80\x18\x12\x11\n\nBAD_MARKER\x10\x82\x80\x80\x18\x12\x16\n\x0f\x42\x41\x44_MESSAGE_TAG\x10\x83\x80\x80\x18\x12\x11\n\nBAD_OBJECT\x10\x84\x80\x80\x18\x12\x0f\n\x08\x42\x41\x44_POSE\x10\x85\x80\x80\x18\x12\x0e\n\x07\x42\x41\x44_TAG\x10\x86\x80\x80\x18\x12\x1e\n\x17\x43HARGER_UNPLUGGED_ABORT\x10\x87\x80\x80\x18\x12!\n\x1a\x43LIFF_ALIGN_FAILED_TIMEOUT\x10\x88\x80\x80\x18\x12$\n\x1d\x43LIFF_ALIGN_FAILED_NO_TURNING\x10\x89\x80\x80\x18\x12&\n\x1f\x43LIFF_ALIGN_FAILED_OVER_TURNING\x10\x8a\x80\x80\x18\x12\"\n\x1b\x43LIFF_ALIGN_FAILED_NO_WHITE\x10\x8b\x80\x80\x18\x12!\n\x1a\x43LIFF_ALIGN_FAILED_STOPPED\x10\x8c\x80\x80\x18\x12!\n\x1a\x46\x41ILED_SETTING_CALIBRATION\x10\x8d\x80\x80\x18\x12(\n!FOLLOWING_PATH_BUT_NOT_TRAVERSING\x10\x8e\x80\x80\x18\x12\x12\n\x0bINTERRUPTED\x10\x8f\x80\x80\x18\x12\x1f\n\x18INVALID_OFF_TREADS_STATE\x10\x90\x80\x80\x18\x12\x19\n\x12MISMATCHED_UP_AXIS\x10\x91\x80\x80\x18\x12\x13\n\x0cNO_ANIM_NAME\x10\x92\x80\x80\x18\x12\x16\n\x0fNO_DISTANCE_SET\x10\x93\x80\x80\x18\x12\x0e\n\x07NO_FACE\x10\x94\x80\x80\x18\x12\x12\n\x0bNO_GOAL_SET\x10\x95\x80\x80\x18\x12\x19\n\x12NO_PREACTION_POSES\x10\x96\x80\x80\x18\x12 \n\x19NOT_CARRYING_OBJECT_ABORT\x10\x97\x80\x80\x18\x12\x1b\n\x14NOT_ON_CHARGER_ABORT\x10\x98\x80\x80\x18\x12\x15\n\x0eNULL_SUBACTION\x10\x99\x80\x80\x18\x12!\n\x1aPATH_PLANNING_FAILED_ABORT\x10\x9a\x80\x80\x18\x12(\n!PICKUP_OBJECT_UNEXPECTEDLY_MOVING\x10\x9b\x80\x80\x18\x12#\n\x1cSEND_MESSAGE_TO_ROBOT_FAILED\x10\x9c\x80\x80\x18\x12\x1c\n\x15STILL_CARRYING_OBJECT\x10\x9d\x80\x80\x18\x12\x0e\n\x07TIMEOUT\x10\x9e\x80\x80\x18\x12\x14\n\rTRACKS_LOCKED\x10\x9f\x80\x80\x18\x12\x1d\n\x16UNEXPECTED_DOCK_ACTION\x10\xa0\x80\x80\x18\x12\x18\n\x11UNKNOWN_TOOL_CODE\x10\xa1\x80\x80\x18\x12\x1c\n\x15UPDATE_DERIVED_FAILED\x10\xa2\x80\x80\x18\x12 \n\x19VISUAL_OBSERVATION_FAILED\x10\xa3\x80\x80\x18\x12 \n\x19SHOULDNT_DRIVE_ON_CHARGER\x10\xa4\x80\x80\x18\x12\x0c\n\x05RETRY\x10\x80\x80\x80 \x12#\n\x1c\x44ID_NOT_REACH_PREACTION_POSE\x10\x81\x80\x80 \x12\x1d\n\x16\x46\x41ILED_TRAVERSING_PATH\x10\x82\x80\x80 \x12!\n\x1aLAST_PICK_AND_PLACE_FAILED\x10\x83\x80\x80 \x12$\n\x1dMOTOR_STOPPED_MAKING_PROGRESS\x10\x84\x80\x80 \x12 \n\x19NOT_CARRYING_OBJECT_RETRY\x10\x85\x80\x80 \x12\x1b\n\x14NOT_ON_CHARGER_RETRY\x10\x86\x80\x80 \x12!\n\x1aPATH_PLANNING_FAILED_RETRY\x10\x87\x80\x80 \x12\x1e\n\x17PLACEMENT_GOAL_NOT_FREE\x10\x88\x80\x80 \x12,\n%PICKUP_OBJECT_UNEXPECTEDLY_NOT_MOVING\x10\x89\x80\x80 \x12\x17\n\x10STILL_ON_CHARGER\x10\x8a\x80\x80 \x12\x1d\n\x16UNEXPECTED_PITCH_ANGLE\x10\x8b\x80\x80 \",\n\x1a\x43\x61ncelActionByIdTagRequest\x12\x0e\n\x06id_tag\x18\x01 \x01(\r\"]\n\x1b\x43\x61ncelActionByIdTagResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x17\n\x15\x43\x61ncelBehaviorRequest\"X\n\x16\x43\x61ncelBehaviorResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\xa7\x01\n\x0fGoToPoseRequest\x12\x0c\n\x04x_mm\x18\x01 \x01(\x02\x12\x0c\n\x04y_mm\x18\x02 \x01(\x02\x12\x0b\n\x03rad\x18\x03 \x01(\x02\x12\x46\n\x0bmotion_prof\x18\x04 \x01(\x0b\x32\x31.Anki.Vector.external_interface.PathMotionProfile\x12\x0e\n\x06id_tag\x18\x05 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x06 \x01(\x05\"\x90\x01\n\x10GoToPoseResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\xd0\x02\n\x13\x44ockWithCubeRequest\x12\x11\n\tobject_id\x18\x01 \x01(\x05\x12\x1f\n\x17\x64istance_from_marker_mm\x18\x02 \x01(\x02\x12\x1a\n\x12\x61pproach_angle_rad\x18\x03 \x01(\x02\x12\x45\n\x0e\x61lignment_type\x18\x04 \x01(\x0e\x32-.Anki.Vector.external_interface.AlignmentType\x12\x1a\n\x12use_approach_angle\x18\x05 \x01(\x08\x12\x19\n\x11use_pre_dock_pose\x18\x06 \x01(\x08\x12\x46\n\x0bmotion_prof\x18\x07 \x01(\x0b\x32\x31.Anki.Vector.external_interface.PathMotionProfile\x12\x0e\n\x06id_tag\x18\x08 \x01(\x05\x12\x13\n\x0bnum_retries\x18\t \x01(\x05\"\x94\x01\n\x14\x44ockWithCubeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\x7f\n\x14\x44riveStraightRequest\x12\x12\n\nspeed_mmps\x18\x01 \x01(\x02\x12\x0f\n\x07\x64ist_mm\x18\x02 \x01(\x02\x12\x1d\n\x15should_play_animation\x18\x03 \x01(\x08\x12\x0e\n\x06id_tag\x18\x04 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x05 \x01(\x05\"\x95\x01\n\x15\x44riveStraightResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\xa9\x01\n\x12TurnInPlaceRequest\x12\x11\n\tangle_rad\x18\x01 \x01(\x02\x12\x19\n\x11speed_rad_per_sec\x18\x02 \x01(\x02\x12\x1a\n\x12\x61\x63\x63\x65l_rad_per_sec2\x18\x03 \x01(\x02\x12\x0f\n\x07tol_rad\x18\x04 \x01(\x02\x12\x13\n\x0bis_absolute\x18\x05 \x01(\r\x12\x0e\n\x06id_tag\x18\x06 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x07 \x01(\x05\"\x93\x01\n\x13TurnInPlaceResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\x9e\x01\n\x13SetHeadAngleRequest\x12\x11\n\tangle_rad\x18\x01 \x01(\x02\x12\x1d\n\x15max_speed_rad_per_sec\x18\x02 \x01(\x02\x12\x1a\n\x12\x61\x63\x63\x65l_rad_per_sec2\x18\x03 \x01(\x02\x12\x14\n\x0c\x64uration_sec\x18\x04 \x01(\x02\x12\x0e\n\x06id_tag\x18\x05 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x06 \x01(\x05\"\x94\x01\n\x14SetHeadAngleResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\x9f\x01\n\x14SetLiftHeightRequest\x12\x11\n\theight_mm\x18\x01 \x01(\x02\x12\x1d\n\x15max_speed_rad_per_sec\x18\x02 \x01(\x02\x12\x1a\n\x12\x61\x63\x63\x65l_rad_per_sec2\x18\x03 \x01(\x02\x12\x14\n\x0c\x64uration_sec\x18\x04 \x01(\x02\x12\x0e\n\x06id_tag\x18\x05 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x06 \x01(\x05\"\x95\x01\n\x15SetLiftHeightResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"j\n\x16TurnTowardsFaceRequest\x12\x0f\n\x07\x66\x61\x63\x65_id\x18\x01 \x01(\x05\x12\x1a\n\x12max_turn_angle_rad\x18\x02 \x01(\x02\x12\x0e\n\x06id_tag\x18\x03 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x04 \x01(\x05\"\x97\x01\n\x17TurnTowardsFaceResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\xd6\x01\n\x11GoToObjectRequest\x12\x11\n\tobject_id\x18\x01 \x01(\x05\x12\x46\n\x0bmotion_prof\x18\x02 \x01(\x0b\x32\x31.Anki.Vector.external_interface.PathMotionProfile\x12&\n\x1e\x64istance_from_object_origin_mm\x18\x03 \x01(\x02\x12\x19\n\x11use_pre_dock_pose\x18\x04 \x01(\x08\x12\x0e\n\x06id_tag\x18\x05 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x06 \x01(\x05\"\x92\x01\n\x12GoToObjectResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\xe6\x01\n\x11RollObjectRequest\x12\x11\n\tobject_id\x18\x01 \x01(\x05\x12\x46\n\x0bmotion_prof\x18\x02 \x01(\x0b\x32\x31.Anki.Vector.external_interface.PathMotionProfile\x12\x1a\n\x12\x61pproach_angle_rad\x18\x03 \x01(\x02\x12\x1a\n\x12use_approach_angle\x18\x04 \x01(\x08\x12\x19\n\x11use_pre_dock_pose\x18\x05 \x01(\x08\x12\x0e\n\x06id_tag\x18\x06 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x07 \x01(\x05\"\x92\x01\n\x12RollObjectResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\xe7\x01\n\x12PopAWheelieRequest\x12\x11\n\tobject_id\x18\x01 \x01(\x05\x12\x46\n\x0bmotion_prof\x18\x02 \x01(\x0b\x32\x31.Anki.Vector.external_interface.PathMotionProfile\x12\x1a\n\x12\x61pproach_angle_rad\x18\x03 \x01(\x02\x12\x1a\n\x12use_approach_angle\x18\x04 \x01(\x08\x12\x19\n\x11use_pre_dock_pose\x18\x05 \x01(\x08\x12\x0e\n\x06id_tag\x18\x06 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x07 \x01(\x05\"\x93\x01\n\x13PopAWheelieResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\xe8\x01\n\x13PickupObjectRequest\x12\x11\n\tobject_id\x18\x01 \x01(\x05\x12\x46\n\x0bmotion_prof\x18\x02 \x01(\x0b\x32\x31.Anki.Vector.external_interface.PathMotionProfile\x12\x1a\n\x12\x61pproach_angle_rad\x18\x03 \x01(\x02\x12\x1a\n\x12use_approach_angle\x18\x04 \x01(\x08\x12\x19\n\x11use_pre_dock_pose\x18\x05 \x01(\x08\x12\x0e\n\x06id_tag\x18\x06 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x07 \x01(\x05\"\x94\x01\n\x14PickupObjectResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"E\n\x1ePlaceObjectOnGroundHereRequest\x12\x0e\n\x06id_tag\x18\x01 \x01(\x05\x12\x13\n\x0bnum_retries\x18\x02 \x01(\x05\"\x9f\x01\n\x1fPlaceObjectOnGroundHereResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12<\n\x06result\x18\x02 \x01(\x0b\x32,.Anki.Vector.external_interface.ActionResult\"\x15\n\x13\x42\x61tteryStateRequest\"\xc9\x02\n\x14\x42\x61tteryStateResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x43\n\rbattery_level\x18\x02 \x01(\x0e\x32,.Anki.Vector.external_interface.BatteryLevel\x12\x15\n\rbattery_volts\x18\x03 \x01(\x02\x12\x13\n\x0bis_charging\x18\x04 \x01(\x08\x12\x1e\n\x16is_on_charger_platform\x18\x05 \x01(\x08\x12\x1d\n\x15suggested_charger_sec\x18\x06 \x01(\x02\x12\x41\n\x0c\x63ube_battery\x18\x07 \x01(\x0b\x32+.Anki.Vector.external_interface.CubeBattery\"\xd3\x01\n\x0b\x43ubeBattery\x12K\n\x05level\x18\x01 \x01(\x0e\x32<.Anki.Vector.external_interface.CubeBattery.CubeBatteryLevel\x12\x12\n\nfactory_id\x18\x02 \x01(\t\x12\x15\n\rbattery_volts\x18\x03 \x01(\x02\x12#\n\x1btime_since_last_reading_sec\x18\x04 \x01(\x02\"\'\n\x10\x43ubeBatteryLevel\x12\x07\n\x03Low\x10\x00\x12\n\n\x06Normal\x10\x01\"\x15\n\x13VersionStateRequest\"\x83\x01\n\x14VersionStateResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x12\n\nos_version\x18\x02 \x01(\t\x12\x17\n\x0f\x65ngine_build_id\x18\x03 \x01(\t\"g\n\x0eSayTextRequest\x12\x0c\n\x04text\x18\x01 \x01(\t\x12\x18\n\x10use_vector_voice\x18\x02 \x01(\x08\x12\x17\n\x0f\x64uration_scalar\x18\x03 \x01(\x02\x12\x14\n\x0cpitch_scalar\x18\x04 \x01(\x02\"\xf5\x01\n\x0fSayTextResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12M\n\x05state\x18\x02 \x01(\x0e\x32>.Anki.Vector.external_interface.SayTextResponse.UtteranceState\"S\n\x0eUtteranceState\x12\x0b\n\x07INVALID\x10\x00\x12\x0e\n\nGENERATING\x10\x01\x12\t\n\x05READY\x10\x02\x12\x0b\n\x07PLAYING\x10\x03\x12\x0c\n\x08\x46INISHED\x10\x04\"\x9b\x01\n\x0fStimulationInfo\x12\x16\n\x0e\x65motion_events\x18\x01 \x03(\t\x12\r\n\x05value\x18\x02 \x01(\x02\x12\x10\n\x08velocity\x18\x03 \x01(\x02\x12\r\n\x05\x61\x63\x63\x65l\x18\x04 \x01(\x02\x12\x1a\n\x12value_before_event\x18\x05 \x01(\x02\x12\x11\n\tmin_value\x18\x06 \x01(\x02\x12\x11\n\tmax_value\x18\x07 \x01(\x02\"Y\n\x14\x41udioSendModeRequest\x12\x41\n\x04mode\x18\x01 \x01(\x0e\x32\x33.Anki.Vector.external_interface.AudioProcessingMode\"Y\n\x14\x41udioSendModeChanged\x12\x41\n\x04mode\x18\x01 \x01(\x0e\x32\x33.Anki.Vector.external_interface.AudioProcessingMode\"\xe8\x01\n\nAudioChunk\x12\x18\n\x10robot_time_stamp\x18\x01 \x01(\r\x12\x10\n\x08group_id\x18\x02 \x01(\r\x12\x10\n\x08\x63hunk_id\x18\x03 \x01(\r\x12\x19\n\x11\x61udio_chunk_count\x18\x04 \x01(\r\x12\x14\n\x0csignal_power\x18\x05 \x01(\x0c\x12\x1b\n\x13\x64irection_strengths\x18\x06 \x01(\x0c\x12\x18\n\x10source_direction\x18\x07 \x01(\r\x12\x19\n\x11source_confidence\x18\x08 \x01(\r\x12\x19\n\x11noise_floor_power\x18\t \x01(\r\"\x12\n\x10\x41udioFeedRequest\"\xc8\x01\n\x11\x41udioFeedResponse\x12\x18\n\x10robot_time_stamp\x18\x01 \x01(\r\x12\x10\n\x08group_id\x18\x02 \x01(\r\x12\x14\n\x0csignal_power\x18\x03 \x01(\x0c\x12\x1b\n\x13\x64irection_strengths\x18\x04 \x01(\x0c\x12\x18\n\x10source_direction\x18\x05 \x01(\r\x12\x19\n\x11source_confidence\x18\x06 \x01(\r\x12\x19\n\x11noise_floor_power\x18\x07 \x01(\r:\x04\x80\xa6\x1d\x01\"L\n\x1a\x45xternalAudioStreamPrepare\x12\x18\n\x10\x61udio_frame_rate\x18\x01 \x01(\r\x12\x14\n\x0c\x61udio_volume\x18\x02 \x01(\r\"W\n\x18\x45xternalAudioStreamChunk\x12\x1e\n\x16\x61udio_chunk_size_bytes\x18\x01 \x01(\r\x12\x1b\n\x13\x61udio_chunk_samples\x18\x02 \x01(\x0c\"\x1d\n\x1b\x45xternalAudioStreamComplete\"\x1b\n\x19\x45xternalAudioStreamCancel\"\x9e\x03\n\x1a\x45xternalAudioStreamRequest\x12Z\n\x14\x61udio_stream_prepare\x18\x01 \x01(\x0b\x32:.Anki.Vector.external_interface.ExternalAudioStreamPrepareH\x00\x12V\n\x12\x61udio_stream_chunk\x18\x02 \x01(\x0b\x32\x38.Anki.Vector.external_interface.ExternalAudioStreamChunkH\x00\x12\\\n\x15\x61udio_stream_complete\x18\x03 \x01(\x0b\x32;.Anki.Vector.external_interface.ExternalAudioStreamCompleteH\x00\x12X\n\x13\x61udio_stream_cancel\x18\x04 \x01(\x0b\x32\x39.Anki.Vector.external_interface.ExternalAudioStreamCancelH\x00\x42\x14\n\x12\x61udio_request_type\"%\n#ExternalAudioStreamPlaybackComplete\"$\n\"ExternalAudioStreamPlaybackFailure\"\\\n ExternalAudioStreamBufferOverrun\x12\x1a\n\x12\x61udio_samples_sent\x18\x01 \x01(\r\x12\x1c\n\x14\x61udio_samples_played\x18\x02 \x01(\r\"\xf9\x02\n\x1b\x45xternalAudioStreamResponse\x12m\n\x1e\x61udio_stream_playback_complete\x18\x01 \x01(\x0b\x32\x43.Anki.Vector.external_interface.ExternalAudioStreamPlaybackCompleteH\x00\x12g\n\x1b\x61udio_stream_buffer_overrun\x18\x02 \x01(\x0b\x32@.Anki.Vector.external_interface.ExternalAudioStreamBufferOverrunH\x00\x12k\n\x1d\x61udio_stream_playback_failyer\x18\x03 \x01(\x0b\x32\x42.Anki.Vector.external_interface.ExternalAudioStreamPlaybackFailureH\x00\x42\x15\n\x13\x61udio_response_type\"^\n\x13MasterVolumeRequest\x12G\n\x0cvolume_level\x18\x01 \x01(\x0e\x32\x31.Anki.Vector.external_interface.MasterVolumeLevel\"V\n\x14MasterVolumeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\".\n\x1c\x45nableMarkerDetectionRequest\x12\x0e\n\x06\x65nable\x18\x01 \x01(\x08\"_\n\x1d\x45nableMarkerDetectionResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\xb1\x01\n\x1a\x45nableFaceDetectionRequest\x12\x0e\n\x06\x65nable\x18\x01 \x01(\x08\x12\x1e\n\x16\x65nable_smile_detection\x18\x02 \x01(\x08\x12$\n\x1c\x65nable_expression_estimation\x18\x03 \x01(\x08\x12\x1e\n\x16\x65nable_blink_detection\x18\x04 \x01(\x08\x12\x1d\n\x15\x65nable_gaze_detection\x18\x05 \x01(\x08\"]\n\x1b\x45nableFaceDetectionResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\".\n\x1c\x45nableMotionDetectionRequest\x12\x0e\n\x06\x65nable\x18\x01 \x01(\x08\"_\n\x1d\x45nableMotionDetectionResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\")\n\x17\x45nableMirrorModeRequest\x12\x0e\n\x06\x65nable\x18\x01 \x01(\x08\"Z\n\x18\x45nableMirrorModeResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x14\n\x12MirrorModeDisabled\"M\n\x1b\x45nableImageStreamingRequest\x12\x0e\n\x06\x65nable\x18\x01 \x01(\x08\x12\x1e\n\x16\x65nable_high_resolution\x18\x02 \x01(\x08\"^\n\x1c\x45nableImageStreamingResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\" \n\x1eIsImageStreamingEnabledRequest\"E\n\x1fIsImageStreamingEnabledResponse\x12\"\n\x1ais_image_streaming_enabled\x18\x01 \x01(\x08\"\x19\n\x17VisionModesAutoDisabled\"\xd1\x03\n\nImageChunk\x12\x18\n\x10\x66rame_time_stamp\x18\x01 \x01(\r\x12\x10\n\x08image_id\x18\x02 \x01(\r\x12\r\n\x05width\x18\x03 \x01(\r\x12\x0e\n\x06height\x18\x04 \x01(\r\x12P\n\x0eimage_encoding\x18\x05 \x01(\x0e\x32\x38.Anki.Vector.external_interface.ImageChunk.ImageEncoding\x12\x15\n\rdisplay_index\x18\x06 \x01(\r\x12\x19\n\x11image_chunk_count\x18\x07 \x01(\r\x12\x10\n\x08\x63hunk_id\x18\x08 \x01(\r\x12\x0c\n\x04\x64\x61ta\x18\t \x01(\x0c\"\xd3\x01\n\rImageEncoding\x12\x17\n\x13NONE_IMAGE_ENCODING\x10\x00\x12\x0c\n\x08RAW_GRAY\x10\x01\x12\x0b\n\x07RAW_RGB\x10\x02\x12\x08\n\x04YUYV\x10\x03\x12\x0c\n\x08YUV420SP\x10\x04\x12\t\n\x05\x42\x41YER\x10\x05\x12\r\n\tJPEG_GRAY\x10\x06\x12\x0e\n\nJPEG_COLOR\x10\x07\x12\x19\n\x15JPEG_COLOR_HALF_WIDTH\x10\x08\x12\x17\n\x13JPEG_MINIMIZED_GRAY\x10\t\x12\x18\n\x14JPEG_MINIMIZED_COLOR\x10\n\"\x13\n\x11\x43\x61meraFeedRequest\"\xa6\x01\n\x12\x43\x61meraFeedResponse\x12\x18\n\x10\x66rame_time_stamp\x18\x01 \x01(\r\x12\x10\n\x08image_id\x18\x02 \x01(\r\x12P\n\x0eimage_encoding\x18\x03 \x01(\x0e\x32\x38.Anki.Vector.external_interface.ImageChunk.ImageEncoding\x12\x0c\n\x04\x64\x61ta\x18\x04 \x01(\x0c:\x04\x80\xa6\x1d\x01\";\n\x19\x43\x61ptureSingleImageRequest\x12\x1e\n\x16\x65nable_high_resolution\x18\x01 \x01(\x08\"\xe8\x01\n\x1a\x43\x61ptureSingleImageResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x18\n\x10\x66rame_time_stamp\x18\x02 \x01(\r\x12\x10\n\x08image_id\x18\x03 \x01(\r\x12P\n\x0eimage_encoding\x18\x04 \x01(\x0e\x32\x38.Anki.Vector.external_interface.ImageChunk.ImageEncoding\x12\x0c\n\x04\x64\x61ta\x18\x05 \x01(\x0c\"5\n\x12SetEyeColorRequest\x12\x0b\n\x03hue\x18\x01 \x01(\x02\x12\x12\n\nsaturation\x18\x02 \x01(\x02\"U\n\x13SetEyeColorResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\"\x15\n\x13\x43\x61meraConfigRequest\"\x84\x02\n\x14\x43\x61meraConfigResponse\x12\x16\n\x0e\x66ocal_length_x\x18\x01 \x01(\x02\x12\x16\n\x0e\x66ocal_length_y\x18\x02 \x01(\x02\x12\x10\n\x08\x63\x65nter_x\x18\x03 \x01(\x02\x12\x10\n\x08\x63\x65nter_y\x18\x04 \x01(\x02\x12\r\n\x05\x66ov_x\x18\x05 \x01(\x02\x12\r\n\x05\x66ov_y\x18\x06 \x01(\x02\x12#\n\x1bmin_camera_exposure_time_ms\x18\x07 \x01(\r\x12#\n\x1bmax_camera_exposure_time_ms\x18\x08 \x01(\r\x12\x17\n\x0fmin_camera_gain\x18\t \x01(\x02\x12\x17\n\x0fmax_camera_gain\x18\n \x01(\x02\"[\n\x18SetCameraSettingsRequest\x12\x0c\n\x04gain\x18\x01 \x01(\x02\x12\x13\n\x0b\x65xposure_ms\x18\x02 \x01(\r\x12\x1c\n\x14\x65nable_auto_exposure\x18\x03 \x01(\x08\"s\n\x19SetCameraSettingsResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus\x12\x16\n\x0estatus_message\x18\x02 \x01(\t\"X\n\x14\x43\x61meraSettingsUpdate\x12\x0c\n\x04gain\x18\x01 \x01(\x02\x12\x13\n\x0b\x65xposure_ms\x18\x02 \x01(\r\x12\x1d\n\x15\x61uto_exposure_enabled\x18\x03 \x01(\x08\"\x96\x01\n\x18SDKInitializationRequest\x12\x1a\n\x12sdk_module_version\x18\x01 \x01(\t\x12\x16\n\x0epython_version\x18\x02 \x01(\t\x12\x1d\n\x15python_implementation\x18\x03 \x01(\t\x12\x12\n\nos_version\x18\x04 \x01(\t\x12\x13\n\x0b\x63pu_version\x18\x05 \x01(\t\"[\n\x19SDKInitializationResponse\x12>\n\x06status\x18\x01 \x01(\x0b\x32..Anki.Vector.external_interface.ResponseStatus*\xdc\x04\n\x0bRobotStatus\x12\x15\n\x11ROBOT_STATUS_NONE\x10\x00\x12\x1a\n\x16ROBOT_STATUS_IS_MOVING\x10\x01\x12\"\n\x1eROBOT_STATUS_IS_CARRYING_BLOCK\x10\x02\x12&\n\"ROBOT_STATUS_IS_PICKING_OR_PLACING\x10\x04\x12\x1d\n\x19ROBOT_STATUS_IS_PICKED_UP\x10\x08\x12\"\n\x1eROBOT_STATUS_IS_BUTTON_PRESSED\x10\x10\x12\x1b\n\x17ROBOT_STATUS_IS_FALLING\x10 \x12\x1d\n\x19ROBOT_STATUS_IS_ANIMATING\x10@\x12\x1c\n\x17ROBOT_STATUS_IS_PATHING\x10\x80\x01\x12\x1d\n\x18ROBOT_STATUS_LIFT_IN_POS\x10\x80\x02\x12\x1d\n\x18ROBOT_STATUS_HEAD_IN_POS\x10\x80\x04\x12!\n\x1cROBOT_STATUS_CALM_POWER_MODE\x10\x80\x08\x12\x1f\n\x1aROBOT_STATUS_IS_ON_CHARGER\x10\x80 \x12\x1d\n\x18ROBOT_STATUS_IS_CHARGING\x10\x80@\x12!\n\x1bROBOT_STATUS_CLIFF_DETECTED\x10\x80\x80\x01\x12$\n\x1eROBOT_STATUS_ARE_WHEELS_MOVING\x10\x80\x80\x02\x12 \n\x1aROBOT_STATUS_IS_BEING_HELD\x10\x80\x80\x04\x12%\n\x1fROBOT_STATUS_IS_MOTION_DETECTED\x10\x80\x80\x08*\x8d\x01\n\x16UnexpectedMovementType\x12\x16\n\x12TURNED_BUT_STOPPED\x10\x00\x12\x1c\n\x18TURNED_IN_SAME_DIRECTION\x10\x01\x12 \n\x1cTURNED_IN_OPPOSITE_DIRECTION\x10\x02\x12\x1b\n\x17ROTATING_WITHOUT_MOTORS\x10\x03*O\n\x16UnexpectedMovementSide\x12\x0b\n\x07UNKNOWN\x10\x00\x12\t\n\x05\x46RONT\x10\x01\x12\x08\n\x04\x42\x41\x43K\x10\x02\x12\x08\n\x04LEFT\x10\x03\x12\t\n\x05RIGHT\x10\x04*\xbd\x01\n\x10\x46\x61\x63ialExpression\x12\x16\n\x12\x45XPRESSION_UNKNOWN\x10\x00\x12\x16\n\x12\x45XPRESSION_NEUTRAL\x10\x01\x12\x18\n\x14\x45XPRESSION_HAPPINESS\x10\x02\x12\x17\n\x13\x45XPRESSION_SURPRISE\x10\x03\x12\x14\n\x10\x45XPRESSION_ANGER\x10\x04\x12\x16\n\x12\x45XPRESSION_SADNESS\x10\x05\x12\x14\n\x10\x45XPRESSION_COUNT\x10\x05\x1a\x02\x10\x01*\xcc\x01\n\x14\x46\x61\x63\x65\x45nrollmentResult\x12\x0b\n\x07SUCCESS\x10\x00\x12\x12\n\x0eSAW_WRONG_FACE\x10\x01\x12\x16\n\x12SAW_MULTIPLE_FACES\x10\x02\x12\r\n\tTIMED_OUT\x10\x03\x12\x0f\n\x0bSAVE_FAILED\x10\x04\x12\x0e\n\nINCOMPLETE\x10\x05\x12\r\n\tCANCELLED\x10\x06\x12\x0f\n\x0bNAME_IN_USE\x10\x07\x12\x16\n\x12NAMED_STORAGE_FULL\x10\x08\x12\x13\n\x0fUNKNOWN_FAILURE\x10\t*l\n\x0f\x42\x65haviorResults\x12\x1a\n\x16\x42\x45HAVIOR_INVALID_STATE\x10\x00\x12\x1b\n\x17\x42\x45HAVIOR_COMPLETE_STATE\x10\x01\x12 \n\x1c\x42\x45HAVIOR_WONT_ACTIVATE_STATE\x10\x02*S\n\x12\x41\x63tionTagConstants\x12\x13\n\x0fINVALID_SDK_TAG\x10\x00\x12\x13\n\rFIRST_SDK_TAG\x10\x81\x89z\x12\x13\n\x0cLAST_SDK_TAG\x10\xc0\x8d\xb7\x01*\x9e\x01\n\rAlignmentType\x12\x1a\n\x16\x41LIGNMENT_TYPE_UNKNOWN\x10\x00\x12\x1e\n\x1a\x41LIGNMENT_TYPE_LIFT_FINGER\x10\x01\x12\x1d\n\x19\x41LIGNMENT_TYPE_LIFT_PLATE\x10\x02\x12\x17\n\x13\x41LIGNMENT_TYPE_BODY\x10\x03\x12\x19\n\x15\x41LIGNMENT_TYPE_CUSTOM\x10\x04*s\n\x0c\x42\x61tteryLevel\x12\x19\n\x15\x42\x41TTERY_LEVEL_UNKNOWN\x10\x00\x12\x15\n\x11\x42\x41TTERY_LEVEL_LOW\x10\x01\x12\x19\n\x15\x42\x41TTERY_LEVEL_NOMINAL\x10\x02\x12\x16\n\x12\x42\x41TTERY_LEVEL_FULL\x10\x03*\xcc\x01\n\x0e\x41udioConstants\x12\x18\n\x14\x41UDIO_CONSTANTS_NULL\x10\x00\x12\x1c\n\x18MIC_DETECTION_DIRECTIONS\x10\x0c\x12%\n SAMPLE_COUNTS_PER_ENGINE_MESSAGE\x10\xa0\x01\x12\"\n\x1dSAMPLE_COUNTS_PER_SDK_MESSAGE\x10\xc0\x0c\x12\x1b\n\x16MICROPHONE_SAMPLE_RATE\x10\x89z\x12\x1a\n\x15PROCESSED_SAMPLE_RATE\x10\x80}*\x85\x01\n\x13\x41udioProcessingMode\x12\x11\n\rAUDIO_UNKNOWN\x10\x00\x12\r\n\tAUDIO_OFF\x10\x01\x12\x13\n\x0f\x41UDIO_FAST_MODE\x10\x02\x12\x1a\n\x16\x41UDIO_DIRECTIONAL_MODE\x10\x03\x12\x1b\n\x17\x41UDIO_VOICE_DETECT_MODE\x10\x04*v\n\x11MasterVolumeLevel\x12\x0e\n\nVOLUME_LOW\x10\x00\x12\x15\n\x11VOLUME_MEDIUM_LOW\x10\x01\x12\x11\n\rVOLUME_MEDIUM\x10\x02\x12\x16\n\x12VOLUME_MEDIUM_HIGH\x10\x03\x12\x0f\n\x0bVOLUME_HIGH\x10\x04\x62\x06proto3')
   ,
   dependencies=[anki__vector_dot_messaging_dot_response__status__pb2.DESCRIPTOR,anki__vector_dot_messaging_dot_extensions__pb2.DESCRIPTOR,])
 
@@ -107,12 +107,78 @@ _ROBOTSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=19443,
-  serialized_end=20047,
+  serialized_start=21067,
+  serialized_end=21671,
 )
 _sym_db.RegisterEnumDescriptor(_ROBOTSTATUS)
 
 RobotStatus = enum_type_wrapper.EnumTypeWrapper(_ROBOTSTATUS)
+_UNEXPECTEDMOVEMENTTYPE = _descriptor.EnumDescriptor(
+  name='UnexpectedMovementType',
+  full_name='Anki.Vector.external_interface.UnexpectedMovementType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='TURNED_BUT_STOPPED', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='TURNED_IN_SAME_DIRECTION', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='TURNED_IN_OPPOSITE_DIRECTION', index=2, number=2,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='ROTATING_WITHOUT_MOTORS', index=3, number=3,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=21674,
+  serialized_end=21815,
+)
+_sym_db.RegisterEnumDescriptor(_UNEXPECTEDMOVEMENTTYPE)
+
+UnexpectedMovementType = enum_type_wrapper.EnumTypeWrapper(_UNEXPECTEDMOVEMENTTYPE)
+_UNEXPECTEDMOVEMENTSIDE = _descriptor.EnumDescriptor(
+  name='UnexpectedMovementSide',
+  full_name='Anki.Vector.external_interface.UnexpectedMovementSide',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='UNKNOWN', index=0, number=0,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='FRONT', index=1, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='BACK', index=2, number=2,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='LEFT', index=3, number=3,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='RIGHT', index=4, number=4,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=21817,
+  serialized_end=21896,
+)
+_sym_db.RegisterEnumDescriptor(_UNEXPECTEDMOVEMENTSIDE)
+
+UnexpectedMovementSide = enum_type_wrapper.EnumTypeWrapper(_UNEXPECTEDMOVEMENTSIDE)
 _FACIALEXPRESSION = _descriptor.EnumDescriptor(
   name='FacialExpression',
   full_name='Anki.Vector.external_interface.FacialExpression',
@@ -150,8 +216,8 @@ _FACIALEXPRESSION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=_descriptor._ParseOptions(descriptor_pb2.EnumOptions(), _b('\020\001')),
-  serialized_start=20050,
-  serialized_end=20239,
+  serialized_start=21899,
+  serialized_end=22088,
 )
 _sym_db.RegisterEnumDescriptor(_FACIALEXPRESSION)
 
@@ -205,8 +271,8 @@ _FACEENROLLMENTRESULT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=20242,
-  serialized_end=20446,
+  serialized_start=22091,
+  serialized_end=22295,
 )
 _sym_db.RegisterEnumDescriptor(_FACEENROLLMENTRESULT)
 
@@ -232,8 +298,8 @@ _BEHAVIORRESULTS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=20448,
-  serialized_end=20556,
+  serialized_start=22297,
+  serialized_end=22405,
 )
 _sym_db.RegisterEnumDescriptor(_BEHAVIORRESULTS)
 
@@ -259,8 +325,8 @@ _ACTIONTAGCONSTANTS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=20558,
-  serialized_end=20641,
+  serialized_start=22407,
+  serialized_end=22490,
 )
 _sym_db.RegisterEnumDescriptor(_ACTIONTAGCONSTANTS)
 
@@ -294,8 +360,8 @@ _ALIGNMENTTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=20644,
-  serialized_end=20802,
+  serialized_start=22493,
+  serialized_end=22651,
 )
 _sym_db.RegisterEnumDescriptor(_ALIGNMENTTYPE)
 
@@ -325,8 +391,8 @@ _BATTERYLEVEL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=20804,
-  serialized_end=20919,
+  serialized_start=22653,
+  serialized_end=22768,
 )
 _sym_db.RegisterEnumDescriptor(_BATTERYLEVEL)
 
@@ -364,8 +430,8 @@ _AUDIOCONSTANTS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=20922,
-  serialized_end=21126,
+  serialized_start=22771,
+  serialized_end=22975,
 )
 _sym_db.RegisterEnumDescriptor(_AUDIOCONSTANTS)
 
@@ -399,8 +465,8 @@ _AUDIOPROCESSINGMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=21129,
-  serialized_end=21262,
+  serialized_start=22978,
+  serialized_end=23111,
 )
 _sym_db.RegisterEnumDescriptor(_AUDIOPROCESSINGMODE)
 
@@ -434,8 +500,8 @@ _MASTERVOLUMELEVEL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=21264,
-  serialized_end=21382,
+  serialized_start=23113,
+  serialized_end=23231,
 )
 _sym_db.RegisterEnumDescriptor(_MASTERVOLUMELEVEL)
 
@@ -458,6 +524,15 @@ ROBOT_STATUS_CLIFF_DETECTED = 16384
 ROBOT_STATUS_ARE_WHEELS_MOVING = 32768
 ROBOT_STATUS_IS_BEING_HELD = 65536
 ROBOT_STATUS_IS_MOTION_DETECTED = 131072
+TURNED_BUT_STOPPED = 0
+TURNED_IN_SAME_DIRECTION = 1
+TURNED_IN_OPPOSITE_DIRECTION = 2
+ROTATING_WITHOUT_MOTORS = 3
+UNKNOWN = 0
+FRONT = 1
+BACK = 2
+LEFT = 3
+RIGHT = 4
 EXPRESSION_UNKNOWN = 0
 EXPRESSION_NEUTRAL = 1
 EXPRESSION_HAPPINESS = 2
@@ -729,8 +804,8 @@ _ACTIONRESULT_ACTIONRESULTCODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=8147,
-  serialized_end=9709,
+  serialized_start=8984,
+  serialized_end=10546,
 )
 _sym_db.RegisterEnumDescriptor(_ACTIONRESULT_ACTIONRESULTCODE)
 
@@ -751,8 +826,8 @@ _CUBEBATTERY_CUBEBATTERYLEVEL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=14429,
-  serialized_end=14468,
+  serialized_start=15381,
+  serialized_end=15420,
 )
 _sym_db.RegisterEnumDescriptor(_CUBEBATTERY_CUBEBATTERYLEVEL)
 
@@ -785,8 +860,8 @@ _SAYTEXTRESPONSE_UTTERANCESTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=14873,
-  serialized_end=14956,
+  serialized_start=15847,
+  serialized_end=15930,
 )
 _sym_db.RegisterEnumDescriptor(_SAYTEXTRESPONSE_UTTERANCESTATE)
 
@@ -843,8 +918,8 @@ _IMAGECHUNK_IMAGEENCODING = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=18387,
-  serialized_end=18598,
+  serialized_start=19393,
+  serialized_end=19604,
 )
 _sym_db.RegisterEnumDescriptor(_IMAGECHUNK_IMAGEENCODING)
 
@@ -2242,6 +2317,246 @@ _CLADRECT = _descriptor.Descriptor(
 )
 
 
+_ROBOTOBSERVEDMOTION = _descriptor.Descriptor(
+  name='RobotObservedMotion',
+  full_name='Anki.Vector.external_interface.RobotObservedMotion',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='Anki.Vector.external_interface.RobotObservedMotion.timestamp', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='img_area', full_name='Anki.Vector.external_interface.RobotObservedMotion.img_area', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='img_x', full_name='Anki.Vector.external_interface.RobotObservedMotion.img_x', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='img_y', full_name='Anki.Vector.external_interface.RobotObservedMotion.img_y', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ground_area', full_name='Anki.Vector.external_interface.RobotObservedMotion.ground_area', index=4,
+      number=5, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ground_x', full_name='Anki.Vector.external_interface.RobotObservedMotion.ground_x', index=5,
+      number=6, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='ground_y', full_name='Anki.Vector.external_interface.RobotObservedMotion.ground_y', index=6,
+      number=7, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='top_img_area', full_name='Anki.Vector.external_interface.RobotObservedMotion.top_img_area', index=7,
+      number=8, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='top_img_x', full_name='Anki.Vector.external_interface.RobotObservedMotion.top_img_x', index=8,
+      number=9, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='top_img_y', full_name='Anki.Vector.external_interface.RobotObservedMotion.top_img_y', index=9,
+      number=10, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='bottom_img_area', full_name='Anki.Vector.external_interface.RobotObservedMotion.bottom_img_area', index=10,
+      number=11, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='bottom_img_x', full_name='Anki.Vector.external_interface.RobotObservedMotion.bottom_img_x', index=11,
+      number=12, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='bottom_img_y', full_name='Anki.Vector.external_interface.RobotObservedMotion.bottom_img_y', index=12,
+      number=13, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='left_img_area', full_name='Anki.Vector.external_interface.RobotObservedMotion.left_img_area', index=13,
+      number=14, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='left_img_x', full_name='Anki.Vector.external_interface.RobotObservedMotion.left_img_x', index=14,
+      number=15, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='left_img_y', full_name='Anki.Vector.external_interface.RobotObservedMotion.left_img_y', index=15,
+      number=16, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='right_img_area', full_name='Anki.Vector.external_interface.RobotObservedMotion.right_img_area', index=16,
+      number=17, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='right_img_x', full_name='Anki.Vector.external_interface.RobotObservedMotion.right_img_x', index=17,
+      number=18, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='right_img_y', full_name='Anki.Vector.external_interface.RobotObservedMotion.right_img_y', index=18,
+      number=19, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3852,
+  serialized_end=4255,
+)
+
+
+_ROBOTERASEDENROLLEDFACE = _descriptor.Descriptor(
+  name='RobotErasedEnrolledFace',
+  full_name='Anki.Vector.external_interface.RobotErasedEnrolledFace',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='face_id', full_name='Anki.Vector.external_interface.RobotErasedEnrolledFace.face_id', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='Anki.Vector.external_interface.RobotErasedEnrolledFace.name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4257,
+  serialized_end=4313,
+)
+
+
+_UNEXPECTEDMOVEMENT = _descriptor.Descriptor(
+  name='UnexpectedMovement',
+  full_name='Anki.Vector.external_interface.UnexpectedMovement',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='timestamp', full_name='Anki.Vector.external_interface.UnexpectedMovement.timestamp', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='movement_type', full_name='Anki.Vector.external_interface.UnexpectedMovement.movement_type', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='movement_side', full_name='Anki.Vector.external_interface.UnexpectedMovement.movement_side', index=2,
+      number=3, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4316,
+  serialized_end=4513,
+)
+
+
 _ROBOTOBSERVEDFACE = _descriptor.Descriptor(
   name='RobotObservedFace',
   full_name='Anki.Vector.external_interface.RobotObservedFace',
@@ -2338,8 +2653,8 @@ _ROBOTOBSERVEDFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3852,
-  serialized_end=4374,
+  serialized_start=4516,
+  serialized_end=5038,
 )
 
 
@@ -2376,8 +2691,8 @@ _ROBOTCHANGEDOBSERVEDFACEID = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4376,
-  serialized_end=4436,
+  serialized_start=5040,
+  serialized_end=5100,
 )
 
 
@@ -2421,8 +2736,8 @@ _FACEENROLLMENTCOMPLETED = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4438,
-  serialized_end=4564,
+  serialized_start=5102,
+  serialized_end=5228,
 )
 
 
@@ -2445,8 +2760,8 @@ _CANCELFACEENROLLMENTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4566,
-  serialized_end=4595,
+  serialized_start=5230,
+  serialized_end=5259,
 )
 
 
@@ -2476,8 +2791,8 @@ _CANCELFACEENROLLMENTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4597,
-  serialized_end=4691,
+  serialized_start=5261,
+  serialized_end=5355,
 )
 
 
@@ -2500,8 +2815,8 @@ _REQUESTENROLLEDNAMESREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4693,
-  serialized_end=4722,
+  serialized_start=5357,
+  serialized_end=5386,
 )
 
 
@@ -2566,8 +2881,8 @@ _LOADEDKNOWNFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4725,
-  serialized_end=4919,
+  serialized_start=5389,
+  serialized_end=5583,
 )
 
 
@@ -2604,8 +2919,8 @@ _ROBOTRENAMEDENROLLEDFACE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4921,
-  serialized_end=4978,
+  serialized_start=5585,
+  serialized_end=5642,
 )
 
 
@@ -2642,8 +2957,8 @@ _REQUESTENROLLEDNAMESRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4981,
-  serialized_end=5139,
+  serialized_start=5645,
+  serialized_end=5803,
 )
 
 
@@ -2687,8 +3002,8 @@ _UPDATEENROLLEDFACEBYIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5141,
-  serialized_end=5225,
+  serialized_start=5805,
+  serialized_end=5889,
 )
 
 
@@ -2718,8 +3033,8 @@ _UPDATEENROLLEDFACEBYIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5227,
-  serialized_end=5323,
+  serialized_start=5891,
+  serialized_end=5987,
 )
 
 
@@ -2749,8 +3064,8 @@ _ERASEENROLLEDFACEBYIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5325,
-  serialized_end=5372,
+  serialized_start=5989,
+  serialized_end=6036,
 )
 
 
@@ -2780,8 +3095,8 @@ _ERASEENROLLEDFACEBYIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5374,
-  serialized_end=5469,
+  serialized_start=6038,
+  serialized_end=6133,
 )
 
 
@@ -2804,8 +3119,8 @@ _ERASEALLENROLLEDFACESREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5471,
-  serialized_end=5501,
+  serialized_start=6135,
+  serialized_end=6165,
 )
 
 
@@ -2835,8 +3150,8 @@ _ERASEALLENROLLEDFACESRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5503,
-  serialized_end=5598,
+  serialized_start=6167,
+  serialized_end=6262,
 )
 
 
@@ -2901,8 +3216,8 @@ _SETFACETOENROLLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5601,
-  serialized_end=5737,
+  serialized_start=6265,
+  serialized_end=6401,
 )
 
 
@@ -2932,8 +3247,70 @@ _SETFACETOENROLLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5739,
-  serialized_end=5828,
+  serialized_start=6403,
+  serialized_end=6492,
+)
+
+
+_ENROLLFACEREQUEST = _descriptor.Descriptor(
+  name='EnrollFaceRequest',
+  full_name='Anki.Vector.external_interface.EnrollFaceRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6494,
+  serialized_end=6513,
+)
+
+
+_ENROLLFACERESPONSE = _descriptor.Descriptor(
+  name='EnrollFaceResponse',
+  full_name='Anki.Vector.external_interface.EnrollFaceResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='status', full_name='Anki.Vector.external_interface.EnrollFaceResponse.status', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='result', full_name='Anki.Vector.external_interface.EnrollFaceResponse.result', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6516,
+  serialized_end=6665,
 )
 
 
@@ -2956,8 +3333,8 @@ _DRIVEOFFCHARGERREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5830,
-  serialized_end=5854,
+  serialized_start=6667,
+  serialized_end=6691,
 )
 
 
@@ -2994,8 +3371,8 @@ _DRIVEOFFCHARGERRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5857,
-  serialized_end=6011,
+  serialized_start=6694,
+  serialized_end=6848,
 )
 
 
@@ -3018,8 +3395,8 @@ _DRIVEONCHARGERREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6013,
-  serialized_end=6036,
+  serialized_start=6850,
+  serialized_end=6873,
 )
 
 
@@ -3056,8 +3433,8 @@ _DRIVEONCHARGERRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6039,
-  serialized_end=6192,
+  serialized_start=6876,
+  serialized_end=7029,
 )
 
 
@@ -3080,8 +3457,8 @@ _FINDFACESREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6194,
-  serialized_end=6212,
+  serialized_start=7031,
+  serialized_end=7049,
 )
 
 
@@ -3118,8 +3495,8 @@ _FINDFACESRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6215,
-  serialized_end=6363,
+  serialized_start=7052,
+  serialized_end=7200,
 )
 
 
@@ -3142,8 +3519,8 @@ _LOOKAROUNDINPLACEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6365,
-  serialized_end=6391,
+  serialized_start=7202,
+  serialized_end=7228,
 )
 
 
@@ -3180,8 +3557,8 @@ _LOOKAROUNDINPLACERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6394,
-  serialized_end=6550,
+  serialized_start=7231,
+  serialized_end=7387,
 )
 
 
@@ -3204,8 +3581,8 @@ _ROLLBLOCKREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6552,
-  serialized_end=6570,
+  serialized_start=7389,
+  serialized_end=7407,
 )
 
 
@@ -3242,8 +3619,8 @@ _ROLLBLOCKRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6573,
-  serialized_end=6721,
+  serialized_start=7410,
+  serialized_end=7558,
 )
 
 
@@ -3266,8 +3643,8 @@ _WAKEWORDBEGIN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6723,
-  serialized_end=6738,
+  serialized_start=7560,
+  serialized_end=7575,
 )
 
 
@@ -3304,8 +3681,8 @@ _WAKEWORDEND = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6740,
-  serialized_end=6796,
+  serialized_start=7577,
+  serialized_end=7633,
 )
 
 
@@ -3342,8 +3719,8 @@ _USERINTENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6798,
-  serialized_end=6848,
+  serialized_start=7635,
+  serialized_end=7685,
 )
 
 
@@ -3394,8 +3771,8 @@ _PHOTOINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6850,
-  serialized_end=6960,
+  serialized_start=7687,
+  serialized_end=7797,
 )
 
 
@@ -3418,8 +3795,8 @@ _PHOTOSINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6962,
-  serialized_end=6981,
+  serialized_start=7799,
+  serialized_end=7818,
 )
 
 
@@ -3456,8 +3833,8 @@ _PHOTOSINFORESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6984,
-  serialized_end=7132,
+  serialized_start=7821,
+  serialized_end=7969,
 )
 
 
@@ -3487,8 +3864,8 @@ _PHOTOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7134,
-  serialized_end=7166,
+  serialized_start=7971,
+  serialized_end=8003,
 )
 
 
@@ -3525,8 +3902,8 @@ _PHOTOPATHMESSAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7168,
-  serialized_end=7222,
+  serialized_start=8005,
+  serialized_end=8059,
 )
 
 
@@ -3570,8 +3947,8 @@ _PHOTORESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7224,
-  serialized_end=7335,
+  serialized_start=8061,
+  serialized_end=8172,
 )
 
 
@@ -3601,8 +3978,8 @@ _THUMBNAILREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7337,
-  serialized_end=7373,
+  serialized_start=8174,
+  serialized_end=8210,
 )
 
 
@@ -3639,8 +4016,8 @@ _THUMBNAILPATHMESSAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7375,
-  serialized_end=7433,
+  serialized_start=8212,
+  serialized_end=8270,
 )
 
 
@@ -3684,8 +4061,8 @@ _THUMBNAILRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7435,
-  serialized_end=7550,
+  serialized_start=8272,
+  serialized_end=8387,
 )
 
 
@@ -3715,8 +4092,8 @@ _DELETEPHOTOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7552,
-  serialized_end=7590,
+  serialized_start=8389,
+  serialized_end=8427,
 )
 
 
@@ -3753,8 +4130,8 @@ _DELETEPHOTORESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7592,
-  serialized_end=7694,
+  serialized_start=8429,
+  serialized_end=8531,
 )
 
 
@@ -3784,8 +4161,8 @@ _PHOTOTAKEN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7696,
-  serialized_end=7726,
+  serialized_start=8533,
+  serialized_end=8563,
 )
 
 
@@ -3885,8 +4262,8 @@ _PATHMOTIONPROFILE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7729,
-  serialized_end=8050,
+  serialized_start=8566,
+  serialized_end=8887,
 )
 
 
@@ -3917,8 +4294,8 @@ _ACTIONRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8053,
-  serialized_end=9709,
+  serialized_start=8890,
+  serialized_end=10546,
 )
 
 
@@ -3948,8 +4325,8 @@ _CANCELACTIONBYIDTAGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9711,
-  serialized_end=9755,
+  serialized_start=10548,
+  serialized_end=10592,
 )
 
 
@@ -3979,8 +4356,63 @@ _CANCELACTIONBYIDTAGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9757,
-  serialized_end=9850,
+  serialized_start=10594,
+  serialized_end=10687,
+)
+
+
+_CANCELBEHAVIORREQUEST = _descriptor.Descriptor(
+  name='CancelBehaviorRequest',
+  full_name='Anki.Vector.external_interface.CancelBehaviorRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=10689,
+  serialized_end=10712,
+)
+
+
+_CANCELBEHAVIORRESPONSE = _descriptor.Descriptor(
+  name='CancelBehaviorResponse',
+  full_name='Anki.Vector.external_interface.CancelBehaviorResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='status', full_name='Anki.Vector.external_interface.CancelBehaviorResponse.status', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=10714,
+  serialized_end=10802,
 )
 
 
@@ -4045,8 +4477,8 @@ _GOTOPOSEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9853,
-  serialized_end=10020,
+  serialized_start=10805,
+  serialized_end=10972,
 )
 
 
@@ -4083,8 +4515,8 @@ _GOTOPOSERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10023,
-  serialized_end=10167,
+  serialized_start=10975,
+  serialized_end=11119,
 )
 
 
@@ -4170,8 +4602,8 @@ _DOCKWITHCUBEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10170,
-  serialized_end=10506,
+  serialized_start=11122,
+  serialized_end=11458,
 )
 
 
@@ -4208,8 +4640,8 @@ _DOCKWITHCUBERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10509,
-  serialized_end=10657,
+  serialized_start=11461,
+  serialized_end=11609,
 )
 
 
@@ -4267,8 +4699,8 @@ _DRIVESTRAIGHTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10659,
-  serialized_end=10786,
+  serialized_start=11611,
+  serialized_end=11738,
 )
 
 
@@ -4305,8 +4737,8 @@ _DRIVESTRAIGHTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10789,
-  serialized_end=10938,
+  serialized_start=11741,
+  serialized_end=11890,
 )
 
 
@@ -4378,8 +4810,8 @@ _TURNINPLACEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=10941,
-  serialized_end=11110,
+  serialized_start=11893,
+  serialized_end=12062,
 )
 
 
@@ -4416,8 +4848,8 @@ _TURNINPLACERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11113,
-  serialized_end=11260,
+  serialized_start=12065,
+  serialized_end=12212,
 )
 
 
@@ -4482,8 +4914,8 @@ _SETHEADANGLEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11263,
-  serialized_end=11421,
+  serialized_start=12215,
+  serialized_end=12373,
 )
 
 
@@ -4520,8 +4952,8 @@ _SETHEADANGLERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11424,
-  serialized_end=11572,
+  serialized_start=12376,
+  serialized_end=12524,
 )
 
 
@@ -4586,8 +5018,8 @@ _SETLIFTHEIGHTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11575,
-  serialized_end=11734,
+  serialized_start=12527,
+  serialized_end=12686,
 )
 
 
@@ -4624,8 +5056,8 @@ _SETLIFTHEIGHTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11737,
-  serialized_end=11886,
+  serialized_start=12689,
+  serialized_end=12838,
 )
 
 
@@ -4676,8 +5108,8 @@ _TURNTOWARDSFACEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11888,
-  serialized_end=11994,
+  serialized_start=12840,
+  serialized_end=12946,
 )
 
 
@@ -4714,8 +5146,8 @@ _TURNTOWARDSFACERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=11997,
-  serialized_end=12148,
+  serialized_start=12949,
+  serialized_end=13100,
 )
 
 
@@ -4780,8 +5212,8 @@ _GOTOOBJECTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12151,
-  serialized_end=12365,
+  serialized_start=13103,
+  serialized_end=13317,
 )
 
 
@@ -4818,8 +5250,8 @@ _GOTOOBJECTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12368,
-  serialized_end=12514,
+  serialized_start=13320,
+  serialized_end=13466,
 )
 
 
@@ -4891,8 +5323,8 @@ _ROLLOBJECTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12517,
-  serialized_end=12747,
+  serialized_start=13469,
+  serialized_end=13699,
 )
 
 
@@ -4929,8 +5361,8 @@ _ROLLOBJECTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12750,
-  serialized_end=12896,
+  serialized_start=13702,
+  serialized_end=13848,
 )
 
 
@@ -5002,8 +5434,8 @@ _POPAWHEELIEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=12899,
-  serialized_end=13130,
+  serialized_start=13851,
+  serialized_end=14082,
 )
 
 
@@ -5040,8 +5472,8 @@ _POPAWHEELIERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13133,
-  serialized_end=13280,
+  serialized_start=14085,
+  serialized_end=14232,
 )
 
 
@@ -5113,8 +5545,8 @@ _PICKUPOBJECTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13283,
-  serialized_end=13515,
+  serialized_start=14235,
+  serialized_end=14467,
 )
 
 
@@ -5151,8 +5583,8 @@ _PICKUPOBJECTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13518,
-  serialized_end=13666,
+  serialized_start=14470,
+  serialized_end=14618,
 )
 
 
@@ -5189,8 +5621,8 @@ _PLACEOBJECTONGROUNDHEREREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13668,
-  serialized_end=13737,
+  serialized_start=14620,
+  serialized_end=14689,
 )
 
 
@@ -5227,8 +5659,8 @@ _PLACEOBJECTONGROUNDHERERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13740,
-  serialized_end=13899,
+  serialized_start=14692,
+  serialized_end=14851,
 )
 
 
@@ -5251,8 +5683,8 @@ _BATTERYSTATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13901,
-  serialized_end=13922,
+  serialized_start=14853,
+  serialized_end=14874,
 )
 
 
@@ -5324,8 +5756,8 @@ _BATTERYSTATERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=13925,
-  serialized_end=14254,
+  serialized_start=14877,
+  serialized_end=15206,
 )
 
 
@@ -5377,8 +5809,8 @@ _CUBEBATTERY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14257,
-  serialized_end=14468,
+  serialized_start=15209,
+  serialized_end=15420,
 )
 
 
@@ -5401,8 +5833,8 @@ _VERSIONSTATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14470,
-  serialized_end=14491,
+  serialized_start=15422,
+  serialized_end=15443,
 )
 
 
@@ -5446,8 +5878,8 @@ _VERSIONSTATERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14494,
-  serialized_end=14625,
+  serialized_start=15446,
+  serialized_end=15577,
 )
 
 
@@ -5479,6 +5911,13 @@ _SAYTEXTREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='pitch_scalar', full_name='Anki.Vector.external_interface.SayTextRequest.pitch_scalar', index=3,
+      number=4, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -5491,8 +5930,8 @@ _SAYTEXTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14627,
-  serialized_end=14708,
+  serialized_start=15579,
+  serialized_end=15682,
 )
 
 
@@ -5530,8 +5969,8 @@ _SAYTEXTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14711,
-  serialized_end=14956,
+  serialized_start=15685,
+  serialized_end=15930,
 )
 
 
@@ -5603,8 +6042,8 @@ _STIMULATIONINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=14959,
-  serialized_end=15114,
+  serialized_start=15933,
+  serialized_end=16088,
 )
 
 
@@ -5634,8 +6073,8 @@ _AUDIOSENDMODEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15116,
-  serialized_end=15205,
+  serialized_start=16090,
+  serialized_end=16179,
 )
 
 
@@ -5665,8 +6104,8 @@ _AUDIOSENDMODECHANGED = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15207,
-  serialized_end=15296,
+  serialized_start=16181,
+  serialized_end=16270,
 )
 
 
@@ -5752,8 +6191,8 @@ _AUDIOCHUNK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15299,
-  serialized_end=15531,
+  serialized_start=16273,
+  serialized_end=16505,
 )
 
 
@@ -5776,8 +6215,8 @@ _AUDIOFEEDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15533,
-  serialized_end=15551,
+  serialized_start=16507,
+  serialized_end=16525,
 )
 
 
@@ -5849,8 +6288,8 @@ _AUDIOFEEDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15554,
-  serialized_end=15754,
+  serialized_start=16528,
+  serialized_end=16728,
 )
 
 
@@ -5887,8 +6326,8 @@ _EXTERNALAUDIOSTREAMPREPARE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15756,
-  serialized_end=15832,
+  serialized_start=16730,
+  serialized_end=16806,
 )
 
 
@@ -5925,8 +6364,8 @@ _EXTERNALAUDIOSTREAMCHUNK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15834,
-  serialized_end=15921,
+  serialized_start=16808,
+  serialized_end=16895,
 )
 
 
@@ -5949,8 +6388,8 @@ _EXTERNALAUDIOSTREAMCOMPLETE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15923,
-  serialized_end=15952,
+  serialized_start=16897,
+  serialized_end=16926,
 )
 
 
@@ -5973,8 +6412,8 @@ _EXTERNALAUDIOSTREAMCANCEL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=15954,
-  serialized_end=15981,
+  serialized_start=16928,
+  serialized_end=16955,
 )
 
 
@@ -6028,8 +6467,8 @@ _EXTERNALAUDIOSTREAMREQUEST = _descriptor.Descriptor(
       name='audio_request_type', full_name='Anki.Vector.external_interface.ExternalAudioStreamRequest.audio_request_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=15984,
-  serialized_end=16398,
+  serialized_start=16958,
+  serialized_end=17372,
 )
 
 
@@ -6052,8 +6491,8 @@ _EXTERNALAUDIOSTREAMPLAYBACKCOMPLETE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=16400,
-  serialized_end=16437,
+  serialized_start=17374,
+  serialized_end=17411,
 )
 
 
@@ -6076,8 +6515,8 @@ _EXTERNALAUDIOSTREAMPLAYBACKFAILURE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=16439,
-  serialized_end=16475,
+  serialized_start=17413,
+  serialized_end=17449,
 )
 
 
@@ -6114,8 +6553,8 @@ _EXTERNALAUDIOSTREAMBUFFEROVERRUN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=16477,
-  serialized_end=16569,
+  serialized_start=17451,
+  serialized_end=17543,
 )
 
 
@@ -6162,8 +6601,8 @@ _EXTERNALAUDIOSTREAMRESPONSE = _descriptor.Descriptor(
       name='audio_response_type', full_name='Anki.Vector.external_interface.ExternalAudioStreamResponse.audio_response_type',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=16572,
-  serialized_end=16949,
+  serialized_start=17546,
+  serialized_end=17923,
 )
 
 
@@ -6193,8 +6632,8 @@ _MASTERVOLUMEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=16951,
-  serialized_end=17045,
+  serialized_start=17925,
+  serialized_end=18019,
 )
 
 
@@ -6224,8 +6663,8 @@ _MASTERVOLUMERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=17047,
-  serialized_end=17133,
+  serialized_start=18021,
+  serialized_end=18107,
 )
 
 
@@ -6255,8 +6694,8 @@ _ENABLEMARKERDETECTIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=17135,
-  serialized_end=17181,
+  serialized_start=18109,
+  serialized_end=18155,
 )
 
 
@@ -6286,8 +6725,8 @@ _ENABLEMARKERDETECTIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=17183,
-  serialized_end=17278,
+  serialized_start=18157,
+  serialized_end=18252,
 )
 
 
@@ -6345,8 +6784,8 @@ _ENABLEFACEDETECTIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=17281,
-  serialized_end=17458,
+  serialized_start=18255,
+  serialized_end=18432,
 )
 
 
@@ -6376,8 +6815,8 @@ _ENABLEFACEDETECTIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=17460,
-  serialized_end=17553,
+  serialized_start=18434,
+  serialized_end=18527,
 )
 
 
@@ -6407,8 +6846,8 @@ _ENABLEMOTIONDETECTIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=17555,
-  serialized_end=17601,
+  serialized_start=18529,
+  serialized_end=18575,
 )
 
 
@@ -6438,8 +6877,8 @@ _ENABLEMOTIONDETECTIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=17603,
-  serialized_end=17698,
+  serialized_start=18577,
+  serialized_end=18672,
 )
 
 
@@ -6469,8 +6908,8 @@ _ENABLEMIRRORMODEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=17700,
-  serialized_end=17741,
+  serialized_start=18674,
+  serialized_end=18715,
 )
 
 
@@ -6500,8 +6939,8 @@ _ENABLEMIRRORMODERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=17743,
-  serialized_end=17833,
+  serialized_start=18717,
+  serialized_end=18807,
 )
 
 
@@ -6524,8 +6963,8 @@ _MIRRORMODEDISABLED = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=17835,
-  serialized_end=17855,
+  serialized_start=18809,
+  serialized_end=18829,
 )
 
 
@@ -6543,6 +6982,13 @@ _ENABLEIMAGESTREAMINGREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='enable_high_resolution', full_name='Anki.Vector.external_interface.EnableImageStreamingRequest.enable_high_resolution', index=1,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -6555,8 +7001,8 @@ _ENABLEIMAGESTREAMINGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=17857,
-  serialized_end=17902,
+  serialized_start=18831,
+  serialized_end=18908,
 )
 
 
@@ -6586,8 +7032,8 @@ _ENABLEIMAGESTREAMINGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=17904,
-  serialized_end=17998,
+  serialized_start=18910,
+  serialized_end=19004,
 )
 
 
@@ -6610,8 +7056,8 @@ _ISIMAGESTREAMINGENABLEDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=18000,
-  serialized_end=18032,
+  serialized_start=19006,
+  serialized_end=19038,
 )
 
 
@@ -6641,8 +7087,8 @@ _ISIMAGESTREAMINGENABLEDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=18034,
-  serialized_end=18103,
+  serialized_start=19040,
+  serialized_end=19109,
 )
 
 
@@ -6665,8 +7111,8 @@ _VISIONMODESAUTODISABLED = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=18105,
-  serialized_end=18130,
+  serialized_start=19111,
+  serialized_end=19136,
 )
 
 
@@ -6753,8 +7199,8 @@ _IMAGECHUNK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=18133,
-  serialized_end=18598,
+  serialized_start=19139,
+  serialized_end=19604,
 )
 
 
@@ -6777,8 +7223,8 @@ _CAMERAFEEDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=18600,
-  serialized_end=18619,
+  serialized_start=19606,
+  serialized_end=19625,
 )
 
 
@@ -6829,8 +7275,8 @@ _CAMERAFEEDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=18622,
-  serialized_end=18788,
+  serialized_start=19628,
+  serialized_end=19794,
 )
 
 
@@ -6841,6 +7287,13 @@ _CAPTURESINGLEIMAGEREQUEST = _descriptor.Descriptor(
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='enable_high_resolution', full_name='Anki.Vector.external_interface.CaptureSingleImageRequest.enable_high_resolution', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -6853,8 +7306,8 @@ _CAPTURESINGLEIMAGEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=18790,
-  serialized_end=18817,
+  serialized_start=19796,
+  serialized_end=19855,
 )
 
 
@@ -6912,8 +7365,8 @@ _CAPTURESINGLEIMAGERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=18820,
-  serialized_end=19052,
+  serialized_start=19858,
+  serialized_end=20090,
 )
 
 
@@ -6950,8 +7403,8 @@ _SETEYECOLORREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19054,
-  serialized_end=19107,
+  serialized_start=20092,
+  serialized_end=20145,
 )
 
 
@@ -6981,8 +7434,254 @@ _SETEYECOLORRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19109,
-  serialized_end=19194,
+  serialized_start=20147,
+  serialized_end=20232,
+)
+
+
+_CAMERACONFIGREQUEST = _descriptor.Descriptor(
+  name='CameraConfigRequest',
+  full_name='Anki.Vector.external_interface.CameraConfigRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=20234,
+  serialized_end=20255,
+)
+
+
+_CAMERACONFIGRESPONSE = _descriptor.Descriptor(
+  name='CameraConfigResponse',
+  full_name='Anki.Vector.external_interface.CameraConfigResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='focal_length_x', full_name='Anki.Vector.external_interface.CameraConfigResponse.focal_length_x', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='focal_length_y', full_name='Anki.Vector.external_interface.CameraConfigResponse.focal_length_y', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='center_x', full_name='Anki.Vector.external_interface.CameraConfigResponse.center_x', index=2,
+      number=3, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='center_y', full_name='Anki.Vector.external_interface.CameraConfigResponse.center_y', index=3,
+      number=4, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fov_x', full_name='Anki.Vector.external_interface.CameraConfigResponse.fov_x', index=4,
+      number=5, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='fov_y', full_name='Anki.Vector.external_interface.CameraConfigResponse.fov_y', index=5,
+      number=6, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='min_camera_exposure_time_ms', full_name='Anki.Vector.external_interface.CameraConfigResponse.min_camera_exposure_time_ms', index=6,
+      number=7, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='max_camera_exposure_time_ms', full_name='Anki.Vector.external_interface.CameraConfigResponse.max_camera_exposure_time_ms', index=7,
+      number=8, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='min_camera_gain', full_name='Anki.Vector.external_interface.CameraConfigResponse.min_camera_gain', index=8,
+      number=9, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='max_camera_gain', full_name='Anki.Vector.external_interface.CameraConfigResponse.max_camera_gain', index=9,
+      number=10, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=20258,
+  serialized_end=20518,
+)
+
+
+_SETCAMERASETTINGSREQUEST = _descriptor.Descriptor(
+  name='SetCameraSettingsRequest',
+  full_name='Anki.Vector.external_interface.SetCameraSettingsRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='gain', full_name='Anki.Vector.external_interface.SetCameraSettingsRequest.gain', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='exposure_ms', full_name='Anki.Vector.external_interface.SetCameraSettingsRequest.exposure_ms', index=1,
+      number=2, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='enable_auto_exposure', full_name='Anki.Vector.external_interface.SetCameraSettingsRequest.enable_auto_exposure', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=20520,
+  serialized_end=20611,
+)
+
+
+_SETCAMERASETTINGSRESPONSE = _descriptor.Descriptor(
+  name='SetCameraSettingsResponse',
+  full_name='Anki.Vector.external_interface.SetCameraSettingsResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='status', full_name='Anki.Vector.external_interface.SetCameraSettingsResponse.status', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='status_message', full_name='Anki.Vector.external_interface.SetCameraSettingsResponse.status_message', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=20613,
+  serialized_end=20728,
+)
+
+
+_CAMERASETTINGSUPDATE = _descriptor.Descriptor(
+  name='CameraSettingsUpdate',
+  full_name='Anki.Vector.external_interface.CameraSettingsUpdate',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='gain', full_name='Anki.Vector.external_interface.CameraSettingsUpdate.gain', index=0,
+      number=1, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='exposure_ms', full_name='Anki.Vector.external_interface.CameraSettingsUpdate.exposure_ms', index=1,
+      number=2, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='auto_exposure_enabled', full_name='Anki.Vector.external_interface.CameraSettingsUpdate.auto_exposure_enabled', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=20730,
+  serialized_end=20818,
 )
 
 
@@ -7040,8 +7739,8 @@ _SDKINITIALIZATIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19197,
-  serialized_end=19347,
+  serialized_start=20821,
+  serialized_end=20971,
 )
 
 
@@ -7071,8 +7770,8 @@ _SDKINITIALIZATIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=19349,
-  serialized_end=19440,
+  serialized_start=20973,
+  serialized_end=21064,
 )
 
 _DRIVEWHEELSRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
@@ -7115,6 +7814,8 @@ _ROBOTSTATE.fields_by_name['accel'].message_type = _ACCELDATA
 _ROBOTSTATE.fields_by_name['gyro'].message_type = _GYRODATA
 _ROBOTSTATE.fields_by_name['prox_data'].message_type = _PROXDATA
 _ROBOTSTATE.fields_by_name['touch_data'].message_type = _TOUCHDATA
+_UNEXPECTEDMOVEMENT.fields_by_name['movement_type'].enum_type = _UNEXPECTEDMOVEMENTTYPE
+_UNEXPECTEDMOVEMENT.fields_by_name['movement_side'].enum_type = _UNEXPECTEDMOVEMENTSIDE
 _ROBOTOBSERVEDFACE.fields_by_name['pose'].message_type = _POSESTRUCT
 _ROBOTOBSERVEDFACE.fields_by_name['img_rect'].message_type = _CLADRECT
 _ROBOTOBSERVEDFACE.fields_by_name['expression'].enum_type = _FACIALEXPRESSION
@@ -7130,6 +7831,8 @@ _UPDATEENROLLEDFACEBYIDRESPONSE.fields_by_name['status'].message_type = anki__ve
 _ERASEENROLLEDFACEBYIDRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
 _ERASEALLENROLLEDFACESRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
 _SETFACETOENROLLRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
+_ENROLLFACERESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
+_ENROLLFACERESPONSE.fields_by_name['result'].enum_type = _BEHAVIORRESULTS
 _DRIVEOFFCHARGERRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
 _DRIVEOFFCHARGERRESPONSE.fields_by_name['result'].enum_type = _BEHAVIORRESULTS
 _DRIVEONCHARGERRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
@@ -7148,6 +7851,7 @@ _DELETEPHOTORESPONSE.fields_by_name['status'].message_type = anki__vector_dot_me
 _ACTIONRESULT.fields_by_name['code'].enum_type = _ACTIONRESULT_ACTIONRESULTCODE
 _ACTIONRESULT_ACTIONRESULTCODE.containing_type = _ACTIONRESULT
 _CANCELACTIONBYIDTAGRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
+_CANCELBEHAVIORRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
 _GOTOPOSEREQUEST.fields_by_name['motion_prof'].message_type = _PATHMOTIONPROFILE
 _GOTOPOSERESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
 _GOTOPOSERESPONSE.fields_by_name['result'].message_type = _ACTIONRESULT
@@ -7231,6 +7935,7 @@ _CAMERAFEEDRESPONSE.fields_by_name['image_encoding'].enum_type = _IMAGECHUNK_IMA
 _CAPTURESINGLEIMAGERESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
 _CAPTURESINGLEIMAGERESPONSE.fields_by_name['image_encoding'].enum_type = _IMAGECHUNK_IMAGEENCODING
 _SETEYECOLORRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
+_SETCAMERASETTINGSRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
 _SDKINITIALIZATIONRESPONSE.fields_by_name['status'].message_type = anki__vector_dot_messaging_dot_response__status__pb2._RESPONSESTATUS
 DESCRIPTOR.message_types_by_name['KeepAlivePing'] = _KEEPALIVEPING
 DESCRIPTOR.message_types_by_name['AnimationTrigger'] = _ANIMATIONTRIGGER
@@ -7265,6 +7970,9 @@ DESCRIPTOR.message_types_by_name['TouchData'] = _TOUCHDATA
 DESCRIPTOR.message_types_by_name['RobotState'] = _ROBOTSTATE
 DESCRIPTOR.message_types_by_name['CladPoint'] = _CLADPOINT
 DESCRIPTOR.message_types_by_name['CladRect'] = _CLADRECT
+DESCRIPTOR.message_types_by_name['RobotObservedMotion'] = _ROBOTOBSERVEDMOTION
+DESCRIPTOR.message_types_by_name['RobotErasedEnrolledFace'] = _ROBOTERASEDENROLLEDFACE
+DESCRIPTOR.message_types_by_name['UnexpectedMovement'] = _UNEXPECTEDMOVEMENT
 DESCRIPTOR.message_types_by_name['RobotObservedFace'] = _ROBOTOBSERVEDFACE
 DESCRIPTOR.message_types_by_name['RobotChangedObservedFaceID'] = _ROBOTCHANGEDOBSERVEDFACEID
 DESCRIPTOR.message_types_by_name['FaceEnrollmentCompleted'] = _FACEENROLLMENTCOMPLETED
@@ -7282,6 +7990,8 @@ DESCRIPTOR.message_types_by_name['EraseAllEnrolledFacesRequest'] = _ERASEALLENRO
 DESCRIPTOR.message_types_by_name['EraseAllEnrolledFacesResponse'] = _ERASEALLENROLLEDFACESRESPONSE
 DESCRIPTOR.message_types_by_name['SetFaceToEnrollRequest'] = _SETFACETOENROLLREQUEST
 DESCRIPTOR.message_types_by_name['SetFaceToEnrollResponse'] = _SETFACETOENROLLRESPONSE
+DESCRIPTOR.message_types_by_name['EnrollFaceRequest'] = _ENROLLFACEREQUEST
+DESCRIPTOR.message_types_by_name['EnrollFaceResponse'] = _ENROLLFACERESPONSE
 DESCRIPTOR.message_types_by_name['DriveOffChargerRequest'] = _DRIVEOFFCHARGERREQUEST
 DESCRIPTOR.message_types_by_name['DriveOffChargerResponse'] = _DRIVEOFFCHARGERRESPONSE
 DESCRIPTOR.message_types_by_name['DriveOnChargerRequest'] = _DRIVEONCHARGERREQUEST
@@ -7311,6 +8021,8 @@ DESCRIPTOR.message_types_by_name['PathMotionProfile'] = _PATHMOTIONPROFILE
 DESCRIPTOR.message_types_by_name['ActionResult'] = _ACTIONRESULT
 DESCRIPTOR.message_types_by_name['CancelActionByIdTagRequest'] = _CANCELACTIONBYIDTAGREQUEST
 DESCRIPTOR.message_types_by_name['CancelActionByIdTagResponse'] = _CANCELACTIONBYIDTAGRESPONSE
+DESCRIPTOR.message_types_by_name['CancelBehaviorRequest'] = _CANCELBEHAVIORREQUEST
+DESCRIPTOR.message_types_by_name['CancelBehaviorResponse'] = _CANCELBEHAVIORRESPONSE
 DESCRIPTOR.message_types_by_name['GoToPoseRequest'] = _GOTOPOSEREQUEST
 DESCRIPTOR.message_types_by_name['GoToPoseResponse'] = _GOTOPOSERESPONSE
 DESCRIPTOR.message_types_by_name['DockWithCubeRequest'] = _DOCKWITHCUBEREQUEST
@@ -7380,9 +8092,16 @@ DESCRIPTOR.message_types_by_name['CaptureSingleImageRequest'] = _CAPTURESINGLEIM
 DESCRIPTOR.message_types_by_name['CaptureSingleImageResponse'] = _CAPTURESINGLEIMAGERESPONSE
 DESCRIPTOR.message_types_by_name['SetEyeColorRequest'] = _SETEYECOLORREQUEST
 DESCRIPTOR.message_types_by_name['SetEyeColorResponse'] = _SETEYECOLORRESPONSE
+DESCRIPTOR.message_types_by_name['CameraConfigRequest'] = _CAMERACONFIGREQUEST
+DESCRIPTOR.message_types_by_name['CameraConfigResponse'] = _CAMERACONFIGRESPONSE
+DESCRIPTOR.message_types_by_name['SetCameraSettingsRequest'] = _SETCAMERASETTINGSREQUEST
+DESCRIPTOR.message_types_by_name['SetCameraSettingsResponse'] = _SETCAMERASETTINGSRESPONSE
+DESCRIPTOR.message_types_by_name['CameraSettingsUpdate'] = _CAMERASETTINGSUPDATE
 DESCRIPTOR.message_types_by_name['SDKInitializationRequest'] = _SDKINITIALIZATIONREQUEST
 DESCRIPTOR.message_types_by_name['SDKInitializationResponse'] = _SDKINITIALIZATIONRESPONSE
 DESCRIPTOR.enum_types_by_name['RobotStatus'] = _ROBOTSTATUS
+DESCRIPTOR.enum_types_by_name['UnexpectedMovementType'] = _UNEXPECTEDMOVEMENTTYPE
+DESCRIPTOR.enum_types_by_name['UnexpectedMovementSide'] = _UNEXPECTEDMOVEMENTSIDE
 DESCRIPTOR.enum_types_by_name['FacialExpression'] = _FACIALEXPRESSION
 DESCRIPTOR.enum_types_by_name['FaceEnrollmentResult'] = _FACEENROLLMENTRESULT
 DESCRIPTOR.enum_types_by_name['BehaviorResults'] = _BEHAVIORRESULTS
@@ -7625,6 +8344,27 @@ CladRect = _reflection.GeneratedProtocolMessageType('CladRect', (_message.Messag
   ))
 _sym_db.RegisterMessage(CladRect)
 
+RobotObservedMotion = _reflection.GeneratedProtocolMessageType('RobotObservedMotion', (_message.Message,), dict(
+  DESCRIPTOR = _ROBOTOBSERVEDMOTION,
+  __module__ = 'anki_vector.messaging.messages_pb2'
+  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.RobotObservedMotion)
+  ))
+_sym_db.RegisterMessage(RobotObservedMotion)
+
+RobotErasedEnrolledFace = _reflection.GeneratedProtocolMessageType('RobotErasedEnrolledFace', (_message.Message,), dict(
+  DESCRIPTOR = _ROBOTERASEDENROLLEDFACE,
+  __module__ = 'anki_vector.messaging.messages_pb2'
+  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.RobotErasedEnrolledFace)
+  ))
+_sym_db.RegisterMessage(RobotErasedEnrolledFace)
+
+UnexpectedMovement = _reflection.GeneratedProtocolMessageType('UnexpectedMovement', (_message.Message,), dict(
+  DESCRIPTOR = _UNEXPECTEDMOVEMENT,
+  __module__ = 'anki_vector.messaging.messages_pb2'
+  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.UnexpectedMovement)
+  ))
+_sym_db.RegisterMessage(UnexpectedMovement)
+
 RobotObservedFace = _reflection.GeneratedProtocolMessageType('RobotObservedFace', (_message.Message,), dict(
   DESCRIPTOR = _ROBOTOBSERVEDFACE,
   __module__ = 'anki_vector.messaging.messages_pb2'
@@ -7743,6 +8483,20 @@ SetFaceToEnrollResponse = _reflection.GeneratedProtocolMessageType('SetFaceToEnr
   # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.SetFaceToEnrollResponse)
   ))
 _sym_db.RegisterMessage(SetFaceToEnrollResponse)
+
+EnrollFaceRequest = _reflection.GeneratedProtocolMessageType('EnrollFaceRequest', (_message.Message,), dict(
+  DESCRIPTOR = _ENROLLFACEREQUEST,
+  __module__ = 'anki_vector.messaging.messages_pb2'
+  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.EnrollFaceRequest)
+  ))
+_sym_db.RegisterMessage(EnrollFaceRequest)
+
+EnrollFaceResponse = _reflection.GeneratedProtocolMessageType('EnrollFaceResponse', (_message.Message,), dict(
+  DESCRIPTOR = _ENROLLFACERESPONSE,
+  __module__ = 'anki_vector.messaging.messages_pb2'
+  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.EnrollFaceResponse)
+  ))
+_sym_db.RegisterMessage(EnrollFaceResponse)
 
 DriveOffChargerRequest = _reflection.GeneratedProtocolMessageType('DriveOffChargerRequest', (_message.Message,), dict(
   DESCRIPTOR = _DRIVEOFFCHARGERREQUEST,
@@ -7946,6 +8700,20 @@ CancelActionByIdTagResponse = _reflection.GeneratedProtocolMessageType('CancelAc
   # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.CancelActionByIdTagResponse)
   ))
 _sym_db.RegisterMessage(CancelActionByIdTagResponse)
+
+CancelBehaviorRequest = _reflection.GeneratedProtocolMessageType('CancelBehaviorRequest', (_message.Message,), dict(
+  DESCRIPTOR = _CANCELBEHAVIORREQUEST,
+  __module__ = 'anki_vector.messaging.messages_pb2'
+  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.CancelBehaviorRequest)
+  ))
+_sym_db.RegisterMessage(CancelBehaviorRequest)
+
+CancelBehaviorResponse = _reflection.GeneratedProtocolMessageType('CancelBehaviorResponse', (_message.Message,), dict(
+  DESCRIPTOR = _CANCELBEHAVIORRESPONSE,
+  __module__ = 'anki_vector.messaging.messages_pb2'
+  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.CancelBehaviorResponse)
+  ))
+_sym_db.RegisterMessage(CancelBehaviorResponse)
 
 GoToPoseRequest = _reflection.GeneratedProtocolMessageType('GoToPoseRequest', (_message.Message,), dict(
   DESCRIPTOR = _GOTOPOSEREQUEST,
@@ -8429,6 +9197,41 @@ SetEyeColorResponse = _reflection.GeneratedProtocolMessageType('SetEyeColorRespo
   # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.SetEyeColorResponse)
   ))
 _sym_db.RegisterMessage(SetEyeColorResponse)
+
+CameraConfigRequest = _reflection.GeneratedProtocolMessageType('CameraConfigRequest', (_message.Message,), dict(
+  DESCRIPTOR = _CAMERACONFIGREQUEST,
+  __module__ = 'anki_vector.messaging.messages_pb2'
+  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.CameraConfigRequest)
+  ))
+_sym_db.RegisterMessage(CameraConfigRequest)
+
+CameraConfigResponse = _reflection.GeneratedProtocolMessageType('CameraConfigResponse', (_message.Message,), dict(
+  DESCRIPTOR = _CAMERACONFIGRESPONSE,
+  __module__ = 'anki_vector.messaging.messages_pb2'
+  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.CameraConfigResponse)
+  ))
+_sym_db.RegisterMessage(CameraConfigResponse)
+
+SetCameraSettingsRequest = _reflection.GeneratedProtocolMessageType('SetCameraSettingsRequest', (_message.Message,), dict(
+  DESCRIPTOR = _SETCAMERASETTINGSREQUEST,
+  __module__ = 'anki_vector.messaging.messages_pb2'
+  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.SetCameraSettingsRequest)
+  ))
+_sym_db.RegisterMessage(SetCameraSettingsRequest)
+
+SetCameraSettingsResponse = _reflection.GeneratedProtocolMessageType('SetCameraSettingsResponse', (_message.Message,), dict(
+  DESCRIPTOR = _SETCAMERASETTINGSRESPONSE,
+  __module__ = 'anki_vector.messaging.messages_pb2'
+  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.SetCameraSettingsResponse)
+  ))
+_sym_db.RegisterMessage(SetCameraSettingsResponse)
+
+CameraSettingsUpdate = _reflection.GeneratedProtocolMessageType('CameraSettingsUpdate', (_message.Message,), dict(
+  DESCRIPTOR = _CAMERASETTINGSUPDATE,
+  __module__ = 'anki_vector.messaging.messages_pb2'
+  # @@protoc_insertion_point(class_scope:Anki.Vector.external_interface.CameraSettingsUpdate)
+  ))
+_sym_db.RegisterMessage(CameraSettingsUpdate)
 
 SDKInitializationRequest = _reflection.GeneratedProtocolMessageType('SDKInitializationRequest', (_message.Message,), dict(
   DESCRIPTOR = _SDKINITIALIZATIONREQUEST,

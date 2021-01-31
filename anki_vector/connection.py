@@ -47,6 +47,14 @@ from .messaging import client, protocol
 from .version import __version__
 
 
+class CancelType(Enum):
+    """Enum used to specify cancellation options for behaviors -- internal use only """
+    #: Cancellable as an 'Action'
+    CANCELLABLE_ACTION = 0
+    #: Cancellable as a 'Behavior'
+    CANCELLABLE_BEHAVIOR = 1
+
+
 class ControlPriorityLevel(Enum):
     """Enum used to specify the priority level for the program."""
     #: Runs above mandatory physical reactions, will drive off table, perform while on a slope,
@@ -689,7 +697,7 @@ class Connection:
         return asyncio.run_coroutine_threadsafe(coro, self._loop)
 
 
-def on_connection_thread(log_messaging: bool = True, requires_control: bool = True, is_cancellable_behavior=False) -> Callable[[Coroutine[util.Component, Any, None]], Any]:
+def on_connection_thread(log_messaging: bool = True, requires_control: bool = True, is_cancellable: CancelType = None) -> Callable[[Coroutine[util.Component, Any, None]], Any]:
     """A decorator generator used internally to denote which functions will run on
     the connection thread. This unblocks the caller of the wrapped function
     and allows them to continue running while the messages are being processed.
@@ -706,7 +714,8 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
     :param log_messaging: True if the log output should include the entire message or just the size. Recommended for
         large binary return values.
     :param requires_control: True if the function should wait until behavior control is granted before executing.
-    :param is_cancellable_behavior: True if the behavior can be cancelled before it has completed.
+    :param is_cancellable: use a valid enum of :class:`CancelType` to specify the type of cancellation for the
+        function. Defaults to 'None' implying no support for responding to cancellation.
     :returns: A decorator which has 3 possible returns based on context: the result of the decorated function,
         the :class:`concurrent.futures.Future` which points to the decorated function, or the
         :class:`asyncio.Future` which points to the decorated function.
@@ -769,10 +778,10 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
             # if the call supplies a _return_future parameter then override force_async with that.
             _return_future = kwargs.pop('_return_future', self.force_async)
 
-            behavior_id = None
-            if is_cancellable_behavior:
-                behavior_id = self._get_next_behavior_id()
-                kwargs['_behavior_id'] = behavior_id
+            action_id = None
+            if is_cancellable == CancelType.CANCELLABLE_ACTION:
+                action_id = self._get_next_action_id()
+                kwargs['_action_id'] = action_id
 
             wrapped_coroutine = log_handler(self.conn, func, self.logger, *args, **kwargs)
 
@@ -783,15 +792,22 @@ def on_connection_thread(log_messaging: bool = True, requires_control: bool = Tr
                                            "function '{}' is being invoked on that thread.\n".format(func.__name__ if hasattr(func, "__name__") else func))
             future = asyncio.run_coroutine_threadsafe(wrapped_coroutine, self.conn.loop)
 
-            if is_cancellable_behavior:
-                def user_cancelled(fut):
-                    if behavior_id is None:
+            if is_cancellable == CancelType.CANCELLABLE_ACTION:
+                def user_cancelled_action(fut):
+                    if action_id is None:
                         return
 
                     if fut.cancelled():
-                        self._abort(behavior_id)
+                        self._abort_action(action_id)
 
-                future.add_done_callback(user_cancelled)
+                future.add_done_callback(user_cancelled_action)
+
+            if is_cancellable == CancelType.CANCELLABLE_BEHAVIOR:
+                def user_cancelled_behavior(fut):
+                    if fut.cancelled():
+                        self._abort_behavior()
+
+                future.add_done_callback(user_cancelled_behavior)
 
             if requires_control:
                 self.conn.active_commands.append(future)
