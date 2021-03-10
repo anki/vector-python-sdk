@@ -67,26 +67,29 @@ MAX_LIFT_HEIGHT = util.distance_mm(MAX_LIFT_HEIGHT_MM)
 class BehaviorComponent(util.Component):
     """Run behaviors on Vector"""
 
-    _next_behavior_id = protocol.FIRST_SDK_TAG
+    _next_action_id = protocol.FIRST_SDK_TAG
 
     @classmethod
-    def _get_next_behavior_id(cls):
-        # Post increment _current_behavior_id (and loop within the SDK_TAG range)
-        next_behavior_id = cls._next_behavior_id
-        if cls._next_behavior_id == protocol.LAST_SDK_TAG:
-            cls._next_behavior_id = protocol.FIRST_SDK_TAG
+    def _get_next_action_id(cls):
+        # Post increment _current_action_id (and loop within the SDK_TAG range)
+        next_action_id = cls._next_action_id
+        if cls._next_action_id == protocol.LAST_SDK_TAG:
+            cls._next_action_id = protocol.FIRST_SDK_TAG
         else:
-            cls._next_behavior_id += 1
-        return next_behavior_id
+            cls._next_action_id += 1
+        return next_action_id
 
     @connection.on_connection_thread()
-    async def _abort(self, behavior_id):
-        # TODO Currently cancels actions only. Add ability to cancel behaviors.
-        cancel_action_request = protocol.CancelActionByIdTagRequest(id_tag=behavior_id)
+    async def _abort_action(self, action_id):
+        cancel_action_request = protocol.CancelActionByIdTagRequest(id_tag=action_id)
         return await self.grpc_interface.CancelActionByIdTag(cancel_action_request)
 
-    # TODO Make this cancellable with is_cancellable_behavior
     @connection.on_connection_thread()
+    async def _abort_behavior(self):
+        cancel_behavior_request = protocol.CancelBehaviorRequest()
+        return await self.grpc_interface.CancelBehavior(cancel_behavior_request)
+
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_BEHAVIOR)
     async def drive_off_charger(self) -> protocol.DriveOffChargerResponse:
         """Drive Vector off the charger
 
@@ -98,12 +101,23 @@ class BehaviorComponent(util.Component):
 
             with anki_vector.Robot() as robot:
                 robot.behavior.drive_off_charger()
+
+        Example of cancelling the :meth:`drive_off_charger` behavior:
+
+        .. testcode::
+
+            import anki_vector
+            import time
+
+            with anki_vector.AsyncRobot() as robot:
+                drive_off_future = robot.behavior.drive_off_charger()
+                time.sleep(3.0)
+                drive_off_future.cancel()
         """
         drive_off_charger_request = protocol.DriveOffChargerRequest()
         return await self.grpc_interface.DriveOffCharger(drive_off_charger_request)
 
-    # TODO Make this cancellable with is_cancellable_behavior
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_BEHAVIOR)
     async def drive_on_charger(self) -> protocol.DriveOnChargerResponse:
         """Drive Vector onto the charger
 
@@ -119,12 +133,23 @@ class BehaviorComponent(util.Component):
 
             with anki_vector.Robot() as robot:
                 robot.behavior.drive_on_charger()
+
+        Example of cancelling the :meth:`drive_on_charger` behavior:
+
+        .. testcode::
+
+            import anki_vector
+            import time
+
+            with anki_vector.AsyncRobot() as robot:
+                drive_on_future = robot.behavior.drive_on_charger()
+                time.sleep(3.0)
+                drive_on_future.cancel()
         """
         drive_on_charger_request = protocol.DriveOnChargerRequest()
         return await self.grpc_interface.DriveOnCharger(drive_on_charger_request)
 
-    # TODO Make this cancellable with is_cancellable_behavior
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_BEHAVIOR)
     async def find_faces(self) -> protocol.FindFacesResponse:
         """Look around for faces
 
@@ -136,12 +161,23 @@ class BehaviorComponent(util.Component):
 
             with anki_vector.Robot() as robot:
                 robot.behavior.find_faces()
+
+        Example of cancelling the :meth:`find_faces` behavior:
+
+        .. testcode::
+
+            import anki_vector
+            import time
+
+            with anki_vector.AsyncRobot() as robot:
+                find_faces_future = robot.behavior.find_faces()
+                time.sleep(3.0)
+                find_faces_future.cancel()
         """
         find_faces_request = protocol.FindFacesRequest()
         return await self.grpc_interface.FindFaces(find_faces_request)
 
-    # TODO Make this cancellable with is_cancellable_behavior
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_BEHAVIOR)
     async def look_around_in_place(self) -> protocol.LookAroundInPlaceResponse:
         """Look around in place
 
@@ -153,12 +189,23 @@ class BehaviorComponent(util.Component):
 
             with anki_vector.Robot() as robot:
                 robot.behavior.look_around_in_place()
+
+        Example of cancelling the :meth:`look_around_in_place` behavior:
+
+        .. testcode::
+
+            import anki_vector
+            import time
+
+            with anki_vector.AsyncRobot() as robot:
+                look_around_in_place_future = robot.behavior.look_around_in_place()
+                time.sleep(3.0)
+                look_around_in_place_future.cancel()
         """
         look_around_in_place_request = protocol.LookAroundInPlaceRequest()
         return await self.grpc_interface.LookAroundInPlace(look_around_in_place_request)
 
-    # TODO Make this cancellable with is_cancellable_behavior
-    @connection.on_connection_thread()
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_BEHAVIOR)
     async def roll_visible_cube(self) -> protocol.RollBlockResponse:
         """Roll a cube that is currently known to the robot
 
@@ -173,11 +220,23 @@ class BehaviorComponent(util.Component):
 
             with anki_vector.Robot() as robot:
                 robot.behavior.roll_visible_cube()
+
+        Example of cancelling the :meth:`roll_visible_cube` behavior:
+
+        .. testcode::
+
+            import anki_vector
+            import time
+
+            with anki_vector.AsyncRobot() as robot:
+                roll_visible_cube_future = robot.behavior.roll_visible_cube()
+                time.sleep(3.0)
+                roll_visible_cube_future.cancel()
         """
         roll_block_request = protocol.RollBlockRequest()
         return await self.grpc_interface.RollBlock(roll_block_request)
 
-    # TODO Make this cancellable with is_cancellable_behavior
+    # TODO Make this cancellable with is_cancellable
     @connection.on_connection_thread()
     async def say_text(self, text: str, use_vector_voice: bool = True, duration_scalar: float = 1.0) -> protocol.SayTextResponse:
         """Make Vector speak text.
@@ -201,7 +260,7 @@ class BehaviorComponent(util.Component):
                                                    duration_scalar=duration_scalar)
         return await self.conn.grpc_interface.SayText(say_text_request)
 
-    # TODO Make this cancellable with is_cancellable_behavior?
+    # TODO Make this cancellable with is_cancellable?
     @connection.on_connection_thread()
     async def set_eye_color(self, hue: float, saturation: float) -> protocol.SetEyeColorResponse:
         """Set Vector's eye color.
@@ -230,12 +289,12 @@ class BehaviorComponent(util.Component):
         eye_color_request = protocol.SetEyeColorRequest(hue=hue, saturation=saturation)
         return await self.conn.grpc_interface.SetEyeColor(eye_color_request)
 
-    @connection.on_connection_thread(is_cancellable_behavior=True)
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_ACTION)
     async def go_to_pose(self,
                          pose: util.Pose,
                          relative_to_robot: bool = False,
                          num_retries: int = 0,
-                         _behavior_id: int = None) -> protocol.GoToPoseResponse:
+                         _action_id: int = None) -> protocol.GoToPoseResponse:
         """Tells Vector to drive to the specified pose and orientation.
 
         In navigating to the requested pose, Vector will use path planning.
@@ -289,20 +348,20 @@ class BehaviorComponent(util.Component):
         go_to_pose_request = protocol.GoToPoseRequest(x_mm=pose.position.x,
                                                       y_mm=pose.position.y,
                                                       rad=pose.rotation.angle_z.radians,
-                                                      id_tag=_behavior_id,
+                                                      id_tag=_action_id,
                                                       num_retries=num_retries)
 
         return await self.grpc_interface.GoToPose(go_to_pose_request)
 
     # TODO alignment_type coming out ugly in the docs without real values
-    @connection.on_connection_thread(is_cancellable_behavior=True)
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_ACTION)
     async def dock_with_cube(self,
                              target_object: objects.LightCube,
                              approach_angle: util.Angle = None,
                              alignment_type: protocol.AlignmentType = protocol.ALIGNMENT_TYPE_LIFT_PLATE,
                              distance_from_marker: util.Distance = None,
                              num_retries: int = 0,
-                             _behavior_id: int = None) -> protocol.DockWithCubeResponse:
+                             _action_id: int = None) -> protocol.DockWithCubeResponse:
         """Tells Vector to dock with a light cube, optionally using a given approach angle and distance.
 
         While docking with the cube, Vector will use path planning.
@@ -360,7 +419,7 @@ class BehaviorComponent(util.Component):
 
         dock_request = protocol.DockWithCubeRequest(object_id=target_object.object_id,
                                                     alignment_type=alignment_type,
-                                                    id_tag=_behavior_id,
+                                                    id_tag=_action_id,
                                                     num_retries=num_retries)
         if approach_angle is not None:
             dock_request.use_approach_angle = True
@@ -372,13 +431,13 @@ class BehaviorComponent(util.Component):
         return await self.grpc_interface.DockWithCube(dock_request)
 
     # Movement actions
-    @connection.on_connection_thread(is_cancellable_behavior=True)
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_ACTION)
     async def drive_straight(self,
                              distance: util.Distance,
                              speed: util.Speed,
                              should_play_anim: bool = True,
                              num_retries: int = 0,
-                             _behavior_id: int = None) -> protocol.DriveStraightResponse:
+                             _action_id: int = None) -> protocol.DriveStraightResponse:
         """Tells Vector to drive in a straight line.
 
         Vector will drive for the specified distance (forwards or backwards)
@@ -424,12 +483,12 @@ class BehaviorComponent(util.Component):
         drive_straight_request = protocol.DriveStraightRequest(speed_mmps=speed.speed_mmps,
                                                                dist_mm=distance.distance_mm,
                                                                should_play_animation=should_play_anim,
-                                                               id_tag=_behavior_id,
+                                                               id_tag=_action_id,
                                                                num_retries=num_retries)
 
         return await self.grpc_interface.DriveStraight(drive_straight_request)
 
-    @connection.on_connection_thread(is_cancellable_behavior=True)
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_ACTION)
     async def turn_in_place(self,
                             angle: util.Angle,
                             speed: util.Angle = util.Angle(0.0),
@@ -437,7 +496,7 @@ class BehaviorComponent(util.Component):
                             angle_tolerance: util.Angle = util.Angle(0.0),
                             is_absolute: bool = 0,
                             num_retries: int = 0,
-                            _behavior_id: int = None) -> protocol.TurnInPlaceResponse:
+                            _action_id: int = None) -> protocol.TurnInPlaceResponse:
         """Turn the robot around its current position.
 
         Vector must be off of the charger for this movement action.
@@ -487,19 +546,19 @@ class BehaviorComponent(util.Component):
                                                             accel_rad_per_sec2=accel.radians,
                                                             tol_rad=angle_tolerance.radians,
                                                             is_absolute=is_absolute,
-                                                            id_tag=_behavior_id,
+                                                            id_tag=_action_id,
                                                             num_retries=num_retries)
 
         return await self.grpc_interface.TurnInPlace(turn_in_place_request)
 
-    @connection.on_connection_thread(is_cancellable_behavior=True)
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_ACTION)
     async def set_head_angle(self,
                              angle: util.Angle,
                              accel: float = 10.0,
                              max_speed: float = 10.0,
                              duration: float = 0.0,
                              num_retries: int = 0,
-                             _behavior_id: int = None) -> protocol.SetHeadAngleResponse:
+                             _action_id: int = None) -> protocol.SetHeadAngleResponse:
         """Tell Vector's head to move to a given angle.
 
         :param angle: Desired angle for Vector's head.
@@ -558,18 +617,18 @@ class BehaviorComponent(util.Component):
                                                               max_speed_rad_per_sec=max_speed,
                                                               accel_rad_per_sec2=accel,
                                                               duration_sec=duration,
-                                                              id_tag=_behavior_id,
+                                                              id_tag=_action_id,
                                                               num_retries=num_retries)
         return await self.grpc_interface.SetHeadAngle(set_head_angle_request)
 
-    @connection.on_connection_thread(is_cancellable_behavior=True)
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_ACTION)
     async def set_lift_height(self,
                               height: float,
                               accel: float = 10.0,
                               max_speed: float = 10.0,
                               duration: float = 0.0,
                               num_retries: int = 0,
-                              _behavior_id: int = None) -> protocol.SetLiftHeightResponse:
+                              _action_id: int = None) -> protocol.SetLiftHeightResponse:
         """Tell Vector's lift to move to a given height.
 
         :param height: desired height for Vector's lift 0.0 (bottom) to
@@ -621,16 +680,16 @@ class BehaviorComponent(util.Component):
                                                                 max_speed_rad_per_sec=max_speed,
                                                                 accel_rad_per_sec2=accel,
                                                                 duration_sec=duration,
-                                                                id_tag=_behavior_id,
+                                                                id_tag=_action_id,
                                                                 num_retries=num_retries)
 
         return await self.grpc_interface.SetLiftHeight(set_lift_height_request)
 
-    @connection.on_connection_thread(is_cancellable_behavior=True)
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_ACTION)
     async def turn_towards_face(self,
                                 face: faces.Face,
                                 num_retries: int = 0,
-                                _behavior_id: int = None) -> protocol.TurnTowardsFaceResponse:
+                                _action_id: int = None) -> protocol.TurnTowardsFaceResponse:
         """Tells Vector to turn towards this face.
 
         :param face_id: The face Vector will turn towards.
@@ -658,17 +717,17 @@ class BehaviorComponent(util.Component):
         """
         turn_towards_face_request = protocol.TurnTowardsFaceRequest(face_id=face.face_id,
                                                                     max_turn_angle_rad=util.degrees(180).radians,
-                                                                    id_tag=_behavior_id,
+                                                                    id_tag=_action_id,
                                                                     num_retries=num_retries)
 
         return await self.grpc_interface.TurnTowardsFace(turn_towards_face_request)
 
-    @connection.on_connection_thread(is_cancellable_behavior=True)
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_ACTION)
     async def go_to_object(self,
                            target_object: objects.LightCube,
                            distance_from_object,
                            num_retries: int = 0,
-                           _behavior_id: int = None) -> protocol.GoToObjectResponse:
+                           _action_id: int = None) -> protocol.GoToObjectResponse:
         """Tells Vector to drive to his Cube.
 
         :param target_object: The destination object. CustomObject instances are not supported.
@@ -696,17 +755,17 @@ class BehaviorComponent(util.Component):
         go_to_object_request = protocol.GoToObjectRequest(object_id=target_object.object_id,
                                                           distance_from_object_origin_mm=distance_from_object.distance_mm,
                                                           use_pre_dock_pose=False,
-                                                          id_tag=_behavior_id,
+                                                          id_tag=_action_id,
                                                           num_retries=num_retries)
 
         return await self.grpc_interface.GoToObject(go_to_object_request)
 
-    @connection.on_connection_thread(is_cancellable_behavior=True)
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_ACTION)
     async def roll_cube(self,
                         target_object: objects.LightCube,
                         approach_angle: util.Angle = None,
                         num_retries: int = 0,
-                        _behavior_id: int = None) -> protocol.RollObjectResponse:
+                        _action_id: int = None) -> protocol.RollObjectResponse:
         """Tells Vector to roll a specified cube object.
 
         :param target_object: The cube to roll.
@@ -742,17 +801,17 @@ class BehaviorComponent(util.Component):
                                                          approach_angle_rad=approach_angle.radians,
                                                          use_approach_angle=use_approach_angle,
                                                          use_pre_dock_pose=use_approach_angle,
-                                                         id_tag=_behavior_id,
+                                                         id_tag=_action_id,
                                                          num_retries=num_retries)
 
         return await self.grpc_interface.RollObject(roll_object_request)
 
-    @connection.on_connection_thread(is_cancellable_behavior=True)
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_ACTION)
     async def pop_a_wheelie(self,
                             target_object: objects.LightCube,
                             approach_angle: util.Angle = None,
                             num_retries: int = 0,
-                            _behavior_id: int = None) -> protocol.PopAWheelieResponse:
+                            _action_id: int = None) -> protocol.PopAWheelieResponse:
         """Tells Vector to "pop a wheelie" using his light cube.
 
         :param target_object: The cube to push down on with Vector's lift, to start the wheelie.
@@ -788,17 +847,17 @@ class BehaviorComponent(util.Component):
                                                             approach_angle_rad=approach_angle.radians,
                                                             use_approach_angle=use_approach_angle,
                                                             use_pre_dock_pose=use_approach_angle,
-                                                            id_tag=_behavior_id,
+                                                            id_tag=_action_id,
                                                             num_retries=num_retries)
 
         return await self.grpc_interface.PopAWheelie(pop_a_wheelie_request)
 
-    @connection.on_connection_thread(is_cancellable_behavior=True)
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_ACTION)
     async def pickup_object(self,
                             target_object: objects.LightCube,
                             use_pre_dock_pose: bool = True,
                             num_retries: int = 0,
-                            _behavior_id: int = None) -> protocol.PickupObjectResponse:
+                            _action_id: int = None) -> protocol.PickupObjectResponse:
         """Instruct the robot to pick up his LightCube.
 
         While picking up the cube, Vector will use path planning.
@@ -830,15 +889,15 @@ class BehaviorComponent(util.Component):
 
         pickup_object_request = protocol.PickupObjectRequest(object_id=target_object.object_id,
                                                              use_pre_dock_pose=use_pre_dock_pose,
-                                                             id_tag=_behavior_id,
+                                                             id_tag=_action_id,
                                                              num_retries=num_retries)
 
         return await self.grpc_interface.PickupObject(pickup_object_request)
 
-    @connection.on_connection_thread(is_cancellable_behavior=True)
+    @connection.on_connection_thread(is_cancellable=connection.CancelType.CANCELLABLE_ACTION)
     async def place_object_on_ground_here(self,
                                           num_retries: int = 0,
-                                          _behavior_id: int = None) -> protocol.PlaceObjectOnGroundHereResponse:
+                                          _action_id: int = None) -> protocol.PlaceObjectOnGroundHereResponse:
         """Ask Vector to place the object he is carrying on the ground at the current location.
 
         :param num_retries: Number of times to reattempt action in case of a failure.
@@ -857,7 +916,7 @@ class BehaviorComponent(util.Component):
                     robot.behavior.pickup_object(robot.world.connected_light_cube)
                     robot.behavior.place_object_on_ground_here()
         """
-        place_object_on_ground_here_request = protocol.PlaceObjectOnGroundHereRequest(id_tag=_behavior_id,
+        place_object_on_ground_here_request = protocol.PlaceObjectOnGroundHereRequest(id_tag=_action_id,
                                                                                       num_retries=num_retries)
 
         return await self.grpc_interface.PlaceObjectOnGroundHere(place_object_on_ground_here_request)
@@ -939,7 +998,7 @@ class ReserveBehaviorControl():
                              '{"name":"Vector-XXXX", "ip":"XX.XX.XX.XX", "cert":"/path/to/cert_file", "guid":"<secret_key>"}')
 
         self._conn = connection.Connection(self._name, ':'.join([self._ip, self._port]), self._cert_file, self._guid,
-                                           behavior_control_level=connection.CONTROL_PRIORITY_LEVEL.RESERVE_CONTROL)
+                                           behavior_control_level=connection.ControlPriorityLevel.RESERVE_CONTROL)
         self._behavior_activation_timeout = behavior_activation_timeout
 
     def __enter__(self):

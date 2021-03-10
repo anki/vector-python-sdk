@@ -15,6 +15,7 @@
 """Support for accessing Vector's audio.
 
 Vector's speakers can be used for playing user-provided audio.
+TODO Ability to access the Vector's audio stream to come.
 
 The :class:`AudioComponent` class defined in this module is made available as
 :attr:`anki_vector.robot.Robot.audio` and can be used to play audio data on the robot.
@@ -55,6 +56,7 @@ class AudioComponent(util.Component):
     """Handles audio on Vector.
 
     The AudioComponent object plays audio data to Vector's speaker.
+    Ability to access the Vector's audio stream to come.
 
     The :class:`anki_vector.robot.Robot` or :class:`anki_vector.robot.AsyncRobot` instance
     owns this audio component.
@@ -66,6 +68,8 @@ class AudioComponent(util.Component):
         with anki_vector.Robot() as robot:
             robot.audio.stream_wav_file('../examples/sounds/vector_alert.wav')
     """
+
+    # TODO restore audio feed code when ready
 
     def __init__(self, robot):
         super().__init__(robot)

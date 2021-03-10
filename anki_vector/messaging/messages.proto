@@ -78,7 +78,7 @@ message StopAllMotorsRequest {
 }
 
 // See the StopAllMotors rpc for more details.
-message StopAllMotorsResponse {  
+message StopAllMotorsResponse {
   ResponseStatus status = 1;
 }
 
@@ -170,6 +170,7 @@ message MeetVictorFaceScanComplete
 
 message Status {
   oneof status_type {
+    FeatureStatus                   feature_status                   = 1; 
     MeetVictorFaceScanStarted       meet_victor_face_scan_started    = 2;
     MeetVictorFaceScanComplete      meet_victor_face_scan_complete   = 3;
     FaceEnrollmentCompleted         face_enrollment_completed        = 4;
@@ -193,7 +194,7 @@ message PoseStruct {
   float x = 1;
   float y = 2;
   float z = 3;
-  
+
   // Rotation quaternion
   float q0 = 4;
   float q1 = 5;
@@ -250,8 +251,7 @@ message RobotState {
   TouchData touch_data = 17;
 }
 
-enum RobotStatus
-{
+enum RobotStatus {
   ROBOT_STATUS_NONE                    = 0x0;
   ROBOT_STATUS_IS_MOVING               = 0x1;
   ROBOT_STATUS_IS_CARRYING_BLOCK       = 0x2;
@@ -286,10 +286,78 @@ message CladRect
   float height = 4;
 }
 
+// (v1.7)
+message RobotObservedMotion {
+  uint32 timestamp = 1; // Timestamp of the corresponding image
+
+  // Area of the supporting region for the point, as a fraction of the image
+  float img_area = 2;
+  int32 img_x = 3; // Pixel coordinate of the point in the image, relative to top-left corner.
+  int32 img_y = 4; // Pixel coordinate of the point in the image, relative to top-left corner.
+
+  // Area of the supporting region for the point, as a fraction of the ground ROI
+  // If unable to map to the ground, area=0
+  float ground_area = 5;
+  int32 ground_x = 6; // Coordinates of the point on the ground, relative to robot, in mm
+  int32 ground_y = 7; // Coordinates of the point on the ground, relative to robot, in mm
+
+  // Top area
+  // Area of the supporting region for the point, as a fraction of the top region
+  float top_img_area = 8;
+  int32 top_img_x = 9; // Pixel coordinate of the point in the image, relative to top-left corner.
+  int32 top_img_y = 10; // Pixel coordinate of the point in the image, relative to top-left corner.
+
+  // Bottom area
+  // Area of the supporting region for the point, as a fraction of the bottom region
+  float bottom_img_area = 11;
+  int32 bottom_img_x = 12; // Pixel coordinate of the point in the image, relative to top-left corner.
+  int32 bottom_img_y = 13; // Pixel coordinate of the point in the image, relative to top-left corner.
+
+  // Left area
+  // Area of the supporting region for the point, as a fraction of the left region
+  float left_img_area = 14;
+  int32 left_img_x = 15; // Pixel coordinate of the point in the image, relative to top-left corner.
+  int32 left_img_y = 16; // Pixel coordinate of the point in the image, relative to top-left corner.
+
+  // Right area
+  // Area of the supporting region for the point, as a fraction of the right region
+  float right_img_area = 17;
+  int32 right_img_x = 18; // Pixel coordinate of the point in the image, relative to top-left corner.
+  int32 right_img_y = 19; // Pixel coordinate of the point in the image, relative to top-left corner.
+}
+
+ // Event confirming that an enrolled face has been removed from the robot.
+message RobotErasedEnrolledFace {
+  int32 face_id = 1;
+  string name = 2;
+}
+
+enum UnexpectedMovementType {
+  TURNED_BUT_STOPPED = 0;
+  TURNED_IN_SAME_DIRECTION = 1;
+  TURNED_IN_OPPOSITE_DIRECTION = 2;
+  ROTATING_WITHOUT_MOTORS = 3;
+}
+
+enum UnexpectedMovementSide {
+  UNKNOWN = 0;
+  FRONT = 1;
+  BACK = 2;
+  LEFT = 3;
+  RIGHT = 4;
+}
+
+// Event dispatched when the robot does not move as expected. Has additional information
+// such as the direction and type of unexpected motion.
+message UnexpectedMovement {
+  uint32 timestamp = 1;
+  UnexpectedMovementType movement_type = 2;
+  UnexpectedMovementSide movement_side = 3;
+}
+
 // This is an int8 on the clad side.
 // Proto field names are prefixed with "EXPRESSION_"
-enum FacialExpression
-{
+enum FacialExpression {
   option allow_alias = true;
   EXPRESSION_UNKNOWN = 0;    // e.g. expression estimation disabled.
 
@@ -330,8 +398,7 @@ message RobotChangedObservedFaceID {
   int32   new_id = 2;
 }
 
-enum FaceEnrollmentResult
-{
+enum FaceEnrollmentResult {
   SUCCESS = 0;
 
   // Failures:
@@ -373,7 +440,7 @@ message LoadedKnownFace {
 
 message RobotRenamedEnrolledFace {
     int32   face_id = 1;
-    string   name = 2;
+    string  name = 2;
 }
 
 message RequestEnrolledNamesResponse {
@@ -421,8 +488,17 @@ message SetFaceToEnrollResponse {
   ResponseStatus status = 1;
 }
 
-enum BehaviorResults
-{
+// (v1.7)
+message EnrollFaceRequest {
+}
+
+// (v1.7)
+message EnrollFaceResponse {
+  ResponseStatus status = 1;
+  BehaviorResults result = 2;
+}
+
+enum BehaviorResults {
   BEHAVIOR_INVALID_STATE = 0;
   BEHAVIOR_COMPLETE_STATE = 1;
   BEHAVIOR_WONT_ACTIVATE_STATE = 2;
@@ -540,7 +616,7 @@ message PhotoTaken {
   uint32 photo_id = 1;
 }
 
-// Struct containing all the information relevant to how a 
+// Struct containing all the information relevant to how a
 // path should be modified or traversed.
 message PathMotionProfile {
   float speed_mmps = 1;
@@ -556,6 +632,7 @@ message PathMotionProfile {
   bool  is_custom = 11;
 }
 
+// These codes are duplicated from actionResults.clad file and need to be kept in sync 
 // The possible results of running an action.
   message ActionResult {
   // The possible results of running an action.
@@ -634,6 +711,15 @@ message CancelActionByIdTagRequest {
 // Response from the robot to CancelActionByIdTagRequest.
 message CancelActionByIdTagResponse {
   // A generic status.
+  ResponseStatus status = 1;
+}
+
+// Cancel a behavior in progress (v1.7)
+message CancelBehaviorRequest {
+}
+
+// Response from the robot to CancelBehaviorRequest. (v1.7)
+message CancelBehaviorResponse {
   ResponseStatus status = 1;
 }
 
@@ -755,7 +841,7 @@ message TurnTowardsFaceResponse {
 }
 
 // GoToObject
-message GoToObjectRequest { 
+message GoToObjectRequest {
   int32             object_id                      = 1;
   PathMotionProfile motion_prof                    = 2;
   float             distance_from_object_origin_mm = 3;
@@ -869,12 +955,12 @@ message VersionStateResponse {
 message SayTextRequest {
   string text = 1;
   bool use_vector_voice = 2;
-  float duration_scalar = 3;
+  float duration_scalar = 3; // Ranges from 0.05 (fast) to 20.0 (slow)
+  float pitch_scalar = 4;    // Ranges from -1.0 (low) to +1.0 (high) (v1.7)
 }
 
 message SayTextResponse {
-  enum UtteranceState
-  {
+  enum UtteranceState {
     INVALID = 0;
     GENERATING = 1;
     READY = 2;
@@ -1006,8 +1092,7 @@ message ExternalAudioStreamResponse {
   }
 }
 
-enum MasterVolumeLevel
-{
+enum MasterVolumeLevel {
   VOLUME_LOW         = 0;
   VOLUME_MEDIUM_LOW  = 1;
   VOLUME_MEDIUM      = 2;
@@ -1015,7 +1100,7 @@ enum MasterVolumeLevel
   VOLUME_HIGH        = 4;
 }
 
-message MasterVolumeRequest 
+message MasterVolumeRequest
 {
   MasterVolumeLevel volume_level = 1;
 }
@@ -1063,7 +1148,7 @@ message EnableMotionDetectionResponse
   ResponseStatus status = 1;
 }
 
-// When enabled, camera feed will appear on the robot's face, along with any 
+// When enabled, camera feed will appear on the robot's face, along with any
 // detections that are enabled from above messages
 message EnableMirrorModeRequest
 {
@@ -1086,6 +1171,7 @@ message MirrorModeDisabled
 message EnableImageStreamingRequest
 {
   bool enable = 1;
+  bool enable_high_resolution = 2;
 }
 
 message EnableImageStreamingResponse
@@ -1111,8 +1197,7 @@ message VisionModesAutoDisabled
 
 // One frame of image data and associated metadata
 message ImageChunk {
-  enum ImageEncoding
-  {
+  enum ImageEncoding {
     NONE_IMAGE_ENCODING = 0;
     RAW_GRAY = 1; // no compression
     RAW_RGB = 2;  // no compression, just [RGBRGBRG...]
@@ -1147,7 +1232,11 @@ message CameraFeedResponse {
   bytes                    data = 4;
 }
 
-message CaptureSingleImageRequest {}
+// Request for a single image from the robot. Default resolution is 640*360,
+// enabling high resolution provides a 1280*720 image.
+message CaptureSingleImageRequest {
+  bool enable_high_resolution = 1;              // (v1.7)
+}
 
 message CaptureSingleImageResponse {
   ResponseStatus           status = 1;
@@ -1166,6 +1255,43 @@ message SetEyeColorResponse {
   ResponseStatus status = 1;
 }
 
+// (v1.7)
+message CameraConfigRequest {}
+
+// (v1.7)
+message CameraConfigResponse {
+  float  focal_length_x = 1;
+  float  focal_length_y = 2;
+  float  center_x = 3;
+  float  center_y = 4;
+  float  fov_x = 5;  // Full FOV in degrees
+  float  fov_y = 6;  // Full FOV in degrees
+  uint32 min_camera_exposure_time_ms = 7;
+  uint32 max_camera_exposure_time_ms = 8;
+  float  min_camera_gain = 9;
+  float  max_camera_gain = 10;
+}
+
+// (v1.7)
+message SetCameraSettingsRequest {
+  float   gain = 1;
+  uint32  exposure_ms = 2;
+  bool    enable_auto_exposure = 3;
+}
+
+// (v1.7)
+message SetCameraSettingsResponse {
+  ResponseStatus status = 1;
+  string  status_message = 2;
+}
+
+// Event sent when camera exposure settings change (v1.7)
+message CameraSettingsUpdate {
+  float   gain = 1;
+  uint32  exposure_ms = 2;
+  bool    auto_exposure_enabled = 3;
+}
+
 message SDKInitializationRequest {
   string sdk_module_version = 1;
   string python_version = 2;
@@ -1178,4 +1304,107 @@ message SDKInitializationResponse {
   ResponseStatus status = 1;
 }
 
+message AppDisconnected{}
 
+message AppIntentRequest {
+  string intent = 1;
+  string param = 2;
+}
+
+message AppIntentResponse {
+  ResponseStatus status = 1;
+}
+
+message FeatureStatus {
+  string feature_name = 1;
+  string source      = 2; // Voice, App, AI, Unknown
+}
+
+message FeatureFlagRequest {
+  string feature_name = 1;
+}
+
+message FeatureFlagResponse {
+  ResponseStatus status = 1;
+  bool valid_feature = 2;
+  bool feature_enabled = 3;
+}
+
+message FeatureFlagListRequest {
+  repeated string request_list = 1;
+}
+
+message FeatureFlagListResponse {
+  ResponseStatus status = 1;
+  repeated string list = 2;
+}
+
+// NOTE: must match attentionTransferTypes.clad
+enum AttentionTransferReason {
+  Invalid = 0;
+
+  NoCloudConnection = 1;
+  NoWifi = 2;
+  UnmatchedIntent = 3;
+}
+
+message AttentionTransfer {
+  AttentionTransferReason reason = 1;
+  float seconds_ago = 2;
+}
+
+message LatestAttentionTransferRequest {
+}
+
+message LatestAttentionTransfer {
+  oneof oneof_message_type {
+    AttentionTransfer attention_transfer = 1;
+  }
+}
+
+message LatestAttentionTransferResponse {
+  ResponseStatus status = 1;
+  LatestAttentionTransfer latest_attention_transfer = 2;
+}
+
+message UpdateAndRestartRequest{}
+
+message UpdateAndRestartResponse{
+  ResponseStatus status = 1;
+}
+
+
+message CheckUpdateStatusRequest{}
+
+message CheckUpdateStatusResponse{
+  option(streamed) = true;
+
+  ResponseStatus status = 1;
+  enum UpdateStatus {
+    NO_UPDATE = 0;
+    READY_TO_INSTALL = 1;
+    IN_PROGRESS_DOWNLOAD = 2;
+  }
+  UpdateStatus update_status = 2;
+  int64 expected = 3;
+  int64 progress = 4;
+  string update_version = 5;
+}
+
+message CheckCloudRequest{}
+
+message CheckCloudResponse{
+  ResponseStatus status = 1;
+  enum ConnectionCode {
+    UNKNOWN = 0;
+    AVAILABLE = 1;
+    BAD_CONNECTIVITY = 2;
+    FAILED_TLS = 3;
+    FAILED_AUTH = 4;
+    INSUFFICIENT_BANDWIDTH = 5;
+  }
+  ConnectionCode code = 2;
+  string status_message = 3;
+  int32 num_packets = 4;
+  int32 expected_packets = 5;
+}

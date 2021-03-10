@@ -20,6 +20,7 @@ package Anki.Vector.external_interface;
 
 import "anki_vector/messaging/behavior.proto";
 import "anki_vector/messaging/cube.proto";
+import "anki_vector/messaging/alexa.proto"; 
 import "anki_vector/messaging/messages.proto";
 import "anki_vector/messaging/settings.proto";
 import "anki_vector/messaging/extensions.proto";
@@ -49,6 +50,7 @@ message Event {
   oneof event_type {
     TimeStampedStatus                time_stamped_status                 = 1;
     WakeWord                         wake_word                           = 3;
+    AttentionTransfer                attention_transfer                  = 4; 
     RobotObservedFace                robot_observed_face                 = 5;
     RobotChangedObservedFaceID       robot_changed_observed_face_id      = 6;
     ObjectEvent                      object_event                        = 7;
@@ -56,12 +58,19 @@ message Event {
     PhotoTaken                       photo_taken                         = 9;
     RobotState                       robot_state                         = 10;
     CubeBattery                      cube_battery                        = 11;
-    // Used by Vector to verify the connection is still alive.
-    KeepAlivePing                    keep_alive                          = 12;
+    KeepAlivePing                    keep_alive                          = 12; // Used by Vector to verify the connection is still alive.
     ConnectionResponse               connection_response                 = 13;
+    JdocsChanged                     jdocs_changed                       = 14; 
+    AlexaAuthEvent                   alexa_auth_event                    = 15; 
     MirrorModeDisabled               mirror_mode_disabled                = 16;
     VisionModesAutoDisabled          vision_modes_auto_disabled          = 17;
+    CheckUpdateStatusResponse        check_update_status_response        = 18; 
     UserIntent                       user_intent                         = 19;
+    RobotObservedMotion              robot_observed_motion               = 20;
+    RobotErasedEnrolledFace          robot_erased_enrolled_face          = 21;
+    RobotRenamedEnrolledFace         robot_renamed_enrolled_face         = 22;
+    CameraSettingsUpdate             camera_settings_update              = 23;
+    UnexpectedMovement               unexpected_movement                 = 24;
   }
 }
 

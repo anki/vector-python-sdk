@@ -694,6 +694,17 @@ class Robot:
                               events.Events.robot_state,
                               _on_connection_thread=True)
 
+        # get the camera configuration from the robot
+        response = self._camera.get_camera_config()
+        if isinstance(response, concurrent.futures.Future):
+            response = response.result()
+        self._camera.set_config(response)
+
+        # Subscribe to a callback for camera exposure settings
+        self.events.subscribe(self._camera.update_state,
+                              events.Events.camera_settings_update,
+                              _on_connection_thread=True)
+
         # access the pose to prove it has gotten back from the event stream once
         try:
             if not self.pose:
