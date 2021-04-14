@@ -35,6 +35,7 @@ import grpc
 import aiogrpc
 
 from . import util
+from .escapepod import EscapePod
 from .exceptions import (connection_error,
                          VectorAsyncException,
                          VectorBehaviorControlException,
@@ -206,13 +207,12 @@ class Connection:
                                    requires behavior control, or None to decline control.
     """
 
-    def __init__(self, name: str, host: str, cert_file: str, guid: str, behavior_control_level: ControlPriorityLevel = ControlPriorityLevel.DEFAULT_PRIORITY):
-        if cert_file is None:
-            raise VectorConfigurationException("Must provide a cert file to authenticate to Vector.")
+    def __init__(self, name: str, host: str, cert_file: str, guid: str, escape_pod: bool = False, behavior_control_level: ControlPriorityLevel = ControlPriorityLevel.DEFAULT_PRIORITY):
         self._loop: asyncio.BaseEventLoop = None
         self.name = name
         self.host = host
         self.cert_file = cert_file
+        self._escape_pod = escape_pod
         self._interface = None
         self._channel = None
         self._has_control = False
@@ -474,7 +474,7 @@ class Connection:
         self._ready_signal.clear()
         self._thread = threading.Thread(target=self._connect, args=(timeout,), daemon=True, name="gRPC Connection Handler Thread")
         self._thread.start()
-        ready = self._ready_signal.wait(timeout=2 * timeout)
+        ready = self._ready_signal.wait(timeout=4 * timeout)
         if not ready:
             raise VectorNotFoundException()
         if hasattr(self._ready_signal, "exception"):
@@ -496,9 +496,20 @@ class Connection:
                 self._control_events = _ControlEventManager(self._loop)
             else:
                 self._control_events = _ControlEventManager(self._loop, priority=self._behavior_control_level)
+
             trusted_certs = None
-            with open(self.cert_file, 'rb') as cert:
-                trusted_certs = cert.read()
+            if not self.cert_file is None:
+                with open(self.cert_file, 'rb') as cert:
+                    trusted_certs = cert.read()
+            else:
+                if not self._escape_pod:
+                    raise VectorConfigurationException("Must provide a cert file to authenticate to Vector.")
+
+            if self._escape_pod:
+                if not EscapePod.validate_certificate_name(self.cert_file, self.name):
+                    trusted_certs = EscapePod.get_authentication_certificate(self.host)
+                    self.name = EscapePod.get_certificate_name(trusted_certs)
+                self._guid = EscapePod.authenticate_escape_pod(self.host, self.name, trusted_certs)
 
             # Pin the robot certificate for opening the channel
             channel_credentials = aiogrpc.ssl_channel_credentials(root_certificates=trusted_certs)

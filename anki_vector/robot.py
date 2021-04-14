@@ -111,6 +111,7 @@ class Robot:
                  ip: str = None,
                  name: str = None,
                  config: dict = None,
+                 escape_pod: bool = False,
                  default_logging: bool = True,
                  behavior_activation_timeout: int = 10,
                  cache_animation_lists: bool = True,
@@ -127,7 +128,7 @@ class Robot:
         self.logger = util.get_class_logger(__name__, self)
         self._force_async = False
         config = config if config is not None else {}
-        config = {**util.read_configuration(serial, name, self.logger), **config}
+        config = {**util.read_configuration(serial, name, self.logger, escape_pod), **config}
 
         if name is not None:
             vector_mdns = VectorMdns.find_vector(name)
@@ -135,22 +136,23 @@ class Robot:
             if vector_mdns is not None:
                 ip = vector_mdns['ipv4']
 
-        self._name = config["name"]
-        self._ip = ip if ip is not None else config["ip"]
-        self._cert_file = config["cert"]
-        self._guid = config["guid"]
+        self._escape_pod = escape_pod
+        self._name = config["name"] if 'name' in config else None
+        self._ip = ip if ip is not {} else config["ip"] if 'ip' in config else None
+        self._cert_file = config["cert"] if 'cert' in config else None
+        self._guid = config["guid"] if 'guid' in config else None
+        self._port = config["port"] if 'port' in config else "443"
 
-        self._port = "443"
-        if 'port' in config:
-            self._port = config["port"]
-
-        if self._name is None or self._ip is None or self._cert_file is None or self._guid is None:
-            raise ValueError("The Robot object requires a serial and for Vector to be logged in (using the app then running the anki_vector.configure executable submodule).\n"
+        if (not escape_pod) and (self._name is None or self._ip is None or self._cert_file is None or self._guid is None):
+            raise ValueError("The Robot object requires a serial and for Vector to be logged in (using the app then running the `python3 -m anki_vector.configure`).\n"
                              "You may also provide the values necessary for connection through the config parameter. ex: "
                              '{"name":"Vector-XXXX", "ip":"XX.XX.XX.XX", "cert":"/path/to/cert_file", "guid":"<secret_key>"}')
 
+        if (escape_pod) and (self._ip is None):
+            raise ValueError('Could not find the sdk configuration file. Please run `python3 -m anki_vector.configure_pod` to set up your Vector for SDK usage.')
+
         #: :class:`anki_vector.connection.Connection`: The active connection to the robot.
-        self._conn = Connection(self._name, ':'.join([self._ip, self._port]), self._cert_file, self._guid, behavior_control_level=behavior_control_level)
+        self._conn = Connection(self._name, ':'.join([self._ip, self._port]), self._cert_file, self._guid, self._escape_pod, behavior_control_level=behavior_control_level)
         self._events = events.EventHandler(self)
 
         # placeholders for components before they exist
