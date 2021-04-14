@@ -53,11 +53,11 @@ def get_requirements():
     return reqs
 
 setup(
-    name='anki_vector',
+    name='cyb3r_vector_sdk',
     version=VERSION,
     description="The Vector SDK is a connected vision- and character-based robotics platform for everyone.",
     long_description=__doc__,
-    url='https://developer.anki.com',
+    url='https://github.com/cyb3rdog/vector-python-sdk',
     author='Anki, Inc',
     author_email='developer@anki.com',
     license='Apache License, Version 2.0',
@@ -68,10 +68,12 @@ setup(
         'Topic :: Software Development :: Libraries',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
     zip_safe=True,
     keywords='anki vector robot robotics sdk ai vision'.split(),
-    packages=['anki_vector', 'anki_vector.camera_viewer', 'anki_vector.configure', 'anki_vector.messaging', 'anki_vector.opengl', 'anki_vector.reserve_control'],
+    packages=['anki_vector', 'anki_vector.camera_viewer', 'anki_vector.configure', 'anki_vector.configure_pod', 'anki_vector.messaging', 'anki_vector.opengl', 'anki_vector.reserve_control'],
     package_data={
         'anki_vector': ['LICENSE.txt', 'opengl/assets/*.obj', 'opengl/assets/*.mtl', 'opengl/assets/*.jpg',
                   'opengl/assets/LICENSE.txt']

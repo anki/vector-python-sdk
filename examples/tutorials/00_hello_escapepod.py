@@ -1,4 +1,6 @@
-# Copyright (c) 2018 Anki, Inc.
+#!/usr/bin/env python3
+
+# Copyright (c) 2021 cyb3rdog
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,4 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-__version__ = "0.7.2.dev2"
+"""Hello Escape Pod
+
+Make Vector say 'Hello Escape Pod' in this simple Vector SDK example program.
+"""
+
+import anki_vector
+
+
+def main():
+    with anki_vector.Robot(ip="192.168.0.148", escape_pod=True) as robot:
+        print("Say 'Hello Escape Pod'...")
+        robot.behavior.say_text("Hello Escape Pod")
+
+
+if __name__ == "__main__":
+    main()
