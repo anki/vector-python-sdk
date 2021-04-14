@@ -31,7 +31,7 @@ pip uninstall anki_vector
 pip uninstall ikkez_vector
 ```
 
-To install this SDK fork, run:
+To install this SDK, run:
 ```
 pip install cyb3r_vector_sdk
 ```
@@ -43,13 +43,13 @@ pip install cyb3r_vector_sdk --upgrade
 
 ### SDK Configuration
 
-To condigure the SDK for **Prod**, or **Prod+OSKR** robot, run:
+To configure the SDK for **Prod**, and/or **Prod+OSKR** robot, run:
 
 ```
 py -m anki_vector.configure
 ```
 
-To condigure the SDK for **EscapePod**, or **EP+OSKR** robot, run:
+To condigure the SDK for **EscapePod**, and/or **EP+OSKR** robot, run:
 
 ```
 py -m anki_vector.configure_pod
