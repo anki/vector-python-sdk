@@ -128,7 +128,8 @@ class Robot:
         self.logger = util.get_class_logger(__name__, self)
         self._force_async = False
         config = config if config is not None else {}
-        config = {**util.read_configuration(serial, name, self.logger, escape_pod), **config}
+        if not escape_pod or ip is {}:
+            config = {**util.read_configuration(serial, name, self.logger, escape_pod), **config}
 
         if name is not None:
             vector_mdns = VectorMdns.find_vector(name)
@@ -138,10 +139,12 @@ class Robot:
 
         self._escape_pod = escape_pod
         self._name = config["name"] if 'name' in config else None
-        self._ip = ip if ip is not {} else config["ip"] if 'ip' in config else None
         self._cert_file = config["cert"] if 'cert' in config else None
         self._guid = config["guid"] if 'guid' in config else None
         self._port = config["port"] if 'port' in config else "443"
+        self._ip = ip if ip is not {} else None
+        if self._ip is None and 'ip' in config:
+            self._ip = config["ip"]
 
         if (not escape_pod) and (self._name is None or self._ip is None or self._cert_file is None or self._guid is None):
             raise ValueError("The Robot object requires a serial and for Vector to be logged in (using the app then running the `python3 -m anki_vector.configure`).\n"
