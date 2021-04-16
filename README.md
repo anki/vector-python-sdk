@@ -4,20 +4,8 @@
 ## With support for Production, EscapePod and OSKR robots!
 
 This is a fork of the original Anki Vector Python SDK.
-I have started this fork as an unofficial version to keep things moving.
 
 ![Vector](docs/source/images/vector-sdk-alpha.jpg)
-
-Learn more about Vector: https://www.anki.com/en-us/vector
-
-Learn more about how Vector works: [Vector Bible](https://github.com/GooeyChickenman/victor/blob/master/documentation/Vector-TRM.pdf)
-
-Learn more about the SDK: https://developer.anki.com/
-
-SDK documentation: https://developer.anki.com/vector/docs/index.html
-
-Forums: https://forums.anki.com/
-
 
 ## Getting Started
 
@@ -49,7 +37,7 @@ To configure the SDK for **Prod**, and/or **Prod+OSKR** robot, run:
 py -m anki_vector.configure
 ```
 
-To condigure the SDK for **EscapePod**, and/or **EP+OSKR** robot, run:
+To configure the SDK for **EscapePod**, and/or **EP+OSKR** robot, run:
 
 ```
 py -m anki_vector.configure_pod
@@ -69,6 +57,15 @@ You can either use the ```anki_vector.configure_pod``` in order to save your aut
 You can generate a local copy of the SDK documetation by
 following the instructions in the `docs` folder of this project.
 
+Learn more about Vector: https://www.anki.com/en-us/vector
+
+Learn more about how Vector works: [Vector Bible](https://github.com/GooeyChickenman/victor/blob/master/documentation/Vector-TRM.pdf)
+
+Learn more about the SDK: https://developer.anki.com/
+
+SDK documentation: https://developer.anki.com/vector/docs/index.html
+
+Forums: https://forums.anki.com/
 
 ## Privacy Policy and Terms and Conditions
 
