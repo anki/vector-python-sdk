@@ -13,6 +13,14 @@
 # limitations under the License.
 
 """
+Anki/DDL Vector - Python SDK:
+    by cyb3rdog
+
+## With support for Production, EscapePod and OSKR robots! ##
+This is the extended fork of the original Anki Vector Python SDK.
+
+For more information, please visit the project Github site: https://github.com/cyb3rdog/vector-python-sdk
+
 The Vector SDK gives you direct access to Vector's unprecedented set of advanced sensors, AI capabilities, and robotics technologies including computer vision, intelligent mapping and navigation, and a groundbreaking collection of expressive animations.
 
 It's powerful but easy to use, complex but not complicated, and versatile enough to be used across a wide range of domains including enterprise, research, and entertainment. Find out more at https://developer.anki.com
@@ -22,7 +30,9 @@ Vector SDK documentation: https://developer.anki.com/vector/docs/
 Official developer forum: https://forums.anki.com/
 
 Requirements:
-    * Python 3.6.1 or later
+    * Python 3.6.1
+    * Python 3.7
+    * Python 3.8
 """
 
 import os.path
