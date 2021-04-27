@@ -1,43 +1,64 @@
 
 # Anki/DDL Vector - Python SDK
+by cyb3rdog
 
 ## With support for Production, EscapePod and OSKR robots!
+Compatible with Ubuntu 16.04 - 20.04 and Python 3.6.1 - 3.9
 
-This is a fork of the original Anki Vector Python SDK.
+This is the extended fork of the original Anki Vector Python SDK.
 
 ![Vector](docs/source/images/vector-sdk-alpha.jpg)
 
 
 ## Getting Started
 
-You can follow steps [here](https://developer.anki.com/vector/docs/index.html) to set up your Vector robot with the SDK.
+For the steps undocumented here, you can still refer to [this original SDK documentation](https://developer.anki.com/vector/docs/index.html).
+*(TODO: docs are old and needs to be updated, contributors wanted)*
+If you are new to the Vector's Python SDK, refer to this documentation anyways, as it still contains lots of valuable information.
 
 
-### Installation
+### Python Installation
 
-In case you have previously installed the original anki or ikkez sdk, uninstall it with following commands:
-```
-pip uninstall anki_vector
-pip uninstall ikkez_vector
-```
+#### Windows:
 
-To install this SDK, run:
-```
-pip install cyb3r_vector_sdk
-```
+If you dont have python installed yet, download and install it from the [Python.org](https://www.python.org/downloads/windows/)
+Be sure to tick the “Add Python 3.X to PATH” checkbox on the Setup screen.
 
-You can upgrade to latest version with:
-```
-pip install cyb3r_vector_sdk --upgrade
-```
+To avoid dificulties during the SDK install on your existing python installation, open the command line and run:
+```py -m pip install -U pip```
+```py -m pip install --upgrade setuptools```
 
-In case you will run into dificulties during installation, run this command first:
+#### Linux:
 
-- Windows:  ```py -m pip install -U pip```
-- Linux:    ```python3 -m pip install -U pip```
+Open the Terminal and run following commands to install and update the Python, and packages required by SDK:
+```sudo apt-get update```
+```sudo apt-get install -y python3 python3-pip python3-tk python3-pil.imagetk build-essential libssl-dev libffi-dev freeglut3```
+
+```pip3 install --upgrade setuptools```
 
 
-If you want to know where the SDK is installed use following command:
+### SDK Installation
+
+- Note: Use either **```pip```** or **```pip3```** correspondingly to the Python version you are using.
+
+In case you have previously installed the original ***Anki*** or ***Ikkez*** SDK, uninstall it/them with following command(s):
+
+```pip uninstall anki_vector``` or ```pip3 uninstall anki_vector```
+```pip uninstall ikkez_vector``` or ```pip3 uninstall ikkez_vector```
+
+To install this new SDK, run:
+
+```pip install cyb3r_vector_sdk``` or ```pip3 install cyb3r_vector_sdk```
+and 
+```pip install --user "cyb3r_vector_sdk[3dviewer]"``` or ```pip3 install --user "cyb3r_vector_sdk[3dviewer]"```
+
+
+To upgrade this SDK to its latest version, use:
+
+```pip install cyb3r_vector_sdk --upgrade``` or ```pip3 install cyb3r_vector_sdk --upgrade```
+
+
+If you want to know where the SDK files are installed, use following command:
 
 - Windows:  ```py -c "import anki_vector as _; print(_.__path__)"```
 - Linux:    ```python3 -c "import anki_vector as _; print(_.__path__)"```
@@ -45,12 +66,12 @@ If you want to know where the SDK is installed use following command:
 
 ### SDK Configuration
 
-To configure the SDK for **Prod**, and/or **Prod+OSKR** robot, run:
+To configure the Python SDK for **Prod**, and/or **Prod+OSKR** robots, run:
 
 - Windows:  **```py -m anki_vector.configure```**
 - Linux:    **```python3 -m anki_vector.configure```**
 
-To configure the SDK for **EscapePod**, and/or **EP+OSKR** robot, run:
+To configure the Python SDK for **EscapePod**, and/or **EP+OSKR** robots, run:
 
 - Windows:  **```py -m anki_vector.configure_pod```**
 - Linux:    **```python3 -m anki_vector.configure_pod```**

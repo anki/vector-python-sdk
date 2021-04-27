@@ -28,7 +28,7 @@ import tkinter as tk
 try:
     from PIL import ImageTk
 except ImportError:
-    sys.exit("Cannot import from PIL: Do `pip3 install --user Pillow` to install")
+    sys.exit('Cannot import from PIL: Do `pip3 install --user "cyb3r_vector_sdk[3dviewer]"` to install')
 
 
 class TkCameraViewer:  # pylint: disable=too-few-public-methods

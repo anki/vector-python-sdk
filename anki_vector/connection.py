@@ -554,6 +554,10 @@ class Connection:
 
             if self._behavior_control_level:
                 self._loop.run_until_complete(self._request_control(behavior_control_level=self._behavior_control_level, timeout=timeout))
+        except grpc.RpcError as rpc_error:  # pylint: disable=broad-except
+            setattr(self._ready_signal, "exception", connection_error(rpc_error))
+            self._loop.close()
+            return
         except Exception as e:  # pylint: disable=broad-except
             # Propagate the errors to the calling thread
             setattr(self._ready_signal, "exception", e)
@@ -628,17 +632,21 @@ class Connection:
             # Close the connection
             conn.close()
         """
-        if self._control_events:
-            self._control_events.shutdown()
-        if self._control_stream_task:
-            self._control_stream_task.cancel()
-            self.run_coroutine(self._control_stream_task).result()
-        self._cancel_active()
-        if self._channel:
-            self.run_coroutine(self._channel.close()).result()
-        self.run_coroutine(self._done_signal.set)
-        self._thread.join(timeout=5)
-        self._thread = None
+        try:
+            if self._control_events:
+                self._control_events.shutdown()
+            if self._control_stream_task:
+                self._control_stream_task.cancel()
+                self.run_coroutine(self._control_stream_task).result()
+            self._cancel_active()
+            if self._channel:
+                self.run_coroutine(self._channel.close()).result()
+            self.run_coroutine(self._done_signal.set)
+            self._thread.join(timeout=5)
+        except:
+            pass
+        finally:
+            self._thread = None
 
     def run_soon(self, coro: Awaitable) -> None:
         """Schedules the given awaitable to run on the event loop for the connection thread.
