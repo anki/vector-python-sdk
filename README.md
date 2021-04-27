@@ -55,7 +55,7 @@ To install this new SDK, run:
 
 - ```pip install cyb3r_vector_sdk``` or ```pip3 install cyb3r_vector_sdk```
 and
-- ```pip install --user "cyb3r_vector_sdk[3dviewer]"``` or ```pip3 install --user "cyb3r_vector_sdk[3dviewer]"```
+- ```pip install "cyb3r_vector_sdk[3dviewer]"``` or ```pip3 install "cyb3r_vector_sdk[3dviewer]"```
 
 
 To upgrade this SDK to its latest version, use:
