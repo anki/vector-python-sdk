@@ -16,20 +16,20 @@ You can follow steps [here](https://developer.anki.com/vector/docs/index.html) t
 ### Installation
 
 In case you have previously installed the original anki or ikkez sdk, uninstall it with following commands:
-**```
+```
 pip uninstall anki_vector
 pip uninstall ikkez_vector
-```**
+```
 
 To install this SDK, run:
-**```
+```
 pip install cyb3r_vector_sdk
-```**
+```
 
 You can upgrade to latest version with:
-**```
+```
 pip install cyb3r_vector_sdk --upgrade
-```**
+```
 
 In case you will run into dificulties during installation, run this command first:
 
