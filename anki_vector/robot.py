@@ -129,7 +129,7 @@ class Robot:
         self._force_async = False
         config = config if config is not None else {}
         config = {**util.read_configuration(serial, name, self.logger, escape_pod or False), **config}
-        escape_pod = config.get("escape_pod") if escape_pod is None else escape_pod
+        escape_pod = config.get("escape_pod", False) if escape_pod is None else escape_pod
 
         if name is not None:
             vector_mdns = VectorMdns.find_vector(name)
