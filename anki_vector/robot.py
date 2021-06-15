@@ -111,7 +111,7 @@ class Robot:
                  ip: str = None,
                  name: str = None,
                  config: dict = None,
-                 escape_pod: bool = False,
+                 escape_pod: bool = None,
                  default_logging: bool = True,
                  behavior_activation_timeout: int = 10,
                  cache_animation_lists: bool = True,
@@ -128,8 +128,8 @@ class Robot:
         self.logger = util.get_class_logger(__name__, self)
         self._force_async = False
         config = config if config is not None else {}
-        if not escape_pod or ip is {}:
-            config = {**util.read_configuration(serial, name, self.logger, escape_pod), **config}
+        config = {**util.read_configuration(serial, name, self.logger, escape_pod or False), **config}
+        escape_pod = config.get("escape_pod", False) if escape_pod is None else escape_pod
 
         if name is not None:
             vector_mdns = VectorMdns.find_vector(name)
@@ -142,7 +142,7 @@ class Robot:
         self._cert_file = config["cert"] if 'cert' in config else None
         self._guid = config["guid"] if 'guid' in config else None
         self._port = config["port"] if 'port' in config else "443"
-        self._ip = ip if ip is not {} else None
+        self._ip = ip or config.get("ip")
         if self._ip is None and 'ip' in config:
             self._ip = config["ip"]
 
