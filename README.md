@@ -1,4 +1,4 @@
-
+﻿
 # Anki/DDL Vector - Python SDK
 by cyb3rdog
 
@@ -12,7 +12,7 @@ This is the extended fork of the original Anki Vector Python SDK.
 
 ## Getting Started
 
-For the steps undocumented here, you can still refer to [this original SDK documentation](https://developer.anki.com/vector/docs/index.html). 
+For the steps undocumented here, you can still refer to [this original SDK documentation](https://developer.anki.com/vector/docs/index.html).
 *(TODO: docs are old and needs to be updated, contributors wanted)*
 
 If you are new to the Vector's Python SDK, refer to this documentation anyways, as it still contains lots of valuable information.
@@ -22,7 +22,7 @@ If you are new to the Vector's Python SDK, refer to this documentation anyways, 
 
 #### Windows:
 
-If you dont have python installed yet, download and install it from the [Python.org](https://www.python.org/downloads/windows/). 
+If you dont have python installed yet, download and install it from the [Python.org](https://www.python.org/downloads/windows/).
 Make sure to tick the “Add Python 3.X to PATH” checkbox on the Setup screen.
 
 To avoid dificulties during the SDK install on your existing python installation, open the command line and run:
@@ -84,12 +84,33 @@ To configure the Python SDK for **EscapePod**, and/or **EP+OSKR** robots, run:
 
 ### SDK Usage - EscapePod
 
-You can either use the ```anki_vector.configure_pod``` in order to save your authentication into the sdk_config.ini file, and use all the [examples](https://github.com/cyb3rdog/vector-python-sdk/tree/master/examples) and your own programs and as you have them, or you can use the Robot object with setting the escape_pod parameter to True, and passing the robot's ip address:
+You can either use the ```anki_vector.configure_pod``` in order to save your authentication into the sdk_config.ini file, and use all the [examples](https://github.com/cyb3rdog/vector-python-sdk/tree/master/examples) and your own programs and as you have them, OR you can use the Robot object setting (or sdk_config) with the ```escape_pod``` parameter to True, and passing just the robot's ip address:
 
 ```
     with anki_vector.Robot(ip="192.168.0.148", escape_pod=True) as robot:
         robot.behavior.say_text("Hello Escape Pod")
 ```
+
+
+### Log Level
+
+In order to change the log level to other then default value of `INFO`, set the `VECTOR_LOG_LEVEL` enviroment variable:
+
+Allowed values are:
+```
+CRITICAL	= 50
+FATAL 		= CRITICAL
+ERROR 		= 40
+WARNING 	= 30
+WARN 		= WARNING
+INFO 		= 20
+DEBUG 		= 10
+```
+
+Example:
+
+- Windows: ```SET VECTOR_LOG_LEVEL=DEBUG```
+- Lunux:   ```VECTOR_LOG_LEVEL="DEBUG"```
 
 
 ### Documentation
