@@ -613,10 +613,10 @@ class Connection:
             self._control_events.shutdown()
         if self._control_stream_task:
             self._control_stream_task.cancel()
-            self.run_coroutine(self._control_stream_task).result()
+            self.run_coroutine(self._control_stream_task)
         self._cancel_active()
         if self._channel:
-            self.run_coroutine(self._channel.close()).result()
+            self.run_coroutine(self._channel.close())
         self.run_coroutine(self._done_signal.set)
         self._thread.join(timeout=5)
         self._thread = None
