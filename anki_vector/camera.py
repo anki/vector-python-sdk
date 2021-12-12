@@ -286,7 +286,10 @@ class CameraComponent(util.Component):
 
     def set_config(self, message: protocol.CameraConfigRequest):
         """Update Vector's camera configuration from the message sent from the Robot """
-        self._config = CameraConfig.create_from_message(message)
+        try:
+            self._config = CameraConfig.create_from_message(message)
+        except:
+            self._config = CameraConfig(0,0,0,0,0,0,0,0,0,0)
 
     @connection.on_connection_thread(requires_control=False)
     async def get_camera_config(self) -> protocol.CameraConfigResponse:
@@ -297,8 +300,11 @@ class CameraComponent(util.Component):
 
         :return:
         """
-        request = protocol.CameraConfigRequest()
-        return await self.conn.grpc_interface.GetCameraConfig(request)
+        try:
+            request = protocol.CameraConfigRequest()
+            return await self.conn.grpc_interface.GetCameraConfig(request)
+        except:
+            pass
 
     @property
     def config(self) -> CameraConfig:
