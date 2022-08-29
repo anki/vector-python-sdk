@@ -5,3 +5,4 @@ googleapis-common-protos
 numpy>=1.11
 Pillow>=3.3
 requests
+protobuf==3.20.*
