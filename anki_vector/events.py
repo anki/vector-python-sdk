@@ -130,7 +130,7 @@ class EventHandler:
         try:
             self._loop = asyncio.new_event_loop()
             asyncio.set_event_loop(self._loop)
-            self._done_signal = asyncio.Event(loop=self._loop)
+            self._done_signal = asyncio.Event()
             # create an event stream handler on the connection thread
             self.event_future = asyncio.run_coroutine_threadsafe(self._handle_event_stream(), self._conn.loop)
 
