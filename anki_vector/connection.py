@@ -613,7 +613,7 @@ class Connection:
             self._control_events.shutdown()
         if self._control_stream_task:
             self._control_stream_task.cancel()
-            self.run_coroutine(self._control_stream_task).result()
+            asyncio.gather(self._control_stream_task, return_exceptions=True)
         self._cancel_active()
         if self._channel:
             self.run_coroutine(self._channel.close()).result()
