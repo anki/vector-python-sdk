@@ -1,0 +1,27 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build protobuf files",
+            "type": "shell",
+            "command": "${workspaceFolder}/.protobuf/bin/protoc",
+            "args": [
+                "--proto_path=${workspaceFolder}",
+                "--python_out=${workspaceFolder}",
+                "${workspaceFolder}/anki_vector/messaging/*.proto"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/.protobuf"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "echo",
+            "type": "shell",
+            "command": "echo ${workspaceFolder}",
+            "problemMatcher": []
+        }
+    ]
+}

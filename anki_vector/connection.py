@@ -74,9 +74,9 @@ class _ControlEventManager:
     """
 
     def __init__(self, loop: asyncio.BaseEventLoop = None, priority: ControlPriorityLevel = None):
-        self._granted_event = asyncio.Event(loop=loop)
-        self._lost_event = asyncio.Event(loop=loop)
-        self._request_event = asyncio.Event(loop=loop)
+        self._granted_event = asyncio.Event()
+        self._lost_event = asyncio.Event()
+        self._request_event = asyncio.Event()
         self._has_control = False
         self._priority = priority
         self._is_shutdown = False
@@ -613,7 +613,7 @@ class Connection:
             self._control_events.shutdown()
         if self._control_stream_task:
             self._control_stream_task.cancel()
-            self.run_coroutine(self._control_stream_task).result()
+            asyncio.gather(self._control_stream_task, return_exceptions=True)
         self._cancel_active()
         if self._channel:
             self.run_coroutine(self._channel.close()).result()

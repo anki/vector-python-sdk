@@ -49,9 +49,9 @@ except ImportError:
 except SyntaxError:
     sys.exit("SyntaxError: possible if accidentally importing old Python 2 version of PIL")
 
-from . import faces
-from . import objects
-from . import util
+from anki_vector import faces
+from anki_vector import objects
+from anki_vector import util
 
 
 DEFAULT_OBJECT_COLORS = {
@@ -61,9 +61,9 @@ DEFAULT_OBJECT_COLORS = {
 }
 
 #: Fastest resampling mode, use nearest pixel
-RESAMPLE_MODE_NEAREST = Image.NEAREST
+RESAMPLE_MODE_NEAREST = Image.Resampling.NEAREST
 #: Slower, but smoother, resampling mode - linear interpolation from 2x2 grid of pixels
-RESAMPLE_MODE_BILINEAR = Image.BILINEAR
+RESAMPLE_MODE_BILINEAR = Image.Resampling.BILINEAR
 
 
 class AnnotationPosition(Enum):

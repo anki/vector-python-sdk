@@ -114,3 +114,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Ignore protobuf stuff
+.protobuf/
+google/

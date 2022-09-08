@@ -6,3 +6,5 @@ numpy>=1.11
 Pillow>=3.3
 requests
 protobuf==3.20.*
+PyOpenGL
+PyOpenGL_accelerate
