@@ -27,9 +27,8 @@ def main():
         # https://github.com/anki/vector-python-sdk/blob/master/examples/sounds/vector_alert.wav
         # https://github.com/anki/vector-python-sdk/blob/master/examples/sounds/vector_bell_whistle.wav
         #
-        # Paste these two wav files next to this tutorial to play sounds.
-        robot.audio.stream_wav_file("vector_bell_whistle.wav", 75)
-        robot.audio.stream_wav_file("vector_alert.wav", 75)
+        robot.audio.stream_wav_file("examples/sounds/vector_bell_whistle.wav", 75)
+        robot.audio.stream_wav_file("examples/sounds/vector_alert.wav", 75)
 
 
 if __name__ == "__main__":
