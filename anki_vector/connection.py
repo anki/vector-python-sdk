@@ -74,9 +74,9 @@ class _ControlEventManager:
     """
 
     def __init__(self, loop: asyncio.BaseEventLoop = None, priority: ControlPriorityLevel = None):
-        self._granted_event = asyncio.Event(loop=loop)
-        self._lost_event = asyncio.Event(loop=loop)
-        self._request_event = asyncio.Event(loop=loop)
+        self._granted_event = asyncio.Event()
+        self._lost_event = asyncio.Event()
+        self._request_event = asyncio.Event()
         self._has_control = False
         self._priority = priority
         self._is_shutdown = False
@@ -485,9 +485,9 @@ class Connection:
             asyncio.set_event_loop(self._loop)
             self._done_signal = asyncio.Event()
             if not self._behavior_control_level:
-                self._control_events = _ControlEventManager(self._loop)
+                self._control_events = _ControlEventManager()
             else:
-                self._control_events = _ControlEventManager(self._loop, priority=self._behavior_control_level)
+                self._control_events = _ControlEventManager(priority=self._behavior_control_level)
             trusted_certs = None
             with open(self.cert_file, 'rb') as cert:
                 trusted_certs = cert.read()

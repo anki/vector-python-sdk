@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'fortune_wheel.css', _external=True) }}"/>
+</head>
+
+<body class="main-container">
+<div>
+    <div class="div-center">
+        <button class="new-game-button" id="new_game">Новая игра</button>
+        <button class="new-game-button" id="exit_game">Закончить</button>
+    </div>
+
+    <h1>Угадайте загаданное слово:</h1>
+    <h3>Перевод загаданного слова: <b>{{ translated_word }}</b></h3>
+
+    <table class="display-table">
+        <tbody>
+        <tr>
+            {% for letter in word %}
+                <td class="bordered-box" value="{{ letter }}"></td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+
+    <div id="add_game_info">
+
+        <div class="me" id="me">
+            <h4>Ваши попытки</h4>
+        </div>
+
+        <div class="robot" id="robot">
+            <h4>Попытки робота</h4>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<script>
+    function visible_letter(current_letter) {
+        /**
+         * If the selected letter is on the letterboard, it will become visible
+         * (if this letter occurs in the word several times, all matches will be visible)
+         */
+        let hidden_word = {{session|tojson}}['hidden_word'];
+        if (hidden_word.includes(current_letter.toLowerCase())) {
+            $('.bordered-box').each(function () {
+                if ($(this).attr('value') === current_letter.toLowerCase()) {
+                    $(this).toggleClass('bordered-box guessed-letter');
+                    $(this).text(current_letter);
+                }
+            });
+        }
+    }
+
+    $(document).on('click', '#new_game', () => {
+        /**
+         * when you click the "New GameЭ" button, the page will reload to update the new hidden word;
+         */
+        location.reload();
+        return false;
+    });
+
+    $(document).on('click', '#exit_game', () => {
+        /**
+         * Completion of the game. Stopping the Flask server, closing the game tab.
+         */
+        $.get('/shutdown');
+        setTimeout(function () {
+            close();
+        }, 1500);
+    });
+
+    function robot_reaction(robot_turn) {
+        /**
+         * If the game is over, the robot's reaction scenario is executed,
+         * depending on whether it has won or not.
+         */
+        $.get('/robot_reaction',
+            {
+                robot_wins: robot_turn,
+            });
+    }
+
+    function choice_processing(game_container, current_container, response, robot_turn) {
+        /**
+         * The selected letter is added to the corresponding text and the new node
+         * is placed in the DOM for display on the page.
+         * If there are more than 10 similar nodes, the oldest one will be deleted.
+         */
+        if (response["game_over"]) {
+            game_container.replaceWith('<div class="div-center">' +
+                '<h2>Игра окончена!</h2></div>');
+            visible_letter(response["key_value"])
+            robot_reaction(robot_turn)
+        } else {
+            let about_letter = ''
+            about_letter = (robot_turn ? "Вектор выбрал букву: " : "Ваша буква: ") + response["key_value"] + '. '
+            about_letter += (response["guessed"] ? 'Есть такая буква! ' : 'Такой буквы в этом слове нет. ')
+
+            if (response['repeat']) {
+                about_letter += 'И ее уже называли '
+            }
+
+            if (current_container.children().length >= 10) {
+                current_container.children(":nth-child(2)").remove();
+            }
+
+            robot_turn ? $('.vector_answer').last().text(about_letter) : current_container.append('<div>' + about_letter + '</div>');
+            visible_letter(response["key_value"])
+        }
+    }
+
+    function validate_keys(e) {
+        /**
+         * Validation of values entered by the user from the keyboard.
+         * Only letters of the English alphabet are allowed.
+         */
+        let charCode = e.keyCode;
+        return ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123) || charCode === 8)
+    }
+
+    $(document).on('keydown', (e) => {
+            /**
+             * The main process of the game, triggered when the player presses the keys.
+             * The player's chosen letter is being processed.
+             * Then the robot initiates the selection of the letter and letter's processing.
+             * If the game is not over, the player's next letter is expected.
+             */
+            let game_container = $('#add_game_info')
+
+            if (validate_keys(e)) {
+                $.get('/game_turn',
+                    {
+                        letter_key: e.key.toUpperCase(),
+                        robot_turn: 0,
+                    }
+                ).done(function (response) {
+                    let player_container = game_container.children('#me');
+                    let robot_container = game_container.children('#robot');
+                    choice_processing(game_container, player_container, response, 0);
+
+                    if (response["game_over"] === false) {
+
+                        setTimeout(function () {
+                            robot_container.append('<div class="vector_answer">' + 'Вектор думает над буквой' + '</div>');
+                        }, 1000);
+
+                        setTimeout(function () {
+                            $.get('/game_turn', {robot_turn: 1,}
+                            ).done(function (response) {
+                                choice_processing(game_container, robot_container, response, 1)
+                            })
+                        }, 2500);
+                    }
+                }).fail(function () {
+                    alert('Извините, что-то пошло не так. Попробуйте еще раз.')
+                });
+            } else {
+                return e.preventDefault();
+            }
+        }
+    );
+</script>
+</body>
+</html>

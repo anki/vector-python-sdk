@@ -130,7 +130,7 @@ class EventHandler:
         try:
             self._loop = asyncio.new_event_loop()
             asyncio.set_event_loop(self._loop)
-            self._done_signal = asyncio.Event(loop=self._loop)
+            self._done_signal = asyncio.Event()
             # create an event stream handler on the connection thread
             self.event_future = asyncio.run_coroutine_threadsafe(self._handle_event_stream(), self._conn.loop)
 
@@ -247,7 +247,8 @@ class EventHandler:
                     unpackaged_event_key, unpackaged_event_data = self._unpackage_event('event_type', evt.event)
                     await self.dispatch_event_by_name(unpackaged_event_data, unpackaged_event_key)
                 except TypeError:
-                    self.logger.warning('Unknown Event type')
+                    pass
+                    # self.logger.warning('Unknown Event type')
         except CancelledError:
             self.logger.debug('Event handler task was cancelled. This is expected during disconnection.')
 

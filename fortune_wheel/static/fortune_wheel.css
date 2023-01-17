@@ -1,0 +1,67 @@
+h1, h2, h3, h4 {
+    margin: 25px;
+    text-align: center;
+}
+
+.main-container {
+    background: #4070a0;
+}
+
+.display-table {
+    background: white;
+    width: 100%;
+    height: 10vw;
+    table-layout: fixed;
+}
+
+.bordered-box {
+    border: 1px solid;
+    border-color: black;
+    border-collapse: collapse;
+    font-size: 80px;
+    text-align: center;
+    color: white;
+}
+
+.guessed-letter {
+    border: 1px solid;
+    border-collapse: collapse;
+    font-size: 80px;
+    text-align: center;
+    color: midnightblue;
+}
+
+.div-center {
+    text-align: center;
+}
+
+.new-game-button {
+    text-decoration: none;
+    display: inline-block;
+    padding: 15px 30px;
+    margin: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 40px 40px royalblue inset, 0 0 0 0 midnightblue;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: white;
+    transition: .15s ease-in-out;
+}
+
+.new-game-button:hover {
+    box-shadow: 0 0 10px 0 royalblue inset, 0 0 10px 4px midnightblue;
+    color: royalblue;
+}
+
+.me {
+    margin-top: 25px;
+    width: 50%;
+    float: left;
+}
+
+.robot {
+    margin-top: 25px;
+    width: 50%;
+    float: right;
+}
