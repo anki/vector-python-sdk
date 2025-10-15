@@ -13,10 +13,14 @@ Forums: https://forums.anki.com/
 
 ## Getting Started
 
-You can follow steps [here](https://developer.anki.com/vector/docs/index.html) to set up your Vector robot with the SDK.
+> [!WARNING]
+> The official Anki Vector site is no longer live.
+>
+> You can generate a local copy of the SDK documetation by following the instructions in the `docs` folder of this project.
+>
+> If you do not wish to generate them yourself, a community-run alternative can be found [here](https://vector.ikkez.de/).
 
-You can also generate a local copy of the SDK documetation by
-following the instructions in the `docs` folder of this project.
+
 
 
 ## Privacy Policy and Terms and Conditions
